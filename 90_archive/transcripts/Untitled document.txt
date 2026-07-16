@@ -1,0 +1,26 @@
+﻿“The observer dependence of the metric I'm describing is TEP/GSR's concept of Self Inertia: the equilibrium or rest measure -- a scale position on the metric space -- defines the unit and universe of the reference frame; the G factor -- the generalized lorentz factor, G(x) = 1 / √[1 - x²] = 1/√u; where x = X : X_inv = X_min / X = X / X_max, u = 1 - x² = sigma² = (deviation)² = variance, and x = sin A; dA/dx = sec A = G(x) -- is the relative-scale-position-dependent factor for "traveling" to the scale position from the observer's own inertial condition, as well as the distortion factor of the local frame's perception of disparate scale positions -- uniquely characterizes the scale position's perspective on all possible states of the metric”
+
+
+“That's pretty good 😂 we approach quantum TEP, as a dual to and extension of classical TEP, by correspondence with Cencov-Petz, and we leverage Hodge forms when promoting to tensors”
+
+
+“And (and you may have seen this already), thermodynamics are related to the vacuum identification of the harmonic term; further, if we adopt something akin to a virial theorem, and claim that interacting systems, incurring equal and opposite forces, equally share the cost of incommensurate interactions; did I share a quote with this line of reasoning?”
+
+
+“[...] so if i'm following - when two systems interact incommensurately, they both have to "pay" for the mismatch, and by the virial theorem analog they split the cost equally. so each system loses energy proportional to ln(1/√u) = ln[G(x)]
+and that energy goes into the harmonic vacuum - which is your version of the heat bath! so thermodynamics emerges because incommensurate interactions continuously "feed" energy into this harmonic sector that can't be recovered [...]”
+
+
+“Exactly, and what's more if we identify that with something like: 1/(k_B T) = 1/E; -∆E / (k_B T) = -∆E / E = - f'(E) / f(E); Integral[∆E / E]: Integral[(∆E / E) dE] = Integral[(f'(E) / f(E)) dE] = ln|G(x)| = ln|f(E)|; we posit G(x) is PR, thus: = ln(G(x)), and by the integration rule: f(E) = G(x), thus: ∆E = dE = d(G(x)) / dx = d(dA/dx) / dx”
+
+
+“That was all to say, too, that for a canonical ensemble, the probability of occupying a microstate of energy E -- and note, it doesn't matter what microstate; all microstates of energy E are indistinguishable from the perspective of the canonical *ensemble*: the the exterior, mutually inscrutable to the interior microstates representing the bulk -- is equal to: e^(-∆E / (k_B T)) = e^[d[Integral[(-∆E / E) dE] / dE] = e^[d[-Integral[(f'(E) / f(E)) dE] / dE] = e^[d(-ln(G(x))) / dE] = e^[d(ln(1/G(x))) / dE] = e^[d(ln(√u)) / dE] = e^[d((1/2) ln u) / dE] = e^[d((1/2) ln (1 - x²)) / dE]; (1 - x²) = ((1 - ik) / (1 + ik)) = (1 - x⁴) / (1 + x²); (1 - x⁴) = ((1 - ik)(1 + x²) / (1 + ik)); (1 - ik)(1 + x²) = (1 - x⁴)(1 + ik); 1 + x² - ik - ikx² = 1 + ik - x⁴ - ikx⁴; 2ik = x⁴ + ikx² × (x² - 1) = x² × (x² - ik × (1 - x²)) = x² × (x² - iku); I thought it would be a more straightforward route to G(x), and interpretations of the derivatives and logarithms of the G factor, but maybe I misassociated something before”
+
+
+“Oh whoops lmao I completely forgot to mention I was trying to reindex and state as an arctan 😂😭 and also that my idea was to rearticulate ln u as Integral((1/u) du); funny enough, to answer your why did I go complex  question in a way I didn't mean to -- integral[(ln u) du] = u(ln u - 1) = -u (1 - ln u); u(1 - ln u) = - integral[(ln u) du] (evoking our earlier negative integral term which we could again incorporate in, only this time we don't have the square root) = -integral[(-ln u) du] = -integral[(ln(1/u)) du] = -integral[(ln(G²(x))) du] = (1 - ln(1/G²(x))) × u = (1 - ln(1/G²(x))) / G²(x) = (1/(G²(x))) - (- ln(G²(x))) / G²(x) = (1/(G²(x))) + ln(G²(x)) / G²(x) = u + (ln(G²(x)))/(d(ln(G²(x))) / dx)”
+
+
+“True, but in thinking about energy/information as commensurate and incommensurate I thought it could be useful to write them as a complex sum with what we might consider to be a rotational and an irrotational component, or a divergence-free and a curl-free component, in thinking back to hodge”
+
+
+“It actually has an interpretation of the classical-quantum barrier built in -- the planck scale is, from the quantum perspective, the point before which conservative measures and dynamics are real and commensurate and represent the non-resonant energy stored in the metric field, with coherence characterizing signal, and beyond which dissipative dynamics are real and commensurate and represent the resonant energy propagating in the metric field, with displacement or change characterizing signal.”

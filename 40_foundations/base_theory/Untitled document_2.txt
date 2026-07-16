@@ -1,0 +1,65 @@
+Exploring boundary measurements
+
+@@TS@@
+
+I'm simulating a random ladder or network to compute the Dirichlet-to-Neumann operator, treating the interior as hidden. I’m looking into computing the Fisher information from boundary measurements and defining x² = I\_obs / I\_total, leading to u = 1 - x². My goal is to see if the effective boundary "time delay" scales as G(x) = 1/√u and connects to mutual information. However, I need to pinpoint nontrivial predictions and consider the implications of TEP and criticality.Proposing a test on networks
+
+@@TS@@
+
+I’m thinking of a test within a multiport passive network, where I define different boundary observers. I would compute the effective admittance after excluding hidden ports and look into the "distortion" related to Wigner delay or group delay. My goal is to determine mutual information between observed boundary signals and hidden ones, along with testing the relationship between delay and these information budgets. I plan to focus on a passive linear network and examine the connections to Bode-Fano tradeoffs with stored energy.Designing a simulation
+
+@@TS@@
+
+I need to design a simulation to test the claim that "observer-dependent distortion is a function of mutual information" across various channels, like electromagnetic, mechanical, and thermal. A straightforward approach would be classical wave scattering in a graded medium, specifically in one dimension with an evanescent region. I'll compute the reflection coefficient r(ω,k\_t) and Wigner delay, as well as mutual information between incident and reflected waves. I hope to find that time delay scales with the mutual information budget derived from r rather than the underlying geometry, unifying three crucial aspects.Proposing a simulation for distortion
+
+@@TS@@
+
+I'm considering a simulation based on scattering theory, incorporating multiple observers with two boundary partitions to illustrate different distortions, like time dilation. For instance, in a network with boundaries A and B, "observer A" measures inputs and outputs at port A, while "observer B" does so at port B. I’ll compute effective admittance and mutual information from their measurements. My goal is to define a distortion factor as the ratio of group delays or energy partition, demonstrating a hyperbolic relationship between mutual information and distortion. I'll remember that mutual information applies to probabilistic signals, which means we should use a stochastic input process.Designing a multi-observer simulation
+
+@@TS@@
+
+I’m proposing a simulation to study "observer-dependent distortion as a function of mutual information." To do this, I'll define a passive linear time-invariant system with hidden interior states, partitioning outputs into observed and unobserved data. My goal is to compute mutual information between inputs and outputs, considering noise.
+
+@@TS@@
+
+I plan to set up two observers: one accessing both ports for full information and another limited to one port. I’ll examine how their mutual information levels impact the effective boundary operators they infer. This approach will help uncover the relationship between mutual information and distortion.Exploring observer-dependent distortion
+
+@@TS@@
+
+I’m examining how to calculate distortion between observers based on the inferred metric parameter, perhaps using concepts like log-budget rapidity. The idea is to compute mutual information from their observations and see how it reflects time dilation effects. We could connect mutual information to the physical delay or phase shift.
+
+@@TS@@
+
+I want to propose a simulation involving a physical system with parameter θ. Two observers will measure different aspects, their uncertainties bounded by Fisher information. The tests will explore how their measurements affect perceived distortion and whether the mapped relationships hold true across varied systems. This would help clarify the nuanced influences of measurement and mutual information on distortion.Testing coherence and distortion
+
+@@TS@@
+
+I'm analyzing the relationship between mutual information and distortion in a passive wave system. The idea is to set up observers at different boundaries to compute their mutual information based on measurement noise. I want to see how this relates to the inferred distortion of the system, focusing on the claim that mutual information and time delay might be linked through identities related to energy.
+
+@@TS@@
+
+For a solid test, I'll consider how to define coherence and distortion reasonably, potentially quantifying them through normalized mutual information and correlation coefficients. Testing whether the distortion factor reflects mutual information in a linear Gaussian context could provide substantial insights\!Proposing simulations for observer-dependent distortion
+
+@@TS@@
+
+I’m exploring the connection between mutual information and distortion in passive systems, particularly focusing on coherence and its mathematical relationships. The simulation involves a 1D graded medium, allowing observers with different noise levels to measure boundary signals, reflecting their differing mutual information. I want to compute the distortion as the difference in reconstructed metrics. This could help test the hypothesis that mutual information directly influences the observer's perception of distortion and supports the claim of hyperbolic relationships in various contexts\!Exploring mutual information and distortion
+
+@@TS@@
+
+I’m delving into how mutual information (I) affects error in estimations, proposing that it shrinks in proportion to e^{-I}. Using a Gaussian linear model, I can establish a precise relationship between mutual information and distortion. The idea of measuring distortion as a function of coherence is intriguing\! I could set up a simulation involving a passive network, focusing on how mutual information impacts observers' time dilation and the resources required for accurate estimations. That would help in uncovering deeper connections between information theory and physicalsystems\!Designing simulations for mutual information
+
+@@TS@@
+
+I'm thinking of how to guide the user by proposing a simulation with different tiers. Starting with verifying passivity, then moving through boundary-only tomography, and later tackling mutual-information-distortion relations. One idea is to create a simulation focusing on a 2D passive network where I examine phase-current conservation and mutual information mapping.
+
+@@TS@@
+
+This involves looking at how different observers perceive information while accounting for noise. I foresee tests that will show how mutual information affects the inferred metric, providing a robust study on the correlations between these variables and their implications.Proposing a simulation design
+
+@@TS@@
+
+I'm considering how to craft a substantial simulation for the user. I want to focus on tomography and phase current, which ties closely to mutual information. First, I agree that the relation of mutual information to time dilation can be mapped through Gaussian processes.
+
+@@TS@@
+
+Now, I'll design a simulation pipeline involving a passive boundary system and analyze mutual information between parameters and measurements. I'll propose a structure that outlines step-by-step procedures, ensuring we account for potential pitfalls like maintaining passivity and avoiding localization issues. The aim is to showcase how observers' data influences reconstructed metrics, essentially testing the variability of topological protection under different noise conditions.

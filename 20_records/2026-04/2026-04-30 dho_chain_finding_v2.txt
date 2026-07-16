@@ -1,0 +1,224 @@
+# Technical note (v2): N-DHO chain composition, topology, and pendulum chaos
+
+**Date:** April 30, 2026 **Supersedes:** dho_chain_finding.md (v1)
+**Context:** Independent verification and extension of the
+TEP/Entrodynamics DHO Lorentz structure investigation. Builds on v1 (the
+det(I−K) finding) by exploring topology generalization, the boost-law
+generalization to N-chains, metallic-mean structure, and the analogy to
+coupled pendulum chains and chaos.
+
+------------------------------------------------------------------------
+
+## Status disclosure
+
+This note makes both **proven** and **speculative** claims, marked
+clearly. The proven results are mathematical theorems verified to
+machine precision. The speculative claims about chaos onset are
+observational pattern-matching with known limitations.
+
+------------------------------------------------------------------------
+
+## Proven results
+
+### Result A: Universal product law (replaces v1's chain-specific claim)
+
+For an N-DHO system with **any graph topology** of symmetric coupling
+(path, cycle, star, complete, tree, or arbitrary), uniform natural
+frequency ω_n, and any (possibly non-uniform) damping ratios:
+
+Π_j ω_j = ω_n\^N · √det(I − K)
+
+where ω_j are the lossless normal mode frequencies and K is the
+symmetric coupling matrix (K_ij = κ_ij, K_ii = 0). This was verified to
+machine precision across path, cycle, star, complete-K_4, Y-tree, and
+caterpillar graphs.
+
+### Result B: Chain-specific zeta-invariant for cross-transfer zeros
+
+For an N-DHO **chain** with same ω_n, the zeros of Re(H\_{1,N}(ω)) (the
+cross-transfer between the two end ports) satisfy:
+
+Π_k ω_k\^{(zero)} = ω_n\^N · √det(I − K_jacobi), exactly, ζ-independent
+
+where K_jacobi is the symmetric tridiagonal Jacobi coupling matrix.
+
+This is **specific to chains** with end-to-end transfer. For other
+topologies the cross-transfer between two ports sees a subset of modes
+(those whose eigenvectors couple those two ports), so the simple
+product-of-zeros law does not directly extend; one must instead use the
+universal Result A on all normal mode frequencies.
+
+This corrects an overgeneralization in v1.
+
+### Result C: Boost law for the 3-chain (uniform damping)
+
+For a 3-DHO chain with uniform damping ratio ζ and chain couplings (κ_1,
+κ_2):
+
+cosh(2 α_eff) = (1 + 6 ζ²) · G(K), K = √(κ_1² + κ_2²)
+
+where α_eff is the rapidity (1/2)ln(ω\_+/ω\_-) extracted from the
+outermost reactive crossings (after factoring the protected ω = ω_n
+mode). The prefactor (1 + 6ζ²) is cosh(2α_0), the zero-coupling
+rapidity. This generalizes the 2-DHO boost law cosh(2α_eff) =
+G(κ)cosh(2α_0).
+
+Verified to machine precision. Note: this requires uniform damping;
+non-uniform damping breaks this clean form.
+
+### Result D: Boost law breaks at N = 4
+
+For the 4-DHO chain with uniform damping, the analog of the boost law
+does **not** hold cleanly. The reactive crossing polynomial factors at ζ
+= 0 into two quadratics with golden-ratio-related effective couplings
+(`1 ± φκ` and `1 ± κ/φ`), but finite ζ breaks this clean factorization.
+The pair products drift with ζ, indicating the 2- and 3-chain boost laws
+are exceptional cases.
+
+### Result E: Path-Jacobi spectrum and the metallic-mean appearance
+
+For an N-DHO chain at ζ = 0 with uniform coupling κ_0, the normal mode
+frequencies satisfy:
+
+ω_j² = ω_n² · (1 − κ_0 · λ_j), λ_j = 2 cos(jπ/(N+1)), j = 1, ..., N
+
+These eigenvalues exhibit specific arithmetic structure:
+
+N = 2: λ ∈ {+1, −1} N = 3: λ ∈ {√2, 0, −√2} (includes zero → mode at
+ω_n) N = 4: λ ∈ {φ, 1/φ, −1/φ, −φ} (golden ratio) N = 5: λ ∈ {√3, 1, 0,
+−1, −√3} (includes zero → mode at ω_n) N = 6: λ_j = 2cos(jπ/7), with
+relation to silver and bronze means
+
+This identifies the framework's "metallic mean hierarchy" (a Tier 4
+structural observation) with the path-Jacobi Chebyshev spectrum --- a
+standard object in algebraic combinatorics. The framework is correctly
+identifying this structure; it has a known mathematical home.
+
+For odd N, the spectrum includes λ = 0, giving a protected mode at ω =
+ω_n. This is why the 3-chain factorization (Result C) works cleanly: the
+protected mode factors out, leaving a 2-DHO-like residual.
+
+------------------------------------------------------------------------
+
+## Connection to pendulum chains (linear regime)
+
+A chain of pendulums coupled by torsion springs, linearized around θ =
+0, satisfies:
+
+θ_k'' + 2ζω_n θ_k' + ω_n² θ_k = ω_n² κ \[(θ\_{k-1} − θ_k) + (θ\_{k+1} −
+θ_k)\]
+
+This is a **graph Laplacian** coupling, not the off-diagonal-only Jacobi
+coupling of the DHO investigation. The path-N Laplacian eigenvalues are:
+
+μ_j = 4 sin²(jπ/(2N)), j = 0, 1, ..., N−1
+
+These also have metallic structure: for N = 5, μ ∈ {0, 2−φ, 2−1/φ,
+2+1/φ, 2+φ}.
+
+So pendulum chains inherit the same structural family of mode spectra,
+just with the spectrum shifted (μ_j = 2 − 2cos(jπ/N) instead of
+2cos(jπ/(N+1))). The framework's structural predictions extend to
+pendulum chains in the linearized regime, with appropriate translation.
+
+------------------------------------------------------------------------
+
+## Speculative: pendulum-chain chaos onset and the sinc² budget
+
+**This section is observational and not yet rigorous.**
+
+Each pendulum has a natural budget structure:
+
+x²(θ) = sin²(θ) / θ² = sinc²(θ) u(θ) = 1 − sinc²(θ)
+
+This compares the actual nonlinear restoring force `sin(θ)` to its
+linear proxy `θ`. The self-dual point x² = 1/2 occurs at θ ≈ 79.7°.
+
+**Observation:** For an N-pendulum chain (N = 5, κ = 0.3) initialized in
+mode 1 with various amplitudes, mode-1 energy stays trapped (\>95%) at
+θ_max ≤ 70° and starts leaking significantly by θ_max = 90°. The
+transition brackets the sinc²-budget self-dual point.
+
+**Caveats this observation requires:**
+
+1.  The match works for N = 5. For N = 4 the leak onset is offset by
+    \~10° (transition near 90° rather than 80°). For N = 3 mode 1 stays
+    trapped at all amplitudes I tested, indicating symmetry-protection
+    that the sinc² budget does not capture.
+
+2.  Different couplings κ shift the threshold: at fixed N = 5, κ = 0.1
+    gives earlier leak onset and κ = 0.6 gives later. The sinc²
+    threshold is coupling-independent, so this isn't a complete story.
+
+3.  The characteristic chaos onset in coupled-oscillator systems is
+    governed by the standard FPU criterion (nonlinearity vs mode gap),
+    which gives amplitude scales depending on κ and N. The sinc²
+    self-dual point is *one* characteristic scale among several.
+
+**What is genuinely interesting:** the sinc² budget is exactly the kind
+of TEP-style "x² + u = 1" budget the framework predicts for any
+oscillator with nonlinear restoring force --- and its self-dual point
+falls in the correct neighborhood for chaos onset in some
+configurations. Whether this sharpens to a quantitative prediction
+depends on more careful analysis, including:
+
+-   Mode-resolved budget (each mode has its own sinc²-like quantity from
+    projection of full nonlinear potential onto that mode's coordinate)
+-   Comparison to standard FPU thresholds
+-   Behavior on the homoclinic orbit / KAM threshold
+
+I would not at this point claim the framework gives a "less inscrutable"
+treatment of chaos. What it gives is a candidate **local coordinate**
+--- the sinc² budget on each pendulum --- that has the right qualitative
+scale. Sharpening it to a quantitative criterion is open.
+
+------------------------------------------------------------------------
+
+## Implications for the framework
+
+**Strengthens:** The det(I−K) law and metallic-mean spectrum
+identification give the framework's "metallic hierarchy" a precise
+mathematical home in Chebyshev / orthogonal polynomial theory. This is
+structural enrichment.
+
+**Refines:** v1's claim that "the Pythagorean form is exact only at N ≤
+3" needs further qualification. The Pythagorean form holds exactly for N
+= 2, exactly for N-stars (any N, by rank-2 structure), and at low order
+for chains. The general law is the matching polynomial of the coupling
+graph.
+
+**Extends:** The boost law `cosh(2α_eff) = G(κ)cosh(2α_0)` extends
+exactly to the 3-chain (with K = √(Σκ²) and prefactor (1+6ζ²)) but not
+to N ≥ 4 chains in clean closed form.
+
+**Open:** A clean N-chain boost law in closed form. Conjecture: it
+should have a determinant or matching-polynomial form, but I haven't
+found it.
+
+**Open:** A rigorous TEP-budget criterion for chaos onset in coupled
+nonlinear systems. The sinc² self-dual point is a candidate local
+coordinate but is not the full story.
+
+------------------------------------------------------------------------
+
+## Suggested updates to the central reference
+
+1.  **Result A (universal product law)** would be a strong Tier 1
+    result. It is more general than what's currently in the reference
+    (which has the 2-DHO Pythagorean form as Tier 2.2).
+
+2.  **Result E (metallic-mean = path-Jacobi spectrum)** identifies the
+    framework's "metallic mean hierarchy" (currently Tier 4) with a
+    standard mathematical structure. This converts the Tier 4
+    observation into a structural prediction.
+
+3.  **Result D (boost law breaks at N=4)** should be a documented honest
+    limitation alongside Result C (boost law for 3-chain). The
+    framework's 2-DHO Lorentz structure is exact at the pair level and
+    at the 3-chain level (with appropriate uniform damping), but does
+    not extend cleanly to N ≥ 4 chains.
+
+4.  **Pendulum-chain chaos analogy** belongs in the "open questions"
+    section rather than the verified results, with clear marking that
+    the sinc² self-dual point is a suggestive but not yet rigorous
+    predictor.

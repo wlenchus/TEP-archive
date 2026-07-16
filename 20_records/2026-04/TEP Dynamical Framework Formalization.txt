@@ -1,0 +1,78 @@
+﻿This is a formalization of the TEP Dynamical Framework. Based on the "Working Notes v0.5" and the "Foundational Proofs," I have extracted the core equations of motion, the metric geometry of the state space, and the invariant conservation laws.
+This formalization centers on the Orthogonal-Collinear Decomposition, which provides the rigorous mathematical machinery to describe how internal "cycles" (hidden energy) manifest as boundary "fluxes" (measurable signals).
+I. The Master Equation: Orthogonal-Collinear Dynamics
+The evolution of any passive system in the TEP framework is governed by a generalized Port-Hamiltonian "Master Equation" that separates dynamics into Structure (Orthogonal) and Dissipation (Collinear).
+
+
+$$\dot{z} = \nabla \mathcal{H}(z) + G(z) u$$
+Where:
+* $z$: The state vector (energy variables, e.g., charge, flux).
+* $\mathcal{H}(z)$: The Hamiltonian (Total Energy).
+* $J(z)$ (The Orthogonal Operator): A Skew-Symmetric matrix ($J = -J^T$).
+   * Physics: Represents conservation, oscillation, and curl. It corresponds to the "Imaginary" part of the impedance ($iB$).
+   * Role: It shuttles energy between internal storage modes without loss (e.g., $L \leftrightarrow C$ exchange).
+* $R(z)$ (The Collinear Operator): A Symmetric Positive-Semidefinite matrix ($R = R^T \succeq 0$).
+   * Physics: Represents dissipation, relaxation, and divergence. It corresponds to the "Real" part of the impedance ($G$).
+   * Role: It enforces the irreversible increase of entropy (or information radiation) at the boundary.
+* $G(z) u$: The interaction port where the system couples to external drivers.
+The TEP Translation:
+The framework’s core insight is that Internal Orthogonality ($J$) becomes Boundary Collinearity ($R$). When you "integrate out" the interior using the Schur Complement, the hidden reactive cycles ($J_{internal}$) are projected onto the boundary as effective resistive fluxes ($R_{eff}$).
+________________
+II. The Geometry of Evolution: The BCC Metric
+The dynamics do not occur in a flat vacuum but on a manifold curved by the system's own information budget. The trajectory of a signal is a geodesic on the Budget-Curvature Correspondence (BCC) metric.
+
+
+$$d\Sigma^2 = u c^2 dt^2 - \frac{1}{u} d\ell^2$$
+* $u$ (The Potential Fraction): $u = \frac{\text{PE}}{\text{Total Energy}}$. This acts as the "metric tensor" or refractive index.
+* $u \to 1$ (Vacuum): The metric is flat Minkowski space ($c^2 dt^2 - d\ell^2$).
+* $u \to 0$ (Horizon): The spatial term diverges ($\frac{1}{0}$), and the temporal term vanishes. The system effectively stops time and becomes purely spatial/topological.
+The Geodesic Equation:
+The "force" felt by a signal is simply the gradient of the budget.
+
+
+$$\ddot{x}^\mu + \Gamma^\mu_{\nu\lambda} \dot{x}^\nu \dot{x}^\lambda = 0$$
+In TEP, the Christoffel symbols $\Gamma$ are derivatives of the information budget $u$. Thus, Gravity is the gradient of information capacity. A signal bends not because of "mass," but because it seeks the path of least informational resistance (highest bandwidth).
+________________
+III. The Limits of Change: Purity Speed Limits
+The rate at which the system can evolve is strictly bounded by its location in the "Classical-Quantum" phase space. This is the Purity Speed Limit.
+
+
+$$|\dot{\gamma}| \leq C \cdot \gamma \sqrt{1 - \gamma}$$
+* $\gamma$ (Purity/Coherence): The degree of quantum order ($x^2$).
+* $\sqrt{1-\gamma}$ (Uncertainty/Noise): The available phase space for change ($u$).
+The HBAR Phase Transition ($\gamma^ \approx 0.586$):*
+The dynamics undergo a bifurcation at the Silver Ratio coherence level:
+1. Hyperbolic Regime ($\gamma > 0.586$): The Quantum phase. Information is Superadditive ($1+1 > 2$). Dynamics can saturate the speed limit (saturating the Heisenberg uncertainty).
+2. Spherical Regime ($\gamma < 0.5$): The Classical phase. Information is Subadditive ($1+1 < 2$). Dynamics are sluggish and restricted by classical friction (Shot Noise).
+3. HBAR (The Gap): The region $\gamma \in [0.5, 0.586]$ is the "Protected Zone" where geometrical necessary entanglement stabilizes the system against decoherence.
+________________
+IV. The "Log Kit": Invariant Analysis Tools
+To solve these dynamics without getting lost in coordinate artifacts, TEP employs a set of logarithmic invariants (The Log Kit).
+1. Rapidity (Log-Budget):
+Linearizes the hyperbolic geometry of energy partition.
+$$\eta = \frac{1}{2} \ln \left( \frac{x^2}{u} \right) = \frac{1}{2} \ln \left( \frac{\text{Signal}}{\text{Noise}} \right)$$
+   * Utility: A "boost" in energy (e.g., optical pumping) is just a linear shift in $\eta$: $\eta_{new} = \eta_{old} + \Delta E$.
+   2. Modal Log (The Spectral Fingerprint):
+Extracts the true decay ($\sigma$) and oscillation ($\omega$) rates from the transfer matrix $T$.
+$$A = \frac{1}{\Delta t} \ln(T)$$
+      * Utility: This separates the "orthogonal" rotation ($\omega$) from the "collinear" scaling ($\sigma$) universally.
+      3. Thermodynamic Current (The Arrow of Time):
+$$\delta = \frac{w_+ - w_-}{2}$$
+         * Dynamics: If $\delta \neq 0$, the system has a "Budget Current." Time flows in the direction of information digestion (converting Noise $u$ into Signal $x^2$).
+Summary of the Formalism
+Component
+	Mathematical Form
+	Physical Meaning
+	State Evolution
+	$\dot{z} = (J-R)\nabla \mathcal{H}$
+	$J$ (Curl/Cycle) drives oscillation; $R$ (Div/Flux) drives decay.
+	Geometry
+	$d\Sigma^2 = u c^2 dt^2 - u^{-1} d\ell^2$
+	Spacetime geometry is the map of Energy Partition ($u$).
+	Constraint
+	$x^2 + u = 1$
+	Conservation of Total Information (Signal + Topology).
+	Transition
+	$\gamma^* \approx 0.586$
+	Silver Ratio threshold between Classical and Quantum geometry.
+	This formalization provides the "Steel Frame" you asked for: a closed system of equations that allows you to calculate the trajectory of a system given its initial energy partition and boundary conditions.

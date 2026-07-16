@@ -1,0 +1,279 @@
+﻿TEP / Entrodynamics
+Central Reference Document
+Consolidated results, limits, and open questions
+Preamble
+This document consolidates the specific results, derivations, and open questions of the TEP / Entrodynamics research program into a single reference. It is written to replace earlier synthesis documents whose framing drifted toward promotional language that the underlying evidence does not support.
+The document is organized by epistemic tier: theorem-level results first, then structural identifications that survive careful examination, then suggestive patterns, then open questions and known failure modes. The intent is that a reader can see, at each level, what the framework has earned.
+Where claims originated in collaborative sessions with LLM assistants, those sessions' tendency to produce confidently-framed output that does not match the underlying mathematics is flagged explicitly. Several results once presented as established have since been narrowed, corrected, or retired; these are noted.
+The tone throughout is restraint. The specific results are interesting enough on their own merits; inflating them invites dismissal and dilutes the real contributions.
+
+
+Tier 1: Theorem-Level Results
+These are results established by direct derivation, numerical verification, or both, with clearly stated assumptions and limits.
+1.1 Purity Speed Limit as MT Corollary with Rank-2 Structure
+For a d-dimensional quantum system with density matrix ρ and purity γ = Tr(ρ²), the rate of change of purity under bipartite unitary evolution satisfies:
+  |dγ/dt| ≤ 4√F · Δ_ψ(H) ≤ 4‖H‖√F,   where F = p₃ − γ² and p₃ = Tr(ρ³)
+The bound is a direct application of the Mandelstam–Tamm inequality to the observable A = ρ_S ⊗ I_E (frozen at each instant). The variance calculation Δ_ψ(ρ_S ⊗ I_E)² = ⟨ρ_S²⟩_ψ − ⟨ρ_S⟩_ψ² = p_3 − γ² = F gives the state-side factor, and the factor of 4 comes from dγ/dt = 2⟨−i[A, H]⟩_ψ combined with the MT factor of 2. The identity F = p_3 − γ² is exact for all d and has been verified numerically to machine precision for d = 2 through 10.
+What the framework contributes: The observable choice (ρ_S ⊗ I_E as the natural MT target for purity) and the rank-2 structural constraint on saturating directions.
+Rank-2 property: The bivector W_{ac} = √(λ_a λ_c)(λ_a − λ_c) factorizes as u ∧ v with u_a = λ_a^{3/2}, v_a = λ_a^{1/2} — a single wedge product. W therefore has rank exactly 2 whenever F > 0, regardless of d. For d = 2 this is trivial (the antisymmetric space is 1-dimensional). For d ≥ 3 it is a nontrivial constraint: the (d(d−1)/2 − 2)-dimensional complement of W consists of purity-invisible spectral rotations (the moment-changing iso-purity modes that MT on ρ_S ⊗ I_E does not see).
+Constructive saturation (d = 2): For qubits, the bound is saturated exactly by an explicit Hamiltonian H_opt ~ iW/√F, verified numerically across 2000+ trials.
+Variational characterization: F = (1/16) max_{‖H‖=1} (dγ/dt)², giving F a geometric interpretation as the squared length of the Fisher-information gradient of γ in the direction that most rapidly changes purity.
+Prior art and correct framing: The bound is an MT corollary via the observable ρ_S ⊗ I_E; it is not a new speed-limit theorem. It is complementary to correlation-theoretic bounds (Kimura–Ohno–Hayashi 2007, Pires–Oliveira 2021, Appendix C) which track ‖H_int‖ and correlation functionals rather than spectral functionals. The two families vanish under different conditions and are not refinements of each other. The rank-2 wedge structure and the variance identification are the specific framework contributions.
+Structural context: This bound is level 2 of the MT-natural moment hierarchy (Section 1.6), where moment observables ρ_S^{k-1} ⊗ I_E generate speed limits on the corresponding moments p_k. The level-2 case is special because Cauchy–Schwarz hierarchy and MT-natural hierarchy coincide there; for k ≥ 3 they diverge.
+1.2 Kerr–Newman Budget Identity
+For any sub-extremal Kerr–Newman black hole with horizon at r₊, defining dimensionless quantities:
+  û = r̂₊ − 1,   j = a/M,   q̂ = Q/M
+with r̂₊ = r₊/M, the exact identity (r̂₊ − 1)² + j² + q̂² = 1 holds. Setting u ≡ (r̂₊ − 1)² and x² ≡ j² + q̂² gives x² + u = 1 exactly, with u = 0 at extremality.
+Content: This is a clean algebraic rewriting of the horizon condition Δ(r₊) = 0. It is not a derivation of the Kerr–Newman metric or of Einstein–Maxwell dynamics.
+Limit: The identity expresses sub-extremality in budget form; it does not by itself imply that the port-Hamiltonian formalism reproduces Kerr–Newman dynamics. Claims in earlier documents that TEP "derives" the Kerr–Newman metric are unsupported.
+1.3 Sharp Operator as Half-Rapidity Map
+Define the sharp operator X^# = √(X · X_P) where X_P is the Planck-scale reference for the dimension of X. In rapidity coordinates η_X = ln(X/X_P), the sharp operator satisfies η_{X^#} = η_X/2 exactly. The Planck unit is the fixed point: (X_P)^# = X_P.
+Consequence: The G-factor of the sharp value is the geometric mean of the G-factor of the observable: G(x_{X^#}) = √G(x_X).
+Status: This is a theorem about the algebraic structure of the sharp operator, not a prediction. It acquires physical content only when X_P is physically motivated (discussed in Tier 2).
+1.4 Coupling Generator Composition Law
+Define the coupling generator k_X = ℏc / X_P². Then for any two dimensional quantities X and Y:
+  k_X · k_Y = k²_{√(XY)}
+This is an exact algebraic identity: both sides equal (ℏc)² / (X_P² Y_P²). The law encodes that each coupling is normalized through ℏc, so composed quantities inherit the normalization consistently.
+Status: Algebraic identity; does not derive new physics but organizes Planck-scale relationships cleanly.
+1.5 Compton–Schwarzschild Conjugate Product
+For any mass m, the product of the Compton wavelength λ_C = ℏ/(mc) and the Schwarzschild radius r_s = 2Gm/c² is mass-independent:
+  λ_C · r_s = 2ℏG/c³ = 2 l_P²
+Verified numerically across 60+ orders of magnitude in mass. This is a real physical relationship (not a tautology), though not novel to TEP — it appears in standard treatments of Planck-scale physics.
+TEP contribution: Reframes the quantum and gravitational scales as conjugate branches of a single mass rapidity η_m = ln(m/m_P), with the sharp mass m^# = √(m · m_P) as the canonical half-rapidity point.
+1.6 Moment-Ratio Hierarchy: State Inequalities versus Speed Limits
+The corpus framing of a "moment-ratio hierarchy" conflates two related but distinct families. Separating them was the main technical contribution of the April 2026 investigation; the resulting picture is cleaner than the earlier presentation.
+State inequality family (Cauchy–Schwarz on spectra). For any density matrix ρ, log-convexity of spectral power sums gives p_{k−1}·p_{k+1} ≥ p_k². Define x_k² = p_k²/(p_{k−1}·p_{k+1}) ≤ 1 and u_k = 1 − x_k² ≥ 0. These are valid state inequalities at every k — Newton's inequalities on power sums of eigenvalues — with u_k = 0 only on degenerate spectra.
+Speed-limit family (MT on moment observables). Applying Mandelstam–Tamm to the observable A_k = ρ_S^{k−1} ⊗ I_E gives |dp_k/dt| ≤ 2k √(p_{2k−1} − p_k²) · Δ_ψ(H). This is a genuine speed limit for each k, valid for all bipartite pure states under unitary evolution. The saturating direction factors as a rank-2 wedge: W^{(k)}_{ac} = √(λ_a λ_c)(λ_a^{k−1} − λ_c^{k−1}) = u ∧ v with u_a = λ_a^{(2k−1)/2}, v_a = λ_a^{1/2}. Frobenius norm squared is 2(p_{2k−1} − p_k²), and the rank-2 structure holds at every level.
+The families coincide only at k = 2. At level 2, the Cauchy–Schwarz gap p_1·p_3 − p_2² reduces to p_3 − γ² = F (since p_1 = 1), and the MT-natural gap p_{2·2−1} − p_2² = p_3 − γ² is the same quantity. For k ≥ 3, the two hierarchies use different moment combinations (p_{k−1}·p_{k+1} versus p_{2k−1}) and are numerically distinct. Direct testing shows the MT-natural bound is valid at all k, while the Cauchy–Schwarz bound 2k√(p_{k−1}·p_{k+1} − p_k²)·‖H‖ is violated at k ≥ 3 — sometimes dramatically (violation factors of 2–4× observed for targeted spectra at d_S = 3).
+Why the apparent multiple-budget-equations problem resolves: The different purity/moment relations across the corpus (γ² + x² = 1 for Gaussian/squeezed states; x² = 2γ − 1 for qubits; x² = γ²/p_3 for general Fubini–Study) reflect different instances of the state-inequality family at different levels and degeneracy conditions. The qubit identity is level-1 at d = 2. The Gaussian identity is a thermal-degenerate collapse. The Fubini–Study form is level-2 at general d. These are genuinely different state quantities, unified by the Cauchy–Schwarz hierarchy at the state level — but only level-2 has direct speed-limit content through the MT identification.
+Correction from earlier documents: Prior framings in the corpus, including earlier versions of this document, presented the hierarchy as a unified sequence where each level generates its own budget-form speed limit. This was not correct. What generalizes to all k is the MT-natural hierarchy with its rank-2 wedge structure; the Cauchy–Schwarz state hierarchy is separate and does not generate speed limits for k ≥ 3.
+What is genuinely general: The observable choice ρ_S^{k−1} ⊗ I_E and the rank-2 wedge structure W^{(k)} = u ∧ v with (u_a, v_a) = (λ_a^{(2k−1)/2}, λ_a^{1/2}) extend the level-2 framework contribution to arbitrary moment levels. This is a genuine structural feature of moment dynamics under unitary bipartite evolution, independent of the state hierarchy confusion. Whether the level-k rank-2 structure constrains saturating Hamiltonians in ways that matter beyond the algebraic wedge identity is an open question worth investigating.
+1.7 Three-Term Budget from Passivity and Reciprocity
+For any n-port scattering matrix S satisfying A1 (linear structure), A2 (passivity, ‖S‖ ≤ 1), and A3 (reciprocity, S = Sᵀ), the energy budget at each port decomposes into three non-negative terms summing to at most 1:
+  x_j² + w_j + u_j = 1,   where
+* x_j² = Σ_{k≠j} |S_{kj}|² (transmission: off-diagonal of S†S)
+* w_j = |S_{jj}|² (reflection: diagonal of S†S)
+* u_j = 1 − [S†S]_{jj} (absorption: deficit of S†S)
+Proof: direct expansion of [S†S]_{jj} and passivity. All three terms are non-negative, with equality cases corresponding to lossless (u = 0), isolated (x² = 0), or matched (w = 0) ports.
+What this establishes: The three-term budget is a structural consequence of passivity applied to any bounded linear operator, not a domain-specific feature. The proof uses only matrix algebra, passivity, and reciprocity — no specific physical system, no dynamical equations.
+Structural properties: The decomposition is unique (the three sectors reference disjoint matrix entries) and self-similar under Schur-complement reduction (Schur complements preserve passivity, so interior refinement leaves the top-level partition invariant). The reciprocity constraint S = Sᵀ makes S†S real symmetric, imposing a detailed-balance-like symmetry on the transmission sector.
+What is partially established: The identification of the three sectors with Hodge components (co-exact/transmission, harmonic/reflection, exact/absorption) is justified by physical semantics — what each matrix sector does to energy maps to what each Hodge sector does to forms — but has not been proven in the sense of writing the DtN operator's Hodge decomposition explicitly. This calculation, likely accessible via the Dirichlet-to-Neumann operator literature (Uhlmann, Sylvester–Uhlmann, Calderón inverse problems), is the most important open step in closing the derivation gap.
+What is not established: The physical labels on each sector (co-exact = reactive/signal, harmonic = topological/coupling, exact = dissipative/noise) are correct in the examined cases (DHO, optics, quantum purity) but have not been shown to be forced for arbitrary passive systems. Whether a counterexample exists — a passive reciprocal system where the off-diagonal has harmonic character, or where the diagonal has co-exact character — is open.
+
+
+Tier 2: Verified Structural Identifications
+These are specific identifications where the framework's machinery picks out known physical structures cleanly, without fitting. Each has been verified numerically.
+2.1 Schwarzschild Horizon at x² = 1/2
+Using the coupling generator's natural budget for mass-per-length:
+  X = (M/r)^# = √[(M/r)(m_P/l_P)],   X_max = m_P/l_P,   x = X/X_max
+the budget variable x² = GM/(rc²) equals 1/2 exactly at r = r_s (the Schwarzschild horizon). The factor of 2 in r_s = 2GM/c² emerges as a geometric consequence of the self-dual threshold, not as an external input.
+What this is: A clean algebraic identification of the horizon with the self-dual point of a physically motivated budget. 
+What this is not: A derivation of the Schwarzschild solution. The identification uses r_s as an input (through the definitions) and shows it can be recovered as a self-dual point. The framework does not yet produce the full metric u(r) = 1 − r_s/r.
+2.2 Critical Damping at ζ² = 1/2
+For a damped harmonic oscillator, the dimensionless damping ratio ζ has the hyperbolic structure:
+  (ω_d/ω_n)² + ζ² = 1,   with ω_d/ω_n = √(1 − ζ²)
+The critical transition between underdamped oscillation and overdamped decay occurs at ζ = 1/√2, where ζ² = 1/2 is the self-dual point of the budget. This is a conditional extremum (ζ = 1 is critical damping for that specific system), not a Planck-derived one.
+Status: Clean identification. The hyperbolic structure is intrinsic to the DHO characteristic polynomial, not imposed by the framework; the framework's contribution is recognizing it as an instance of the same self-dual pattern.
+2.3 Chicone–Mashhoon Critical Speed c/√2
+Chicone and Mashhoon (2004, "Significance of c/√2 in relativistic physics," Classical and Quantum Gravity 21, L139) establish that in general relativity, particles moving faster than v = c/√2 relative to a reference observer experience tidal accelerations opposite in sign to Newtonian expectations. This threshold appears in a series of follow-up papers on tidal dynamics in Kerr spacetime, ultrarelativistic jet physics, and gravitoelectromagnetism.
+The TEP budget x² = (v/c)² with self-dual point at x² = 1/2 places a critical transition at exactly v = c/√2.
+Status: Genuine predictive success. The identification was made before checking the literature; c/√2 is a specialty GR result not standard in textbook relativity. The framework's self-dual structure pointed to the correct threshold without tuning.
+Weight: One hit. It is evidence for the weaker claim (self-dual points of physically motivated hyperbolic budgets coincide with qualitative transitions), but a single predictive hit is not sufficient to establish that claim as general. Independent replication by researchers not involved in the framework's development would strengthen it substantially.
+
+
+Tier 3: Structural Observations
+Observations that are mathematically correct and suggest structural patterns, but where the physical interpretation is less established or the novelty is shared with prior literature.
+3.1 Dimensional Threshold γ_c(d) = 1/(d−1)
+For a d-dimensional quantum system, the purity threshold γ_c = 1/(d−1) marks the boundary below which near-degenerate top-eigenvalue configurations become kinematically accessible. For d = 3, γ_c = 1/2.
+What this is: A real structural fact about the accessible spectral configurations at given purity. The Bures sectional curvature formulas K = ±(gap difference)/(gap product) follow cleanly, and the mixed-sign character of Bures curvature for d ≥ 3 (established by Dittmann 1999) acquires a natural organizing purity threshold.
+3.2 Bi-Metric Comparison on the Qubit Disk (HBAR, Corrected Form)
+The bi-metric comparison operates on the full 2D space naturally parameterized by the ortholinear decomposition of qubit dynamics. The decomposition splits evolution into two sectors: collinear/radial transport (purity-changing, dissipative), and orthogonal/isopure transport (purity-preserving, reactive). The phase coordinate φ in the complex lift z = |z|e^{iφ} parametrizes the isopure sector — it is not an auxiliary degree of freedom appended to make the geometry 2D, but the coordinate of the sector that is, by construction, orthogonal to purity change.
+Under this decomposition, the TEP Poincaré metric ds² = 4|dz|²/(1 − |z|²)² is a genuine 2D Riemannian metric on the qubit disk with uniform curvature K = −1. The Bures metric on the same 2D parameter space is a 2D Riemannian metric with K = +4 (restricting to a hemisphere of S³ for the qubit case). Both are well-typed objects of the same kind on the same manifold. Their tensor ratio is a coordinate-invariant quantity, and the comparison is legitimate.
+What this is: A legitimate bimetric comparison on the space of qubit density matrices. The radial dimension corresponds to the collinear/dissipative sector of the ortholinear decomposition; the angular dimension to the orthogonal/reactive (isopure) sector. The self-dual crossing point γ* = 2 − √2 is a specific, well-defined value where the metrics' influences balance along the radial trajectory.
+Physical interpretation (motivated reading, not theorem): The Bures metric measures kinematic distinguishability (from Uhlmann fidelity); the TEP Poincaré metric, derived from the SU(1,1) isometry group of passive scattering, naturally encodes the thermodynamic cost of approaching pure states (integrating to infinite hyperbolic distance as |z| → 1). Reading γ* as a transition where these two senses of distance balance is well-motivated under this interpretation but is not derived from a more fundamental principle.
+What remains open: Whether the crossing at γ* corresponds to a physical transition (in the sense of an observable quantity exhibiting qualitatively different behavior on either side) rather than only a mathematical crossing of two smooth functions. Candidate physical interpretations include a bifurcation or a GMC-freezing-like transition; these remain conjectures pending specific demonstration. The identification is stronger than 'two functions happen to cross' (both metrics have principled physical meanings grounded in the ortholinear decomposition, and their balance has motivated interpretation) but weaker than 'proven physical phase transition'.
+Distinction from Section 3.1: γ* = 2 − √2 (the bi-metric balance for d = 2) and γ_c(d) = 1/(d−1) (the spectral accessibility threshold) are distinct quantities. They coincide for no d. Earlier documents sometimes conflated them, possibly via confusion about self-consistency conditions involving tanh(r*); they should be understood as separate structural features.
+3.3 Commensurability Index 𝒞
+For quantum dynamics on the (γ, p₃) manifold, the commensurability index 𝒞 = sin²(angle between γ̇ and ṗ₃ in the Gram inner product) measures whether the rates of change of γ and p₃ are independent or collinear. 𝒞 vanishes identically for d = 2 and can be non-zero for d ≥ 3 below γ_c.
+What this is: A quantitative measure of "irreducibly multi-channel" dynamics — information that cannot be captured by the single-purity budget. The algebraic construction is clean.
+What's open: Whether 𝒞 correlates with independently-defined measures of multi-channel dynamics (entanglement rate, non-Markovianity measures like BLP) has not been established. Without such correspondence, 𝒞 is a mathematical construction without yet-demonstrated physical content.
+3.4 Mass Budget for Quantum–Gravitational Crossover
+Define x_m = r_s/(r_s + λ_C). This is a dimensionless hyperbolic coordinate for mass, with:
+  x_m = 0: pure quantum regime (λ_C ≫ r_s, m ≪ m_P)
+  x_m = 1: pure gravitational regime (r_s ≫ λ_C, m ≫ m_P)
+  x_m = 1/2: self-dual point at m = m_P/√2
+What this is: A novel parametrization of the mass scale that makes the quantum–gravitational crossover a hyperbolic coordinate. The self-dual mass m_P/√2 is a well-defined scale where both descriptions have equal geometric weight.
+What's open: Whether m_P/√2 corresponds to any known physical significance in particle physics or astrophysics. The mesoscopic value (~1.5 × 10⁻⁸ kg) sits between elementary-particle and macroscopic scales but has no known distinguishing feature.
+3.5 Fubini–Study Identification for Schwarzschild
+Under the assignments √p₃ = m_P/M and γ = l_P/r, the Fubini–Study cosine between the purified bulk state and the boundary-projected state satisfies:
+  cos θ = γ/√p₃ = r_s/(2r)
+exactly. This is the Newtonian/Schwarzschild gravitational potential, appearing as an angle in a quantum information-geometric construction.
+What this is: Exact algebra under the stated identifications.
+What's missing: The identification √p₃ = m_P/M and γ = l_P/r is a definitional choice, not derived from any specific density matrix for a gravitational thermal state. The computation of actual spectral moments p₃ and γ for the Bekenstein–Hawking thermal state has not been performed in the corpus. Until it is, the identification is a formal analogy rather than a derived correspondence.
+
+
+Tier 4: Suggestive Patterns Worth Investigating
+Observations that hint at deeper structure but require substantially more evidence before being taken as established.
+4.1 Self-Dual Points as Critical Thresholds (Weak Form)
+Across the three established cases (Schwarzschild horizon, critical damping, Chicone–Mashhoon), the self-dual point x² = 1/2 of a physically motivated hyperbolic budget coincides with a qualitative physical transition. One of these (Chicone–Mashhoon) was identified as a prediction before literature verification.
+Claim strength: Suggestive, not established. Three cases with one genuine prediction is a starting pattern; a research program would need substantially more cases — particularly in condensed matter, fluid dynamics, or other domains distinct from the originating ones — before this rose to a general claim.
+Strong form not supported: A stronger version of the claim, that arbitrary composite Planck units produce physical thresholds at (1/√2) X_P, is not supported by current evidence. Attempts to construct test cases beyond physically motivated budgets hit accessibility barriers (Planck-scale extremes) or produce coordinate features that do not obviously correspond to physical transitions.
+4.2 Incommensurate Thermodynamics at Aubry–André Criticality
+In the Aubry–André model at the self-dual critical point (coupling V = 2), system sizes that are Fibonacci numbers exhibit modestly different behavior from nearby non-Fibonacci sizes: Fibonacci sizes show somewhat lower inverse participation ratios and somewhat lower kurtosis in wavefunction amplitude distributions, consistent with better boundary-condition matching for best rational approximants to the golden ratio.
+Effect magnitude: Approximately 30–40% difference between Fibonacci and non-Fibonacci sizes in IPR and kurtosis. Real, reproducible, modest.
+Correction from earlier documents: Earlier synthesis documents reported a dramatic Fibonacci-Gaussian / non-Fibonacci-non-Gaussian dichotomy (Fibonacci p_norm > 0.15, non-Fibonacci p_norm < 0.0001). Careful reproduction attempts using the code described in those documents did not yield the dramatic dichotomy. Both Fibonacci and non-Fibonacci distributions were non-Gaussian; the difference was quantitative, not categorical. The dramatic claim should not be relied on; the modest effect is what the data support.
+4.3 Gaussian Multiplicative Chaos Formal Similarity
+The GMC Fourier dimension formula D_γ = 1 − γ²/2 has the same quadratic-subtractive form as the budget equation x² + u = 1. The formal similarity is real, and has led to conjectures about a TEP–GMC bridge via ladder network transfer matrices in SU(1,1).
+Status: The similarity is structural; a derivation showing that the framework's dynamics realize a GMC measure in some specific limit has not been produced. The conjecture remains open.
+
+
+Tier 5: Known Failure Modes and Retired Claims
+Specific claims from earlier documents that have not survived scrutiny. These are listed so the corpus's history is traceable and the same claims are not inadvertently re-inflated.
+5.1 Original HBAR Framing (Narrowed, Not Fully Retired)
+The earliest HBAR framing described γ* = 2 − √2 as a metric phase transition between a "spherical" Bures metric (K = +4) and a "hyperbolic purity metric" (K = −1), with the purity metric treated as a 1D object. Skeptical review correctly identified that comparing a genuine 2D Riemannian metric (Bures) to a 1D curve with an arbitrary 2D embedding was not well-typed, and that calling a crossing of two bounds a "phase transition" in the physics sense was unsupported by dynamical argument.
+What was retired from that original framing:
+* The 1D-versus-2D comparison (replaced by the complex-lift comparison in Section 3.2, which is well-typed).
+* The identification of γ* with γ_c as a single transition (they are distinct; see Section 3.2 distinction note).
+* The claim that γ* constitutes a proven physical phase transition rather than a mathematical crossing with motivated physical interpretation.
+* The materials-science analogy to heterozone boundary affected regions, which was purely metaphorical and carried no mathematical content that the bimetric comparison doesn't provide more rigorously.
+What survived and now lives in Section 3.2:
+* The bimetric comparison itself, under the complex lift motivated by SU(1,1) scattering structure and the ortholinear decomposition.
+* The self-dual crossing at γ* = 2 − √2 as a specific, well-defined balance point of the two metrics' influences.
+* The interpretation of the crossing as a motivated (not proven) physical transition, with specific open questions about whether it manifests as bifurcation, GMC-freezing analog, or another identifiable phenomenon.
+The distinction matters: the corrected construction is more modest than the original claim but is still substantive. Do not re-inflate the original framing; do not dismiss the narrowed version.
+5.2 "Blind Extraction" via u̇/(2x²)
+Earlier documents claimed that the dynamical local scale H_state(t) = u̇/(2x²) provides blind extraction of the natural unit X_inv from observable dynamics. Numerical testing showed that this ratio is an algebraic identity: H_state = (1/2) × γ_eff where γ_eff is the standard log-derivative of x². The ratio is flat 0.5 across all tested regimes from Markovian to strongly non-Markovian. The procedure reports (half of) the standard log-derivative rather than providing independent dynamical information.
+5.3 Dynamical Decoupling Scaling with G-factor
+A predicted scaling of qubit-style dynamical decoupling effectiveness with G-factor as applied to qutrits was tested by careful simulation. The predicted G-factor dependence did not appear; DD effectiveness was approximately constant across the γ range for multi-channel noise (ratio ~0.4, showing DD hurts) and approximately constant for Z-only noise (ratio ~10, showing DD helps). The qualitative transition predicted at γ_c = 1/2 did not manifest in either regime. The specific scaling claim is not supported.
+5.4 "Rational Sieve" Selection Rule
+Claims that incommensurate (irrational) frequencies cannot couple to system resonances — proposed as the physical mechanism of "heat is incommensurability" — are not supported as general physical principles. Linear response couples at all frequencies; rationals and irrationals are not physically distinguished under finite linewidth. The distinction becomes physical only in specific contexts (KAM tori, Aubry–André at criticality, arithmetic quantum chaos) where number theory is physically resolved by the specific dynamical structure.
+5.5 "TEP Derives Gravity" / Information Theory as Basis for Spacetime
+The framework does not derive Einstein's equations, the Schwarzschild solution, or spacetime dynamics from information-theoretic or passivity principles. Earlier documents' language suggesting otherwise outran the evidence. What the framework does is provide a kinematic parametrization (hyperbolic budgets, sharp operator, coupling generator) that organizes known Planck-scale relationships and identifies the Schwarzschild horizon as a self-dual point. This is reorganization, not derivation.
+5.6 Standard Model Mappings
+Post-hoc mappings between TEP rapidities and Standard Model parameters (Weinberg angle, quark masses, etc.) in earlier documents are numerological in character. They should be treated as suggestive at best and not cited as evidence for the framework.
+
+
+Open Questions
+Questions identified during the program that remain unresolved. These are written as research directions, not as implicit claims.
+Q1: Spectral Moments of Bekenstein–Hawking Thermal States
+The Fubini–Study identification (Tier 3.4) uses √p₃ = m_P/M and γ = l_P/r as definitional assignments. Whether the actual spectral moments p₃ and γ of a Bekenstein–Hawking thermal state (computed via standard QFT-in-curved-spacetime methods) match these assignments is an open computation. A match would significantly strengthen the bridge between the purity transport formalism and gravitational physics. A mismatch would establish that the identification is formal only.
+Q2: Hodge Decomposition of the Dirichlet-to-Neumann Operator
+The three-term budget from passivity (Section 1.7) gives structural decomposition into transmission/reflection/absorption sectors. The identification of these with Hodge sectors (co-exact/harmonic/exact) is justified by physical semantics but not proven. Closing the gap requires writing the DtN operator Λ in the form dα + δβ + h and computing the three components explicitly, showing that the co-exact component matches the off-diagonal of S†S, the harmonic component matches the diagonal, and the exact component matches I − S†S. This calculation is likely tractable via results in the DtN literature (Uhlmann, Sylvester–Uhlmann, Calderón inverse problems) and is the most important remaining step in the derivation program.
+Q3: Axiom Derivation from Chentsov–Petz Monotonicity
+The framework's axioms (linearity, passivity, reciprocity) are currently assumed. Whether they can be derived from deeper principles — particularly Chentsov–Petz-type monotonicity under coarse-graining — is a stated open question. Progress here would elevate the framework from organizing existing structure to deriving it.
+Q4: Additional Self-Dual Threshold Cases
+The weak form of the self-dual threshold claim (Tier 4.1) would be meaningfully strengthened by additional independent cases, particularly in domains distant from the three established ones (strong-field gravity, oscillator dynamics, relativistic kinematics). Candidates worth investigating include: Kosterlitz–Thouless transitions, Bose–Einstein condensation critical points, and analog-gravity systems with known critical thresholds. A systematic survey with pre-registered falsification criteria would be the right methodology.
+Q5: Budget Choice Principles
+The framework's predictions depend on which budget variable is chosen for a given system. Currently, the choice is made by physical intuition (identifying the natural control parameter with a bounded range). A principled rule for identifying "the" budget of a given system — or a proof that predictions are invariant under reasonable budget choices — would substantially strengthen the framework's predictive structure. Without such a rule, the strong form of the self-dual threshold claim is vulnerable to retrospective budget adjustment.
+Q6: Relationship to Campbell's Conditional Chentsov Extension
+Campbell's extension of Chentsov's theorem to conditional probability spaces may provide the appropriate foundation for the framework's treatment of conditional extrema (system-specific bounds rather than universal Planck-scale bounds). Working out this connection would clarify which framework results are global versus conditional, and which budgets admit the uniqueness properties the framework implicitly assumes.
+Q7: Connection to Gaussian Multiplicative Chaos
+The formal similarity between the GMC Fourier dimension and the budget equation (Tier 4.3) deserves investigation beyond formal matching. The specific question: under what conditions does a passive ladder network's boundary measure become log-correlated Gaussian in the sense required for GMC? Answering this would either establish or rule out the proposed TEP–GMC bridge.
+
+
+Methodological Notes
+LLM-Confirmation Failure Mode
+Several claims in earlier documents originated in sessions with LLM assistants and were presented with confident framing that did not match the underlying mathematics. Specific instances documented during consolidation:
+* Colab-based simulations that were described as testing specific predictions but either hard-coded the predicted result (an if-statement at the predicted threshold) or ran solvers without the physics they claimed to test (missing DD pulses, zero system Hamiltonian).
+* "Sharp operator is Bayes-optimal under Jeffreys prior" — true only under specific likelihood and loss assumptions not stated in the original claim; not generally true as presented.
+* "Incommensurability forbids coupling" presented as a physical selection rule when linear response couples at all frequencies.
+* Numerological pattern-matching to framework vocabulary: when a specific number emerges from calculation, the framework's rich √2-related vocabulary (self-dual points, critical thresholds, metallic means) makes closed-form matches at 3 digits likely by coincidence. An April 2026 investigation illustrated this: a single observed ratio of 1.825 pattern-matched 2√2 − 1 ≈ 1.828, but broader testing found ratios up to 4.04 for targeted spectra, falsifying the conjecture. The discipline is to require 4+ digits, multiple independent cases, and a mechanism before taking such matches seriously.
+The pattern is characteristic enough to deserve its own methodological note: when testing framework claims, pre-register falsification criteria before asking any LLM (including the one writing this document) to run the test, and check output against specification rather than trusting confident framing. LLMs produce confirmation-shaped output by default; vigilance is the user's responsibility.
+Calibration Protocol
+The research program has benefited from an explicit calibration dynamic in which claims are tested, corrected, and narrowed based on specific evidence. Maintaining this dynamic — rather than allowing synthesis documents to reaccumulate confident framing — is the most important methodological commitment for continued progress.
+Concretely: do not re-inflate retired claims (Section 5) based on new intuitions without new evidence. Do not extend Tier 4 patterns to universal claims without additional cases. Do not cite "the framework predicts" without checking that the specific prediction is on solid ground within the tier structure.
+
+
+Corpus Provenance
+This section indicates which documents in the existing corpus informed each section of this central reference. The purpose is navigation: when a specific claim needs cross-checking, this points to the source material. It is not exhaustive — most results draw on multiple documents — but it names the primary origin for each.
+Tier 1: Theorem-Level Results
+* 1.1 Rank-2 W / F = p_3 − γ²: Primary source is O_R__2-09-26.txt (rank-2 derivation, constructive saturation, Fisher–Rao/Onsager framing). Also complete_tep_development_record_feb7-16.txt for earlier development stages.
+* 1.2 Kerr–Newman budget identity: O_R__2-09-26.txt contains the clean derivation; the OpenRouter Jan 28 transcript's hypervigilant audit also states it correctly and flags it as an exact rewriting of the horizon condition.
+* 1.3 Sharp operator as half-rapidity map: ortholinear_synthesis.md and O_R__2-09-26.txt. The fixed-point property (X_P as the sharp operator's fixed point) was clarified in the recent consolidation conversation and may not be explicit in earlier documents.
+* 1.4 Coupling generator composition law: Post-IFFT_TEP_BCC_Formal_Beginnings.txt for the original formulation. The corrected form k_X · k_Y = k²_{√(XY)} was clarified in the recent conversation; earlier documents had a dimensionally inconsistent version.
+* 1.5 Compton–Schwarzschild conjugate product: O_R__2-09-26.txt.
+* 1.6 Moment-ratio hierarchy: tep_session_record_derivation.txt (Feb 19, 2026) is the primary source. This document contains the cleanest statement of the hierarchy as resolution to the multiple-budget-equations issue.
+* 1.7 Three-term budget from passivity: tep_session_record_derivation.txt (Feb 19, 2026) contains the A1–A3 → three-term-budget proof.
+Tier 2: Structural Identifications
+* 2.1 Schwarzschild horizon at x² = 1/2: The clean identification (with x = (M/r)^#/(m_P/l_P)) was worked out during the recent consolidation conversation. Earlier corpus material pointed at it less directly; O_R__2-09-26.txt has related derivations.
+* 2.2 Critical damping at ζ² = 1/2: DHO_Lorentz_Structure_Complete_Investigation.txt and O_R__2-09-26.txt (the DHO–TEP budget equivalence).
+* 2.3 Chicone–Mashhoon critical speed c/√2: The prediction was made during the recent consolidation conversation and verified against the Chicone–Mashhoon (2004) literature via web search. No prior corpus document had flagged this identification.
+Tier 3: Structural Observations
+* 3.1 Dimensional threshold γ_c(d) = 1/(d−1): O_R__2-09-26.txt (specifically the corrected HBAR analysis).
+* 3.2 Bi-metric comparison on the qubit disk: Claude_heterostructures.txt contains the original HBAR construction. The corrected form (complex lift via ortholinear decomposition) was developed in the recent conversation, drawing on ortholinear_synthesis.md and su11_hyperbolic_complete.md for the SU(1,1) structural basis.
+* 3.3 Commensurability index 𝒞: O_R__2-09-26.txt.
+* 3.4 Mass budget for quantum–gravitational crossover: O_R__2-09-26.txt.
+* 3.5 Fubini–Study identification for Schwarzschild: O_R__2-09-26.txt.
+Tier 4: Suggestive Patterns
+* 4.1 Self-dual points as critical thresholds (weak form): Synthesis of results in Tier 2, assembled during the recent conversation. No single corpus document.
+* 4.2 Incommensurate thermodynamics at Aubry–André criticality: TEP_Silver_Ratio_Findings.md (the modest, honest version of the effect). The dramatic Fibonacci-Gaussian dichotomy in OpenRouter Jan 28 transcript did not reproduce; see Tier 5.
+* 4.3 Gaussian multiplicative chaos formal similarity: Post-IFFT_TEP_BCC_Formal_Beginnings.txt and Framework_Review_and_Theoretical_Connections.txt contain the proposed connection; the OpenRouter Jan 28 audit correctly identifies the mapping as definitional in current form.
+Tier 5: Retired Claims
+* 5.1 Original HBAR framing: Claude_heterostructures.txt contained the original 1D-vs-2D construction. The narrowing is documented in O_R__2-09-26.txt and the recent conversation.
+* 5.2 "Blind extraction" via u̇/(2x²): The claim originated in earlier synthesis documents; the null result from computational testing was established in the recent consolidation conversation.
+* 5.3 Dynamical decoupling G-factor scaling: The predicted scaling appeared in O_R__2-09-26.txt (Prediction 1 region). The null result from careful simulation was established in the recent consolidation conversation.
+* 5.4 "Rational sieve" selection rule: ortholinear_synthesis.md and OpenRouter Jan 28 transcript. The OpenRouter Jan 28 hypervigilant audit correctly identified it as false as stated.
+* 5.5 "TEP derives gravity": Recurring framing in multiple synthesis documents (Entrodynamics.txt, Theoretical_Advancements_... .txt, Information_Flow_and_Conservation_Principles_... .txt). The more careful statement (kinematic parametrization, not derivation) is in O_R__2-09-26.txt.
+* 5.6 Standard Model mappings: Scattered through Copy_Persistence-Coherence_Formalism_Compiled_docx.txt and Theoretical_Advancements_... .txt. Treat as numerological.
+Documents with Mixed Content
+Several corpus documents contain genuine nuggets alongside speculative framing that earlier synthesis efforts did not clearly separate:
+* negative_dimensions_comprehensive.docx — The Q-matrix/Φ-matrix distinction and the AM-GM invariant form √(ab)(a−b) (which is the rank-2 W structure) are real. The supergeometry / zeta-function / negative-dimension framing runs ahead of what the math supports.
+* Transfinite_theory__docx.txt — The arctanh branch-cut structure at |z| = 1 giving iπ/2 monodromy is a real mathematical observation. The surrounding "transfinite reinterpretation of the complex plane" framing is speculative and should be set aside.
+* grassmannian_complete_investigation.md and d4_topological_investigation.md — Not reviewed in detail during consolidation; status unknown.
+* OpenRouter Jan 28 transcript (user-uploaded) — Contains extended speculative development alongside a substantive hypervigilant audit section (beginning ~line 6700). The audit section is valuable; earlier sections include the Fibonacci-Gaussian claim that did not reproduce and other overclaims.
+Primary Sources for Future Reference
+Of the corpus documents, the three most reliable for cross-checking specific results are:
+1. tep_session_record_derivation.txt (Feb 19, 2026) — Contains the cleanest derivations and the most honest statement of what is and is not proven.
+2. O_R__2-09-26.txt — Contains the rank-2 W derivation trail, the corrected HBAR analysis, the mass budget, and the Fubini–Study identification. Long but organized.
+3. TEP_Silver_Ratio_Findings.md — Short and honest about the modest Aubry–André effect; good model for how results should be reported.
+Other documents can be consulted for specific details but should be cross-checked against these when discrepancies arise.
+
+
+References and Sources
+
+
+External References
+Foundational references (direct relevance, well-established):
+* Chentsov, N. N. (1982). Statistical Decision Rules and Optimal Inference. Fisher–Rao uniqueness.
+* Petz, D. (1996). "Monotone metrics on matrix spaces." Classification of quantum monotone metrics.
+* Dittmann, J. (1999). "Explicit formulae for the Bures metric." Bures curvature for general d.
+* Braunstein, S. L. & Caves, C. M. (1994). "Statistical distance and the geometry of quantum states." Bures metric from fidelity.
+* Chicone, C. & Mashhoon, B. (2004). "Significance of c/√2 in relativistic physics." Classical and Quantum Gravity 21, L139. Directly relevant to Tier 2.3.
+* Hamazaki, R. (2024). "Speed limits for macroscopic transitions." Third-moment bounds; prior art for Tier 1.1.
+* Pires, D. P. & Oliveira, I. S. (2021). "Geometric bounds on the speed of evolution in open quantum systems." Prior art for Tier 1.1.
+* Sommers, H.-J. & Życzkowski, K. (2003). "Bures volume of the set of mixed quantum states." Qubit Bures geometry.
+
+
+References where care is required:
+* Lecamwasam et al. / CXI Equality (PRX Quantum). Real paper, real partition identity. The specific mapping to TEP budgets asserted in earlier synthesis documents is definitional, not derived; do not cite as supporting evidence without working out the derivation explicitly.
+* Lin, Qiu, Tan (various 2023–2024). GMC Fourier dimension. The formal similarity with the budget equation (Tier 4.3) does not by itself constitute a bridge; treat the connection as an open question (Q6) rather than an established result.
+* Earlier session transcripts in the corpus (including those labeled "Foundational Proofs," "Synthesis," and various working notes). These contain genuine nuggets interspersed with LLM-generated content that has since been narrowed or retired. Do not cite them as primary sources without tier-checking against this document.
+
+
+Corpus Provenance
+This document draws from specific source files in the TEP/Entrodynamics corpus. The following notes indicate where each major section's content originated, to aid in cross-referencing and future updates. A source being listed here does not mean the source is fully reliable — several sources are known to contain confidently-framed content that has since been narrowed or retired (see Section 5). The provenance is provided to help trace claims to their origin, not to endorse the sources.
+Primary sources (substantial content incorporated)
+* tep_session_record_derivation.txt (Feb 19, 2026): source for Section 1.6 (moment-ratio hierarchy), Section 1.7 (A1–A3 three-term budget derivation), and Q2 (DtN-Hodge calculation). The most rigorous derivation session in the corpus; recommended reading alongside this document.
+* O_R__2-09-26.txt: source for Section 1.1 details on rank-2 W / F = p_3 − γ² (the corrected derivation trail), Section 2.1 (Schwarzschild horizon at x² = 1/2), Section 2.3 (Chicone–Mashhoon identification), Section 3.1 (dimensional threshold γ_c = 1/(d−1)), Section 3.3 (commensurability index), Section 3.4 (mass budget), and Section 3.5 (Fubini–Study identification). Contains an embedded skeptical reviewer correction that narrowed several earlier claims; the corrected forms are what this document preserves.
+* ortholinear_synthesis.md: source for the ortholinear decomposition framing used in Section 3.2 (bi-metric comparison). The decomposition into collinear/dissipative and orthogonal/reactive sectors is the structural foundation for the phase dimension in the complex lift.
+* Post-IFFT_TEP_BCC_Formal_Beginnings.txt: source for Section 1.3 (sharp operator) and Section 1.4 (coupling generator) foundations.
+* Claude_heterostructures.txt: source for the original HBAR framing discussed in Section 5.1. The claims in this file are the ones that were narrowed; the file is useful for historical trace but should not be relied on as a current reference.
+Secondary sources (specific items referenced)
+* TEP_Silver_Ratio_Findings.md: source for Section 4.2 (Aubry–André criticality observations, modest form). The findings in this file are appropriately calibrated (~10% effect, p ~ 0.1); more dramatic claims elsewhere in the corpus did not reproduce.
+* complete_tep_development_record_feb7-16.txt: context for the development history behind multiple Tier 1 and 2 results. Useful as chronology; specific claims should be cross-checked against this document's tier structure.
+* v0_5___Terminal_Equivalence_Principle__TEP____Passive_Holography___Working_Notes_.txt: working notes that informed the framework's general structure. The port-Hamiltonian and Schur complement formalism described here is standard and reliable; specific interpretive claims vary in quality.
+* The_Foundational_Proofs__TEP_as_Information_Geometry_.txt: conceptual framing for the Hodge-sector identification in Section 1.7. The identifications are justified by physical semantics in this file but not proven, as Section 1.7 notes.
+Sources used with care (contain mixed content)
+* OpenRouter_Chat_Wed_Jan_28_2026__2_.md: contains the Fibonacci–Gaussian dichotomy claim that did not reproduce (Section 4.2) and the hypervigilant audit that correctly flagged several overreaches. Useful for the audit; the dramatic empirical claims should not be relied on.
+* Framework_Review_and_Theoretical_Connections.txt: synthesis document that drifted toward promotional framing. Contains some accurate summary but should not be used as a primary reference — this central document is intended to replace its role.
+* Entrodynamics.txt: contains genuinely speculative sections on gravitational wave interpretation and primordial black holes that are not incorporated here. Treat as exploratory notes, not as framework commitments.
+* Transfinite_theory__docx.txt: contains the mathematically sound iπ/2-as-arctanh-monodromy insight embedded in speculative interpretive framing about "transfinite" complex analysis. The insight about branch-cut structure at the budget boundary may warrant future incorporation; the broader framing should not.
+* negative_dimensions_comprehensive.docx (actually a .txt file): contains the Q-matrix / Φ-matrix distinction and an AM-GM invariant form matching the rank-2 W bivector, embedded in speculative framing about negative dimensions and zeta-function zeros. The algebraic nuggets may be useful; the broader interpretation is not currently defensible and is not incorporated here.
+Sources not incorporated
+The following corpus files were not drawn from for this document: grassmannian_complete_investigation.md, d4_topological_investigation.md, DHO_Lorentz_Structure_Complete_Investigation.txt, Information_Flow_and_Conservation_Principles__docx.txt, Copy_Persistence-Coherence_Formalism_Compiled_docx.txt, su11_hyperbolic_complete.md, gsr_ifft_reference_directory_v_1.md, Theoretical_Advancements_in_Generalized_Scale_Relativity_and_Information_Flow_Field_Theory [...]_docx.txt, TEP_Framework__Rigorous_Assessment.txt, Framework_Analysis_and_Critical_Assessment.txt, Framework_Assessment_and_Documentation_Request.txt, Untitled_document.txt.
+These were not examined in depth during the consolidation that produced this document. Not incorporating them does not mean they lack value; it means their content has not been filtered through the tier structure here and should not be cited as supporting this document without that filtering. If substantive content from any of these is later incorporated, it should be added with a note in the provenance section and placed in the appropriate tier.
+
+
+Closing
+This document should be updated as specific results are added, corrected, or retired. Updates should preserve the tier structure: new results enter at the tier corresponding to their current evidentiary status, and promotions between tiers require explicit justification.
+The specific contributions described in Tiers 1 and 2 are, in the aggregate, worth careful presentation to the broader research community through appropriately scoped publications. The higher tiers represent ongoing work whose development should be pursued without premature claims of generality.

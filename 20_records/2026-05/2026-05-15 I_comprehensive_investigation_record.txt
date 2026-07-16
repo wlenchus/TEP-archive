@@ -1,0 +1,984 @@
+# Comprehensive Investigation Record
+
+## Riccati Calculus, Quantum Statistics, and Cascade Thermodynamics in the TEP/Entrodynamics Framework
+
+*A working record of the structural investigation conducted across one
+conversation. The findings here are technical-grade --- verified
+numerically and symbolically where possible --- and the document
+distinguishes carefully between what the framework derives from its
+stated axioms and what requires external physical input.*
+
+------------------------------------------------------------------------
+
+## Preface: Scope and Epistemic Standards
+
+This document records an investigation into the framework's content for
+thermal-statistical physics, conducted in dialogue. The starting point
+was an assessment of two synthesis documents that the author conceded
+were tonally overeager. The investigation aimed to identify what
+survives surgical pressure: which structural claims are derivational,
+which are interpretive overlays, which are wrong, and which are open.
+
+The standards used throughout:
+
+1.  **Derivational** means: produced as a forced consequence of the
+    framework's stated axioms (passive linear scattering, positive-real
+    DtN boundary operator, SU(1,1) Lorentz structure, Schur-complement
+    composition), without external physical inputs beyond those axioms.
+2.  **Imported** means: borrowed from standard physics or mathematics
+    without derivation, used to provide vocabulary or interpretation.
+3.  **Approximation/asymptotic** means: matches an established result in
+    a specific limit, with explicit corrections beyond that limit.
+4.  **Conjectural** means: suggested by the framework's structure but
+    not yet established.
+
+The investigation produced one genuinely derivational result that
+surprised me (the Haldane fractional-exclusion match), several
+structural reorganizations of known physics (the cascade-family
+thermodynamic stratification, the unified quantum-statistics Riccati),
+corrections to a prior labeling (the Hodge decomposition under
+reciprocity), and a clear identification of where the framework's reach
+ends (3+1D spin-statistics, specific QCP exponents).
+
+The Central Reference's tier structure is used: Tier 1 (verified
+theorem), Tier 2 (structural identification with motivated reading),
+Tier 3 (suggestive correspondence), and explicit notation of retired or
+non-derivational claims.
+
+------------------------------------------------------------------------
+
+## Part 1: The Derivation Chain --- How the Riccati Emerges
+
+The framework's central technical object is the Riccati equation
+$$\frac{dn}{ds} = -n - n^2$$ governing the SNR observable $n$ as a
+function of a depth coordinate $s$. Two independent synthesis documents
+claimed this derives Bose-Einstein statistics from passive holography.
+The investigation produced a precise derivation chain that supports a
+narrower but real version of this claim.
+
+### The geometric backbone
+
+Passive linear scattering admits an SU(1,1) symmetry group acting on
+reflection coefficients $r \in D$ (the unit disk in $\mathbb{C}$). This
+is forced by passivity: $S^\dagger S \preceq I$ on each port, with
+reciprocity giving $S = S^T$. The Iwasawa decomposition K-A-N partitions
+SU(1,1) into compact rotation (K), non-compact boost (A), and parabolic
+shear (N) generators.
+
+The Poincaré-disk metric $ds_P^2 = 4|dz|^2/(1-|z|^2)^2$ makes the disk a
+hyperbolic plane with infinite radius. Radial geodesic flow at unit
+hyperbolic speed satisfies
+$$\frac{dx}{ds_P} = \frac{1-x^2}{2}, \qquad x = \tanh(s_P/2)$$ This
+radial direction corresponds to the boost generator A --- the "lossy"
+direction in scattering terminology, distinct from the rotation K
+(phase) and shear N (reactive/lossless).
+
+### From radial flow to the Riccati
+
+Define $n = x^2/(1-x^2)$, recognizing this as the framework's SNR.
+Direct computation: $$\frac{dn}{ds_P} = \sqrt{n(1+n)}$$ This is the
+Poincaré-natural ODE, but it is *not* the framework's Riccati. The
+difference is one of coordinate choice: the framework uses the depth
+coordinate $$s = \ln(1 + 1/n) = -\ln(x^2) = \ln(1 + \text{NSR})$$ which
+is the capacity-additive coordinate for the noise-side quantity. Under
+this reparameterization,
+$$\frac{ds}{dn} = -\frac{1}{n(1+n)} \implies \frac{dn}{ds} = -n(1+n)$$
+The framework's Riccati follows exactly. The general solution is
+$n(s) = 1/(c + Ae^s)$, with $A = 1$ and $c = -1$ giving the
+Bose-Einstein form $n(s) = 1/(e^s - 1)$.
+
+### Status of the chain
+
+The derivation has two physical inputs: - **Input 1:** Identification of
+"depth into the passive bulk" with the radial direction on the Poincaré
+disk. Justified because radial = boost = lossy in the Iwasawa
+decomposition; not arbitrary. - **Input 2:** Choice of the
+capacity-additive-NSR depth coordinate $s = \ln(1 + \text{NSR})$.
+Justified because NSR is the quantity that should be extensive under
+cascade composition of noise-accumulating stages (signal decays, noise
+accumulates).
+
+Both inputs are physically motivated, not free parameters. Given them,
+the Riccati and the Bose-Einstein form follow with no remaining degrees
+of freedom.
+
+**Verdict:** Tier 1 derivation of the Riccati structure from passive
+scattering + two natural coordinate identifications. The collaborator's
+Redheffer/invariant-imbedding pointer is correct in spirit (continuous
+Schur composition produces Riccati equations generally) but the
+disk-geometric argument is cleaner and doesn't require the full
+Redheffer machinery --- Möbius generators are quadratic, so any
+one-parameter SU(1,1) flow is Riccati.
+
+------------------------------------------------------------------------
+
+## Part 2: Numerical Verification of the Derivation
+
+To verify that the analytical chain produces what it claims, I ran four
+numerical tests on discrete Möbius cascades.
+
+### Test A: Pure radial Möbius iteration
+
+A cascade of 2000 inward boosts of $\Delta\theta = 0.005$ each, starting
+at $r_0 = 0.999 + 0i$ on the disk boundary. Comparing the numerical
+$dn/ds$ to the predicted $-n(1+n)$ gives ratio mean = 1.000 with std
+$\sim 10^{-14}$. The full trajectory $n(s)$ matches the closed-form
+Bose-Einstein expression $n(s) = 1/(e^s - 1)$ to machine precision. The
+horizon point $n = 1$ is achieved at exactly $s = \ln 2 = 0.693$.
+
+### Test B: Rotation invariance
+
+Inserting random rotations between each boost (rotations preserve $|r|$
+and therefore $|r|^2$) does not perturb the radial flow. The BE form
+holds to machine precision. This confirms that only the radial component
+matters for the Riccati.
+
+### Test C: Random-axis cascade
+
+Cascades with boost axes drawn uniformly from $[0, 2\pi]$ accumulate
+depth at only **0.65%** of the pure-radial efficiency. The total
+hyperbolic angle applied (10 nats) produces an actual depth of only
+$\sim 0.06$ nats because most of the boost magnitude is "wasted" on
+transverse motion. The framework's depth coordinate is fragile to
+angular incoherence in the cascade.
+
+### Test D: Friis-like additive-noise cascade
+
+Standard Friis cascade with amplitude transmission $\alpha = 0.99$ and
+noise variance $\nu = 10^{-4}$ per stage. The framework's $ds/dk$ varies
+by a factor of **193** across the cascade --- highly non-uniform. The BE
+form still appears as an algebraic identity (because we defined $s$ from
+$n$), but the depth coordinate is no longer a natural cascade
+step-length.
+
+### Test E: Signal-multiplicative cascade
+
+Per-stage signal coherence factor $p_{\text{stage}} = 0.95$. The
+framework's $ds/dk = \ln(1/p_{\text{stage}}) = 0.0513$ is uniform per
+stage with std $\sim 10^{-16}$. The horizon at $n = 1$ lands at exactly
+$s = \ln 2$, independent of $p_{\text{stage}}$. This is the cascade
+family for which the framework's depth coordinate is structurally
+natural.
+
+### What the numerics establish
+
+The framework's Riccati and depth coordinate are **structurally
+natural** for **signal-coherence-multiplicative cascades** specifically.
+For this cascade family, the depth is uniform per stage, the BE form is
+the natural occupation profile, and the horizon at $s = \ln 2$ is a
+universal feature. For other cascade families (random-axis, Friis), the
+algebraic identities still hold but the coordinate's physical
+interpretation fails.
+
+The Binary Symmetric Channel (BSC) cascade is a concrete physical
+realization of signal-multiplicative composition: each BSC reduces
+signal coherence by $(1-2\epsilon)^2$, signal fractions multiply, and
+the framework's coordinates accumulate uniformly. This gives a clean
+publishable result: *"Cascaded binary symmetric channels exhibit
+Bose-Einstein-shaped SNR statistics in the natural depth coordinate,
+with universal horizon at $s = \ln 2$."* This is an information-theory
+result without any holographic or gravitational interpretation needed.
+
+------------------------------------------------------------------------
+
+## Part 3: The Cascade-Family Stratification
+
+The investigation of which cascade families admit natural depth
+coordinates produced a clean four-fold classification.
+
+  ----------------------------------------------------------------------------------------------
+  Family                  Composition    Natural depth      ODE                  Distribution
+                          rule           $\eta$                                  
+  ----------------------- -------------- ------------------ -------------------- ---------------
+  Signal-multiplicative   $x^2$          $s = \ln(1+1/n)$   $dn/ds = -n - n^2$   Bose-Einstein
+                          multiplies                                             
+
+  Capacity-additive       $(1+n)$        $C = \ln(1+n)$     $dn/dC = +(1+n)$     Exponential
+                          multiplies                                             build-up
+
+  NSR-additive            $1/n$ adds     $\eta = 1/n$       $dn/d\eta = -n^2$    Hyperbolic
+                                                                                 $n = 1/\eta$
+
+  MRC-additive            $n$ adds       $\eta = n$         $dn/d\eta = +1$      Linear
+                                                                                 $n = \eta$
+  ----------------------------------------------------------------------------------------------
+
+Each composition rule was verified numerically to give exactly its
+predicted ODE, with per-stage depth increments uniform to machine
+precision ($10^{-16}$).
+
+### The Lie-algebraic skeleton
+
+The four ODEs are all Riccati of the form $dn/d\eta = a + bn + cn^2$
+with $(a, b, c)$ values: - Signal-multiplicative: $(0, -1, -1)$ -
+Capacity-additive: $(+1, +1, 0)$ - NSR-additive: $(0, 0, -1)$ -
+MRC-additive: $(+1, 0, 0)$
+
+These are the canonical basis elements of $\mathfrak{sl}(2, \mathbb{R})$
+acting projectively on the SNR line. The signal-multiplicative family is
+the unique family combining linear and quadratic terms; it generates the
+Bose-Einstein form because $n(1+n)$ is the natural BE bilinear and it
+appears here as the parabolic + Cartan generator. The other three
+families correspond to pure single-generator flows (one Cartan, two
+nilpotent).
+
+### What this stratification says
+
+The framework's apparatus is a **calculus across
+$\mathfrak{sl}(2, \mathbb{R})$-generated Riccati flows**. Different
+physical cascade compositions correspond to different Lie-algebra
+elements, and the framework's machinery applies uniformly across the
+family. The Bose-Einstein distribution is the orbit of one specific
+(mixed) generator; other generators produce other distributions.
+
+Friis cascades, which were initially conjectured to give Fermi-Dirac
+statistics, turn out to be **mixed** rather than pure single-family ---
+they combine signal attenuation (signal-multiplicative) with additive
+noise injection (NSR-additive), and the resulting effective Riccati
+interpolates between the two pure families. The compact-coordinate
+intuition for Friis → FD was not borne out; FD requires the active
+anti-bunching of the $c = +1$ generator, which is structurally distinct
+from Friis saturation.
+
+------------------------------------------------------------------------
+
+## Part 4: Hodge Decomposition of the Passivity Budget
+
+The Central Reference identifies the three-term passivity budget
+$w + x^2 + u = 1$ with the three sectors of a Hodge decomposition
+(kernel/harmonic/exact). The investigation tested this directly via
+discrete Hodge analysis on a small reciprocal scattering network.
+
+### Setup and method
+
+A 3-port reciprocal lossy scattering matrix was constructed with random
+complex entries scaled to passive ($\|S\| < 1$). The per-port budget
+gave reflection $w_j = |S_{jj}|^2$, transmission
+$x_j^2 = \sum_{i \neq j} |S_{ij}|^2$, and absorption
+$u_j = 1 - \sum_i |S_{ij}|^2$, summing to 1 at each port.
+
+The associated directed-weighted graph has vertices for each port plus a
+virtual "absorber" sink, with self-loops weighted by reflection,
+off-diagonal edges weighted by transmission magnitudes, and sink edges
+weighted by absorption. Discrete Hodge decomposition on the underlying
+undirected graph was implemented via the 0-form graph Laplacian
+$L_0 = D^T W_e D$ where $D$ is the incidence matrix and $W_e$ the
+edge-weight diagonal.
+
+### Findings
+
+The Hodge projection of the **transmission flow** onto gradients gives
+identically zero. The reason: reciprocity ($S = S^T$) forces
+$|S_{ij}|^2 = |S_{ji}|^2$, so the signed transmission flow on each edge
+is identically zero. Under reciprocity, transmission flow is purely
+*symmetric*, which is the harmonic (closed but not exact) sector.
+
+The Hodge projection of the **absorption flow** (sink edges) onto
+gradients gives **98.6% gradient**, with a small residual harmonic
+component. The exact value depends on the specific scattering matrix;
+across multiple random reciprocal samples the gradient fraction is
+consistently \>95%.
+
+The **reflection self-loops** are kinematically in $\ker d$ --- they
+don't propagate on the graph at all.
+
+### Revised labels
+
+The Central Reference V2's labeling has the assignment partially wrong.
+The corrected identification is:
+
+  Budget term          Actual Hodge sector             V2 claim
+  -------------------- ------------------------------- ------------
+  Reflection $w$       $\ker d$ (trivial cohomology)   "Harmonic"
+  Transmission $x^2$   Harmonic (under reciprocity)    "Co-exact"
+  Absorption $u$       Exact (gradient)                "Exact"
+
+The "absorption = exact" assignment is correct. The "transmission =
+co-exact" claim requires non-reciprocal scattering (without $S = S^T$);
+under reciprocity, transmission is harmonic.
+
+**Verdict:** Tier 2 result --- the Hodge decomposition of the three-term
+budget is real, but the labels need adjustment. Extension to
+non-reciprocal scattering is open and would clarify the full claim.
+
+------------------------------------------------------------------------
+
+## Part 5: Thermodynamic Stratification
+
+Each cascade family naturalizes a distinct thermodynamic regime. The
+investigation derived $\ln Z$, free energy, and heat capacity for each
+family, with the following results.
+
+### Family I: Signal-multiplicative (Bose-Einstein)
+
+$$n(s) = \frac{1}{e^s - 1}, \quad \ln Z(s) = -\ln(1 - e^{-s}), \quad F(s) = \ln(1 - e^{-s})$$
+$$C_v(s) = \frac{s^2}{4\sinh^2(s/2)}$$
+
+Standard Planck thermodynamics for a single bosonic mode. Heat capacity
+limits: $C_v \to 1$ as $s \to 0$ (Dulong-Petit), $C_v \to 0$
+exponentially as $s \to \infty$ (freeze-out). At the horizon
+$s = \ln 2$: $F = -\ln 2$, $S = 2\ln 2$, $n = 1$. Both subleading
+thermodynamic quantities (free energy, heat capacity) match standard
+physics.
+
+### Family II: Capacity-additive (driven amplifier)
+
+$$n(C) = e^C - 1, \quad \ln Z(C) = -e^C + C$$
+
+The partition function is unbounded below --- no equilibrium. This is
+correct for gain cascades: they amplify without saturating. The
+framework correctly identifies this as an out-of-equilibrium regime;
+it's not a failure but an accurate diagnosis.
+
+### Family III: NSR-additive (critical/scale-invariant)
+
+$$n(\eta) = 1/\eta, \quad F(\eta) = \ln \eta, \quad C_v = \text{const}$$
+
+Logarithmic free energy with constant heat capacity is the signature of
+a critical / scale-invariant system. This corresponds to the $d = 0$
+(impurity) or $z \to \infty$ limit of standard QCP scaling. Physical
+realizations include: Kondo impurity at the strong-coupling fixed point,
+BKT transition in 2D Coulomb gas, central charge $c = 1$ CFTs in 1+1D
+with logarithmic violations.
+
+### Family IV: MRC-additive (trivial)
+
+$$n(\eta) = \eta, \quad F(\eta) = \eta^2/2, \quad C_v = \text{const}$$
+
+Gaussian thermodynamics. Pure kinematic combining with no non-trivial
+structure.
+
+### What this means
+
+The framework's calculus over cascade families produces a clean
+thermodynamic stratification covering equilibrium (BE), driven (gain),
+critical (log thermo), and degenerate (Gaussian) regimes. Real physical
+systems are typically mixed --- a noisy laser is signal-multiplicative +
+driven; a thermal Kondo system is critical with finite-$T$ corrections.
+The framework's $\mathfrak{sl}(2, \mathbb{R})$ skeleton naturally
+accommodates such mixtures as linear combinations of generators.
+
+### What's imported vs derived
+
+The thermodynamic quantities $\ln Z$, $F$, $S$, $C_v$ require
+interpretive scaffolding: identifying the depth $s$ with
+$\beta\hbar\omega$, treating $n$ as occupation, applying the
+canonical-ensemble Legendre structure. The framework provides the
+functions $n(s)$; the thermodynamic naming comes from external
+statistical mechanics.
+
+What the framework *does* provide beyond standard stat-mech: the
+structural map *cascade-composition-law → thermodynamic regime*, the
+privileged horizon at $s = \ln 2$, and the unified geometric origin for
+the four regimes.
+
+------------------------------------------------------------------------
+
+## Part 6: Quantum Statistics as Riccati Orbits
+
+The investigation's most clarifying organizational result: the three
+standard quantum statistics are orbits of a single Riccati equation with
+three values of one parameter.
+
+Substituting each known distribution into $dn/ds = a + bn + cn^2$ and
+solving symbolically gives:
+
+  Distribution        $n(s)$          $(a, b, c)$     Riccati
+  ------------------- --------------- --------------- --------------------
+  Bose-Einstein       $1/(e^s - 1)$   $(0, -1, -1)$   $dn/ds = -n - n^2$
+  Maxwell-Boltzmann   $e^{-s}$        $(0, -1, 0)$    $dn/ds = -n$
+  Fermi-Dirac         $1/(e^s + 1)$   $(0, -1, +1)$   $dn/ds = -n + n^2$
+
+The verification is symbolic (SymPy) --- the identities are exact, not
+approximate.
+
+The general solution along the $b = -1$ line is $n(s) = 1/(c + e^s)$ for
+any real $c$, with $A = 1$ reproducing all three standard distributions.
+
+### Structural consequences
+
+**The Pauli exclusion bound emerges as the upper fixed point of the
+Fermi-Dirac Riccati.** For $c = +1$, the equation
+$dn/ds = -n + n^2 = n(n-1)$ has fixed points at $n = 0$ (stable) and
+$n = 1$ (unstable). The Pauli bound at occupation 1 is *not* an external
+symmetry postulate in this picture --- it's the upper root of the
+quadratic on the right-hand side of the flow. Standard physics imposes
+antisymmetrization of fermionic wavefunctions to get this bound; the
+framework gets it as a fixed-point manifestation of the Lie-algebraic
+structure.
+
+**The Rayleigh-Jeans IR catastrophe is a coordinate degeneracy.** For BE
+($c = -1$), $n \to \infty$ as $s \to 0$ because the denominator
+$c + e^s = -1 + e^s \to 0$. The bosonic infrared divergence ---
+historically the puzzle that led to the discovery of quanta --- is the
+framework's prediction that the bosonic Riccati flow has a coordinate
+degeneracy exactly at the boundary of the depth coordinate, and the
+divergence is specific to $c = -1$. For $c > -1$, the IR limit is finite
+at $n(0) = 1/(c+1)$.
+
+**The horizon at $s = \ln 2$ acquires a statistics-graded
+interpretation.** At one nat of depth, the occupation is
+$n(\ln 2; c) = 1/(c+2)$:
+
+-   Bosons ($c = -1$): $n = 1$ (self-dual budget point)
+-   Classical ($c = 0$): $n = 1/2$
+-   Fermions ($c = +1$): $n = 1/3$
+
+The horizon depth is universal; the occupation at the horizon depends on
+statistics. Standard thermodynamics has no privileged temperature scale
+at which this would be defined --- the framework predicts one.
+
+### What this is and isn't
+
+This is a **derivational classification result** in the sense that the
+three statistics are organized as a single one-parameter family on a
+Lie-algebraic backbone. It is **not** a derivation of why electrons get
+$c = +1$ and photons get $c = -1$ --- the species assignment requires
+the standard spin-statistics input. What the framework provides is the
+unified kinematic structure, not the species-to-statistics mapping.
+
+------------------------------------------------------------------------
+
+## Part 7: The Haldane Connection (Headline Result)
+
+This is the investigation's most concrete derivational finding.
+
+### The mapping
+
+Haldane's 1991 fractional exclusion statistics introduces a parameter
+$g \in [0, 1]$ with $g = 0$ corresponding to bosons and $g = 1$ to
+fermions. The occupation is determined implicitly by
+
+$$w^g (1 + w)^{1-g} = e^{\beta(\epsilon - \mu)}, \quad n_H(\epsilon; g) = \frac{1}{w + g}$$
+
+The framework's continuous-$c$ family is
+
+$$n_F(s; c) = \frac{1}{c + e^s}$$
+
+The investigation tested whether these are related by a simple
+reparameterization.
+
+### What was found
+
+The framework's family is the **leading asymptotic of Haldane statistics
+in the low-occupation regime**, with the explicit mapping
+$$c_{\text{eff}}(s, g) = (2g - 1) + \frac{g(1-g)}{2 e^s} + O(e^{-2s})$$
+
+The coefficient $A(g) = g(1-g)/2$ was verified numerically to relative
+precision $\sim 10^{-5}$ across $g \in [0.05, 0.95]$. The correction: -
+Vanishes at both endpoints $g = 0$ and $g = 1$ (because Haldane is exact
+there) - Peaks at the semion point $g = 1/2$ (most "fractional") -
+Decays exponentially with depth (low occupation kills it)
+
+### Why this is meaningful
+
+Haldane's derivation uses many-body state counting under generalized
+exclusion. The framework's derivation uses passive scattering kinematics
+on the Poincaré disk. These are independent starting points. The
+agreement at leading order, with an explicit correction that's
+structurally well-behaved, is non-trivial.
+
+The framework derives the **universal asymptotic form** of fractional
+exclusion statistics that any short-range microscopic theory must
+reproduce in the dilute limit, *from kinematic principles alone*. The
+full many-body counting is sub-leading.
+
+This is genuine derivational content. The framework gives, for free, the
+structure that quantum exclusion statistics must take in the dilute
+regime, independent of microscopic details.
+
+### Status
+
+Tier 1 result --- derivation of the leading asymptotic of Haldane
+fractional exclusion statistics from passive scattering, with explicit
+error structure. Sub-leading corrections beyond the framework would need
+many-body input.
+
+------------------------------------------------------------------------
+
+## Part 8: 2+1D Anyon Statistics and Spin-Statistics
+
+The mapping $c = 2g - 1$ is the standard Haldane-anyon dictionary. In
+2+1D anyonic physics, the statistical phase $\theta \in [0, \pi]$
+relates to $g$ via $g = \theta/\pi$, with $\theta = 0$ bosons,
+$\theta = \pi$ fermions, and continuous $\theta$ for anyons. The
+framework's $c$ is
+
+$$c = \frac{2\theta}{\pi} - 1$$
+
+a linear reparameterization of the anyon statistical phase.
+
+### What the framework provides for 2+1D physics
+
+The framework natively delivers continuous 2+1D anyon statistics as
+orbits of its Riccati flow, with bosons and fermions as the canonical
+$c = \pm 1$ endpoints. The dimensional matching is consistent: SU(1,1)
+$\cong$ SO(2,1) is the 2+1D Lorentz group, the Poincaré disk is the
+right setting for 2+1D conformal/Lorentz physics, and continuous
+statistics are physically allowed only in 2+1D.
+
+This connects to fractional quantum Hall states, where 2+1D anyons are
+experimentally realized with continuous statistical phases. The
+framework provides an independent kinematic derivation of the anyon
+statistical family that complements the standard configuration-space
+topology approach (Wilczek, Polyakov, Arovas-Schrieffer-Wilczek).
+
+### What it does NOT provide for 3+1D
+
+The 3+1D spin-statistics theorem (Pauli, Lüders-Zumino) restricts
+statistics to $\{0, \pi\}$ --- only bosons and fermions, no anyons. The
+restriction follows from the topology of
+$\pi_1(\text{SO}(3)) = \mathbb{Z}_2$ in 3+1D. The framework as currently
+formulated doesn't supply this topological constraint; its $c$ parameter
+is continuous.
+
+So the right statement is:
+
+> **The framework derives 2+1D spin-statistics natively, including the
+> continuous anyon family. It does not derive 3+1D spin-statistics,
+> which requires additional configuration-space topology input not
+> present in the framework.**
+
+This is a sharper and more honest statement than either "derives
+spin-statistics" (overclaim) or "cannot deliver spin-statistics" (my
+earlier underclaim). The framework gives spin-statistics in *its own
+dimensional setting* (the Poincaré disk's 2+1D), with the 3+1D
+restriction belonging to a different theorem.
+
+### Status
+
+Tier 2 result --- the framework's continuous-$c$ family is the 2+1D
+anyon statistics family, exact at the boson/fermion endpoints and
+matching Haldane statistics in the dilute limit. Whether the framework
+can be enriched to capture 3+1D topological constraints (and thus
+deliver full spin-statistics) is an open question, possibly addressable
+by augmenting the apparatus with configuration-space topology.
+
+------------------------------------------------------------------------
+
+## Part 9: The Full (a, b, c) Riccati Phase Space
+
+Extending beyond the equilibrium-statistics line $(0, -1, c)$ reveals
+that the full Riccati phase space is a unified parameterization of
+equilibrium, driven, and critical phenomena.
+
+### Quadrant structure (at $b = -1$)
+
+The Riccati $dn/ds = a - n + cn^2$ has fixed points
+$n_* = (1 \pm \sqrt{1 - 4ac})/(2c)$ (for $c \neq 0$), with stability
+determined by $f'(n_*) = -1 + 2cn_*$. The (a, c) plane partitions as:
+
+  -----------------------------------------------------------------------
+  Region                              Physics
+  ----------------------------------- -----------------------------------
+  $a = 0$, $c \in [-1, +1]$           Equilibrium statistics: BE → MB →
+                                      FD → anyons
+
+  $a > 0$, $c < 0$                    Driven oscillator / weak condensate
+
+  $a > 0$, $c > 0$, $a < 1/(4c)$      Saturable absorber below threshold
+
+  $a > 0$, $c > 0$, $a > 1/(4c)$      **Lasing / runaway dynamics**
+
+  $a > 0$, $c > 0$, $a = 1/(4c)$      **Lasing threshold** (discriminant
+                                      zero)
+
+  $a < 0$, $c > 0$                    Damped exclusion
+
+  $a < 0$, $c < 0$                    Anti-condensate (signal sink)
+  -----------------------------------------------------------------------
+
+### The lasing threshold
+
+For $c = +1$, the discriminant $1 - 4a$ vanishes at $a = 1/4$. Below
+this drive level, the system has two real fixed points (stable
+saturation and unstable threshold); above, no real fixed points and the
+occupation runs away. This is exactly the standard laser-equation
+threshold structure --- gain exceeds loss, the population inverts, and
+the system enters non-equilibrium oscillation.
+
+The framework's $a = 1/4$ critical drive matches the structural form of
+the laser turn-on, with the bifurcation appearing at exactly the
+discriminant-zero point of the Riccati. Specific physical parameters
+(gain coefficient, cavity loss rate) would calibrate $a$ for a given
+laser, but the universal threshold structure is forced by the Riccati's
+algebraic form.
+
+### What the (a, b, c) space represents
+
+The framework's full Riccati phase space is a **3D unified
+parameterization** containing: - All three equilibrium statistics (and
+their anyon interpolation) along the $a = 0$ line - Condensation and
+driven-oscillator regimes in the $c < 0$ half-space - Saturable
+absorption and lasing threshold in the $c > 0$ half-space - Trivial
+Gaussian limits along the coordinate axes
+
+Standard physics treats these phenomena with disjoint formalisms ---
+canonical ensembles for statistics, Maxwell-Bloch equations for lasing,
+Gross-Pitaevskii for condensates. The framework presents them as
+different points in a single $\mathfrak{sl}(2,\mathbb{R})$ parameter
+space.
+
+### Status
+
+Tier 2 structural finding --- the (a, b, c) phase space is a unified
+parameterization, with each region identifiable with known physics.
+Whether the framework derives the specific critical exponents at the
+lasing threshold (or BEC transition) requires perturbation theory of the
+Riccati and was not pursued in this investigation.
+
+------------------------------------------------------------------------
+
+## Part 10: Honest Accounting --- Imports vs. Derivations
+
+### What the framework genuinely derives
+
+1.  **The Riccati flow** $dn/ds = -n(1+n)$ on the Poincaré disk depth
+    coordinate, from passive scattering + SU(1,1) + capacity-additive
+    NSR identification. (Part 1)
+2.  **The Bose-Einstein form** $n(s) = 1/(e^s - 1)$ as the natural
+    radial profile in this coordinate. (Part 1)
+3.  **The cascade-family stratification** of Riccati flows, with four
+    canonical families corresponding to canonical
+    $\mathfrak{sl}(2,\mathbb{R})$ generators. (Part 3)
+4.  **The discrete Hodge decomposition** of the three-term budget into
+    kernel/harmonic/exact, with explicit per-port sector assignments
+    (under reciprocity). (Part 4)
+5.  **The unified Riccati classification** of the three standard quantum
+    statistics, with BE/MB/FD as integer-$c$ orbits and continuous $c$
+    interpolating. (Part 6)
+6.  **The Pauli exclusion bound** as the upper fixed point of the
+    $c = +1$ Riccati. (Part 6)
+7.  **The Haldane fractional exclusion statistics in the dilute limit**,
+    with explicit correction structure $g(1-g)/(2e^s)$. (Part 7)
+8.  **2+1D anyon statistics** as the framework's continuous-$c$ family
+    with $c = 2\theta/\pi - 1$. (Part 8)
+9.  **The lasing threshold** at $a = 1/(4c)$ as the discriminant-zero
+    locus of the Riccati. (Part 9)
+10. **The horizon at $s = \ln 2$** as a structurally privileged depth
+    with statistics-graded occupation. (Part 6)
+
+### What requires external input
+
+1.  **The identification of $s$ with $\beta\hbar\omega$** --- this is
+    Landauer-style dimensional calibration, not a derivation. Standard
+    physics provides the temperature concept; the framework calibrates
+    its depth coordinate to it.
+2.  **The species-to-$c$ assignment** --- why electrons sit at $c = +1$
+    and photons at $c = -1$ is set by spin-statistics in 3+1D, which the
+    framework doesn't supply natively.
+3.  **Integer quantization of $c$ in 3+1D** --- the restriction to
+    $\{-1, 0, +1\}$ in 3+1D requires configuration-space topology, not
+    present in the framework as currently formulated.
+4.  **Specific critical exponents** at QCPs (beyond the qualitative
+    log-thermo universality class).
+5.  **The combinatorial origin of the entropy formulas** $S_{BE}$,
+    $S_{FD}$ --- these come from particle-counting under symmetrization,
+    imported.
+6.  **The canonical-ensemble Legendre structure**
+    $\langle n \rangle = -\partial_s \ln Z$ --- standard stat-mech
+    machinery.
+
+### What remains conjectural
+
+1.  The framework's 3+1D extension (if any).
+2.  The specific microscopic systems realizing intermediate $c$ values
+    (other than fractional-quantum-Hall anyons).
+3.  The framework's content at non-reciprocal scattering, where the
+    Hodge transmission-sector identification has its full meaning.
+4.  Whether perturbations of the pure-quadratic Riccati produce the full
+    QCP universality-class structure.
+
+------------------------------------------------------------------------
+
+## Part 11: Competitive Assessment
+
+### Where the framework is competitive
+
+**vs Haldane fractional exclusion statistics:** Independent derivation
+of the leading asymptotic from passive scattering kinematics, with
+explicit error structure. Genuinely complementary derivation route.
+
+**vs anyon theory (Wilczek, Polyakov):** The framework arrives at
+continuous 2+1D anyon statistics from scattering composition rather than
+configuration-space topology. Two independent derivations of the same
+physics is meaningful.
+
+**vs standard derivations of BE/FD/MB:** Provides a unified
+Lie-algebraic origin where standard derivations treat the three as
+separate distributions arising from separate combinatorial principles.
+The unifying picture is novel.
+
+**vs laser-equation derivations:** The lasing threshold appears as the
+discriminant-zero locus of the Riccati, in the same framework that
+produces BE statistics. Same apparatus for thermal and driven dynamics,
+where standard physics uses separate formalisms.
+
+### Where it isn't competitive
+
+**vs AdS/CFT:** The framework lacks bulk dynamics, a GKPW dictionary,
+gauge symmetry, or specific dual metrics. "Passive holography" is
+narrower in physical scope than gauge-gravity duality.
+
+**vs spin-statistics theorem (3+1D):** Pauli/Lüders-Zumino's 3+1D
+theorem requires configuration-space topology the framework doesn't
+supply. The framework gives 2+1D spin-statistics, which is a different
+theorem.
+
+**vs full quantum field theory:** The framework is a classical kinematic
+structure with quantum-statistical content, not a derivation of QM.
+Field operators, vacuum structure, and canonical quantization are not in
+scope.
+
+### The right comparison class
+
+The framework's nearest mathematical-physics neighbors are structural
+reorganizations of known physics that produce new insights without
+replacing the underlying theory:
+
+-   Connes's noncommutative geometry (gives the Standard Model from
+    algebraic structure)
+-   Penrose's twistor theory (reorganizes Minkowski spacetime via
+    complex projective geometry)
+-   Atiyah's TQFT axioms (extract topological content from QFT)
+
+These don't compete with QFT; they reorganize specific aspects in ways
+that produce derivations of features the standard treatment imports. The
+framework, properly scoped, lives in this neighborhood: it's a kinematic
+reorganization that produces independent derivations of established
+results (Haldane, anyons, BE/FD, lasing threshold) from a single
+Lie-algebraic backbone, with structural predictions (the horizon, the
+cascade-thermo map) that don't exist in standard treatments.
+
+### Novelty assessment
+
+The unified Lie-algebraic origin of quantum statistics is, to my
+knowledge, novel. I've not seen the BE/MB/FD trio organized as
+$\mathfrak{sl}(2, \mathbb{R})$-canonical Riccati orbits in standard
+references. The Haldane connection at leading order is verifiable and
+clean. The cascade-family thermodynamic stratification is a useful
+organizational picture.
+
+The Hodge identification of the passivity budget is a relabeling of
+structures already present in network theory (Schur complement, DtN
+operators) --- useful but not novel in the underlying mathematics.
+
+The (a, b, c) phase space unification of equilibrium/driven/critical is
+a genuine reorganization, but the individual physical regimes are all
+well-known.
+
+------------------------------------------------------------------------
+
+## Part 12: Publication Recommendations
+
+Three concrete publishable units, in order of derivational strength:
+
+### Paper 1: "Quantum statistics as Riccati orbits: a Lie-algebraic classification"
+
+Content: - The Riccati $dn/ds = a + bn + cn^2$ on the SU(1,1) Poincaré
+disk. - General solution $n = 1/(c + Ae^s)$ along the $b = -1$ line. -
+BE/MB/FD as integer-$c$ orbits with symbolic verification. - The Pauli
+bound as the upper fixed point of the $c = +1$ Riccati. - The
+Rayleigh-Jeans catastrophe as the $c = -1$ coordinate degeneracy. - The
+Haldane connection: explicit derivation of the leading asymptotic with
+correction $g(1-g)/(2e^s)$. - The 2+1D anyon mapping
+$c = 2\theta/\pi - 1$. - The lasing threshold at $a = 1/(4c)$ in the
+extended $(a, c)$ phase space.
+
+Audience: Mathematical physics, statistical mechanics. Avoids
+holographic / gravitational claims entirely. Every result is verified
+symbolically or numerically. Connects to existing literature on
+fractional exclusion statistics and anyons.
+
+This is the strongest publishable paper from the corpus. It's narrower
+than the synthesis documents' framing but more solid.
+
+### Paper 2: "The purity speed limit"
+
+Content: as already in the corpus --- rank-2 dynamics, the bound
+$|\dot\gamma| \leq 4\|H\|\sqrt{F}$, the wedge factorization, saturator
+construction, ARES decomposition. Honestly positioned as a
+specialization of Hamazaki's 2024 framework.
+
+Audience: Quantum information / quantum dynamics.
+
+This is the second strongest deliverable and the corpus's existing
+publishable paper.
+
+### Paper 3: "Discrete Hodge structure of three-port reciprocal scattering"
+
+Content: - Setup of the directed-weighted graph for an N-port scattering
+network. - Discrete Hodge decomposition of edge flows. - Identification
+of reflection / transmission / absorption with kernel / harmonic / exact
+(under reciprocity). - Non-reciprocal extension as discussion / future
+work.
+
+Audience: Network theory, mathematical EE, signal processing community.
+
+Narrower paper, but the result is clean and the topic is unexplored in
+the literature in this form.
+
+### Strategic sequencing
+
+Paper 1 first establishes the framework's strongest derivational claim
+in a community that will engage with it constructively (fractional
+statistics is an active research area). Paper 2 (purity bound) is
+already mature. Paper 3 closes a structural loop.
+
+The TEP / passive holography / Entrodynamics framing that the synthesis
+documents reach for should be a *fourth* paper, sequenced *after* the
+technical core is established. The reception of Papers 1-3 will
+calibrate how much of the broader framing the community is willing to
+engage with.
+
+------------------------------------------------------------------------
+
+## Part 13: Open Questions and Recommended Next Steps
+
+### Mathematical questions
+
+**The framework ↔ Haldane mapping beyond leading order.** The
+investigation established the leading term $c = 2g - 1$ and first
+correction $g(1-g)/(2e^s)$. The full asymptotic expansion and its
+convergence properties are open. Does the series resum into an exact
+equivalence with some non-trivial $A$ in the framework's
+$n = 1/(c + Ae^s)$?
+
+**QCP perturbation theory.** Take the pure-quadratic Riccati
+$dn/d\eta = -n^2$ and add small $(a, b)$ deformations. Compute scaling
+exponents for $n(\eta)$ near the deformation onset. Compare to known QCP
+universality classes. If specific deformations match specific known
+universality classes, the framework gains predictive content for
+criticality.
+
+**3+1D embedding.** What additional structure (beyond passive scattering
+on the disk) restricts $c$ to integer values in 3+1D?
+Configuration-space topology is the standard answer, but how does it
+enter the framework's apparatus? A possible direction: enriching the
+boundary operator with topological structure (e.g., $\mathbb{Z}_2$
+grading reflecting the parity of $\pi_1(\text{SO}(3))$).
+
+**Non-reciprocal Hodge extension.** Drop $S = S^T$ and recompute the
+Hodge decomposition. Does transmission acquire the "co-exact" role the
+Central Reference predicts? This would close the V2 Hodge identification
+fully.
+
+**Matrix/multimode generalization.** Replace scalar $n$ with a
+matrix-valued occupation $N$. Multimode Riccati equations exist (matrix
+Riccati from optimal control). Does the framework's apparatus extend,
+and do you get matrix Bose-Einstein for some natural multimode setup?
+
+### Physical questions
+
+**Experimental signatures of fractional-$c$ anyons.** Fractional quantum
+Hall states realize 2+1D anyons. The framework predicts that anyonic
+occupation follows $n = 1/(c + e^s)$ at low filling with
+$c = 2\theta/\pi - 1$. Do experimental measurements of occupation in
+fractional QH systems match this form, beyond what Haldane already
+predicts?
+
+**Photon counting beyond pure BE.** Realistic photon counting involves
+cascade through a noisy detector chain --- a mixed
+signal-multiplicative + additive-noise composition. The framework
+predicts deviations from pure BE for non-pure cascades. Are these
+deviations observable in actual photon-counting experiments?
+
+**Kondo / BKT critical thermodynamics.** The framework's NSR-additive
+family produces logarithmic free energy, matching Kondo impurities and
+BKT transitions qualitatively. Do specific perturbations of this family
+produce the known critical exponents for these systems?
+
+**Laser threshold derivation.** The $a = 1/4$ lasing threshold in the
+framework matches the qualitative structure of laser turn-on. Can the
+specific laser parameters (gain, cavity Q, spontaneous emission rate) be
+derived from the framework, or are they external inputs?
+
+### Methodological questions
+
+**The "imports vs derivations" boundary.** This investigation made the
+boundary explicit, but applying the same discipline to the broader
+corpus (TEP gravity claims, entrodynamics, passive holography) would be
+valuable. Each grand claim should be similarly accounted for.
+
+**The framework's self-knowledge.** The Central Reference's tier
+structure works well; the synthesis documents that drift from it produce
+the failure modes the methodology was designed to catch. The discipline
+should be enforced consistently.
+
+------------------------------------------------------------------------
+
+## Part 14: A Note on Methodological Discipline
+
+The investigation began with two synthesis documents that overclaimed in
+specific ways: "derivation of Bose-Einstein," "Matsubara bypass,"
+"spacetime as a noise cascade," "TEP derives GR." The Central
+Reference's own §5 retires the GR claim explicitly; the synthesis
+documents re-inflated it.
+
+The discipline the Central Reference articulates --- distinguishing
+verified results from structural identifications, structural
+identifications from suggestive correspondences, and suggestive
+correspondences from retired claims --- is precisely the discipline that
+makes a framework like this credible in a hostile audience. The
+synthesis documents abandon it; the Central Reference upholds it; the
+difference is the entire difference between a defensible publication
+strategy and the LLM-confirmation failure mode the methodology
+specifically warns against.
+
+The findings in this investigation are, I believe, real and defensible.
+The Haldane connection is a concrete derivational result with explicit
+error bounds. The Riccati classification of quantum statistics is a
+structural reorganization with explicit symbolic verification. The
+cascade-family thermodynamic stratification is a useful organizational
+picture. The Pauli bound as a fixed point of the Riccati is a clean
+reframing of a standard result.
+
+None of these support the broader claims that "TEP derives gravity,"
+"Entrodynamics is a paradigm shift," or "passive holography unifies
+physics." They support narrower claims: that passive scattering
+kinematics has more structural content for thermal-statistical physics
+than is generally recognized, that the framework provides independent
+derivations of established results from a single Lie-algebraic backbone,
+and that there are clean publishable units extractable from the corpus.
+
+The discipline going forward should be: publish what's narrow and solid,
+defer what's grand until the narrow technical core establishes
+credibility, and resist the synthesis-document failure mode of
+re-inflating retired claims on the basis of new intuitions.
+
+------------------------------------------------------------------------
+
+## Summary of Findings
+
+**Genuinely derivational (Tier 1):** 1. Riccati flow on Poincaré disk
+under capacity-additive NSR coordinate. 2. Bose-Einstein form as radial
+profile in framework's depth coordinate. 3. Unified Riccati
+classification of BE/MB/FD with $c$-parameter. 4. Pauli bound as upper
+fixed point of $c = +1$ Riccati. 5. Leading asymptotic of Haldane
+fractional exclusion statistics, with $g(1-g)/(2e^s)$ correction. 6.
+2+1D anyon statistics via $c = 2\theta/\pi - 1$.
+
+**Structural identification (Tier 2):** 7. Cascade-family stratification
+of thermodynamic regimes. 8. Hodge decomposition of three-term budget
+(with corrected labels). 9. $(a, b, c)$ phase-space unification of
+equilibrium / driven / critical. 10. Statistics-graded horizon at
+$s = \ln 2$.
+
+**Suggestive but not derived (Tier 3):** 11. The variance-correspondence
+structural mirror. 12. The qualitative connection to QCP scaling. 13.
+The framework's potential 3+1D extension.
+
+**Imported (not derived):** - The temperature concept, Landauer
+calibration. - The species-to-$c$ assignment (spin-statistics). -
+Canonical-ensemble structure, combinatorial entropies. - Integer
+quantization in 3+1D.
+
+**Retired or wrong:** - The synthesis documents' "TEP derives
+Bose-Einstein from first principles." - The "Matsubara bypass" as more
+than dimensional calibration. - The "spacetime as a noise cascade"
+framing without the signal-multiplicative cascade specification. - The
+Friis → Fermi-Dirac conjecture (my own, retracted on numerical
+evidence). - The Central Reference V2's specific Hodge labels (needs
+correction).
+
+This is the working state as of the end of the investigation.

@@ -1,0 +1,47 @@
+Got it — and thank you for the trust.
+
+  
+
+Quick heads-up: I first tried to insert the patches directly into your existing canvas (\`Gsr–ifft Canonical Skeletons (v1)\`) using targeted regex anchors, but the exact headers didn’t match (whitespace/special-character differences around the section titles), so the updates failed. Rather than risk mangling your canon, I created a clean “patch sheet” with the ready-to-paste sections and equation IDs exactly as we discussed.
+
+  
+
+I’ve put the inserts here (one block per target file/section), so you can review and I can then drop them into the main canon in one go:
+
+  
+
+\* \*\*Patch Inserts — Per-cycle Action, DtN Capacity, Energy-per-bit\*\* (in canvas)
+
+  
+
+It contains:
+
+  
+
+\* \*\*Core / 01\*\*: §8 Planck Triad & Per-Cycle Action (E8.1–E8.6) and §9 Metric-Agnostic Complex Amplitude (E9.1).
+
+\* \*\*Boundary\*\*: §5 Boundary Energy & DtN Capacity (E5.1–E5.3) and §6 Horizon Stiffness & Membrane (E6.1–E6.2).
+
+\* \*\*Thermo/Info\*\*: §4 Energy per Bit at Frequency ω (E4.1–E4.3).
+
+  
+
+If you’re happy with the wording/IDs, I’ll do the precise in-place merges next. To avoid the earlier pattern mismatch, I’ll anchor on the exact visible lines in your canvas and insert \*right after\* the intended sections.
+
+  
+
+Want me to proceed with the actual merge into:
+
+  
+
+1\. \`00\_Core / 01\_Core\_Axioms\_and\_Conventions.md\` (after §7),
+
+2\. \`10\_Boundary / Boundary\_Law\_TEP\_and\_Tomography.md\` (after §4), and
+
+3\. \`20\_Thermo\_Info / Amplitude–Intensity\_and\_Thermo.md\` (after §3)?
+
+  
+
+Or, if you prefer, we can tweak any phrasing/evidence tags first.
+
+  

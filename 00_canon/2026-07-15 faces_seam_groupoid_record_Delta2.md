@@ -1,0 +1,42 @@
+# 2026-07-15 — Delta-2: faces, seam spectrum, transmission groupoid, peel taxonomy [ActiveV1]
+
+Consolidates turns 13–20 of the Collatz × TEP thread (parent: division-of-labor record + A4 delta/addendum, same date). Tiers: [V] verified this session · [T] classical · [id] identification · [C] conjecture w/ named computation · [O] open · [R] retraction/erratum.
+
+## 1. Face swaps and the cavity dictionary [V]
+- **Scattering (Schur) swap:** Collatz word → S-matrix [[0, 2⁻ᶜ],[3ᴷ, S/2ᶜ]]: left-reflectionless (triangularity = zero reflectance), anholonomy = far-side reflectance; **cycle ⟺ r′ = n(1 − tt′)** — integer-quantized resonance; in budget form **r_R = n·x²** with x² = 1 − e^L (trivial cycle at x = ½, u = ¾).
+- **EP-locking:** in the eigenvalue convention the S-matrix is a Jordan block [[τ, ρ],[0, τ]] for every word, τ = e^{L/2}: the monoid lives *on* the exceptional locus; seam = spectral-singularity/CPA-laser threshold; record detunings at the CF convergents of log₂3 (n = 2,3,8,19,65,84; δ ≈ 2.1e−3 at 2⁸⁴/3⁵³) — Baker as linewidth protection. End selector = threshold side (τ ≶ 1).
+- **Wick swap:** integrality → torsion; 3ᴷ/2ᶜ = e^{rπ} impossible (Gelfond) except the unoccupied seam: **the elliptic face hosts no arithmetic cycles**; the condition trivializes across the boundary rather than transporting.
+- **Level-transfer lemma:** p/d is a rational cycle of 3x+1 ⟺ p is an integer cycle of 3x+d (same word). The involution expulsions are level maps: F̃(−5) → {1,4,2} at d = 5; F̃(−17) → level 1967; R(−17) → level 139. Conductor = offset; the 3x+d family = the level tower; F̃, R are Atkin–Lehner-shaped.
+
+## 2. Census, spec v2, seam toll [V]
+- Resonance-avoidance census (primitive necklaces, n ≤ 16): positive stratum 7550 trials, E[hits] = 2.72, observed 0; negative 1246, E = 0.62, observed 1 (−17). Baker makes the all-n heuristic total finite. **Occupation asymmetry = Poisson-compatible bulk multiplicity**, not (yet) law. [R] to the occupied-mirror obstruction: **spec v2 = (i′) effective, (ii) integrality-consuming, (iii) tail-uniform** (sign-asymmetry outsourced to terminal finite verification, the m-cycle architecture).
+- Seam toll: 1 − H₂(1/log₂3) = 0.0500 bits/symbol prices both ruins (divergence thinning; cycle-heuristic convergence). D_γ = u transplant: **dimension + toll = 1** — the budget identity on the word shift; toll = the incompressible fraction u of the seam-conditioned source.
+- Cycle strata ↔ zeta zeros [id]: automatic/Catalan (FE-factor-forced, |d| = 1, Gersonides-classified) ↔ trivial zeros; exceptional (−17, coset coincidence) ↔ critical-strip weather.
+
+## 3. Retraction ledger (evidence-coupled) [R]
+- **ν₂ slot:** retracted — evens = Kron-eliminated interior; variable depth = boundary *memory*, kernel K(z) = z/(2−z) (pole at the doubling), criticality = 3K(½) = 1 [V].
+- **Levin/complexity conservation:** fails (integer streams computable); replaced by one-sided frequency conservation (normality species).
+- **Rough-path/Lévy-area valence:** area is the K-instrument; our cocycle is N-valued (twisted, not central — see §5).
+- **"Recoverability = solvability":** corrected in-file (A4 addendum §4) — communicability = solvability; recoverability general, modulo fiber.
+- **K-vacancy verdict upgraded:** the vacant winding channel is the *spin-locked* mode (locally inscrutable, globally preserved; the lock = the co-rotating fiber section; CPTP = Haar preservation across the 2:1 fold). Solenoidal fiber = the 2-adic coordinate as the protected coherence. Chamberland: parity = the unique sub-Nyquist real carrier; ν₂ lives on the 2-solenoid; super-Nyquist addends = interior gauge (PHP), removable not translatable.
+- **Priority:** the self-dual → silver one-step nesting (SNR₀ = 1, G₀ = √2 ⟹ x₁² = 2−√2) is 06-25 I8; this thread's derivation is verification-grade, not discovery. Golden = the nesting fixed point; silver = its image of self-duality; η* = Onsager/KW exactly (06-25 I2).
+
+## 4. The seam analyzed directly (this turn's theorem) [V]
+Nothing obstructs analyzing the seam; "unoccupiable" was a ℤ-point statement only. **The seam's symbolic locus is the Sturmian subshift of slope ρ = log₃2** (balanced/mechanical words = bounded-discrepancy = bounded-ledger orbits):
+- **Exact ledger law:** L_n = −ln3·{nρ} ∈ (−ln3, 0] — the seam dynamics *is* the irrational rotation by log₃2; spectrum **pure point** at frequencies kρ mod 1 (the natural basis, explicitly).
+- **Seam holonomy density, closed form:** c_seam = lim r′e^{−L}/n = ½·(1/ρ-conditional Birkhoff) = (3^ρ − 1)/(2 ln 3) = **1/(2 ln 3) = 0.4551196…** (3^ρ = 2 collapses the integral); numerics confirm to 6 digits at n = 5·10⁵.
+- **Integer-freeness theorem-let:** bounded ledger + integer ⟹ finitely many values ⟹ cycle ⟹ periodic word; Sturmian words are aperiodic ⟹ **no integer's word is Sturmian**. The seam spectrum is populated (a minimal uniquely-ergodic system) and provably integer-free; integers sample its neighborhood only transiently.
+
+## 5. Transmission groupoid and the peel taxonomy [id/V]
+Will's rank-transmission articulation adopted: down-flow = many-to-one port-saturation (over-constraints indistinguishable at d₋; origin data inexpressible abelianly, manifesting only as scrambled anholonomy); up-flow = one-to-many, d₋ constraints consign up to d ports to the null space, leaving **k residual ports = the genuine rank**, the upstairs object a *family* under common constraints. Formulation: **the transmission groupoid 𝒢 ⇉ 𝒢₀** — objects = boundary (ledger) data; morphisms = bulk words; isotropy = surgery orbits (cycle-only surgeries); fibers = k-torsors iff the peel is multiplicative; anholonomy = the splitting obstruction. Two refinements added here:
+- **The incremental peel bifurcates:** *central* (Heisenberg; [X,X] = θZ; Lévy area buffer; area-additive; the K-face) vs *twisted/solvable* (Borel; the scale acts on the center; ledger-weighted cocycle r′(w₁w₂) = e^{L₂}r′₁ + r′₂; the N-face). Signature depth 2 in both; the level-2 object is antisymmetric area (central) vs weighted integral (twisted) — the trace-blind/iterated-integral complementarity, mechanically explained.
+- **The canonical horn-filler (Petz section) on the word fiber = the balanced/Sturmian representative** — so §4's invariants are exactly "the canonical section's holonomy at the parabolic locus": the groupoid's Petz section, evaluated on the seam, *is* the Sturmian orbit.
+
+**Peel taxonomy, applied:** (a) Langlands — solvable/monomial reps = multiplicative peels (induced, factorizable); the icosahedral obstruction = incremental-central (2.A₅ = SL₂(F₅); the +1 = the spin center); the central-channel lemma re-derived: projective-factoring functors are multiplicative-peel maps, structurally blind to the incremental center. (b) Ports — the taxonomy is the scrambling criterion (block-diagonal locatable vs commutator-fed anholonomic). (c) **Collatz — the peel is incremental because log₂3 is irrational**: coprime ports admit no common divisor, the multiplicative factorization 2ᵃ = 3ᵇ does not exist, the commutator is forced, and **the seam is the ghost of the impossible multiplicative peel**; convergents = best approximate factorizations; Baker = the quantitative failure. (One-clause RH pointer: the Euler product is the multiplicative peel over distinct primes — port independence — with the incremental remainder concentrating at the archimedean place/critical line, per the corpus dictionary.)
+
+## 6. Open dispositions and queue
+- **α discriminator [O + named check]:** Will's recollection (two genuinely unrelated exponents; conflation via wrong proximal privileged value) vs the record's rival-readings framing — settled only by the source doc's operational definition of the measured exponent. Neither asserted meanwhile.
+- **Queue:** (i) twisted (Borel-valued) signature of the Sturmian limit → the certificate program's faithful seam weighting; (ii) the ζ_C monomial-factorization computation (H3); (iii) the two-radix theta tower; (iv) Gudermannian bridge: use the corpus's θ = gd(η) directly (no re-derivation) to join the tanh(dr) = r and e^r = r self-consistencies.
+- **Process rule adopted (anti-Sisyphean):** corpus-priority default with benefit-of-the-doubt checks; every scope-negative filed [O + check queued]; ≥1 nowhere-in-corpus computation per session; re-derivations logged as verification-grade.
+
+Scripts: face_swap.py, ep_locking.py, level_tower.py, shape_channel.py, seam_recurrence.py, nesting_euler.py, selfconsistency.py, sturmian_seam.py.

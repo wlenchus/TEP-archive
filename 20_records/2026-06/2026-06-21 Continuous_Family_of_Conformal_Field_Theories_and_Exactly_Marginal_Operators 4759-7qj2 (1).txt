@@ -1,0 +1,873 @@
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+
+Continuous Family of Conformal Field Theories and Exactly Marginal Operators
+Shota Komatsu,1,* Yuya Kusuki ,2,3,4,† Marco Meineri ,5,‡ and Hirosi Ooguri
+
+6,7,8,§
+
+1
+
+Department of Theoretical Physics, CERN, 1211 Meyrin, Switzerland
+Institute for Advanced Study, Kyushu University, Fukuoka 819-0395, Japan
+3
+Department of Physics, Kyushu University, Fukuoka 819-0395, Japan
+4
+RIKEN Interdisciplinary Theoretical and Mathematical Sciences (iTHEMS), Wako, Saitama 351-0198, Japan
+5
+Dipartimento di Fisica, Università di Torino and INFN—Sezione di Torino, Via P. Giuria 1, Torino 10125, Italy
+6
+Walter Burke Institute for Theoretical Physics and Leinweber Forum for Theoretical Physics, California Institute of Technology,
+Pasadena, California 91125, USA
+7
+Kavli Institute for the Physics and Mathematics of the Universe (WPI), University of Tokyo, Kashiwa 277-8583, Japan
+8
+RIKEN Pioneering Research Institute, Wako, Saitama 351-0198, Japan
+2
+
+(Received 13 January 2026; revised 12 April 2026; accepted 19 May 2026; published 16 June 2026)
+Does a conformal manifold imply the existence of exactly marginal operators? We answer this question
+affirmatively under the assumption that there exists a conformal interface with certain properties connecting
+nearby conformal field theories. We show that the exactly marginal operator that connects the conformal
+field theories can be reconstructed from the interface displacement operator. Our construction is model
+independent and based on the general principles of conformal symmetry.
+DOI: 10.1103/4759-7qj2
+
+Introduction and summary—If exactly marginal operators exist in a conformal field theory (CFT), they generate
+a conformal manifold, which parametrizes a continuous
+family of CFTs [1]. One might naturally ask if the converse
+also holds: Does a conformal manifold require the existence of exactly marginal operators? In this Letter, we
+address this question by deriving the existence of exactly
+marginal operators under certain assumptions.
+The existence of exactly marginal operators has important implications for the swampland program, particularly
+for the distance conjecture [2]. The earliest distance
+conjecture may have been stated by Albert Einstein in
+his autobiographical notes, in which he claimed that there
+are no free parameters in the basic equations of physics.
+This was reformulated as Conjecture 0 in [2] as “the moduli
+space of a consistent quantum gravity is parametrized by
+inequivalent expectation values of massless scalar fields.”
+The existence of exactly marginal operators for a conformal
+manifold allows us to prove Conjecture 0 for gravitational
+theories in anti–de Sitter (AdS) space as follows [3]: If there
+is a continuous family of gravitational theories in AdS, then
+*
+
+Contact author: shota.komatsu@cern.ch
+Contact author: kusuki.yuya@phys.kyushu-u.ac.jp
+‡
+Contact author: marco.meineri@unito.it
+§
+Contact author: ooguri@caltech.edu
+†
+
+Published by the American Physical Society under the terms of
+the Creative Commons Attribution 4.0 International license.
+Further distribution of this work must maintain attribution to
+the author(s) and the published article’s title, journal citation,
+and DOI. Funded by SCOAP3.
+
+0031-9007=26=136(24)=241603(7)
+
+there must be a corresponding family of CFTs. If we can
+show that each CFT parameter is associated with an exactly
+marginal operator, the AdS/CFT dictionary would tell us
+that the exactly marginal operator corresponds to a massless scalar field with a flat potential, and the asymptotic
+behavior of this field determines the parameters. Therefore,
+every parameter in quantum gravity in AdS is related to a
+value of a dynamical field, as claimed in Conjecture 0 [4].
+We note an interesting analogy with the absence of
+global symmetry in quantum gravity in AdS, which was
+proven in [9,10] using the splittability of symmetry generators [11] in CFT. For continuous symmetry, the splittability is the consequence of the well-known fact that the
+symmetry generators are expressed as exponentiated integrals of the Noether currents over a Cauchy surface. If we
+regard a continuous deformation of CFT as (−1)-form
+global symmetry, the existence of the corresponding
+exactly marginal operator is the splittability of the symmetry. In this way, the absence of free parameters and the
+absence of global symmetry in gravitational theories in
+AdS are unified and understood in a single framework as
+consequences of the splittability of symmetry generators.
+In what follows, we show that exactly marginal operators
+exist, under the assumption of the existence of a conformal
+interface between nearby CFTs that reduces to the identity
+when the CFTs coincide. The argument is constructive and
+model independent. We focus on two-dimensional CFTs
+for simplicity, but the proof can be generalized to higher
+dimensions and will be reported in [12].
+To motivate our proposal, consider a theory with an
+exactly marginal operator ϕ, which we can use to deform
+
+241603-1
+
+Published by the American Physical Society
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+
+FIG. 1. Interface CFT. We denote the stress tensors of the CFTs
+on the upper and bottom sides of the interface by T 1 and T 2 ,
+respectively.
+
+the CFT in the upper half-plane as (see Fig. 1 for our choice
+of convention)
+Z
+S0 → S0 þ δλ
+d2 zϕðz; z̄Þ;
+ð1Þ
+Im z>0
+
+where S0 is the original action of the CFT. At the leading
+order in δλ, this defines a conformal interface satisfying the
+gluing condition at Im z ¼ 0 [13–15]:
+T 1 − T̄ 1 ¼ T 2 − T̄ 2 ;
+
+ð2Þ
+
+where T 1;2 (T̄ 1;2 ) are the holomorphic (antiholomorphic)
+stress tensors on the upper and bottom half-planes.
+Furthermore, it follows from the Ward identity that
+T 1 ðx þ i0Þ − T 2 ðx − i0Þ ¼ πδλϕðxÞ þ Oðδλ2 Þ;
+
+ð3Þ
+
+where we have written z ¼ x þ iy. Now we consider the
+displacement operator associated with this conformal
+interface [16]:
+D ≡ T 1 þ T̄ 1 − T 2 − T̄ 2 ¼ 2ðT 1 − T 2 Þ:
+
+ð4Þ
+
+The two-point function of the displacement operator has the
+following form:
+hDðzÞDðwÞi ¼
+
+ND
+;
+ðz − wÞ4
+
+ð5Þ
+
+where N D can be computed using (2) and (3) as [17]
+N D ¼ ð2πδλÞ2 þ Oðδλ3 Þ:
+
+ð6Þ
+
+This shows that one can extract the marginal operator ϕðxÞ
+from (see Fig. 2)
+ϕ ¼ lim D̂;
+δλ→0
+
+ð7Þ
+
+where D̂ is the normalized displacement operator:
+pﬃﬃﬃﬃﬃﬃ
+D̂ ≡ D= N D :
+
+ð8Þ
+
+In the rest of this Letter, we show that one can reverse
+this logic; assuming the existence of a conformal interface
+
+FIG. 2. A rough sketch of our construction of the exactly
+marginal operator ϕ. We parametrize the conformal manifold by
+λ. As δλ → 0, the two CFTs on both sides coincide, the interface
+vanishes, and what remains is the bulk local operator. We show
+that this local operator is actually the exactly marginal operator.
+
+between nearby CFTs that reduces to the identity when the
+CFTs coincide, we provide a simple proof for the existence
+of an exactly marginal operator. It is desirable to prove the
+result without assuming the existence of such an interface.
+We are actively investigating this and hope to present
+details in an extended version forthcoming [12].
+Displacement operator as exactly marginal operator—
+We define a conformal manifold as a collection of CFT data
+which depend continuously on a set of parameters. For every
+choice of parameters, the stress tensor exists and generates
+two copies of the Virasoro algebra. Our proof further
+assumes that (1) for any pair of CFTs that are close to each
+other on the conformal manifold, there is a conformal
+interface that becomes trivial (i.e., the identity interface)
+when the two CFTs coincide; (2) correlators involving unit
+normalized defect operators have finite limits as the interface
+disappears (smoothness condition) [18]. The consequence of
+these two assumptions is that defect operators become local
+operators of the CFT in the limit, unless they decouple (see
+Fig. 2) [19]. This is true, in particular, for the (normalized)
+displacement operator D̂, which exists on every conformal
+interface. For the reasons explained later, we also make the
+additional technical assumption that (3) the bulk CFT has no
+operators with conformal weights of ð1=2; 1=2Þ that are
+neutral under all the global symmetries preserved by the
+interface. Note that this third assumption excludes Liouville
+theory from our discussion [20].
+On the other hand, we do not need to assume that the
+central charges on both sides (cL;R ) are the same.
+Furthermore, chiral and antichiral central charges are
+allowed to differ, while the condition c1 − c̄1 ¼ c2 − c̄2
+is necessary for the existence of a conformal interface [16].
+In other words, the central charge can vary on the
+conformal manifold, but c − c̄ cannot [21].
+Our proof proceeds by showing the following three facts:
+(1) limN D →0 D̂ is an interface primary operator of conformal
+dimension 2. (2) limN D →0 D̂ is, in fact, a bulk primary
+operator of conformal dimension (1, 1). (3) The three-point
+function of limN D →0 D̂ vanishes.
+Here, an interface primary operator refers to a primary
+operator localized on the interface, associated with a
+highest weight state under the single Virasoro symmetry
+that remains unbroken in the interface CFT. Interface
+
+241603-2
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+quasiprimaries are defined analogously with respect to the
+slð2; RÞ algebra preserved by the defect. Note that, unlike
+bulk scaling operators, which are labeled by conformal
+weights ðh; h̄Þ under the bulk symmetry Vir ⊗ Vir, interface scaling operators are characterized by a single eigenvalue corresponding to the remaining Virasoro symmetry.
+Let us show that the displacement operator D̂ becomes
+an interface primary of weight 2 in the limit where the two
+CFTs coincide. When evaluated on the interface, the stress
+tensors reorganize in two interface primaries (W, W̄) and a
+quasiprimary (T tot ¼ T 1 þ T̄ 2 ); see Ref. [22]. Notice that
+the gluing condition implies T tot ¼ T̄ tot . In particular, the
+displacement operator D can be shown to be an interface
+quasiprimary. Indeed, one can check that
+
+
+pﬃﬃﬃﬃﬃﬃ
+
+ðc1 − c2 Þ= N D
+T 1 ðzÞ þ T̄ 2 ðzÞ D̂ðwÞ ¼
+ðz − wÞ4
+
+
+2
+1
+∂
+þ
+þ
+ðz − wÞ2 z − w
+× D̂ðwÞ þ Oð1Þ;
+
+ð9Þ
+
+
+TðzÞ þ T̄ðzÞ D̂ðwÞ
+
+¼
+
+2
+1
+∂D̂ðwÞ þ Oð1Þ:
+D̂ðwÞ þ
+2
+ðz
+−
+wÞ
+ðz − wÞ
+
+h
+∂ϕðw; w̄Þ
+þ Oð1Þ;
+ϕðw; w̄Þ þ
+2
+ðz − wÞ
+ðz − wÞ
+
+T̄ðz̄Þϕðw; w̄Þ ¼
+
+∂ϕðw; w̄Þ
+h̄
+þ Oð1Þ:
+ϕðw; w̄Þ þ
+2
+ðz̄ − w̄Þ
+ðz̄ − w̄Þ
+
+ð10Þ
+
+Hence, limN D →0 D̂ is indeed an interface primary of weight
+2. It is worth emphasizing that this expression shows that
+D̂ðwÞ does not decouple from the theory.
+Given that D̂ is an interface operator of conformal
+dimension 2, this constrains the possible bulk local operators that can emerge in the N D → 0 limit. In the following,
+we examine each candidate and show that the only viable
+possibility is a primary operator with conformal dimensions
+(1, 1). We broadly distinguish two cases: a highest weight
+state under the conformal symmetry Vir ⊗ Vir (i.e., a
+primary state) and those that can be obtained by acting
+with the stress tensor modes L−n on primary states (i.e.,
+descendant states).
+Primary fields: Suppose we have a bulk primary field
+ϕðz; z̄Þ of conformal weights ðh; h̄Þ. The OPE between a
+primary operator and the stress tensor is given by
+
+ð11Þ
+
+Restricting z and w to the real axis and taking the difference
+between the two expressions, we obtain
+
+
+h − h̄
+∂−∂
+TðzÞ − T̄ðzÞ ϕðwÞ ¼
+ϕðwÞ þ Oð1Þ:
+ϕðwÞ þ
+2
+z−w
+ðz − wÞ
+ð12Þ
+By symmetrizing with respect to z and w, we obtain
+
+
+
+
+TðzÞ − T̄ðzÞ ϕðwÞ þ TðwÞ − T̄ðwÞ ϕðzÞ
+¼
+
+where z and w lie on the real axis and Oð1Þ denotes terms
+that are nonsingular at z ¼ w. Equation (9) is obtained by
+making use of the interface boundary condition (2) as well
+as of the fact that T 1 ðzÞT̄ 2 ðwÞ and T̄ 1 ðzÞT 2 ðwÞ have no
+singularities at z ¼ w. This absence of singularity follows
+from the cluster decomposition principle [16].
+In the limit N D → 0, the singular part of (9) vanishes,
+thanks to the averaged null energy conditions, which
+enforce the bound N D ≥ 2jc1 − c2 j [23,24]. We obtain
+the operator product expansion (OPE)
+
+
+TðzÞϕðw; w̄Þ ¼
+
+
+h − h̄ 
+ϕðzÞ
+þ
+ϕðwÞ
+þ Oð1Þ:
+ðz − wÞ2
+
+ð13Þ
+
+Recalling that ϕ is constructed from T 1 ðwÞ − T 2 ðwÞ, this
+expression implies that the OPE between T 1 ðzÞ − T̄ 1 ðzÞ
+and T 1 ðwÞ − T 2 ðwÞ contains symmetric singular terms,
+unless h − h̄ ¼ 0. On the other hand, the interface boundary conditions on the energy-momentum tensor imply that
+the singular parts of the OPE are antisymmetric in z and w:
+ðT 1 ðzÞ − T̄ 1 ðzÞÞðT 1 ðwÞ − T 2 ðwÞÞ
+¼ T 1 ðzÞT̄ 1 ðwÞ − T̄ 1 ðzÞT 1 ðwÞ þ Oð1Þ;
+
+ð14Þ
+
+where we used the gluing condition (2) and the fact that
+T 1 ðzÞT̄ 2 ðwÞ and T̄ 1 ðzÞT 2 ðwÞ do not have singularities at
+z ¼ w. Note that T 1 ðzÞT̄ 1 ðwÞ is singular because of the
+gluing condition. Consequently, we must have h ¼ h̄.
+Since h þ h̄ ¼ 2, the bulk primary field ϕ that can appear
+in D̂ must be of conformal weights (1, 1), i.e., marginal.
+Descendant fields, L−2 j0i or L̄−2 j0i: The local operator corresponding to L−2 j0i is the energy-momentum
+tensor. It cannot appear by itself in D̂ðzÞ, since the OPE
+of TðzÞ þ T̄ðz̄Þ with TðzÞ contains a ðz − wÞ−4 singularity
+due to the conformal anomaly, which contradicts the
+expression given in (10). However, if we instead consider
+the combination c̄TðzÞ − cT̄ðzÞ, such a higher-order pole
+may cancel on the real axis.
+Nevertheless, this possibility can be excluded as follows.
+On the one hand, we have
+
+
+
+TðzÞ − T̄ðzÞ c̄TðwÞ − cT̄ðwÞ ¼
+
+cc̄
+þ ;
+ðz − wÞ4
+
+ð15Þ
+
+where z and w are restricted to the real axis. On the other
+hand, as shown in (14), the OPE singularities between
+TðzÞ − T̄ðzÞ and D̂ðwÞ must be antisymmetric under the
+exchange of z and w. Since there are no other operators that
+
+241603-3
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+can produce a ðz − wÞ−4 singularity to cancel the conformal
+anomaly term in (15), we conclude that c̄TðzÞ − cT̄ðzÞ
+cannot appear in D̂ðzÞ.
+Descendant fields, L−1 j1; 0i or L̄−1 j0; 1i: In this case,
+the CFT must possess either a holomorphic current J or an
+antiholomorphic current J̄. Suppose that D̂ðzÞ contains a
+linear combination of ∂J and ∂ J̄. Since we have
+
+
+
+TðzÞ þ T̄ðzÞ ∂JðwÞ
+
+2JðwÞ
+2∂JðwÞ ∂2 JðwÞ
+¼
+þ Oð1Þ;
+þ
+þ
+3
+z−w
+ðz − wÞ
+ðz − wÞ2
+
+
+TðzÞ þ T̄ðzÞ ∂ J̄ðwÞ
+¼
+
+2J̄ðwÞ
+2∂ J̄ðwÞ ∂2 J̄ðwÞ
+þ
+þ
+þ Oð1Þ;
+3
+z−w
+ðz − wÞ
+ðz − wÞ2
+
+ð16Þ
+
+
+
+
+1=2
+1=2
+TðzÞ þ T̄ðzÞ ρðw; w̄Þ ¼
+ρðw; w̄Þ
+þ
+ðz − wÞ2 ðz − w̄Þ2
+
+
+∂
+∂
+þ
+ρðw; w̄Þ þ Oð1Þ;
+þ
+z − w z − w̄
+ð17Þ
+
+for z on the real axis. It then follows that
+
+
+
+TðzÞ þ T̄ðzÞ ∂ρðw; w̄Þ
+
+ρðw; w̄Þ 2∂ρðw; w̄Þ ð∂ þ ∂Þ∂ρðw; w̄Þ
+¼
+þ Oð1Þ;
+þ
+þ
+z−w
+ðz − wÞ3 ðz − wÞ2
+
+
+TðzÞ þ T̄ðzÞ ∂ρðw; w̄Þ
+¼
+
+ρðw; w̄Þ 2∂ρðw; w̄Þ ð∂ þ ∂Þ∂ρðw; w̄Þ
+þ
+þ
+þ Oð1Þ:
+z−w
+ðz − wÞ3 ðz − wÞ2
+
+ð18Þ
+
+It implies that the combination ð∂ − ∂Þρ satisfies (10).
+In summary, we have shown that the conformal symmetry alone guarantees that the limit of D̂ is a linear
+combination:
+
+ð19Þ
+
+where ϕ and ρ are dimension (1, 1) and ð12 ; 12Þ primaries,
+respectively. Both ϕ and ρ must be neutral under any global
+symmetry that preserves the interface since D̂ is. Since we
+assumed that the theory does not contain neutral ð12 ; 12Þ
+primaries, this establishes the existence of a marginal operator
+(since ρ ¼ 0 and, therefore, ϕ is necessarily present). We will
+elaborate more on this point in the next section.
+Let us now verify that the three-point function of ϕ
+vanishes, as expected from exact marginality. Given a pair
+of quasiprimary operators O1 and O2 , with the same spin
+h1 − h̄1 ¼ h2 − h̄2 , on either side of any conformal interface, their correlators with and without the displacement are
+constrained as follows [26]:
+a12
+;
+ð2 Im zÞΔ1 þΔ2
+pﬃﬃﬃﬃﬃﬃ
+ðΔ1 − Δ2 Þa12 = N D
+hO1 ðz; z̄ÞO2 ðz̄; zÞD̂ðwÞi ¼
+;
+ð2 Im zÞΔ1 þΔ2 −2 jz − wj4
+hO1 ðz; z̄ÞO2 ðz̄; zÞi ¼
+
+in order to satisfy (10), we need to consider the combination ð∂J − α∂ J̄Þ for some constant α and impose the totally
+reflective boundary condition JðzÞ ¼ αJ̄ðz̄Þ. However, this
+boundary condition is not compatible with full conformal
+invariance, namely, with preserving the full symmetry
+Vir ⊗ Vir without the interface. Hence, it cannot arise
+when N D ¼ 0, where the interface is absent. Therefore, this
+possibility must be excluded.
+Descendant fields, L−1 j1=2; 1=2i or L̄−1 j1=2; 1=2i:
+Suppose there exists a bulk primary field ρ of conformal
+weight ð1=2; 1=2Þ. Then, we have
+
+
+lim D̂ ¼ ϕ þ ð∂ − ∂Þρ;
+
+N D →0
+
+ð20Þ
+ð21Þ
+
+where Δ ¼ h þ h̄, w ∈ R, a12 is a constant which, at
+N D ¼ 0, is fixed by normalization, i.e., a12 ¼ 1, and it
+should be noted that O1 and O2 are placed at symmetric
+positions with respect to the interface. Having established
+the existence of an operator of weight 2 at a generic point of
+the conformal manifold, we select O1 ¼ O2 ¼ ϕ, so that
+the rhs of (21) vanishes identically for any value of N D ,
+while (20) does not, and, in particular, limN D →0 a12 ¼ 1.
+Since the rhs of (21) reduces to the three-point function of ϕ
+at N D ¼ 0, we conclude that
+hϕðzÞϕðwÞϕðuÞi ¼ 0;
+
+ð22Þ
+
+establishing the marginality of ϕ at the leading order.
+More generally, let O1 ¼ Oλþδλ and O2 ¼ Oλ denote the
+same quasiprimary operator at two nearby points on the
+conformal manifold. Then we define δΔO ≡ Δ1 − Δ2 .
+Using a12 → 1 in (20) and D̂ → ϕ as N D → 0, (21) reduces
+to the bulk three-point function with ϕ, and we obtain
+pﬃﬃﬃﬃﬃﬃ 
+pﬃﬃﬃﬃﬃﬃ
+ð23Þ
+δΔO ¼ N D cOOϕ þ o
+ND :
+This is precisely the expected first-order relation between
+the variation of scaling dimensions and the OPE coefficient
+with the exactly marginal operator in conformal perturbation theory. This agreement provides an additional justification for identifying D̂ with an exactly marginal operator.
+Interface conformal manifold—Why did we need to
+assume the absence of neutral ð12 ; 12Þ primaries? Let us first
+clarify what ρ actually represents in (19). If a CFT contains
+a weight-one scalar operator, one can produce a line defect
+by integrating it with an infinitesimal coefficient. If,
+
+241603-4
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+furthermore, cρρρ ¼ 0, together with the required higher
+order conditions, the line defect is part of a conformal
+manifold. As a concrete example, the Ising CFT admits a
+defect conformal manifold generated by the following
+interface exactly marginal deformation [14]:
+Z
+Sdefect ¼ γ dxε;
+ð24Þ
+where ε is the energy density operator with conformal
+dimensions ð1=2; 1=2Þ. The displacement operator is
+γ
+D ¼ ð∂ − ∂Þε:
+2
+
+compactification radius, i.e., R → R0 ≡ Reπδλ . The interface with a CFT deformed by δλ can be described by the
+following gluing matrix [15]:
+
+
+∂X1
+∂X2
+
+where R represents the compactification radius. The marginal operator in this CFT is ϕ ¼ ∂X∂X. The exactly
+marginal deformation leads to the shift in the
+
+
+
+∂X1
+¼S
+;
+∂X2
+
+
+
+cos 2θ − sin 2θ
+S¼−
+;
+sin 2θ cos 2θ
+
+ð27Þ
+
+where we define tan θ ¼ eπδλ . This gluing condition allows
+us to express the stress tensor on the bottom side of the
+interface in terms of the free boson fields on the upper side:
+1
+1
+T 2 ¼ ∂X2 ∂X2 ¼ ∂X1 ∂X1 − πδλ∂X1 ∂X1 ;
+2
+2
+1
+1
+T̄ 2 ¼ ∂X2 ∂X2 ¼ ∂X1 ∂X1 − πδλ∂X1 ∂X1 :
+2
+2
+
+ð25Þ
+
+This is precisely of the same form as the second term in (19).
+Vice versa, given a family of interfaces connected to the
+identity, whose displacement obeys (19) with ϕ ¼ 0, one can
+prove that cρρρ ¼ 0—see Supplemental Material [25].
+Furthermore, it is easy to check that, if limN D →0 D̂ ¼
+ð∂ − ∂Þρ, the lhs of (21) vanishes in the limit; therefore,
+no scaling dimension changes at leading order in N D . More
+generally, symmetry-neutral exactly marginal deformation
+on the interface can arise from the breaking of a phantom
+symmetry [27]: a symmetry that emerges when one interprets
+the interface between CFT1 and CFT2 as a boundary in
+CFT1 ⊗ CFT2 using the folding trick. In such cases, a
+phantom current with conformal dimension (1,0) in the
+folded theory induces an interface exactly marginal operator
+with dimension ð1=2; 1=2Þ in the unfolded theory. This is
+precisely the case in the example of the Ising CFT, where the
+phantom current is given by j ¼ ψ 1 ψ 2. Here, ψ 1=2 represents
+the fermion field on the upper or bottom side of the interface,
+and the energy density operator in the Ising CFT can be
+expressed in terms of these fermions as ε1=2 ¼ iψ 1=2 ψ̄ 1=2 .
+The explicit examples discussed above describe interfaces
+between identical CFTs rather than interfaces connecting
+different points on a conformal manifold as considered in the
+main text. However, our leading-order analysis does not rule
+out the possibility that an interface could connect theories at
+distinct points on a conformal manifold while still obeying
+limN D →0 D̂ ¼ ð∂ − ∂Þρ. Consider, for instance, the case
+where D ∼ ϕ̃ þ ð∂ − ∂Þρ with hϕ̃ ϕ̃i ¼ OðN 1þϵ
+D Þ with
+ϵ > 0. Equation (19) would be obeyed with ϕ ¼ 0. This
+example shows that additional input is needed to treat
+conformal manifolds containing protected dimension-1
+operators within our framework [28].
+Examples—Let us illustrate our results with concrete
+examples: the compact free boson, whose action is given by
+Z
+1
+S¼
+X ∼ X þ 2πR;
+ð26Þ
+d2 z∂X∂X;
+4π
+
+
+
+ð28Þ
+
+This expression leads to the following displacement
+operator:
+lim D̂ ¼ ∂X∂X:
+
+δλ→0
+
+ð29Þ
+
+This coincides precisely with the exactly marginal operator ϕ ¼ ∂X∂X.
+Another example is the supersymmetric sigma model
+whose target space is a Calabi-Yau manifold. For each
+exactly marginal deformation, there is a primary field ρ of
+dimensions ð1=2; 1=2Þ and an exactly marginal operator ϕ,
+which is a superconformal descendant of ρ. However, since
+ρ carries nonzero R charges with respect to the N ¼ ð2; 2Þ
+superconformal algebra, it cannot appear on the right-hand
+side of (19). For a generic Calabi-Yau manifold, there are
+no neutral ð1=2; 1=2Þ primaries. Therefore, the limit of D̂
+can be identified with the exactly marginal operator ϕ.
+Comments—In the Introduction, we noted the interesting
+analogy between the absence of free parameters and the
+absence of global symmetry in AdS gravitational theories,
+both of which are consequences of the splittability of
+symmetry generators. The absence of free parameters has
+been quantified as distance conjectures 1 and 2 [2] and
+formulated in AdS [29], and some of these conjectures have
+been proven [30,31]. The absence of global symmetry has
+been quantified as the weak gravity conjecture [32] and
+formulated in AdS [10,33–35], and some of these have
+been proven [36,37]. Since both are formulated in terms of
+inequalities, it would be interesting to determine whether
+they are analogous and can be understood within a single
+framework.
+Our result is conditional on assumption 1. At present, we
+do not know a general theorem guaranteeing the existence
+of conformal interfaces approaching the identity between
+arbitrary nearby points on a conformal manifold, nor are we
+aware of explicit counterexamples. In the examples we
+know, including the free boson example, the assumption is
+satisfied. Clarifying its general validity is an interesting
+open problem, which we hope to return to in [12].
+
+241603-5
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+Acknowledgments—We thank Tom Banks, Nathan
+Benjamin, Davide Gaiotto, Daniel Harlow, Joao
+Penedones, Ashoke Sen, Mark Van Raamsdonk, Yifan
+Wang, Yunqin Zheng, and Sasha Zhiboedov for discussions. Y. K. and H. O. are supported in part by the Walter
+Burke Institute for Theoretical Physics at Caltech and by
+the U.S. Department of Energy, Office of Science, Office of
+High Energy Physics, under Award No. DE-SC0011632.
+Y. K. has also been supported in part by the Brinson Prize
+Fellowship at Caltech, by the INAMORI Frontier Program
+at Kyushu University, and by JSPS KAKENHI Grant
+No. 23K20046. H. O. is also supported in part by the
+Leinweber Forum for Theoretical Physics at Caltech, the
+Simons Investigator Award (MP-SIP-00005259), and JSPS
+Grants-in-Aid for Scientific Research No. 23K03379. His
+work was performed in part at the Kavli Institute for the
+Physics and Mathematics of the Universe at the University
+of Tokyo, which is supported by the World Premier
+International Research Center Initiative, MEXT, Japan,
+at the Kavli Institute for Theoretical Physics (KITP) at
+the University of California, Santa Barbara, which is
+supported by NSF Grant No. PHY-2309135, at the
+Aspen Center for Physics, which is supported by NSF
+Grant No. PHY-1607611, and Pioneering Science
+Promotion Division of RIKEN. M. M. is supported by
+the Italian Ministry of University and Research (MUR)
+under
+the
+FIS
+grant
+BootBeyond
+(CUP:
+No. D53C24005470001), and by the INFN “Iniziativa
+Specifica” ST&FI. M. M. is supported by the European
+Union through the MSCA Staff Exchange program (Project
+No.
+HORIZON-MSCA-2023-SE-01-101182937-HeI).
+S. K. and Y. K. thank Yukawa Institute for Theoretical
+Physics and the workshop “Progress on Theoretical
+Bootstrap” for hospitality during the completion of
+this work.
+Data availability—There are no publicly available
+research data or software supporting this manuscript.
+Requests for further information or data should be sent
+to the authors.
+[1] A. B. Zamolodchikov, Irreversibility of the flux of the
+renormalization group in a 2d field theory, JETP Lett. 43,
+730 (1986).
+[2] H. Ooguri and C. Vafa, On the geometry of the string
+landscape and the Swampland, Nucl. Phys. B766, 21
+(2007).
+[3] H. Ooguri, Perspectives and prospects, in Summary Talk at
+Strings 2022, Vienna, Austria.
+[4] There has been an interesting development in interpreting
+the conjecture in AdS [5–8].
+[5] T. Banks, Old Ideas for new physicists III: String theory
+parameters are NOT vacuum expectation values, arXiv:
+2501.17697.
+[6] A. Sen, Are moduli vacuum expectation values or parameters?, arXiv:2502.07883.
+
+[7] A. Sen, How to create a flat ten or eleven dimensional spacetime in the interior of an asymptotically flat four dimensional string theory, arXiv:2503.00601.
+[8] A. Sen, Decorating asymptotically flat space-time with the
+moduli space of string theory, J. High Energy Phys. 12
+(2025) 145.
+[9] D. Harlow and H. Ooguri, Constraints on symmetries from
+holography, Phys. Rev. Lett. 122, 191601 (2019).
+[10] D. Harlow and H. Ooguri, Symmetries in quantum field
+theory and quantum gravity, Commun. Math. Phys. 383,
+1669 (2021).
+[11] D. Buchholz, S. Doplicher, and R. Longo, On Noether’s
+theorem in quantum field theory, Ann. Phys. (N.Y.) 170, 1
+(1986).
+[12] S. Komatsu, Y. Kusuki, M. Meineri, and H. Ooguri (to be
+published).
+[13] M. Oshikawa and I. Affleck, Defect lines in the Ising model
+and boundary states on orbifolds, Phys. Rev. Lett. 77, 2604
+(1996).
+[14] M. Oshikawa and I. Affleck, Boundary conformal field
+theory approach to the critical two-dimensional Ising model
+with a defect line, Nucl. Phys. B495, 533 (1997).
+[15] C. Bachas, J. de Boer, R. Dijkgraaf, and H. Ooguri,
+Permeable conformal walls and holography, J. High Energy
+Phys. 06 (2002) 027.
+[16] M. Billò, V. Gonçalves, E. Lauria, and M. Meineri, Defects
+in conformal field theory, J. High Energy Phys. 04 (2016)
+091.
+[17] I. Brunner and C. Schmidt-Colinet, Reflection and transmission of conformal perturbation defects, J. Phys. A 49,
+195401 (2016).
+[18] While the Cauchy-Schwarz inequality implies that correlators of a single interface operator and any number of bulk
+operators are bounded, it does not imply that the limit exists.
+Furthermore, the norm of multiple defect insertions is not
+automatically bounded. It might be possible to improve this
+by considering multiple interfaces, but we do not pursue this
+avenue here.
+[19] If the interface in the limit is not trivial but topological and
+noninvertible, defect operators may become operators with a
+topological line attached.
+[20] For arbitrary values of the coupling constant, Liouville
+theory has a symmetry-neutral ð1=2; 1=2Þ operator, hence
+violating our assumption 3. This operator may not correspond to a normalizable state in Liouville theory, but our
+current argument is insensitive to such a normalizability
+issue.
+[21] From modular T invariance,
+h − h̄ −
+
+c − c̄
+∈ Z;
+24
+
+while the single-valuedness of correlation functions implies
+the quantization of spin, h − h̄ ∈ Z=2. Combining these
+relations, we conclude that c − c̄ must be quantized. This, in
+turn, means that c − c̄ is invariant under continuous deformations.
+[22] T. Quella, I. Runkel, and G. M. T. Watts, Reflection and
+transmission for conformal defects, J. High Energy Phys. 04
+(2007) 095.
+
+241603-6
+
+PHYSICAL REVIEW LETTERS 136, 241603 (2026)
+[23] M. Meineri, J. Penedones, and A. Rousset, Colliders and
+conformal interfaces, J. High Energy Phys. 02 (2020) 138.
+[24] Reflection positivity is sufficient only to show that (2) is
+bounded in the limit [16], while the smoothness condition
+implies the even stronger bound; jc1 − c2 j2=3 =N D stays
+finite in the limit N D → 0—see Supplemental Material [25].
+[25] See Supplemental Material at http://link.aps.org/suppleme
+ntal/10.1103/4759-7qj2 for details on the smoothness condition and on the proof that cρρρ ¼ 0.
+[26] F. Gliozzi, P. Liendo, M. Meineri, and A. Rago, Boundary
+and interface CFTs from the conformal bootstrap, J. High
+Energy Phys. 05 (2015) 036.
+[27] A. Antinucci, C. Copetti, G. Galati, and G. Rizi, Defect
+conformal manifolds from phantom (non-invertible) symmetries, Phys. Rev. Lett. 135, 211602 (2025).
+[28] Of course, if a scalar has dimension 1 only on some
+submanifold of the conformal manifold, our analysis works
+by considering points in the complement of said submanifold.
+[29] E. Perlmutter, L. Rastelli, C. Vafa, and I. Valenzuela, A CFT
+distance conjecture, J. High Energy Phys. 10 (2021) 070.
+
+[30] F. Baume and J. Calderón-Infante, On higher-spin points
+and infinite distances in conformal manifolds, J. High
+Energy Phys. 12 (2023) 163.
+[31] H. Ooguri and Y. Wang, Universal bounds on CFT distance
+conjecture, J. High Energy Phys. 12 (2024) 154.
+[32] N. Arkani-Hamed, L. Motl, A. Nicolis, and C. Vafa, The
+string landscape, black holes and gravity as the weakest
+force, J. High Energy Phys. 06 (2007) 060.
+[33] Y. Nakayama and Y. Nomura, Weak gravity conjecture in the
+AdS/CFT correspondence, Phys. Rev. D 92, 126006 (2015).
+[34] D. Harlow, Wormholes, emergent gauge fields, and the
+weak gravity conjecture, J. High Energy Phys. 01 (2016)
+122.
+[35] O. Aharony and E. Palti, Convexity of charged operators in
+CFTs and the weak gravity conjecture, Phys. Rev. D 104,
+126005 (2021).
+[36] A. Sharon and M. Watanabe, A counterexample to the CFT
+convexity conjecture, J. High Energy Phys. 05 (2023) 202.
+[37] O. Aharony and Y.-N. Breitstein, Tests of the charge
+convexity conjecture in Caswell-Banks-Zaks theory, J. High
+Energy Phys. 08 (2023) 044.
+
+241603-7
+
+

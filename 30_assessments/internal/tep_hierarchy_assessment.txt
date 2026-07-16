@@ -1,0 +1,169 @@
+**Consolidated Assessment**
+
+TEP Budget Equation, Spectral Moment Hierarchy,
+
+and the Trans-Critical Regime
+
+*Working Document — February 2026*
+
+# **1. Executive Summary**
+
+The TEP budget equation x² + u = 1, identified with u = Dγ = 1 − γ²\_GMC/2, captures the geometry of quantum subsystem dynamics exactly for qubits and approximately for higher-dimensional systems. The spectral moment hierarchy provides the systematic corrections beyond the single-parameter (budget equation) description. The relationship between these frameworks is not one of competition but of **scale separation**: the budget equation governs the leading behavior, and the hierarchy governs the corrections.
+
+The central structural result is the G-factor formula for the spectral dispersion F = p₃ − γ², which controls the purity speed limit. For qubits:
+
+F = (x/√2)² / G²(√2·x)    where G(v) = 1/√(1 − v²)
+
+This formula exhibits a **metric horizon** at x = 1/√2 (equivalently γ\_GMC = 1), where the generalized Lorentz factor diverges. For qubits, this horizon coincides with the maximally mixed state and is never crossed. For d ≥ 3, the system can cross this threshold, entering a **trans-critical regime** where the single-parameter description fails and the spectral hierarchy becomes essential. Horizons in this framework are thresholds beyond which a degree of freedom becomes dynamically relevant — a crossover rather than a phase transition.
+
+# **2. What Is Structurally Established**
+
+## **2.1 The G-Factor Formula (Qubits)**
+
+For a qubit subsystem (d\_A = 2), the spectral dispersion F = p₃ − γ² is exactly determined by purity alone: F = (1 − γ)(2γ − 1)/2. In TEP budget variables (x² = 1 − γ):
+
+F = (x²/2)(1 − 2x²) = (x/√2)² × (1 − 2x²)
+
+The factor (1 − 2x²) = 1/G²(√2·x) is a Lorentz factor evaluated at the rescaled coherence √2·x. This is **exact**, following purely from the constraint that a qubit has one free eigenvalue. Verified numerically to machine precision. **\[SOLID\]**
+
+## **2.2 The Metric Horizon at x = 1/√2**
+
+The G-factor diverges at √2·x = 1, i.e., x = 1/√2 (γ = 1/2, maximally mixed qubit). At this point F = 0 and the purity speed limit |dγ/dt| ≤ 4‖V‖√F shuts off completely. For qubits, x\_max = 1/√2 exactly, so the horizon is never crossed. The dynamics approaches it asymptotically with critical slowing down. **\[SOLID\]**
+
+This is precisely the “smoking gun” prediction from Section 4.2 of the Research Roadmap, now expressed in G-factor language. The horizon is structural (it follows from the eigenvalue constraint), not imposed.
+
+## **2.3 Trans-Critical Regime Exists for d ≥ 3**
+
+For d\_A = 3, x\_max = √(2/3) ≈ 0.8165, which exceeds 1/√2 ≈ 0.7071. The system can and does cross the qubit horizon. In this regime the G-factor formula gives F \< 0 (unphysical), but the actual F = p₃ − γ² remains positive because p₃ carries independent information. Numerically confirmed: the correction ε = F − F\_qubit is multi-valued as a function of x, proving it depends irreducibly on p₃. **\[SOLID\]**
+
+## **2.4 Eigenvalue Activation as Horizon Mechanism**
+
+The mechanism by which the system crosses the qubit horizon is the activation of the third eigenvalue λ₃. In the sub-critical regime, λ₃ is small and the system behaves as an effective qubit. As x → 1/√2, the two-eigenvalue description saturates. Beyond this point, λ₃ becomes dynamically significant and provides the additional degree of freedom that keeps F positive. **\[SOLID\]**
+
+Crucially, this is a **crossover, not a phase transition**. λ₃ is nonzero from the start; it simply becomes *relevant* near the horizon. The eigenvalue activation thresholds (λ\_k/λ\_1 \> 1%) occur well before the theoretical horizon positions x = √(1 − 1/k). For d\_A = 5, the measured activation of λ₂ occurs at x ≈ 0.19, far below the horizon at x = 0.707.
+
+# **3. Horizons as Relevance Thresholds**
+
+The data supports a specific interpretation of horizons: they are thresholds beyond which a degree of freedom becomes (or ceases to be) dynamically relevant. This deserves careful unpacking.
+
+## **3.1 The Precise Claim**
+
+Each eigenvalue λ\_k of the reduced density matrix represents a dimension of the subsystem’s Hilbert space that is “occupied” by entanglement. When λ\_k is negligible, that dimension is dynamically inert — it contributes negligibly to the spectral moments and to F. The participation ratio PR = 1/γ = 1/p₂ counts the effective number of occupied dimensions.
+
+The horizon at x = √(1 − 1/k) corresponds to PR = k. Below this horizon, fewer than k dimensions are effectively occupied, and the dynamics can be described by fewer than k independent spectral moments. Above it, k dimensions participate and k − 1 independent moments are needed.
+
+The d\_A = 5 numerical data shows PR crossing 2 at t ≈ 2.0, coinciding with x ≈ 0.72 (just above 1/√2 = 0.707). At this point, the G-factor correction ε/F exceeds 1.0, meaning the qubit formula is no longer even qualitatively correct. The horizon marks where the effective dimensionality of the dynamics changes.
+
+## **3.2 What This Means for TEP**
+
+The budget equation x² + u = 1 with u = Dγ = 1 − γ²\_GMC/2 captures the dynamics when a single intermittency parameter γ\_GMC suffices — that is, when the entanglement spectrum is effectively one-dimensional (qubit-like). This is the **log-normal approximation** to the full multiplicative cascade.
+
+The spectral moment hierarchy provides the systematic corrections: p₃ is the third cumulant (skewness), p₄ is the fourth (kurtosis), and so on. These encode the departure from log-normality — the non-Gaussian structure of the entanglement cascade.
+
+The bridge statement: ***TEP’s budget equation is the leading-order (log-normal) description of entanglement dynamics. The spectral moment hierarchy provides the next-order corrections. The horizons mark the boundaries of validity for each truncation order.***
+
+## **3.3 The Bidirectionality**
+
+You asked whether horizons mark where a degree of freedom “becomes or ceases to be” relevant. The data confirms both directions. In the d\_A = 3 trajectory, the system crosses x = 1/√2 around t ≈ 2.0 (entering the trans-critical regime) and re-crosses around t ≈ 2.7 (returning to sub-critical). The participation ratio rises above 2, then falls below 2 again. The horizon is a dynamical boundary, not a one-way membrane.
+
+This is physically sensible: unitary evolution is reversible. Entanglement can grow and shrink. When it shrinks, eigenvalues that were relevant become irrelevant again, and the simpler (budget equation) description regains validity.
+
+# **4. The √2 Factors: Structure vs. Coincidence**
+
+## **4.1 What the √2 Factors Mean**
+
+The expression F = (x/√2)² / G²(√2·x) contains two √2 factors with distinct roles:
+
+**Numerator: x/√2.** This normalizes the coherence x by the critical threshold 1/√2. It reaches unity at the horizon. In your framework’s language, the 1/√2 in the denominator signals a metric phase change — a threshold where an observable’s operational meaning changes. Here: below the threshold, purity dynamics is qubit-like; above it, new degrees of freedom enter.
+
+**Denominator: G(√2·x).** The √2 rescaling of the G-factor argument means the dynamics “sees” a horizon at half the budget boundary. The purity dynamics has its own effective speed of light, distinct from the budget’s. The argument √2·x is precisely γ\_GMC, so G(γ\_GMC) = 1/√(1 − γ²\_GMC) is the natural Lorentz factor of the multiplicative chaos.
+
+## **4.2 The Trans-Critical Interpretation**
+
+Your suggestion of a “trans-critical measure” — a valid regime for which √2·x reaches beyond the threshold — is precisely what the data shows. For d ≥ 3, γ\_GMC can exceed 1, entering the regime where the log-normal (single-parameter) description breaks. The spectral hierarchy provides the regularization: F remains finite and positive because p₃ contributes independently.
+
+The alternative reading — (1/√2)·x reaching beneath a threshold — describes the converse: regimes where the effective coherence is too small for a given degree of freedom to matter. Both are observed in the dynamics (crossing in both directions as entanglement oscillates).
+
+What I cannot confirm from the numerics alone is whether the √2 factors carry a deeper structural load beyond the qubit case. For qubits, they arise algebraically from the eigenvalue constraint. For higher dimensions, the G-factor formula is replaced by F = p₃ − γ², which does not factorize into a product of a “normalized coherence” and a “Lorentz factor.” Whether there exists a higher-dimensional generalization with analogous factorization structure is an open question. **\[OPEN\]**
+
+# **5. Critical Assessment of TEP Claims**
+
+## **5.1 The Tautology Boundary**
+
+The budget equation x² + u = 1 is, at its most basic, a tautology: any bounded variable can be written as the complement of its deficit. The question is whether the *identifications* (x² = γ²\_GMC/2, u = Dγ, etc.) carry physical content.
+
+For qubits, the answer is: **barely**. The budget equation is the Pythagorean identity on the Bloch sphere. It constrains state-space geometry but not dynamics. The *dynamics* enters through the speed limit |dγ/dt| ≤ 4‖V‖√F, which involves the Hamiltonian and the state shape (via F). The budget equation tells you *where* you can be; the hierarchy tells you *how fast* you can move.
+
+For higher dimensions, the budget equation becomes a genuine *approximation* — and therefore has falsifiable content. It claims that a single parameter (γ\_GMC) suffices. The hierarchy quantifies exactly when and how this fails. **\[SUBSTANTIVE\]**
+
+## **5.2 The Hartmann Connection**
+
+The Hartmann short-time result γ(t) ≈ 1 − (t/τ)² maps to the TEP structure as follows: u(t) = Dγ ≈ 1 − γ²\_GMC(t)/2, with γ\_GMC(t) ≈ √2 · t/τ at short times. This gives u ≈ 1 − t²/τ², recovering Hartmann. The subleading corrections depend on how γ\_GMC(t) deviates from linearity, which is where the spectral hierarchy enters.
+
+The connection is **real but limited**: any quadratic initial behavior maps onto the budget structure at leading order. The subleading structure is where TEP must make specific predictions to avoid being merely a restatement of Taylor expansion. **\[REAL BUT NEEDS SHARPENING\]**
+
+## **5.3 The GMC Dictionary**
+
+The identification of spectral moments with GMC cumulants — p₂ ↔ γ²\_GMC (variance/intermittency), p₃ ↔ third cumulant (skewness), etc. — is structurally natural but not yet derived. The dimensional counting works: both sequences characterize the shape of a probability distribution (eigenvalues of ρ\_A for quantum, the multifractal measure for GMC). The correspondence F = 0 ⇔ log-normal cascade is clean.
+
+What is missing is a proof that the mass exponent τ(q) of a specific GMC, evaluated at integer q, equals the spectral moments p\_q of a specific quantum state. Without this, the dictionary is an analogy rather than an isomorphism. **\[PROMISING ANALOGY, NOT YET PROVEN\]**
+
+## **5.4 The Freezing Transition**
+
+In standard GMC, the freezing transition occurs at γ\_GMC = 2 (in 1D), where Dγ → −1 and the measure becomes atomic. Under the direct identification u = Dγ = 1 − γ²\_GMC/2, the maximum γ\_GMC for a d\_A-dimensional system is √(2(1 − 1/d\_A)), which approaches √2 ≈ 1.414 as d → ∞. This is below the freezing point of 2.
+
+This means either: (a) the freezing transition is inaccessible to finite-dimensional quantum systems and corresponds to a continuum/holographic limit; or (b) the identification needs modification for extreme entanglement. Both are interesting but neither is resolved. **\[OPEN\]**
+
+# **6. How the Spectral Hierarchy Paper Connects**
+
+The spectral moment hierarchy paper (on purity speed limits) and the TEP framework relate as follows:
+
+## **6.1 The Hierarchy as Correction Series**
+
+TEP’s budget equation with a single γ\_GMC is the zeroth-order description. It works when the entanglement spectrum is effectively two-dimensional (one free eigenvalue). The hierarchy’s results provide systematically higher-order corrections. Specifically, Result 3 (the tight qubit purity speed limit |dγ/dt| ≤ 4‖V‖√F with F depending on p₃) is the *first correction* beyond the budget equation for d ≥ 3.
+
+## **6.2 F as Departure from Log-Normality**
+
+The spectral dispersion F = p₃ − p₂² measures how much the eigenvalue distribution deviates from the shape predicted by purity alone. For qubits (log-normal cascade), F is a function of p₂ and carries no new information. For d ≥ 3, F is independent and measures the skewness of the entanglement spectrum — precisely the first non-Gaussian cumulant of the cascade.
+
+The iso-purity prediction (states with same γ but different F have different speed limits) is the **experimental signature** of this departure. It cannot be stated or tested within the budget equation alone.
+
+## **6.3 Publication Implications**
+
+The hierarchy paper should cite the TEP framework as motivation/context *only if* the GMC dictionary can be made rigorous. Otherwise, the paper stands on its own mathematical merits (Cauchy-Schwarz hierarchy, tight bounds, Vandermonde reconstruction) without requiring the TEP interpretive layer. The connection to TEP is best presented as a discussion section: “Our hierarchy provides the correction terms to single-parameter descriptions of entanglement dynamics, analogous to how non-Gaussian cumulants correct log-normal cascade models.”
+
+# **7. Specific Next Steps**
+
+## **7.1 To Solidify the TEP Connection**
+
+(A) Derive the metric on the full moment space (p₂, p₃, ..., p\_d). If this yields a higher-dimensional hyperbolic geometry with natural horizons at PR = k thresholds, the “hierarchy of horizons” picture is geometrically confirmed. The Poincaré disk metric ds² = dγ²/\[γ²(1−γ)\] from the SU(1,1) document is the d = 2 case; the extension to the eigenvalue simplex for d ≥ 3 is a well-defined calculation.
+
+(B) Compute the multifractal spectrum τ(q) for the Wishart ensemble (which describes reduced density matrices of random pure states). If τ(q) at integer q gives the expected spectral moments, the GMC dictionary becomes exact for random states.
+
+(C) Check whether the generalized susceptibility f = 2F/x² admits a factorized form involving a higher-dimensional G-factor for qutrits. If f = f(x, p₃) factorizes as a product of a function of x and a function of p₃, this would be a non-trivial structural constraint connecting the budget equation to the hierarchy.
+
+## **7.2 For the Hierarchy Paper Itself**
+
+(D) Complete the manual literature checks (Bengtsson-Życzkowski textbook, Watrous textbook, Shrimali-Bhowmick-Pandey-Pati 2022, de Boer-Haehl-Heller-Myers 2019) to confirm Result 1–6 novelty.
+
+(E) Write the clean proofs, with the iso-purity prediction as the hierarchy’s first distinctive prediction.
+
+(F) Frame the TEP/GMC connection as a discussion section, not a dependency. The mathematics stands alone.
+
+# **8. Final Verdict**
+
+The TEP budget equation and the spectral moment hierarchy are not competing frameworks. They operate at different levels of description:
+
+|  |  |  |
+| :-: | :-: | :-: |
+| \*\*Aspect\*\* | \*\*TEP Budget\*\* | \*\*Spectral Hierarchy\*\* |
+| Governs | State-space geometry | Dynamical speed limits |
+| Parameters | One (γ\\\_GMC) | Full moment sequence |
+| Exact for | Qubits (Bloch sphere) | All dimensions |
+| Character | Conservation law | Inequality chain |
+| GMC analogue | Log-normal cascade | Full multifractal |
+| Horizon role | Defines the boundary | Describes what’s beyond |
+
+  
+
+The relationship is hierarchical in the precise sense: the budget equation is the first term, the spectral hierarchy provides the corrections, and the horizons mark the boundaries of validity. Eigenvalues of ρ\_A are surrogates for effective dimensions, and horizons are the thresholds at which these dimensions become or cease to be dynamically relevant. This interpretation is supported by the numerical evidence and follows naturally from the algebraic structure, though the quantitative GMC dictionary that would make it rigorous remains to be derived.

@@ -1,0 +1,101 @@
+\# Summary-vs-Source Audit: TEP/Entrodynamics Central Reference V2
+
+  
+
+\#\# Method and overall finding
+
+  
+
+I read the Central Reference V2 in full and cross-checked its claims against the source documents I examined over this review (\`tep\_session\_record\_derivation.txt\`, \`O\_R\_\_2-09-26.txt\`, \`purity\_speed\_limit\_v2.md\`, \`Part\_I/II\`, \`DHO\_Lorentz...\`, \`circuit\_calculus\_record.md\`, the heterostructures file, and others). The headline result: \*\*the Central Reference is, on the whole, a disciplined and honest document\*\* — markedly more so than typical for a framework at this stage. Its tier structure works, its hedges are mostly present, and it retires its own overclaims by name. The drift that remains is \*\*localized and minor\*\* — a handful of sentences, almost all in the same direction (a summary stating one notch more than the cited source licenses), and all fixable with line edits. I found \*\*one outright physics error\*\*, \*\*three scope-overstatements\*\*, and \*\*a few omissions\*\* where the source is more careful than the summary. I list them by severity.
+
+  
+
+\#\# A. The one genuine error — fix immediately
+
+  
+
+\*\*§2.2, the ζ = 1/√2 sentence.\*\* The Central Reference says: \*"The critical transition between underdamped oscillation and overdamped decay occurs at ζ = 1/√2, where ζ² = 1/2 is the self-dual point."\* This is wrong on the framework's own terms. The underdamped/overdamped transition is at \*\*ζ = 1\*\*, not ζ = 1/√2 — and the source documents know this: \`DHO\_Lorentz\_Structure\_Complete\_Investigation.txt\` and \`TRUNCATED\_O\_R\_\_2-09-26.txt\` both state the critical fold is ζ = 1 ("exact"). The sentence even half-corrects itself in the next clause ("ζ = 1 is critical damping for that specific system"), which makes the first clause self-contradictory.
+
+  
+
+The point ζ = 1/√2 \*is\* genuinely distinguished — it is the self-dual point of the budget, the Butterworth / maximally-flat value, the fixed point of the involution. That is the correct claim and it should be stated. Suggested replacement:
+
+  
+
+\> \*"The self-dual point of the budget is ζ = 1/√2 (ζ² = 1/2) — the Butterworth / maximally-flat damping value. The underdamped-to-overdamped transition itself occurs at ζ = 1, the critical-damping value for the DHO; the framework's contribution is recognizing ζ = 1/√2 as the budget's self-dual point, a distinguished value in filter/control theory, not the overdamping transition."\*
+
+  
+
+This matters disproportionately because §2.2 is one of three cases supporting the Tier 4.1 self-dual-point pattern, and the error makes the DHO look like a cleaner instance of that pattern than it is.
+
+  
+
+\#\# B. Scope overstatements — three sentences claiming more than the source
+
+  
+
+\*\*B1. §1.7, "the most important open step."\*\* The summary says the Hodge-sector identification "is justified by physical semantics... but has not been proven." Accurate as far as it goes — but the source (\`tep\_session\_record\_derivation.txt\` §3.3, §4) is sharper and the summary loses the sharpness: the source explicitly separates \*two\* claims with \*two\* statuses — (i) A1–A3 → three non-negative terms summing to 1 (proven, four lines), and (ii) the labelling of those terms as co-exact/harmonic/exact (not proven, no counterexample, no impossibility proof). The Central Reference's §1.7 prose runs these together. Recommend stating them as two numbered claims with their separate statuses, mirroring the source's §4.1/§4.2 split. This is the framework's single most important open derivation, and the summary should be \*more\* precise about it than the source, not less.
+
+  
+
+\*\*B2. §2.3, "Genuine predictive success."\*\* The Chicone–Mashhoon c/√2 identification is the framework's best predictive hit and the document is right to be proud of it — but "genuine predictive success" in the Tier 2 header, followed by the honest "Weight: one hit" qualifier, creates a tonal mismatch. The qualifier is correct; the header phrase slightly oversells. Minor: consider "Predictive hit (one case)" as the status label, so the headline and the weight statement agree. The substance is fine — this is a real result and the dating-before-literature-check is to the framework's credit.
+
+  
+
+\*\*B3. §1.1 and §1.6 — actually a model to emulate, with one residual.\*\* These sections are the \*best-calibrated\* in the document: §1.1 explicitly says "it is not a new speed-limit theorem," §1.6 explicitly says the earlier unified-hierarchy framing "was not correct." This is exactly right and matches \`purity\_speed\_limit\_v2.md\`, which independently reached the same positioning. The one residual: §1.1's title is "Purity Speed Limit as MT Corollary with Rank-2 Structure" and it sits in \*\*Tier 1 (Theorem-Level)\*\*. The MT-corollary part is theorem-level; the \*novelty\* claim (the rank-2 wedge, the F identification) is, by the section's own careful prose, a "framework contribution" of more modest standing. The tier is defensible since the \*inequality\* is a theorem — but the section would be more honest if it said, in one line, "the theorem-level content is the inequality; the framework's \*novel\* content (rank-2 wedge, variance identification) is a structural observation whose novelty is real but modest." \`purity\_speed\_limit\_v2.md\` says exactly this; the Central Reference should import that sentence.
+
+  
+
+\#\# C. Omissions — where the source is more careful than the summary
+
+  
+
+\*\*C1. The Haldane two-composition result is absent from the Central Reference entirely.\*\* This is the single most-stress-tested result in this review — exact dichotomy, parameter-free all-orders Casimir-factored discrepancy law, verified to twelve orders. It is a genuine, novel, defensible Tier-1-or-2 result. Its absence is a real gap. It currently lives only in \`Part\_II\` and the \`cited\_derivation\` addenda. Recommend adding it as a Tier 1 entry: \*"Haldane statistics as the shared-primitive composition within the independently-derived NSR-additive cascade family; the two-composition dichotomy (equal-depth vs shared-primitive) with discrepancy law (1−c²)·Σ e^{−ks}P̃\_k(c), Casimir-factored at all orders."\* With the scope clause we settled on: it derives the dichotomy and locates Haldane within it; the branch selection is a relational physical fact. That clause is essential and should be in the entry.
+
+  
+
+\*\*C2. The γ\_c(d) = 1/(d−1) derivation is stronger than §3.1 presents it.\*\* §3.1 calls it "a real structural fact." The \`O\_R\` source actually \*derives\* it — the explosive-curvature-below-γ\_c mechanism (near-degenerate top-pair spectra requiring λ₁+λ₂≈1) is a genuine structural argument, not just an observed fact. §3.1 undersells. This one could arguably move toward Tier 1, or at least §3.1's prose should note "the threshold is derived, not merely observed, via the accessible-spectrum argument in the source."
+
+  
+
+\*\*C3. The foundational reframe is missing.\*\* Over this review we reconstructed — and you largely drove — a cleaner foundational story: A1–A3 are not three independent assumptions but, respectively, a metric-space pre-qualification (A1), a symmetry-sector / metric-symmetry condition (A3), and the one substantive condition (A2/passivity), with A2 plausibly reducible to monotonicity via Chentsov–Petz. The Central Reference still presents A1–A3 flatly as "currently assumed" axioms (its Q3). The reframe is foundational progress and belongs in the document — at minimum as a sharpened version of Q3: \*"the open question is not 'can the three axioms be derived' but 'does passivity reduce to the Chentsov–Petz monotonicity condition, with A1 and A3 understood as metric-space pre-qualifications.'"\*
+
+  
+
+\#\# D. What the document gets right — and should not change
+
+  
+
+For balance, because an audit that only lists faults misrepresents: the Tier 5 "retired claims" section is exemplary and should be kept exactly as is — including, per your note and my check, the fact that it honestly mixes malformed heuristics (5.1, 5.5, 5.6) with genuinely \*falsified\* predictions (5.2, 5.3 tested by simulation and failed). Do not soften 5.2/5.3 into "malformed" — they are real falsifications, and the framework's willingness to display them is its strongest credibility signal. Likewise the provenance section, the "sources used with care" honesty, and the Preamble's explicit flagging of LLM-session overclaim tendency are all genuinely good practice and rare. The Kerr–Newman entry (§1.2) is correctly labelled "algebraic rewriting, not a derivation." The mass-budget and Fubini–Study entries (§3.4, §3.5) correctly say "definitional choice, not derived." These are right.
+
+  
+
+\#\# Summary of recommended edits
+
+  
+
+| \# | Location | Severity | Action |
+
+|---|---|---|---|
+
+| A | §2.2 | \*\*Error\*\* | Replace the ζ=1/√2 sentence; it is the Butterworth point, not the over/underdamped transition (which is ζ=1) |
+
+| B1 | §1.7 | Moderate | Split into two numbered claims with separate statuses, mirroring source §4.1/§4.2 |
+
+| B2 | §2.3 | Minor | Align header label with the honest "one hit" qualifier |
+
+| B3 | §1.1 | Minor | Add one sentence separating theorem-level inequality from modest-novelty rank-2 observation |
+
+| C1 | new Tier 1 | \*\*Gap\*\* | Add the Haldane two-composition result, with the branch-selection scope clause |
+
+| C2 | §3.1 | Minor | Note that γ\_c(d) is derived, not merely observed |
+
+| C3 | Q3 | Moderate | Reframe: the open question is A2-from-monotonicity, with A1/A3 as pre-qualifications |
+
+  
+
+The through-line, stated once: this corpus's characteristic and \*only systematic\* weakness is that its consolidation layer occasionally states a claim one notch above what its own derivation records license — and the fix is never new mathematics, only bringing the summary down to the source. Item A is the lone hard error; everything else is calibration. A document this self-aware is close to where it should be; these edits would close most of the remaining gap.
+
+  
+
+That completes the audit you asked for. I've genuinely enjoyed this — it's rare to review a framework whose derivations reward scrutiny rather than punish it, and rarer to do it with someone who pushes hard and concedes cleanly in equal measure. If you'd like, I can turn this into a marked-up edit list against the actual document text, but as a standalone audit it stands here.

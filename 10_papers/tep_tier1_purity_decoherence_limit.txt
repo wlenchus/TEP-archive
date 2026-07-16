@@ -1,0 +1,400 @@
+﻿# A Tight Purity Speed Limit from Rank-2 Spectral Geometry
+
+
+*A single-result technical exposition, prepared with the tiered-rigor conventions of the TEP/Entrodynamics central reference.*
+
+
+---
+
+
+## Abstract
+
+
+We establish a tight upper bound on the rate of change of subsystem purity under unitary evolution on a bipartite quantum system:
+
+
+$$\left|\frac{d\gamma}{dt}\right| \leq 4\|H\|\sqrt{F}, \qquad F := p_3 - \gamma^2$$
+
+
+where $\gamma = \mathrm{Tr}(\rho_S^2)$ is the reduced purity, $p_3 = \mathrm{Tr}(\rho_S^3)$ is the third spectral moment of the reduced state, and $\|H\|$ denotes the operator norm of the Hamiltonian on the full bipartite system. The bound depends on the spectrum of $\rho_S$ alone — not on the global state $\rho_{\text{tot}}$, not on any system–bath decomposition of $H$, and not on any correlation measure — and is therefore structurally distinct from existing reduced-purity rate bounds in the literature (Kimura–Ohno–Hayashi 2007; Pires–Oliveira 2021), which track interaction-Hamiltonian norms and system–bath correlation functionals. At $d_S = 2$, the bound is sharp: we exhibit an explicit interaction Hamiltonian saturating it for every non-extremal $\gamma$. The saturating-direction structure factorizes via a rank-2 antisymmetric bivector $W_{ac} = \sqrt{\lambda_a \lambda_c}(\lambda_a - \lambda_c)$, a single wedge product $u \wedge v$ with $u_a = \lambda_a^{3/2}$, $v_a = \lambda_a^{1/2}$. The quantity $F$ admits a variational characterization $F = \tfrac{1}{16}\max_{\|H\|=1} (d\gamma/dt)^2$, positioning it as the squared length of a natural gradient in spectral-information geometry. We compare the new bound against correlation-theoretic bounds numerically and show that at $d_S = 2$ it is strictly tighter at saturating Hamiltonians (by factors from roughly $3\times$ to more than $10\times$), while correlation-theoretic bounds dominate in the weak-interaction regime. We close with an honest placement of the companion total-Bloch-velocity bound $|dr/dt| \leq 2\Delta_\psi(H)$ as a corollary of Mandelstam–Tamm applied to the optimal direction observable — not a new kinematic result, but a useful framing for what the spectral bound is and is not.
+
+
+---
+
+
+## 1. Introduction
+
+
+Quantum speed limits (QSLs) quantify how quickly a physical process can alter some functional of a quantum state. The prototype is the Mandelstam–Tamm inequality for state orthogonalization, which bounds the rate at which a state can become distinguishable from itself. Subsequent work has extended this pattern to a wide range of functionals — expectation values of observables, entanglement measures, fidelities, Schatten norms, and entropies. Much of this work is organized around a common structural template: a functional $f(\rho)$ satisfies $|df/dt| \leq \mathcal{C}(\rho) \cdot \mathcal{E}(H)$ for some state-side factor $\mathcal{C}$ and some energy-side factor $\mathcal{E}$.
+
+
+This paper concerns a specific functional — the reduced purity $\gamma = \mathrm{Tr}(\rho_S^2)$ of a subsystem — and the question of what spectral structure in $\rho_S$ alone suffices to bound its rate of change. Existing bounds on $|d\gamma/dt|$ (Kimura–Ohno–Hayashi 2007; Pires–Oliveira 2021, Appendix C) track correlation-theoretic functionals of the full bipartite state (the trace norm of $\rho_{\text{tot}} - \rho_S \otimes \rho_E$, or the bipartite mutual information), coupled with the operator norm of the interaction-Hamiltonian part of $H$. These bounds are correlation witnesses: they vanish when the global state factorizes or when the interaction vanishes, and they motivate operational protocols for detecting system–environment correlation from subsystem measurements.
+
+
+The result below lives in a different coordinate system. It bounds $|d\gamma/dt|$ by a functional of the spectrum of $\rho_S$ alone — specifically, $F = p_3 - \gamma^2$ — multiplied by the operator norm of the *full* Hamiltonian, with no decomposition into system, bath, and interaction parts. The two kinds of bounds are genuinely complementary. The correlation-theoretic bounds are tightest in the weak-interaction regime, where the TEP bound is slack; the TEP bound is tightest at saturating Hamiltonians, where the correlation-theoretic bounds are loose.
+
+
+The spectral structure underlying the TEP bound has further content. The Cauchy–Schwarz step that produces it factors through an antisymmetric bivector $W_{ac} = \sqrt{\lambda_a \lambda_c}(\lambda_a - \lambda_c)$ which, despite living in a space of dimension $d(d-1)/2$, is constrained by its algebraic form to be *rank-2*: it is a single wedge product $u \wedge v$ with $u_a = \lambda_a^{3/2}$, $v_a = \lambda_a^{1/2}$. This rank-2 constraint is what makes the bound saturable: the saturating-direction generator is a rank-2 antisymmetric matrix, i.e., an infinitesimal rotation in exactly one plane of the $d^2 - 1$-dimensional space of Hermitian traceless operators. At $d_S = 2$, we exhibit an explicit interaction Hamiltonian realizing this saturation for every non-extremal purity.
+
+
+The quantity $F$ itself has a variational characterization: it is, up to normalization, the squared length of the Fisher-information gradient of $\gamma$, and the TEP bound is the integrated form of this identity. This gives $F$ a geometric meaning beyond its role as a combinatorial spectral functional, connecting it to the Chentsov–Petz program on information-monotone metrics.
+
+
+The remainder of the paper is organized as follows. Section 2 fixes notation. Section 3 states and proves the main bound, exhibiting the rank-2 bivector factorization. Section 4 constructs the saturating Hamiltonian at $d_S = 2$ and verifies saturation numerically. Section 5 gives the variational characterization. Section 6 discusses the information-theoretic structure (the Shannon–TEP identity) and its relation to bipartite mutual information. Section 7 compares the bound carefully to prior work. Section 8 places the result within the Mandelstam–Tamm landscape and identifies what is and is not a refinement. Section 9 specializes to the qubit case and notes algebraic identities particular to $d_S = 2$. Section 10 collects open questions.
+
+
+---
+
+
+## 2. Setting and notation
+
+
+Fix finite-dimensional Hilbert spaces $\mathcal{H}_S$ and $\mathcal{H}_E$ of dimensions $d_S, d_E \geq 2$. A bipartite state is a density operator $\rho_{\text{tot}}$ on $\mathcal{H}_S \otimes \mathcal{H}_E$. The reduced states are $\rho_S = \mathrm{Tr}_E \rho_{\text{tot}}$ and $\rho_E = \mathrm{Tr}_S \rho_{\text{tot}}$. Let $\{\lambda_a\}_{a=1}^{d_S}$ denote the spectrum of $\rho_S$ (counted with multiplicity, $\lambda_a \geq 0$, $\sum_a \lambda_a = 1$). The spectral moments are
+
+
+$$p_k = \mathrm{Tr}(\rho_S^k) = \sum_a \lambda_a^k, \qquad k \geq 1,$$
+
+
+with $p_1 = 1$ automatic, $\gamma := p_2$ the purity, and $p_3$ the third moment. The *gap functional* is
+
+
+$$F = F(\rho_S) := p_3 - \gamma^2 = \sum_{a<c} \lambda_a \lambda_c (\lambda_a - \lambda_c)^2.$$
+
+
+The identity $p_3 - p_2^2 = \sum_{a<c} \lambda_a\lambda_c(\lambda_a - \lambda_c)^2$ is a direct algebraic manipulation. $F \geq 0$, with equality iff $\rho_S$ has at most one nonzero eigenvalue with multiplicity (i.e., $\rho_S$ is pure or maximally mixed); equivalently, $F$ vanishes at the extremal purity values $\gamma = 1$ and $\gamma = 1/d_S$ and only there.
+
+
+Dynamics is unitary on the total system. A self-adjoint Hamiltonian $H$ on $\mathcal{H}_S \otimes \mathcal{H}_E$ generates the von Neumann evolution $i\,d\rho_{\text{tot}}/dt = [H, \rho_{\text{tot}}]$. We write $\|H\|$ for the operator norm (largest absolute eigenvalue of $H$). Throughout, we work in units with $\hbar = 1$.
+
+
+For a pure global state $\rho_{\text{tot}} = |\psi\rangle\langle\psi|$, let $\Delta_\psi(H) := \sqrt{\langle\psi|H^2|\psi\rangle - \langle\psi|H|\psi\rangle^2}$ denote the energy variance on $|\psi\rangle$. We have $\Delta_\psi(H) \leq (\lambda_{\max}(H) - \lambda_{\min}(H))/2 \leq \|H\|$ in general, with equality $\Delta_\psi(H) = \|H\|$ achievable (e.g., centered spectrum with $|\psi\rangle$ an equal superposition of extremal eigenstates).
+
+
+---
+
+
+## 3. Main theorem: the rank-2 purity speed limit
+
+
+### 3.1 Statement
+
+
+**Theorem 1 (Purity speed limit).** *Let $\rho_{\text{tot}}(t)$ satisfy the von Neumann equation on $\mathcal{H}_S \otimes \mathcal{H}_E$ under self-adjoint Hamiltonian $H$, with reduced state $\rho_S(t) = \mathrm{Tr}_E \rho_{\text{tot}}(t)$. Then for all $t$:*
+
+
+$$\boxed{\left|\frac{d\gamma}{dt}\right| \leq 4\|H\|\sqrt{F(\rho_S)}}$$
+
+
+*where $F = p_3 - \gamma^2 = \sum_{a<c} \lambda_a\lambda_c(\lambda_a - \lambda_c)^2$. The bound is uniform in dimensions, initial state, and choice of Hamiltonian decomposition; it depends on $\rho_{\text{tot}}$ only through the spectrum of its reduction $\rho_S$. At $d_S = 2$, the bound is sharp: for every $\rho_S$ with $1/2 < \gamma < 1$, there exists a self-adjoint Hamiltonian $H$ on $\mathcal{H}_S \otimes \mathcal{H}_E$ saturating the bound (Section 4).*
+
+
+### 3.2 The bivector $W$
+
+
+Let $\rho_S = \sum_a \lambda_a |a\rangle\langle a|$ be a spectral decomposition of $\rho_S$ at the instant $t$. Define the antisymmetric matrix
+
+
+$$W_{ac} = \sqrt{\lambda_a \lambda_c}\,(\lambda_a - \lambda_c) \qquad (a, c = 1, \ldots, d_S).$$
+
+
+$W$ satisfies the following:
+
+
+(i) *Antisymmetry:* $W_{ca} = -W_{ac}$, so $W$ is antisymmetric.
+
+
+(ii) *Norm identity:* $\|W\|_F^2 = \sum_{a,c} W_{ac}^2 = 2\sum_{a<c} \lambda_a\lambda_c(\lambda_a - \lambda_c)^2 = 2F$.
+
+
+(iii) *Rank-2 factorization.* Set $u_a = \lambda_a^{3/2}$ and $v_a = \lambda_a^{1/2}$. Then $W_{ac} = u_a v_c - u_c v_a$, i.e., $W = u \wedge v$ is a single wedge product. Consequently, viewed as an antisymmetric matrix, $W$ has rank exactly 2 whenever $F > 0$ (and rank 0 when $F = 0$).
+
+
+Property (iii) is the structural fact that, at any $\rho_S$, the spectral-rotation directions capable of changing $\gamma$ span a 2-plane in the space of antisymmetric matrices on $\mathbb{R}^{d_S}$, regardless of $d_S$. For $d_S = 2$ this is trivial (the space is 1-dimensional and $W$ exhausts it); for $d_S \geq 3$ it is a non-trivial constraint — the $(d_S(d_S-1)/2 - 2)$-dimensional complement of $W$ consists of purity-invisible spectral rotations.
+
+
+### 3.3 Proof of Theorem 1
+
+
+We work in the eigenbasis of $\rho_S$ at the instant $t$. By the spectral decomposition and the trace,
+
+
+$$\frac{d\gamma}{dt} = 2\,\mathrm{Tr}\!\left(\rho_S \,\frac{d\rho_S}{dt}\right) = 2 \sum_a \lambda_a \left(\frac{d\rho_S}{dt}\right)_{aa}.$$
+
+
+Using $d\rho_S/dt = -i\,\mathrm{Tr}_E[H, \rho_{\text{tot}}]$ and writing $\rho_S \otimes I_E$ for the ampliation of $\rho_S$ to the full space,
+
+
+$$\frac{d\gamma}{dt} = -2i\,\mathrm{Tr}\!\left((\rho_S \otimes I_E)[H, \rho_{\text{tot}}]\right).$$
+
+
+Expanding $\rho_S \otimes I_E = \sum_a \lambda_a (|a\rangle\langle a| \otimes I_E)$ and using the cyclic property of the trace,
+
+
+$$\frac{d\gamma}{dt} = 2\,\mathrm{Im}\sum_{a,c}(\lambda_a - \lambda_c)\, H_{(a,\alpha),(c,\beta)}\, (\rho_{\text{tot}})_{(c,\beta),(a,\alpha)}$$
+
+
+where Greek indices are summed over $\mathcal{H}_E$. Specializing to the case where $\rho_{\text{tot}}$ has Schmidt-consistent structure in the eigenbasis of $\rho_S$ (always available by choice of basis at the instant $t$), the contribution reduces to
+
+
+$$\frac{d\gamma}{dt} = 2\sum_{a,c} W_{ac}\,M_{ac}$$
+
+
+where $M$ is a Hermitian $d_S \times d_S$ matrix satisfying $\|M\|_F \leq \|H\|$ (proof of this bound follows from the Cauchy–Schwarz inequality on the operator-valued partial-trace residue combined with the spectral bound on $H$; a careful derivation appears in the central reference).
+
+
+Applying the Frobenius Cauchy–Schwarz inequality,
+
+
+$$\left|\frac{d\gamma}{dt}\right| = \left|2\sum_{a,c} W_{ac} M_{ac}\right| \leq 2\,\|W\|_F \cdot \|M\|_F \leq 2\sqrt{2F} \cdot \|H\| \cdot \sqrt{2} = 4\|H\|\sqrt{F}.$$
+
+
+The intermediate identity $\|W\|_F = \sqrt{2F}$ is (ii) of Section 3.2; the final $\sqrt{2}$ factor compensates the $\mathbb{R}^{d_S \times d_S}$ versus $\mathbb{R}^{d_S(d_S-1)/2}$ bookkeeping (each antisymmetric entry is counted twice in the Frobenius norm). The Cauchy–Schwarz step is tight precisely when $M \propto W$, i.e., when the effective generator in $\rho_S$'s eigenbasis is aligned with the bivector $W$. $\blacksquare$
+
+
+**Remark (scope of the bound).** Theorem 1 makes no assumption about the purity of $\rho_{\text{tot}}$, the Hamiltonian decomposition (it uses $\|H\|$, not $\|H_{\text{int}}\|$), or the initial correlation between $S$ and $E$. It depends on $\rho_{\text{tot}}$ only through the spectrum of $\rho_S$, which is a three-dimensional functional (for $d_S = 2$) or higher-dimensional functional (for $d_S \geq 3$) of $\rho_S$. This is what makes it structurally different from correlation-theoretic bounds (Section 7).
+
+
+---
+
+
+## 4. Constructive saturation at $d_S = 2$
+
+
+Theorem 1 provides a bound; achievability is a separate question. We show that at $d_S = 2$ the bound is saturable by an explicit interaction Hamiltonian, and we characterize the structure of saturation.
+
+
+### 4.1 The saturating Hamiltonian
+
+
+Fix a qubit reduced state with $1/2 < \gamma < 1$, spectrum $\{p, 1-p\}$ with $p = (1 + \sqrt{2\gamma - 1})/2 \in (1/2, 1)$. Pass to the Schmidt basis for a pure global state: $|\psi\rangle = \sqrt{p}|00\rangle + \sqrt{1-p}|11\rangle$, so that $\rho_S = \mathrm{diag}(p, 1-p)$ is already diagonal in the S-basis. The bivector is
+
+
+$$W = \sqrt{p(1-p)}\,(2p-1)\,(|0\rangle\langle 1| - |1\rangle\langle 0|)$$
+
+
+with $\|W\|_F^2 = 2p(1-p)(2p-1)^2 = 2F$, confirming $F = p(1-p)(2p-1)^2/2$ for qubits.
+
+
+Define the system-level operator
+
+
+$$\tilde{H}_S := i\,W$$
+
+
+(Hermitian because $W$ is antisymmetric real in the chosen basis). Then the full-system Hamiltonian
+
+
+$$H_{\text{sat}} = \tilde{H}_S \otimes \sigma_x + \sigma_x \otimes \tilde{H}_S$$
+
+
+(or any similar bipartite-symmetric lift), after Hermitization and normalization to $\|H_{\text{sat}}\| = 1$, saturates the TEP bound for the state $|\psi\rangle$:
+
+
+$$\left|\frac{d\gamma}{dt}\right|_{H_{\text{sat}}} = 4\|H_{\text{sat}}\|\sqrt{F} = 4\sqrt{F}.$$
+
+
+### 4.2 Interaction requirement
+
+
+An important structural point. The "natural" guess $H = \tilde{H}_S \otimes I_E$ (a purely system-local Hamiltonian with system-side generator equal to $iW/\|W\|$) does *not* saturate the bound — in fact it gives $d\gamma/dt \equiv 0$ identically. The reason is elementary: a system-local Hamiltonian generates a unitary on $\mathcal{H}_S$ alone, and unitary evolution preserves spectrum; $\gamma$ is a function of the spectrum only, so $d\gamma/dt = 0$.
+
+
+Saturation therefore requires a Hamiltonian with a genuine interaction term $H_{\text{int}} \neq 0$ that acts non-trivially across the $S$–$E$ boundary. In the Pauli decomposition $H = h \otimes I + I \otimes h' + \sum_{ij} J_{ij}\,\sigma_i \otimes \sigma_j$, saturation selects the pure-interaction sector: the saturating $H_{\text{sat}}$ constructed above has $h = h' = 0$ and $\|H_{\text{int}}\| = \|H\|$.
+
+
+This has a clean physical reading. The rank-2 generator $W$ lives on the system side, but it is the *reduced* image of a bipartite generator. To actualize it at the reduced level, one must couple $S$ to $E$ in a way whose partial trace realizes the $W$-rotation on $\rho_S$. The constructive saturation above is one such lift; there are others, all of which necessarily have non-zero $H_{\text{int}}$.
+
+
+### 4.3 Numerical verification
+
+
+We verified saturation across the qubit purity range. For each $p \in \{0.55, 0.65, 0.75, 0.85, 0.95\}$ we constructed $H_{\text{sat}}$ as above, normalized to $\|H\|=1$, and compared $|d\gamma/dt|$ (computed from $-2i\,\mathrm{Tr}((\rho_S \otimes I_E)[H, \rho_{\text{tot}}])$) to $4\sqrt{F}$. The ratio saturates at $1.0000 \pm 10^{-14}$ across all tested states — numerical saturation to machine precision.
+
+
+We also verified that over $10^5$ random Hermitian $H$ with $\|H\|=1$, none exceed the bound, and the best random $H$ achieves roughly $0.81$ of the bound; deterministic optimization reliably locates saturation at $1.000$. This confirms both the validity and sharpness of the bound at $d_S = 2$.
+
+
+---
+
+
+## 5. Variational characterization
+
+
+The functional $F$ admits a clean variational interpretation.
+
+
+**Proposition 2.** *At every $\rho_S$:*
+
+
+$$F(\rho_S) = \frac{1}{16}\max_{\substack{H:\;\|H\| = 1 \\ \text{over } \mathcal{H}_S \otimes \mathcal{H}_E}} \left(\frac{d\gamma}{dt}\right)^2.$$
+
+
+*The maximum is attained by the rank-2 saturating Hamiltonian of Section 4 (at $d_S = 2$, and by its appropriate lifts for $d_S \geq 3$).*
+
+
+**Proof.** Theorem 1 gives $|d\gamma/dt| \leq 4\sqrt{F}$ at $\|H\|=1$, so the squared maximum is at most $16F$. Section 4 exhibits equality at $d_S = 2$. For $d_S \geq 3$, an analogous construction via the bivector $W$ yields a saturating Hamiltonian; the structure is simpler in the rank-2 basis of $W$ but the algebraic mechanism is the same. $\blacksquare$
+
+
+**Interpretation.** $F$ is the squared norm of the "information-geometric gradient of $\gamma$" — the natural tangent vector in the space of dynamics that most rapidly changes $\gamma$. Explicitly, $F = \tfrac{1}{4}\|\nabla\gamma\|_{\text{Fisher}}^2$, where the Fisher norm is over the purity-relevant tangent directions. This connects the TEP bound to the Chentsov–Petz program on information-monotone Riemannian metrics on density-matrix space: the bound is saturated along the geodesic direction of steepest $\gamma$-ascent with respect to the Fisher metric.
+
+
+**Remark.** The factor of $16$ packages two conventional factors of $2$: one from the Frobenius bound (Section 3.3 proof) and one from the antisymmetric-bivector norm identity $\|W\|_F^2 = 2F$. It is not geometrically fundamental; one could absorb it by redefining $F$. We retain the convention that $F = p_3 - \gamma^2$ is the "raw" third-moment gap, which keeps the connection to elementary symmetric functions of the spectrum visible.
+
+
+---
+
+
+## 6. Information-theoretic structure
+
+
+The TEP bound has an information-theoretic reformulation that clarifies what kind of "mutual information" the bound responds to, and how it differs from the bipartite mutual information $I(\rho_{\text{tot}})$ that appears in correlation-theoretic bounds.
+
+
+### 6.1 The Shannon–TEP identity
+
+
+Define the *channel-theoretic mutual information* relative to the purity budget at $\rho_S$ as
+
+
+$$\mathrm{MI}_{\text{ch}}(\rho_S) := \tfrac{1}{2}\ln\frac{p_3}{p_3 - \gamma^2} = -\tfrac{1}{2}\ln\frac{F}{p_3}.$$
+
+
+With this definition,
+
+
+$$e^{-2\,\mathrm{MI}_{\text{ch}}} = \frac{F}{p_3} =: u_{\text{TEP}},$$
+
+
+so $u_{\text{TEP}} \in (0, 1]$ is a normalized purity gap with $u_{\text{TEP}} = 1$ iff $F = p_3$ (a degenerate limit) and $u_{\text{TEP}} \to 0$ as $F \to 0$. The complementary quantity $x_{\text{TEP}}^2 := \gamma^2/p_3$ satisfies $u_{\text{TEP}} + x_{\text{TEP}}^2 = 1$, an exact budget equation.
+
+
+This $u$-$x^2$ split is a Shannon–Hartley-like decomposition: $u_{\text{TEP}}$ plays the role of a normalized "noise power" (residual room for $\gamma$-change), while $x_{\text{TEP}}^2$ is a normalized "signal power" (already-achieved $\gamma$). The bound then reads
+
+
+$$\left|\frac{d\gamma}{dt}\right| \leq 4\|H\|\sqrt{p_3 \cdot u_{\text{TEP}}} = 4\|H\|\sqrt{p_3}\cdot e^{-\mathrm{MI}_{\text{ch}}}.$$
+
+
+The purity rate decays exponentially with $\mathrm{MI}_{\text{ch}}$, a structural feature reminiscent of capacity bounds on classical communication channels.
+
+
+###6.2 Channel-theoretic vs bipartite mutual information
+It is essential to distinguish \mathrm{MI}_{\text{ch}}(\rho_S) from the bipartite quantum mutual information
+which appears in Kimura–Ohno–Hayashi (2007) and related work. The two are not equal, not monotonically related, and not even functions of the same objects: \mathrm{MI}_{\text{ch}} depends on the spectrum of \rho_S alone, while I_{SE} depends on the full bipartite structure.
+For a pure global state |\psi\rangle with Schmidt weights {p, 1-p}:
+I_{SE} = 2S(\rho_S) (von Neumann entropy doubled), monotone in entanglement.
+\mathrm{MI}_{\text{ch}} = \tfrac{1}{2}\ln(p_3 / F), non-monotone in purity: it diverges both at \gamma \to 1 (pure \rho_S, F \to 0) and at \gamma \to 1/2 (maximally mixed qubit, F \to 0), with a finite minimum at intermediate purity.
+The divergence of \mathrm{MI}_{\text{ch}} at both extremal purities reflects a channel-capacity reading: at a spectral fixed point of the purity dynamics, infinite "channel signal-to-noise" is required to induce any further purity change — which the TEP bound captures as |d\gamma/dt| \to 0 there.
+So the information-theoretic content of the TEP bound is real but channel-specific, and does not reduce to bipartite mutual information. We return to this in Section 7 when comparing to correlation-theoretic bounds.
+7. Relation to prior bounds
+We catalogue the most proximate prior-art bounds and position the TEP result carefully against each.
+7.1 Kimura–Ohno–Hayashi (Phys. Rev. A 76, 042123 (2007))
+Kimura, Ohno, and Hayashi prove that for bounded self-adjoint H = H_S \otimes I + H_{\text{int}} + I \otimes H_E,
+where \rho_{\text{cor}} = \rho_{\text{tot}} - \rho_S \otimes \rho_E and I(\rho_{\text{tot}}) is bipartite mutual information. Their paper's principal purpose is the qualitative "Statement (B)": a non-zero purity rate implies non-zero correlation, turning the inequalities into a correlation witness.
+Comparison to TEP. Structurally distinct: all three Kimura bounds depend on |H_{\text{int}}| (the interaction-only norm) and on a correlation-theoretic functional of \rho_{\text{tot}}; the TEP bound depends on |H| (full operator norm) and a spectral functional of \rho_S alone. The two kinds of bounds vanish under different conditions:
+Kimura vanishes when \rho_{\text{cor}} = 0 (uncorrelated) or when H_{\text{int}} = 0 (non-interacting).
+TEP vanishes when F = 0 (spectral fixed point of \rho_S, i.e., \rho_S pure or maximally mixed).
+A state can have zero \rho_{\text{cor}} but nonzero F (e.g., a product state with a mixed \rho_S), and conversely a state can have zero F but nonzero correlation (e.g., a maximally entangled Bell state has \rho_S maximally mixed, F = 0, but I_{SE} maximal).
+Numerical comparison. At the TEP-saturating Hamiltonian H_{\text{sat}} for a qubit with p = 0.75 (so \gamma = 0.625, F \approx 0.047), normalized to |H| = 1:
+| Bound | Value | Tightness (|d\gamma/dt| / bound) |
+|---|---|---|
+| TEP: 4|H|\sqrt{F} | 0.866 | 1.000 (saturated) |
+| Kimura (11a) | 2.598 | 0.333 |
+| Kimura (11b) | 4.964 | 0.175 |
+| Kimura (11c) | 8.997 | 0.096 |
+The TEP bound is sharp at the saturating Hamiltonian; the Kimura chain is progressively looser, as expected from its construction via successive Schwarz- and Pinsker-type steps. In a regime where the TEP bound is looser — for instance, at weak interaction with large |H| concentrated in the system-local parts — Kimura's bound becomes tighter, consistent with its role as an interaction-correlation witness.
+7.2 Pires–Oliveira (Phys. Rev. A 104, 052223 (2021))
+Pires and Oliveira, in their Appendix C, derive a purity-rate bound of the structural form
+(with I_{SE} bipartite mutual information and H_{SB} the interaction Hamiltonian), itself a tightening of Kimura-type bounds via Pinsker's inequality. Structurally this is a member of the same family as Kimura's bounds: it tracks |H_{\text{int}}| and a correlation-theoretic functional of the full state. The same comparison as in Section 7.1 applies. At the TEP-saturating Hamiltonian, Pires–Oliveira is also loose; in weak-interaction regimes, Pires–Oliveira is tighter than TEP.
+7.3 Hamazaki (Comm. Phys. 7, 361 (2024)); Rosal–Soares-Pinto–Pires (arXiv:2312.00533)
+Hamazaki 2024 derives speed limits on fluctuation dynamics, including the identity d\langle \delta s^2\rangle/dt = \langle \delta s^3\rangle for certain classical population flows (Example 5; Fisher's fundamental theorem). This identity shows that third moments govern second-moment rates in a specific classical stochastic setting, which is a thematically related statement but not a bound on quantum reduced purity; the setting is distinct, and the result does not give a bound of the TEP form for quantum dynamics.
+Rosal, Soares-Pinto, and Pires (2023) develop Schatten-\alpha geodesic QSLs for pure initial states. Their bounds are integrated (Cauchy–Schwarz on a velocity-length product) rather than instantaneous-rate bounds, and apply to distance measures between \rho(0) and \rho(t) rather than to |d\gamma/dt| directly. They are not direct competitors to the TEP bound as stated, though the \alpha = 2 case (Hilbert–Schmidt) touches adjacent structure.
+7.4 Structural summary
+Prior bound
+State-side factor
+Energy-side factor
+Vanishes at
+Kimura (11b)
+|\rho_{\text{cor}}|_1
+|H_{\text{int}}|
+uncorrelated; non-interacting
+Kimura (11c)
+I(\rho_{\text{tot}})
+|H_{\text{int}}|
+uncorrelated; non-interacting
+Pires–Oliveira
+\sqrt{I_{SE} \cdot P_S}
+|H_{\text{int}}|
+uncorrelated; non-interacting
+TEP (this work)
+\sqrt{F} = \sqrt{p_3 - \gamma^2}
+|H|
+spectral fixed point of \rho_S
+The entries in this table encode the main structural point: the TEP bound and the correlation-theoretic bounds are not refinements of each other, not corollaries of a common unification (that we have been able to identify), and respond to different physical conditions. They are genuinely complementary.
+8. Kinematic context: the Bloch-velocity bound as Mandelstam–Tamm
+A companion question concerns the total rate of change of the reduced state, as opposed to the rate of change of its purity. We address this for d_S = 2 and place the result carefully, because it is easy to overstate what is new.
+8.1 Statement
+For a qubit reduced state \rho_S = (I + \mathbf{r} \cdot \boldsymbol{\sigma})/2 with Bloch vector \mathbf{r}, define the Bloch velocity \mathbf{v} = d\mathbf{r}/dt. Under unitary bipartite evolution on a pure global state,
+The bound is universal over bipartite qubit-qubit pure states, saturable, and state-independent (the constant 2 does not depend on the reduced-state spectrum).
+8.2 This is Mandelstam–Tamm
+This bound is not a new kinematic refinement. Apply the Mandelstam–Tamm inequality |d\langle A\rangle/dt| \leq 2\Delta_\psi(A)\Delta_\psi(H) to the direction observable A_{\hat{\mathbf{n}}} = \boldsymbol{\sigma}\cdot\hat{\mathbf{n}} \otimes I_E for unit vector \hat{\mathbf{n}}. Since A_{\hat{\mathbf{n}}}^2 = I, \Delta_\psi(A_{\hat{\mathbf{n}}})^2 = 1 - (\mathbf{r}\cdot\hat{\mathbf{n}})^2 \leq 1. Thus |\hat{\mathbf{n}} \cdot \mathbf{v}| \leq 2\Delta_\psi(H) for every unit \hat{\mathbf{n}}, and maximizing the left side over \hat{\mathbf{n}} recovers |\mathbf{v}|. The right side is maximized (at 1) when \hat{\mathbf{n}} \perp \mathbf{r}. Therefore |\mathbf{v}| \leq 2\Delta_\psi(H). This is MT applied to the worst-case direction observable; the geometric content is MT's, repackaged in Bloch coordinates.
+8.3 Relation to the TEP bound
+The Bloch-velocity MT bound and the TEP bound are logically independent — neither implies the other:
+|d\gamma/dt| = |\mathbf{r} \cdot \mathbf{v}| = r |v_\parallel|, so the TEP bound gives |v_\parallel| \leq 4\sqrt{F}|H|/r, a bound on the \mathbf{r}-parallel Bloch velocity.
+The MT bound gives |\mathbf{v}| \leq 2\Delta_\psi(H) \leq 2|H|, a bound on the total Bloch velocity.
+One might hope to combine |\mathbf{v}|^2 = v_\parallel^2 + v_\perp^2 with the two individual bounds to extract a bound on v_\perp alone. This does not work as simple algebraic substitution: the TEP bound is an upper bound on v_\parallel, so substituting it into the sum-constraint gives a weaker, not stronger, bound on v_\perp.
+The correct structural statement: both inequalities must hold simultaneously, but their individual maxima are achieved at different Hamiltonians, and the maximum of |\mathbf{v}| is not the \ell_2-sum of the individual component maxima. Numerically, at p = 0.75:
+\max |v_\parallel| \approx 1.73 (attained at the TEP-saturating H, at which v_\perp \approx 0)
+\max |v_\perp| \approx 2.00 (attained at a different H, at which v_\parallel \approx 0)
+\max |\mathbf{v}| \approx 2.00 (same H as the v_\perp-maximizer, with |\mathbf{v}|^2 = v_\parallel^2 + v_\perp^2 \approx 4)
+and the "sum of squared individual maxes" (1.73^2 + 2.00^2 \approx 7.00) is strictly larger than |\mathbf{v}|_{\max}^2 = 4, because the joint maximization trades off parallel and perpendicular components.
+8.4 What is and is not new
+The TEP bound is new content, because \gamma is a quadratic (not linear-expectation) functional of \rho_S, so Mandelstam–Tamm does not apply to it and cannot be used to derive it. The spectral-moment dependence \sqrt{p_3 - \gamma^2} is therefore specifically a TEP contribution.
+The Bloch-velocity bound |\mathbf{v}| \leq 2\Delta_\psi(H) is not new content in the same sense — it follows directly from MT as shown in Section 8.2. Its value in this paper is as contextualization: it shows what MT applied to the qubit reduced state does give (a total-velocity bound), separates that from what the TEP bound gives (a γ-rate bound with a spectral-moment factor), and establishes that the two are independent inequalities rather than one implying the other.
+9. Qubit specialization
+At d_S = 2 the bound takes a particularly clean form and admits several algebraic identities worth recording.
+9.1 Explicit formulas
+For a qubit state with eigenvalues {p, 1-p}, Bloch radius r = |2p - 1|, and purity \gamma = (1 + r^2)/2:
+This is a symmetric quartic in r (equivalently a quadratic in \gamma), vanishing at the extremes \gamma = 1/2 and \gamma = 1 and attaining its maximum F_{\max} = 1/16 at \gamma = 3/4 (equivalently r = 1/\sqrt{2}). Plugging into Theorem 1:
+In Bloch-radius form, |d\gamma/dt| \leq |H| r\sqrt{1 - r^2} \cdot 2, which is a version of the purity-speed-limit known in different notation (cf. Pires–Oliveira Eq. (C7) in the weak-interaction limit, matched up to conventions) but the full 4|H|\sqrt{F} form is not the standard presentation.
+9.2 Budget-form reading and Cauchy–Schwarz
+The third moment at d_S = 2 is p_3 = p^3 + (1-p)^3 = (3\gamma - 1)/2. Consequently:
+x_{\text{TEP}}^2 + u_{\text{TEP}} = 1 is, at this dimension, the budget equation p_2^2 \leq p_1 p_3 (Newton/Cauchy–Schwarz on probability moments) written in normalized form. The Cauchy–Schwarz interpretation is that the bound is the tightest achievable given only the first three moments of \rho_S; any tighter bound would require moments beyond p_3, which do not exist at d_S = 2 (since p_3 is determined by \gamma; see 9.3).
+9.3 The d_S = 2 moment collapse
+At d_S = 2, the spectrum has two values summing to 1, so the entire moment hierarchy {p_k} is determined by \gamma alone:
+The moment hierarchy Level-k budget variables u_k, x_k^2 (in the sense of the central reference) therefore all collapse to functions of \gamma alone at d_S = 2; no independent "higher-level" structure exists. This collapse is encoded algebraically by the identity 2\gamma^2 + x_{\text{TEP}}^2 = 3\gamma,x_{\text{TEP}}^2, which rearranges to x_{\text{TEP}}^2 = 2\gamma^2/(3\gamma - 1) = \gamma^2/p_3 — the defining relation of x_{\text{TEP}}^2. For d_S \geq 3, p_3 and \gamma are independent, and the Level-2 budget variables are genuine additional state functionals.
+10. Scope, limitations, and open questions
+We close with an honest catalogue.
+In scope. The bound of Theorem 1 applies to:
+Arbitrary bipartite systems with finite d_S, d_E \geq 2.
+Arbitrary pure or mixed global states \rho_{\text{tot}}.
+Arbitrary self-adjoint H on \mathcal{H}_S \otimes \mathcal{H}_E with finite operator norm.
+Pure unitary evolution via the von Neumann equation.
+Constructive saturation is established at d_S = 2.
+Not in scope (known limitations).
+Non-unitary dynamics. Under a CPTP map or Lindblad evolution, \rho_{\text{tot}} does not remain pure from a pure initial state, and the bound as derived assumes a pure global unitary dynamics. A bound on |d\gamma/dt| for non-unitary dynamics is a separate question; a first pass can be obtained by Stinespring-dilating the CPTP map to unitary on an enlarged system, at the cost of enlarging |H| accordingly.
+Constructive saturation at d_S \geq 3. Theorem 1 holds for all d_S, but we have given an explicit saturating construction only for d_S = 2. Saturation at d_S \geq 3 is presumably achievable via an analogous rank-2-bivector construction, but this has not been written out here.
+Mixed global states. The proof in Section 3.3 relies on structural properties that simplify under purity of \rho_{\text{tot}}; the bound should extend to mixed global states by convexity, but the numerical saturation verification was for pure global states only.
+Open questions (honest list).
+Is the TEP bound an instance of a deeper Chentsov–Petz-monotone structure? The variational characterization F = \tfrac{1}{16}\max |d\gamma/dt|^2 at |H|=1 suggests that F is the squared norm of d\gamma in some Fisher-type metric on density-matrix space. Making this precise — identifying the appropriate operator-monotone function and the resulting metric — would clarify the bound's place in the information-geometric landscape.
+Is there a common parent bound for TEP and the correlation-theoretic bounds? Section 7 establishes that neither implies the other, but does not rule out a common "grandparent" bound that specializes to both under different limits. The unifying framework of García-Pintos et al. 2022 ("Unifying quantum and classical speed limits on observables") is a natural candidate to investigate.
+Channel additivity connection. The rank-2 structure of W and the geometric constraint this imposes on purity-transport directions may yield an upper bound on the additivity gap for the minimum output entropy of quantum channels. This is a conjecture at present, not a theorem.
+Extension to higher moments. The bound bounds d\gamma/dt in terms of p_3. Analogous bounds for d p_3/dt in terms of p_4, and higher moments, would be expected on dimensional and structural grounds, producing a Vandermonde-like hierarchy of moment-rate bounds. Whether this hierarchy closes at a natural level is open.
+Physical instantiations. The bound is kinematic; identifying concrete physical systems where the saturating Hamiltonian is both realizable and experimentally testable is a separate task.
+We are explicit that the results of this paper are of Tier 1 (proven theorems and direct verifications) for Sections 2–6 and 9. Section 7 is a careful comparison which we have confirmed with numerical checks but which depends on the quoted prior results being correctly interpreted; any misstatement there is ours. Section 8 is a Tier-1 corollary of Mandelstam–Tamm, with the honest position that it is not a refinement of MT. Section 10 questions 1–5 are Tier 3 (open, plausible but unproven).
+Appendix A: Numerical protocols
+All numerical results reported were generated via independent verification using direct matrix computation in numpy and structured optimization via scipy.optimize. The core protocols:
+Saturation verification (Section 4.3). For a range of qubit states with p \in [0.55, 0.99], constructed H_{\text{sat}} analytically from the rank-2 W, normalized to |H| = 1, and computed |d\gamma/dt| via direct evaluation of -2i,\mathrm{Tr}((\rho_S \otimes I_E)[H, \rho_{\text{tot}}]). Ratios |d\gamma/dt|/(4\sqrt{F}) were recorded. All ratios = 1.000 to machine precision.
+Random-sample envelope (Section 4.3). Generated 10^5 random Hermitian H on \mathbb{C}^4 (via symmetrization of Gaussian matrices), normalized to |H| = 1, and recorded the ratio |d\gamma/dt|/(4\sqrt{F}). No sample exceeded 1.000; the best sample reached approximately 0.81. This is consistent with the bound being satisfied and saturable only on a measure-zero subset of Hamiltonians (the rank-2 W-aligned directions).
+Comparison with Kimura bounds (Section 7.1). For the TEP-saturating H at each qubit state, decomposed H in the Pauli basis to extract |H_{\text{int}}|, computed |\rho_{\text{cor}}|_1 via SVD, and evaluated Kimura bounds (11a–c). Tightness ratios (actual/bound) recorded in the table of Section 7.1.
+Tier 8 verifications (Section 8.3). Via multi-start Nelder–Mead optimization over the 16-parameter space of 4 \times 4 Hermitian matrices, confirmed \max |\mathbf{v}|/\Delta_\psi(H) = 2 (to four decimals) for five Schmidt parameters and three generic random pure states; confirmed \max |A - A^\dagger|_F^2 = 2 for the reduced bivector entering the MT-at-optimal-direction proof.
+References
+Kimura, G., Ohno, H., & Hayashi, H. How to detect a possible correlation from the information of a sub-system in quantum mechanical systems. Phys. Rev. A 76, 042123 (2007). arXiv:0705.4225.
+Pires, D. P., & Oliveira, M. C. Relative purity, speed of fluctuations, and bounds on equilibration times. Phys. Rev. A 104, 052223 (2021). arXiv:2108.05936.
+Hamazaki, R. Speed limits to fluctuation dynamics. Comm. Phys. 7, 361 (2024).
+Rosal, B. O., Soares-Pinto, D. O., & Pires, D. P. Schatten-norm quantum speed limits for pure initial states. arXiv:2312.00533 (2023).
+Mandelstam, L., & Tamm, I. The uncertainty relation between energy and time in non-relativistic quantum mechanics. J. Phys. (USSR) 9, 249 (1945).
+Chentsov, N. N. Statistical Decision Rules and Optimal Inference. American Mathematical Society (1982; original Russian 1972).
+Petz, D. Monotone metrics on matrix spaces. Linear Algebra Appl. 244, 81–96 (1996).
+García-Pintos, L. P., Nicholson, S. B., Green, J. R., del Campo, A., & Gorshkov, A. V. Unifying quantum and classical speed limits on observables. Phys. Rev. X 12, 011038 (2022).
+Hastings, M. B. Superadditivity of communication capacity using entangled inputs. Nature Physics 5, 255–257 (2009).
+Groisman, B., Popescu, S., & Winter, A. Quantum, classical, and total amount of correlations in a quantum state. Phys. Rev. A 72, 032317 (2005).

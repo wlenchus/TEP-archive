@@ -1,0 +1,169 @@
+Here is a comprehensive transcription of the main content of the paper (Sections 1 through 7, omitting the title page metadata, table of contents, and reference list). I have kept the language and mathematical expressions as close to the original text as possible:
+
+  
+
+\#\#\# Abstract
+
+Within the full replica-symmetry-breaking (fullRSB) solution of dense hard spheres in infinite dimension, Charbonneau, Kurchan, Parisi, Urbani, and Zamponi introduced three critical exponents $a, b, c$ governing the matching region of the fullRSB profile near the jamming transition \[1\]. These exponents satisfy two scaling relations \[1\]. The first, $b = (1+ c)/2$, was established analytically by the diffusion-drift balance in the scaling ansatz \[1\]. The second, $a+ b = 1$, was observed numerically to arbitrary precision but could not be proven \[1\]. The exponents $a,b,c$ of the scaling fullRSB ansatz are related to the physical exponents $\\alpha,\\theta,\\kappa$ that control the gap, force, and overlap distributions by the relations $\\alpha = a/b$, $\\theta = (c- a)/(b- c)$, and $\\kappa = c+1$ \[1\]. Crucially, the relation $a+ b = 1$ yields the scaling relations $\\alpha = 1/(2+ \\theta)$ and $\\kappa = 2- 2/(3+ \\theta)$ predicted on independent grounds by the mechanical-marginal-stability arguments of Wyart and collaborators \[1\]. Here, we give an analytic proof of the identity $a+ b = 1$ from the scaling fullRSB equations, which was obtained through interaction with Claude (Sonnet 4.6 and Opus 4.7) and verified by us \[1\].
+
+  
+
+\#\#\# 1. Introduction and motivation
+
+  
+
+\*\*1.1. Jamming, marginal stability, and critical exponents\*\*
+
+Amorphous packings of hard or soft spheres exhibit a non-equilibrium ‘jamming’ transition at the density above which mechanical rigidity sets in \[2\]. Near this transition, a number of physical observables show power-law critical behavior, with exponents whose values are remarkably universal across spatial dimensions \[2\]. The long-time limit of the mean square displacement for thermal hard spheres scales as $\\Delta\_{EA} \\sim p^{-\\kappa}$ with reduced pressure $p$ near jamming where $p \\to \\infty$ \[2\]. At jamming, the radial distribution function diverges as $g(r) \\sim (r-D)^{-\\alpha}$ when the pair distance $r$ approaches the contact diameter $D$, and the force distribution vanishes as $P(f) \\sim f^\\theta$ for small inter-particle forces $f$ \[2\].
+
+  
+
+The infinite-dimensional ($d \\to \\infty$) hard-sphere theory of Charbonneau, Kurchan, Parisi, Urbani and Zamponi (CKPUZ) provides an exact mean-field description of jamming and predicts these exponents analytically \[2, 3\]. Within the full replica-symmetry-breaking (fullRSB) Ansatz, the calculation reduces, in the appropriate scaling regime near jamming, to a non-linear boundary-value problem for an auxiliary function $J(t)$, coupled to a linear eigenvalue equation for a second function $p\_1(t)$ \[3\]. Three scaling exponents $a,b,c$ are determined by the asymptotics of these equations and by an integral ‘marginal-stability’ identity that arises from differentiating the replicon-zero condition along the fullRSB profile \[3\].
+
+  
+
+The exponents $a,b,c$ are related to the physical exponents by $\\alpha = a/b$, $\\theta = (c- a)/(b- c)$ and $\\kappa = 1+ c$ \[4\]. CKPUZ obtained the numerical values $a= 0.29213...$, $b= 0.70787...$, $c= 0.41574...$, $\\alpha= 0.41269...$, $\\theta = 0.42311...$, and $\\kappa= 1.41574...$, and remarked that, within numerical precision, these satisfy $a+ b = 1$, a relation they could not prove \[4\]. Combined with the relation $b= (1+ c)/2$ (which follows from the diffusion-drift balance in the scaling ansatz), this relation is equivalent to $a+ c/2 = 1/2$ \[4, 5\].
+
+  
+
+The interest of this relation is that, written in terms of the physical exponents, it leads to the scaling relations $\\alpha= 1/(2+ \\theta)$ and $\\kappa= 2- 2/(3+ \\theta)$, which were derived independently by Wyart and collaborators on the basis of the marginal mechanical stability of the contact network at jamming \[5\]. These relations are crucial conceptually because they tie the phase-space marginal stability of fullRSB (a property of the fullRSB saddle point) to the mechanical marginal stability of the underlying packing (a property of the network of forces) \[5\]. Proving this relation therefore proves the equivalence of these two notions of marginality within the $d \\to \\infty$ theory \[5\].
+
+  
+
+\*\*1.2. Strategy of the proof\*\*
+
+In this work, we present a proof of $a+ b = 1$ \[6\]. The proof was obtained by interaction with Claude Sonnet 4.6 and Opus 4.7 \[6\]. The model Opus 4.7 essentially derived the proof by itself, with minimal supervision from us \[6\]. In the first part of the conversation, the model had to study the differential equations numerically and produce a C++ code that finds the solution to have a high-precision verification of the conjecture \[6\]. Only at the end did we ask for an analytic proof of the result, spanning a conversation of 40 prompts \[6\]. We checked the proof carefully and pointed out some inconsistencies in an early version, which the model corrected by itself, and Sonnet 4.6 was used to further refine some minor steps \[7\]. We asked the model to write down the proof in mathematical language, which we then checked and edited to improve accuracy and readability \[7\]. We eliminated parts that were not necessary and deposited the full text of the conversations in a Zenodo repository \[7\].
+
+  
+
+Let us recap the conjecture (using $\\theta \\equiv \\theta(-t)$ throughout for the Heaviside step and exploiting $\\theta^2 = \\theta$ on each open half-line) \[8\].
+
+Our main non-linear ODE in the range $-\\infty \< t \< \\infty$ is:
+
+$(c/2)J''(t) = \[-b+ c\\theta\] tJ'(t)+ J(t)- \\theta+ (c^2/4)(J'(t))^2$, with $J(-\\infty) = 1$ and $J(+\\infty) = 0$ \[8\]. The boundary conditions are imposed by matching to the left and right asymptotic regimes of the fullRSB solution \[8\].
+
+We define a linear eigenvalue equation for a function $p\_1(t)$:
+
+$(c/2)p\_1''(t) = (a- c\\theta)p\_1(t)+ (b- c\\theta) tp\_1'(t)- (c^2/2)(p\_1'(t)J'(t)+ p\_1(t)J''(t))$ \[8, 9\].
+
+The eigenvalue $a$ is fixed (at given $c$) by the requirement that $p\_1(t) \\propto (-t)^\\theta$ as $t \\to -\\infty$ and $p\_1(t) \\propto t^{-\\alpha}$ as $t \\to +\\infty$, with $\\theta = (c- a)/(b- c)$ and $\\alpha = a/b$, where $b = (c+1)/2$ \[9\]. In our specific case, $p\_1(t)$ must be positive because it physically originates from a probability; this selection determines $a = a(c)$ \[9\].
+
+The exponent $c$ in turn is fixed by the integral identity:
+
+$1/2 = \\int\_{-\\infty}^{\\infty} dt p\_1(t) \[f(t)\]^2 \[1- f(t)\] / \\int\_{-\\infty}^{\\infty} dt p\_1(t) \[d/dt (f(t))\]^2$ \[9, 10\].
+
+Here we defined $f(t) \\equiv \\theta(-t)+ (c/2)J''(t)$ \[10\]. This condition arises from the differentiated marginal-stability condition \[10\]. If this condition is satisfied, we found $a+ b = 1$ with high numerical precision \[10\].
+
+  
+
+The proof is organized in four steps:
+
+1\. \*\*The eigenvalue condition revisited:\*\* The previous equation for $p\_1$ could be written as $D p\_1 = 0$, implying that for any differentiable function $\\xi(t)$ such that integrals converge, $0 = \\int dt \\xi(t) D p\_1(t) = \\int dt p\_1(t) D^\* \\xi(t)$, derived by integration by parts \[11\].
+
+2\. \*\*An algebraic identity:\*\* We show that $f$ inherits from $J(t)$ an explicit ODE \[12\]. Using $f$ to build the test function $\\xi := f(1- f)$, integrating against the eigenvalue equation for $p\_1(t)$, and substituting leads to the algebraic identity: $c(D- 2N) = (b- a- c)K = (1- a- b)K$, where $K = \\int p\_1 f(1- f)dt$, $N = \\int p\_1 f^2(1- f)dt$, and $D = \\int p\_1 (f')^2 dt$ \[12\].
+
+3\. \*\*The marginal-stability identity:\*\* The identity expresses marginal stability as $N/D = 1/2$, i.e. $D = 2N$ \[13\]. Equation (9) then gives $(a+ b- 1)K = 0$, so we only have to prove that $K \\neq 0$ to arrive at the conclusions \[13\].
+
+4\. \*\*Selection of the physical branch via a Fisher-KPP PDE:\*\* The nonlinear equation admits a discrete family of solutions, classified by the nodal count of $f$ \[14\]. The physically relevant branch is the no-node one ($0 \\leq f \\leq 1$) \[14\]. The selection is realized at the level of the underlying fullRSB flow by introducing the two-variable extension $F(y,h) := \\theta(-h)- \\gamma(y) \\hat{\\jmath}''(y,h)$, which reduces to $f(t)$ in the scaling regime \[14, 15\]. $F$ satisfies a Fisher-KPP-type reaction-diffusion equation where the initial condition is in $\[16\]$ pointwise, and the parabolic maximum principle preserves the bounds \[15\]. Passing to the scaling limit gives $0 \\leq f \\leq 1$ pointwise, so $K \> 0$ follows from the intermediate value theorem \[15\].
+
+  
+
+Combining these elements gives $(1- a- b)K = 0$, hence $a+ b = 1$, equivalent to $a+ c/2 = 1/2$, completing the proof \[17\].
+
+  
+
+\*\*1.3. What is and is not in this paper\*\*
+
+We work in the scaling-region matching framework of CKPUZ, taking as given the derivation of the scaling equations, the identity $b = (1+ c)/2$, and the marginal-stability identities \[17\]. What is added here is the algebraic identity linking $a,b,c$ to the integrals $K, N, D$, and the Fisher-KPP identification that closes the existence/positivity question for the physical branch \[17\]. The existence and uniqueness of the fullRSB profile itself, the convergence of the scaling expansion, and the rigorous existence of the matching region are taken as given \[18\].
+
+  
+
+\#\#\# 2. From the kRSB equations to the matching-region scaling
+
+We briefly recall the derivation of the scaling equations to fix notation \[19\]. The starting point is the continuum fullRSB equations in scaled variables $y = m\_i/m \\in \[1,\\infty)$ and $h \\in \\mathbb{R}$, in the jamming limit $m \\to 0$ \[19\].
+
+$\\partial\_y \\hat{\\jmath}(y,h) = \\frac{1}{2} \\frac{\\dot{\\gamma}(y)}{y} \[-\\frac{\\theta(-h)}{\\gamma(y)} + \\hat{\\jmath}''(y,h) - 2y \\frac{h\\theta(-h)}{\\gamma(y)} \\hat{\\jmath}'(y,h) + y(\\hat{\\jmath}'(y,h))^2\]$ \[19\].
+
+$\\partial\_y \\hat{P}(y,h) = -\\frac{1}{2} \\frac{\\dot{\\gamma}(y)}{y} e^{-h} \\{\[e^h \\hat{P}(y,h)\]'' - 2y \\partial\_h \[e^h \\hat{P}(y,h)(-\\frac{h\\theta(-h)}{\\gamma(y)} + \\hat{\\jmath}'(y,h))\]\\}$ \[19\].
+
+$1/\\gamma(y) = y \\kappa(y) - \\int\_y^{1/m} dz \\kappa(z)$, where $\\kappa(y) = \\frac{\\hat{\\phi}}{2} \\int dh e^h \\hat{P}(y,h) \[-\\frac{h\\theta(-h)}{\\gamma(y)} + \\hat{\\jmath}'(y,h)\]^2$ \[19, 20\].
+
+Here $\\hat{P}(y,h)$ is a rescaled probability density of $h$, and the explicit Heaviside $\\theta(-h)$ distinguishes these equations from the spin-glass case \[20\].
+
+  
+
+The fullRSB profile is sought with the power-law form $\\gamma(y) \\sim \\gamma\_\\infty y^{-c}$ for $y$ large \[21\]. Inserting the scaling ansatz $\\hat{\\jmath}(y,h) = -\\frac{c^2}{2y} J(t)$, $\\hat{P}(y,h) = y^a p\_1(t)$, $t = \\frac{h y^b}{\\sqrt{\\gamma\_\\infty}}$, and $b = \\frac{1+c}{2}$ yields the main equation for $J$: $\\frac{c}{2} J''(t) = \[-b+ c\\theta\]t J'(t) + J(t) - \\theta + \\frac{c^2}{4} (J'(t))^2$, with $J(-\\infty) = 1$ and $J(+\\infty) = 0$ \[21, 22\].
+
+Inserting the same scaling yields the linear eigenvalue equation for $p\_1$: $\\frac{c}{2} p\_1''(t) = (a- c\\theta)p\_1(t) + (b- c\\theta)t p\_1'(t) - \\frac{c^2}{2}(p\_1'(t)J'(t) + p\_1(t)J''(t))$ \[22\]. The eigenvalue $a$ is fixed by the asymptotic requirements, and the exponent $c$ is fixed by the integral identity from differentiated marginal-stability \[22, 23\].
+
+  
+
+\*\*Remark 1 ($p\_1 \\in C^2(\\mathbb{R})$):\*\* On each open half-line, $\\theta(-t)$ is locally constant and $J \\in C^\\infty$, so $p\_1 \\in C^\\infty$ there \[23\]. At $t=0$, the jump $\[\\theta(-t)\] = -1$ and $\[J''\] = 2/c$ cancel exactly giving $\[p\_1''\] = 0$, hence $p\_1 \\in C^2(\\mathbb{R})$ \[23\].
+
+\*\*Remark 2 (strict positivity of $p\_1$):\*\* Since $p\_1$ originates from a probability, $p\_1 \\geq 0$ \[24\]. Using the Picard-Lindelöf theorem on the ODE, one can show that $p\_1 \> 0$ for all $t \\in \\mathbb{R}$ \[24\].
+
+\*\*Remark 3:\*\* The split between $a(c)$ (from the eigenvalue problem) and $c$ (from marginal stability) is conceptually important \[25\]. The identity $a+ c/2 = 1/2$ is not manifest in either condition alone \[25\].
+
+  
+
+\#\#\# 3. The scaling regime
+
+  
+
+\*\*3.1. The function f\*\*
+
+Define $\\tilde{f}(y,h) := \\gamma(y)\\hat{f}(y,h) = -\\frac{1}{2}h^2\\theta(-h) + \\gamma(y)\\hat{\\jmath}(y,h)$ \[26\]. A direct computation of its second $h$-derivative gives at leading order: $\\tilde{f}''(y,h) = -\\theta(-t) - \\frac{c}{2}J''(t) + o(1) \\equiv -f(t)$ \[26, 27\]. This identifies the natural auxiliary function: $f(t) := \\theta(-t) + \\frac{c}{2}J''(t)$ and $g(t) := 1- f(t)$ \[27\].
+
+\*\*Lemma 4:\*\* As $t \\to -\\infty$, $f \\to 1$, $g \\to 0$, $f' \\to 0$ super-exponentially, and as $t \\to +\\infty$, $f \\to 0$, $g \\to 1$, $f' \\to 0$ super-exponentially \[27\]. This is because $J(t)$ has Gaussian envelopes controlling all derivatives in their respective halflines \[27\].
+
+  
+
+\*\*3.2. The ODE for f\*\*
+
+\*\*Lemma 5:\*\* On each open half-line, the function $f$ satisfies $\\frac{c}{2} f''(t) = -cf(t)g(t) + \\frac{c^2}{2}J'(t)f'(t) - (b- c\\theta)t f'(t)$ \[28\]. This is proven by differentiating the equation for $J(t)$ twice with respect to $t$ \[28, 29\].
+
+\*\*Lemma 6:\*\* The function $f(t)$ belongs to $C^2(\\mathbb{R})$ \[29\]. The continuity of $f$, $f'$, and $f''$ at $t=0$ is verified by evaluating the limits from both sides and ensuring the jumps cancel out \[29-31\].
+
+  
+
+\*\*3.3. Marginal stability differentiated\*\*
+
+The requirement $\\dot{\\kappa}(y) = -\\dot{\\gamma}/(y\\gamma^2)$ implies the integral identity $1 = \\frac{\\hat{\\phi}}{2} \\int dh e^h \\hat{P}(y,h) \\tilde{f}''(y,h)^2$, physically corresponding to marginal stability (vanishing of the replicon) \[32\]. Differentiating once more in $y$ yields a second identity that simplifies in the matching region to $\\frac{1}{2} = N/D$, where $N := \\int p\_1(t) f(t)^2 g(t) dt$ and $D := \\int p\_1(t) f'(t)^2 dt$ \[33, 34\]. This provides closure for the exponent $c$ alongside the eigenvalue condition \[34\].
+
+  
+
+\#\#\# 4. The algebraic identity
+
+\*\*Lemma 8:\*\* For any test function $\\xi$ such that $\\xi$ and $\\xi'$ vanish super-exponentially at $\\pm \\infty$, $\\int p\_1 \[ \\frac{c}{2}\\xi'' - (a- c\\theta)\\xi + (b- c\\theta)(\\xi + t\\xi') - \\frac{c^2}{2}J'\\xi' \] dt = 0$ \[35\]. This is proven by multiplying the $p\_1$ eigenvalue equation by $\\xi$ and integrating by parts, noting that distributional contributions involving $\\theta'(-t) = -\\delta(t)$ vanish \[35, 36\].
+
+\*\*Theorem 9:\*\* Let $c \\in (0,1)$, let $J$ solve equation (5), and let $p\_1$ be any solution of the eigenvalue equation \[36\]. Then $cD = 2cN + (b- a- c)K$, where $K = \\int p\_1 f g dt$ \[36, 37\].
+
+\*Proof:\* Choose as a test function $\\xi(t) := f(t)g(t)$ \[37\]. After substituting $\\frac{c}{2}f''$ from Lemma 5, two exact cancellations occur involving the $J'f'$ and $tf'$ pieces \[37\]. What remains simplifies directly to the algebraic identity $\\int p\_1 \[ (b- a- c)fg + 2cf^2 g - c(f')^2 \] dt = 0$ \[37, 38\].
+
+  
+
+\#\#\# 5. Existence of the f $\\geq$ 0 branch via Fisher-KPP
+
+To complete the proof, it remains to show that $K \> 0$ \[38\].
+
+\*\*5.1. The upper bound $f \\leq 1$ from the limit ODE:\*\* Any solution with $f(-\\infty) = 1$ and $f(+\\infty) = 0$ satisfies $f(t) \\leq 1$ \[39\]. If $f(t\_{max}) \> 1$, evaluating the ODE at the maximum gives a strictly positive value on the right, contradicting $f''(t\_{max}) \\leq 0$ \[39\].
+
+\*\*5.2. Failure of the analogous lower-bound argument:\*\* A symmetric argument for the infimum does not yield $f \\geq 0$ \[40\]. The non-linear ODE admits a discrete family of solutions with nodes, so the physical no-node branch must be selected at the level of the fullRSB flow \[40, 41\].
+
+\*\*5.3. The Fisher-KPP equation for the two-variable extension:\*\* Define $F(y,h) := \\theta(-h) - \\gamma(y)\\hat{\\jmath}''(y,h)$ \[41\]. On each open half-line, $F$ satisfies a Fisher-KPP-type reaction-diffusion equation with a positive diffusion coefficient and positive reaction coefficient: $\\partial\_\\tau F = \\frac{|\\dot{\\gamma}|}{2y} F'' + \\frac{|\\dot{\\gamma}|}{\\gamma}(\\gamma \\hat{\\jmath}' - h\\theta(-h))F' + \\frac{|\\dot{\\gamma}|}{\\gamma} F(1-F)$ \[42-45\].
+
+\*\*5.4. Maximum principle preserves $F \\in \[16\]$:\*\* At the initial condition, $F \\in \[16\]$ pointwise \[45\]. Parabolic comparison principles ensure that the flow preserves these bounds for all $\\tau \\geq 0$, preventing $F$ from exceeding 1 or dipping below 0 \[45, 46\]. Thus, the scaling limit gives $f(t) \\in \[16\]$ for all $t \\in \\mathbb{R}$, uniquely identifying the physical no-node branch \[46, 47\].
+
+  
+
+\#\#\# 6. Putting it together
+
+\*\*Theorem 13:\*\* For the fullRSB critical exponents, on the physical branch (the no-node branch $0 \\leq f \\leq 1$), one has $a+ c/2 = 1/2$, equivalently $a+ b = 1$ \[47\].
+
+\*Proof:\* By Theorem 9, $cD = 2cN + (b- a- c)K$ \[47\]. Since $f \\in \[16\]$ and passes continuously from 1 to 0, $K = \\int p\_1 f g dt \> 0$ \[47, 48\]. The marginal-stability identity gives $cD - 2cN = 0$ \[48\]. Combined with the algebraic identity, $(b- a- c)K = 0$, and with $K \> 0$, we find $a = (1- c)/2$, completing the proof \[48\].
+
+  
+
+\#\#\# 7. Discussion and outlook
+
+Theorem 13 closes the gap between the CKPUZ scaling theory and the scaling relations of Wyart and collaborators \[48\]. The scaling relations imply $\\alpha = 1/(2+ \\theta)$ and $\\kappa = 2- 2/(3+ \\theta)$ \[48\]. This demonstrates the equivalence of phase-space marginal stability (the replicon-zero condition) and mechanical marginal stability (the zero-mode-density of the contact-network Hessian) at the level of critical exponents within the $d \\to \\infty$ theory \[48, 49\]. Open issues beyond the scope of this paper include the rigorous existence and uniqueness of the fullRSB profile, the fully rigorous derivation of the matching-region scaling regime, completely proving the scaling limit of the no-node branch is attained, and mathematically deriving the fullRSB structure conversely from mechanical marginality \[49-51\]. The authors note at the very end that they previously missed the proof because they were looking for a deeper relationship and neglected the conceptually simple algebraic cancellations \[51\].

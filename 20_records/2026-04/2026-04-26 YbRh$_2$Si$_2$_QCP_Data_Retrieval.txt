@@ -1,0 +1,366 @@
+﻿An Analysis of Experimental Data at the Quantum Critical Point of YbRh$_2Si_2$
+This report synthesizes experimental data concerning the quantum critical point (QCP) in the heavy fermion compound YbRh$_2Si_2$. The focus is on measurements conducted at millikelvin temperatures and as a function of magnetic field tuned through the Néel critical field B_N. The data are organized to address specific physical quantities, with careful attention to the direction of the applied magnetic field relative to the crystallographic axes and the observed behavior proximate to the QCP.
+I. Introduction to YbRh$_2Si_2$ and its Quantum Criticality
+A. Overview of YbRh$_2Si_2$ as a Prototypical Heavy Fermion System
+The intermetallic compound YbRh$_2Si_2$, crystallizing in the tetragonal ThCr$_2Si_2$-type structure, has garnered significant attention as a model system for studying heavy fermion physics and quantum criticality. Heavy fermion materials are characterized by electrons that behave as if they have exceptionally large effective masses, often hundreds of times that of a free electron, a consequence of strong correlations originating from the hybridization of localized f-electrons (from Yb in this case) with itinerant conduction electrons.
+A salient feature of YbRh$_2Si_2$ is its antiferromagnetic (AFM) order, which develops at a remarkably low Néel temperature (T_N) of approximately 70 mK in the absence of an external magnetic field. This intrinsically low T_N signifies that the system is naturally poised close to a quantum phase transition, where a continuous phase transition at absolute zero temperature (T=0) can be accessed by tuning a non-thermal parameter, such as magnetic field, pressure, or chemical composition. In YbRh$_2Si_2$, the AFM order can be continuously suppressed to T=0 by applying a relatively small magnetic field, thereby inducing a field-tuned QCP. The critical magnetic field (B_N) required to reach this QCP is highly anisotropic: B_N \approx 0.06 Tesla (T) when the field is applied perpendicular to the crystallographic c-axis (B \perp c), and significantly higher, B_N \approx 0.66 T, when the field is applied parallel to the c-axis (B \parallel c). At a QCP, quantum mechanical fluctuations, rather than thermal fluctuations, govern the system's physical properties, often leading to exotic, non-Fermi-liquid (NFL) behaviors that deviate from the standard Landau theory of metals. While some general discussions on QCPs involve ferromagnetic systems like YbNi$_4P_2$ , the primary focus here is the AFM QCP in YbRh$_2Si_2$.
+The pronounced anisotropy in B_N by a factor of approximately 11 between the B \perp c and B \parallel c configurations is a fundamental characteristic of YbRh$_2Si_2$. This substantial difference implies either highly anisotropic magnetic exchange interactions or a strongly anisotropic g-factor for the Yb moments, or a combination thereof. The crystallographic c-axis is established as the magnetically hard axis, with the basal plane being the easy magnetic plane. Such anisotropy dictates that the nature of spin fluctuations and the response of the AFM order to the applied field are markedly different for the two principal field orientations. Consequently, any comprehensive theoretical description must inherently account for this anisotropy, as it may influence the universality class or the specific critical phenomena observed.
+Furthermore, the extremely low intrinsic energy scales (T_N(0) \approx 70 mK and the small B_N values) indicate that YbRh$_2Si_2$ resides naturally very close to a QCP even in zero field. This inherent proximity makes it an exceptional platform for investigating QCP physics. However, this fragility also renders the system highly sensitive to external perturbations such as pressure, chemical doping, and particularly to sample quality, including stoichiometry and disorder. The delicate balance between the Kondo screening of Yb moments and the Ruderman-Kittel-Kasuya-Yosida (RKKY) interaction, which mediates the magnetic order, is easily tipped. Therefore, variations in sample characteristics, often quantified by the residual resistivity (\rho_0) , can significantly influence experimental outcomes, necessitating careful consideration of sample details in comparative studies.
+B. Significance of Studying the QCP in YbRh$_2Si_2$
+YbRh$_2Si_2$ has emerged as a canonical example for the study of unconventional QCPs, those that may not conform to the standard Hertz-Millis-Moriya theory for itinerant quantum criticality. A central debate revolves around the nature of its QCP: whether it is a conventional spin-density wave (SDW) type, where the f-electrons remain part of a large Fermi surface across the transition, or an unconventional type involving a more radical transformation, such as "Kondo breakdown" or "local quantum criticality." In the latter scenarios, the f-electrons might abruptly change their character from itinerant (contributing to the Fermi volume) to localized (forming magnetic moments) at the QCP, leading to a concomitant reconstruction of the Fermi surface. The availability of high-purity single crystals and the relatively modest magnetic fields required to access the QCP have facilitated a wealth of detailed experimental investigations.
+C. Scope of the Report
+This report aims to compile and analyze experimental data for a range of physical quantities pertinent to the QCP in YbRh$_2Si_2$, as specified in the user query. The focus will be on measurements performed at the lowest achievable temperatures (millikelvin range) and as a function of magnetic field sweeping through B_N for both B \perp c and B \parallel c orientations, providing a data-centric foundation for theoretical modeling.
+II. Magnetic Grüneisen Ratio (\Gamma_{mag})
+A. Definition and Significance
+The magnetic Grüneisen ratio, \Gamma_{mag}, is a key thermodynamic quantity for characterizing field-tuned QCPs. It can be defined either via the magnetocaloric effect as \Gamma_{mag} = (1/T)(\partial T/\partial B)_S, representing the temperature change upon an adiabatic variation of the magnetic field, or equivalently through Maxwell relations as \Gamma_{mag} = -(\partial M/\partial T)_B / C_B = (1/C_B)(\partial S/\partial B)_T. Here, M is the magnetization, T is temperature, C_B is the specific heat at constant field, S is entropy, and B is the magnetic field. Analogous to the standard Grüneisen ratio \Gamma_{th} \propto (\partial S/\partial P)_T / C_P at a pressure-tuned QCP (where P is pressure), \Gamma_{mag} is predicted to diverge as B \rightarrow B_N at T \rightarrow 0. Such a divergence signifies a strong coupling between the magnetic and thermal degrees of freedom and indicates a massive accumulation of entropy in the vicinity of the QCP, a hallmark of quantum critical behavior.
+B. Experimental Data for B \perp c (Critical Field B_N \approx 0.06 T)
+Experimental investigations by Tokiwa et al. have provided detailed insights into the behavior of \Gamma_{mag} in YbRh$_2Si2$ for magnetic fields applied perpendicular to the c-axis (H \perp c). These studies involved meticulous measurements of M(T) using a high-resolution capacitive Faraday magnetometer and C(T) via a quasi-adiabatic heat-pulse technique on high-quality single crystals, allowing for the calculation of $\Gamma{mag}$.
+Divergence at B_N: As the applied field H approaches the critical field H_c = 0.06 T (equivalent to B_N), \Gamma_{mag} exhibits a clear divergence. This is evident from Figure 2c of Tokiwa et al. , where measurements extend down to approximately 70 mK. Both the quantities -(\mathrm{d}M/\mathrm{d}T)/T and C(T)/T (the electronic specific heat coefficient \gamma_{el}) diverge as T \rightarrow 0 at H_c. Crucially, the divergence of -(\mathrm{d}M/\mathrm{d}T)/T is found to be stronger than that of C(T)/T. If both quantities were to diverge with the same temperature exponent, \Gamma_{mag} would saturate at a finite value. The observed stronger divergence in the numerator implies that the entropy S(T,B) possesses a particularly sharp feature with respect to magnetic field changes at low temperatures near the QCP, or that the critical fluctuations coupling to the magnetic field are more singular than those primarily influencing the specific heat's temperature dependence. This underscores the efficacy of the magnetic field as a tuning parameter for accessing this highly singular critical state.
+Field Dependence near B_N: In the Fermi liquid (FL) regime, for H > H_c, \Gamma_{mag} changes sign and can be described by the relation \Gamma_{mag} = -G_r(H - H_{fit}^c), with a material-dependent constant G_r = -0.30 \pm 0.01 (T$^{-1}$) and a fitted critical field H_{fit}^c = (0.065 \pm 0.005) T. This behavior, where \Gamma_{mag} is proportional to (H-H_c)^{-1} (since G_r is a constant prefactor), is consistent with quantum critical scaling predictions. The inset of Figure 2c in illustrates \Gamma_{mag} (for T > 0.3 K) as a function of H, clearly showing this sign change around H_c.
+Temperature Dependence at B_N: At the critical field H_c = 0.06 T, the temperature dependence of \Gamma_{mag} appears to follow a power law \Gamma_{mag} \propto T^{-\epsilon_{mag}}. A log-log plot (inset of Fig. 2c in ) suggests an exponent \epsilon_{mag} \approx 0.7 for T > 0.3 K, although the main panel indicates a potentially steeper divergence below 0.3 K. This exponent value is notably similar to the exponent observed for the thermal Grüneisen ratio (\Gamma_{th} \propto T^{-0.7}) in Ge-doped YbRh$2$(Si${1-x}Gex$)_2 at its zero-field QCP. Such consistency across different Grüneisen ratios and related compounds hints at a common underlying physics, possibly linked to local quantum criticality, which can produce such fractional exponents. The combination of $\Gamma{mag} \sim (H - H_{fit}^c)^{-1}$ in the FL regime and \Gamma_{mag} \sim T^{-0.7} at H_c provides robust evidence for quantum critical scaling and serves as a stringent constraint for theoretical models.
+The field dependence of \mathrm{d}M/\mathrm{d}T (and thus (\partial S/\partial B)_T) also reveals an inflection point when plotted against magnetic field, which occurs as the system crosses the characteristic T^*(H) line (discussed in Section III.A). This observation links the behavior of the magnetic Grüneisen ratio directly to the T^*(H) energy scale, implying that the entropy landscape, and its rapid rearrangement near the QCP, is significantly influenced by the physical processes associated with T^*, such as f-electron delocalization/localization.
+Graphical Data: The publications by Tokiwa et al. provide high-resolution graphs of -(\mathrm{d}M/\mathrm{d}T)/T vs T, C(T)/T vs T, and \Gamma_{mag} vs T for several magnetic fields applied perpendicular to the c-axis (specifically 0.06 T, 0.1 T, 0.15 T, 0.2 T, and 0.3 T). These plots are suitable for potential data digitization.
+C. Data for B \parallel c (Critical Field B_N \approx 0.66 T)
+The available research material predominantly focuses on \Gamma_{mag} measurements for the B \perp c orientation. While the critical field for B \parallel c is consistently reported as H_c \approx 0.66 T , specific experimental data for \Gamma_{mag}(B \parallel c) or its detailed behavior near this higher critical field are not presented in the provided documents. A dedicated literature search would be required to locate such data.
+The following table summarizes the key findings for the magnetic Grüneisen ratio.
+Table 1: Magnetic Grüneisen Ratio (\Gamma_{mag}) Characteristics at the QCP in YbRh$_2Si_2$
+Field Direction
+	B_N (T)
+	\Gamma_{mag} behavior at B_N
+	\Gamma_{mag} behavior for B > B_N (T \rightarrow 0)
+	Temperature Range (mK)
+	Calculation Method
+	Reference(s)
+	B \perp c
+	\approx 0.06
+	Diverges, \Gamma_{mag} \propto T^{-0.7} (for T > 0.3 K)
+	\Gamma_{mag} = -G_r(B - B_{fit}^N) with G_r = -0.30 \pm 0.01 T$^{-1}$, B_{fit}^N \approx 0.065 T
+	\gtrsim 70
+	From independent M(T) and C(T) measurements
+	
+
+	B \parallel c
+	\approx 0.66
+	Data not available in provided sources
+	Data not available in provided sources
+	---
+	---
+	---
+	III. Characteristic Energy Scales / Temperatures vs. Magnetic Field (at lowest T)
+Several characteristic temperature scales delineate different regimes in the temperature-magnetic field (T-B) phase diagram of YbRh$_2Si_2$. Their evolution with magnetic field, particularly their vanishing at B_N, provides crucial insights into the nature of the QCP.
+A. Fermi Liquid Crossover Temperature T_{FL}(B) (or T^*(B))
+For magnetic fields B > B_N, the system transitions from non-Fermi liquid (NFL) behavior at higher temperatures to Landau Fermi liquid (LFL) behavior at lower temperatures. The crossover temperature marking this transition is denoted T_{FL}(B). In the context of YbRh$_2Si_2$, particularly for B \perp c, this scale is often referred to as T^*(B) when it emerges from B_N into the paramagnetic phase, and it is associated with more than just a simple FL crossover; it is linked to significant changes in the electronic structure. This T^*(B) scale vanishes as B \rightarrow B_N.
+Data for B \perp c (B_N \approx 0.06 T): The T-B phase diagram for B \perp c, as depicted in Figure 1 of (data from Friedemann et al., 2010) and Figure 1 of , clearly shows the T^*(B) line. This line, determined from features in Hall effect and magnetoresistance measurements, decreases as B is lowered from fields above B_N, and extrapolates to zero temperature at B_N \approx 0.06 T. It serves as the boundary between the NFL region at T > T^*(B) and the LFL region at T < T^*(B) for B > B_N. The crossover is noted to be quite broad. Thermopower measurements also confirm the recovery of LFL behavior for B > B_c = 60 mT (B \perp c), with the determined LFL crossover temperature (T_{LFL}) aligning with those derived from resistivity and specific heat studies. Schematics in (Fig 1b), while labeled for H \parallel c, likely draw from the general phenomenology which includes the B \perp c case, illustrating regions where the resistivity exponent \alpha=1 (NFL) and \alpha=2 (LFL), showing T_{FL} increasing with |B-B_N|.
+The T^*(B) line in YbRh$_2Si_2$ is of particular significance because it is not merely a FL coherence scale but is intimately tied to a fundamental transformation in the electronic state. This transformation is widely interpreted as a Fermi surface reconstruction resulting from the Yb f-electrons changing their character from itinerant (contributing to the Fermi volume) to localized (forming magnetic moments), or vice-versa, as the system is tuned by the magnetic field. The Hall effect exhibits a pronounced change across the T^*(B) line, which sharpens with decreasing temperature and extrapolates to an abrupt jump at T=0, B=B_N. The simultaneous vanishing of T^*(B) and T_N(B) at the same critical field B_N is a defining characteristic of the unconventional QCP in YbRh$_2Si_2$, strongly supporting scenarios like Kondo breakdown or local quantum criticality.
+Data for B \parallel c (B_N \approx 0.66 T): For fields applied parallel to the c-axis, a similar crossover scale, also often denoted T^*(H), is observed. Figure 6 in presents a detailed T-H phase diagram for H \parallel c. A broad red line, identified from crossovers in isothermal Hall resistivity, represents this T^*(H). It is distinct from the Néel temperature T_N(H) and also appears to decrease towards zero as H approaches H_c \approx 0.7 T (in that particular dataset). The region above H_c and below T^*(H) is characterized by LFL behavior (e.g., \Delta\rho \propto T^2). For Ge-doped YbRh$2Si2$, Figure 3 in (data from ) displays a $T{LFL}$ line for B \parallel c, derived from resistivity measurements. Thermal conductivity studies at B_c \parallel c = 0.66 T also note the destruction of FL signatures at the QCP, consistent with $T{FL}(B_N) = 0$.
+Identification Methods: The T_{FL}(B) or T^*(B) scale is typically identified from:
+* Resistivity: The temperature below which \rho(T) - \rho_0 transitions from NFL behavior (e.g., linear in T) to LFL behavior (\propto T^2).
+* Specific Heat: The temperature below which C/T becomes approximately constant (Sommerfeld coefficient \gamma_0).
+* Hall Effect: A characteristic change in the temperature or field dependence of the Hall coefficient R_H or Hall resistivity \rho_{xy}.
+* Thermopower: The temperature below which S/T becomes constant.
+B. Néel Temperature T_N(B)
+The Néel temperature T_N(B) is the critical temperature for the onset of long-range AFM order as a function of the applied magnetic field B. It is suppressed by the magnetic field, vanishing at the QCP, T_N(B_N) = 0.
+Data for B \perp c (B_N \approx 0.06 T): Numerous studies confirm the suppression of T_N (initially 70 mK at B=0) by an in-plane magnetic field, reaching zero at B_N \approx 0.057 - 0.06 T [ (Fig 1), ]. More recent investigations extending to microkelvin temperatures have revealed a more complex behavior for B \perp c. These studies show that the T_N(B) line for the primary electronic AFM phase (denoted AFM1, T_N \lesssim 70 mK) exhibits a non-monotonic dependence on B at very low temperatures (below ~20 mK), showing a "backturn" before vanishing. This unexpected behavior is attributed to the influence of hyperfine interactions between the Yb nuclear moments and the electronic moments. Furthermore, a second, electro-nuclear AFM phase (AFM2) emerges at even lower temperatures (T \lesssim 1.5 mK) and very low fields. The critical field for the purely electronic AFM1 order, extrapolated from temperatures above the hyperfine-dominated regime, is around 57 mT. This discovery implies that while the NFL phenomena observed at temperatures above a few millikelvin are likely governed by the electronic QCP, the ultimate T=0 state at B_N might be more intricate due to these nuclear effects. Theoretical models aiming to describe the physics in the mK and \muK regime must therefore incorporate these hyperfine couplings.
+Data for B \parallel c (B_N \approx 0.66 T): For fields parallel to the c-axis, T_N(H) is suppressed to zero at a much higher critical field, H_c \approx 0.66 - 0.7 T [ (Fig 6), ]. The typical evolution for YbRh$_2Si_2$ (and its Ge-doped variants) is often described by T_N(B) = T_N(0)(1 - B/B_N)^\zeta, where \zeta \approx 0.36 has been reported for Ge-doped samples, and a similar behavior is expected for the pure compound.
+Identification Methods: T_N(B) is commonly determined from anomalies or peaks in measurements of specific heat, magnetic susceptibility (AC and DC), magnetostriction, thermal expansion, and electrical resistivity.
+C. Spin Excitation Gap \Delta_s(B) or other relevant energy gaps
+Inelastic neutron scattering (INS) is a powerful technique to probe the energy spectrum of magnetic excitations, \chi''(\mathbf{q}, \omega), including any spin excitation gaps, \Delta_s. A gap that closes as B \rightarrow B_N would provide direct evidence of softening critical magnetic modes.
+Data (primarily B \perp c): INS studies on YbRh$_2Si_2$ have been performed by Stock et al.. These experiments, conducted with magnetic fields (up to 11 T, thus crossing B_N \perp c) applied perpendicular to the scattering plane (which can be aligned for B \perp c), revealed the following:
+* At B=0 and T=100 mK (above T_N=70 mK, so not in the ordered state), the magnetic fluctuations are incommensurate, peaked at a wavevector \mathbf{q}_0 = (\pm \delta, \pm \delta, L) with \delta = 0.14 \pm 0.04 reciprocal lattice units (r.l.u.), and extend to low energies (down to \sim 0.1 meV).
+* Upon application of an in-plane magnetic field (B \perp c), a sharp, resolution-limited resonant excitation develops at the zone center (\mathbf{Q}=0). The energy of this mode, E_0, increases linearly with the applied field: E_0 = g\mu_B B, with an effective g-factor g = 3.8 \pm 0.2. This mode is interpreted as an intra-doublet excitation within the Yb$^{3+}$ crystal electric field (CEF) ground state doublet, which becomes underdamped in the presence of the field. This field-induced Q=0 resonance, E_0(B), represents a type of spin excitation energy that closes as B \rightarrow 0, not specifically at B_N \approx 0.06 T. It reflects the Zeeman splitting of the local Yb moments in the paramagnetic state induced by the field. At B_N \approx 0.06 T, this energy would be E_0 \approx 0.013 meV (or \approx 150 mK), a relatively low energy. It is not immediately clear how this Q=0 mode relates to the critical fluctuations driving the AFM QCP, which are expected at or near the AFM ordering wavevector \mathbf{q}_0. The coexistence of these field-induced Q=0 excitations and the underlying incommensurate fluctuations (precursors to AFM order) points to a complex magnetic excitation spectrum. The interplay and evolution of these different types of fluctuations as B \rightarrow B_N are crucial for a complete understanding of the QCP. NMR studies also hint at a competition between q=0 and finite-q fluctuations near B_N.
+Data for B \parallel c: Specific INS data detailing a spin excitation gap \Delta_s(B) that vanishes at B_N \parallel c \approx 0.66 T is not readily available in the provided documentation. While the INS experiments used vertical fields that could be aligned along the c-axis, the detailed analysis presented focuses on the in-plane field configuration.
+D. Characteristic Frequency/Energy from \omega/T scaling in Dynamical Spin Susceptibility \chi''(\omega,B,T)
+A key signature of quantum criticality is the observation of \omega/T scaling (or E/T scaling) in the dynamical spin susceptibility, \chi''(\omega,T), at the critical field B_N. This implies that \chi''(\omega,T) can be expressed in the form T^{-\alpha'} \mathcal{F}(\omega/k_B T), where \mathcal{F} is a universal scaling function and \alpha' is a critical exponent. Such scaling indicates that temperature T is the only relevant energy scale for spin fluctuations at the QCP. Away from B_N, this scaling is expected to break down, and a characteristic energy scale \omega^*(B) (or E^*(B)) should emerge, which vanishes as B \rightarrow B_N. The functional dependence of \omega^*(B) on |B-B_N| is an important characteristic of the QCP.
+Experimental Evidence & Data:
+* General reviews and theoretical discussions acknowledge \omega/T scaling as a characteristic feature of the QCP in YbRh$_2Si_2$, often linking it to a Kondo-destroying QCP and fractional exponents in \chi''(\omega,T).
+* The seminal experimental work demonstrating E/T scaling in the YbRh$_2Si_2$ family is by Gegenwart et al., Science 315, 969 (2007). Although direct access to this paper's content is limited by , it is widely cited for showing that in Ge-doped YbRh$2$(Si${1-x}Ge_x$)_2 (specifically for x=0.05, which is at or very near a QCP at B=0), the INS spectrum Im$\chi(E,T)$ indeed follows E/T scaling: Im$\chi(E,T) \propto T^{-\alpha'} \Phi(E/k_B T)$ with an exponent \alpha' \approx 0.75. At the QCP, the characteristic energy scale of spin fluctuations was found to be k_B T itself.
+* When tuned away from the QCP by magnetic field (or further doping), a characteristic energy scale E^*(B) (or E^*(x)) emerges, which represents the energy below which \omega/T scaling breaks down and Im$\chi(E)$ develops a peak or other features. This E^*(B) is the \omega^*(B) sought. It is expected that E^*(B) \rightarrow 0 as B \rightarrow B_N. The precise functional form of E^*(B) vs (B-B_N) for pure YbRh$_2Si_2$ from direct INS measurements across B_N (both \perp c and \parallel c) is a critical piece of information that would ideally be extracted from such studies. The absence of the full content of the Science 2007 paper in the provided material limits the presentation of specific \omega^*(B) plots or functional forms here, but it remains the primary reference.
+The \omega/T scaling implies that at the QCP, intrinsic energy scales of the spin system (like spin stiffness or a gap) have vanished or become irrelevant compared to temperature. The magnetic field |B-B_N| introduces another energy scale that competes with k_B T. The crossover where this field-induced scale becomes comparable to k_B T defines the boundary of the quantum critical fan and the behavior of \omega^*(B).
+The following table summarizes the behavior of these characteristic energy scales.
+Table 2: Key Characteristic Temperatures/Energies vs. Magnetic Field in YbRh$_2Si_2$
+Scale
+	Field Direction
+	Behavior as B \rightarrow B_N
+	Value at B_N (T=0)
+	Measurement Technique(s)
+	Key Reference(s)
+	T_N(B) (AFM1 phase)
+	B \perp c
+	Vanishes; non-monotonic at \muK T due to hyperfine effects
+	0
+	Specific heat, susceptibility, magnetostriction, resistivity
+	
+
+	T_N(B)
+	B \parallel c
+	Vanishes, T_N(B) \propto (B_N-B)^\zeta, \zeta \approx 0.36 (Ge-doped)
+	0
+	Specific heat, susceptibility, resistivity
+	
+
+	T^*(B) / T_{FL}(B)
+	B \perp c
+	Vanishes
+	0
+	Hall effect, magnetoresistance, specific heat, thermopower
+	
+
+	T^*(B) / T_{FL}(B)
+	B \parallel c
+	Vanishes
+	0
+	Hall effect, resistivity
+	
+
+	\Delta_s(B) (field-induced Q=0 mode)
+	B \perp c
+	E_0 = g\mu_B B, so E_0 \rightarrow 0 as B \rightarrow 0 (not B_N)
+	Non-zero at B_N
+	Inelastic Neutron Scattering (INS)
+	
+
+	\Delta_s(B) (AFM gap)
+	B \perp c
+	Expected to vanish
+	0
+	INS (not clearly isolated for AFM gap at B_N in snippets)
+	---
+	\Delta_s(B) (AFM gap)
+	B \parallel c
+	Expected to vanish
+	0
+	INS (data not available in snippets)
+	---
+	\omega^*(B) from \omega/T scaling
+	B \perp c
+	Expected to vanish
+	0
+	INS (primarily from YbRh$2$(Si${1-x}Ge_x$)_2 data)
+	Science 315, 969 (2007) by Gegenwart et al. (via context)
+	\omega^*(B) from \omega/T scaling
+	B \parallel c
+	Expected to vanish
+	0
+	INS (data not available in snippets)
+	---
+	IV. Other Key Thermodynamic or Transport Properties vs. Magnetic Field (at lowest T)
+The response of various thermodynamic and transport coefficients to magnetic field sweeps across B_N at the lowest achievable temperatures provides further crucial information about the QCP.
+A. Specific Heat Coefficient (C/T or \gamma_{el}) vs. B
+The electronic specific heat coefficient \gamma_{el} = C_{el}/T is directly proportional to the quasiparticle effective mass m^* in a Fermi liquid. Its evolution as a function of magnetic field B through B_N is a sensitive probe of how m^* changes upon approaching the QCP. A strong enhancement or divergence of C/T at B_N is a generic expectation for quantum critical systems.
+Data for B \perp c (B_N \approx 0.06 T):
+* Measurements presented in (Fig 4a, likely from Gegenwart et al.) show C_{el}/T versus T for various fields H \perp c. At the critical field H_c \approx 0.055 T, C_{el}/T exhibits its strongest temperature divergence (approximately T^{-0.4} at low T, transitioning to a -\ln T dependence at higher T). For fields H > H_c, C_{el}/T tends towards saturation at low temperatures, indicative of Fermi liquid behavior. The magnitude of this saturated C_{el}/T value systematically decreases as H increases further above H_c. This implies that the effective mass m^* is maximal at H_c and is suppressed upon moving into the FL phase.
+* Similarly (Fig 2A) displays C_{4f}/T (the f-electron contribution to C/T) versus T at B=0, B=B_N (60 mT), and B=2B_N for B \perp c. At B_N, C_{4f}/T clearly diverges with decreasing temperature. At 2B_N, it saturates, but at a value lower than that observed at B=0 (within the AFM ordered phase).
+* The field dependence of C/T in the FL regime (H > H_c) for YbRh$2$(Si${0.95}Ge_{0.05})_2$ was found to follow (C/T)^{-3} \propto (H-H_c), suggesting C/T \propto (H-H_c)^{-1/3}. A similar behavior is implied for pure YbRh$_2Si_2$. This power-law divergence of m^* as B \rightarrow B_N^+ is a key quantitative signature.
+Data for B \parallel c (B_N \approx 0.66 T):
+* The phase diagram for H \parallel c delineates a LFL region for H > H_c, where C/T would be expected to saturate. However, explicit plots of C/T versus B for B \parallel c across B_N are not readily found in the provided material. Further literature search would be needed for direct C/T(B \parallel c) data.
+B. Electrical Resistivity (\rho) vs. B (Magnetoresistance)
+Isothermal measurements of electrical resistivity as a function of magnetic field, \rho(B), can reveal important features associated with phase transitions or crossovers, changes in scattering mechanisms, or modifications of the Fermi surface.
+Data for B \perp c (B_N \approx 0.06 T):
+* The T-B phase diagram in (Fig 1) includes a greyscale representation of the slope of isothermal magnetoresistance, \mathrm{d}\rho/\mathrm{d}B, which highlights features along the T^*(B) crossover line.
+* Data points for constructing \rho(B) isotherms can be inferred from \rho(T) curves at fixed fields , which show T-linear resistivity at B \approx B_N (0.05 T and 0.06 T) and T^2 LFL behavior at B=0 and B=0.2 T.
+* For Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})_2$, scaled isothermal magnetoresistance, \rho(B)/\rho_0, for B \perp c shows a peak structure around B_N that sharpens as temperature is lowered. Similar behavior is shown for pure YbRh$_2Si_2$ (open symbols in the same figure).
+Data for B \parallel c (B_N \approx 0.66 T):
+* For Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})2$, isothermal magnetoresistance for B \parallel c exhibits inflection points ($B{infl}$) that are temperature-dependent.
+* Explicit \rho(B) isotherms for pure YbRh$_2Si_2$ with B \parallel c sweeping through B_N \approx 0.66 T are not clearly presented in the provided documents.
+C. Hall Coefficient (R_H) vs. B
+The Hall coefficient R_H is a particularly insightful probe, as it is sensitive to the dominant charge carrier type, carrier density, and the topology of the Fermi surface. A sharp or discontinuous change in R_H(B) across B_N is considered strong evidence for a Fermi surface reconstruction.
+Data for B \perp c (B_N \approx 0.06 T):
+* Isothermal measurements of the linear-response Hall coefficient R_H as a function of H \perp c reveal a broadened, step-like feature centered around H_c \approx 0.055 T. The width of this crossover diminishes with decreasing temperature, and critically, it extrapolates to an abrupt jump in R_H at T=0 precisely at H_c.
+* High-resolution Hall effect studies by Friedemann et al. corroborate these findings. They confirm a robust crossover in R_H(B \perp c) whose full width at half maximum (FWHM) is proportional to temperature, vanishing as T \rightarrow 0. This T-linear width is consistent with E/T scaling of critical fluctuations. In the T \rightarrow 0 limit, a clear discontinuity (jump) in R_H is observed at B_N, signifying a change in the Fermi surface volume. The T^*(B) line in the phase diagram is indeed derived from these Hall measurements.
+Data for B \parallel c (B_N \approx 0.66 T):
+* The T^*(H) line in the H \parallel c phase diagram is also determined from features in the isothermal Hall resistivity.
+* Early work by Paschen et al. reported R_H measurements for B \parallel c. Figure 2a of shows Hall resistivity \rho_H versus B \parallel c isotherms. After subtraction of an anomalous Hall contribution (which can be significant in magnetic materials), the ordinary Hall coefficient R_H is found to decrease by a factor of approximately 1.5 when tuning the system from the B=0 AFM state to the field-induced paramagnetic state. This change, while continuous at finite temperatures, is relatively sharp around B_c \approx 0.66 T and is interpreted as evidence of a field-induced change in the Fermi surface.
+* De Haas-van Alphen studies , which probe the Fermi surface at much higher fields (8-16 T), also reference the Hall coefficient crossovers at H_c \approx 0.6 T (H \parallel c) as indicative of Fermi surface reconstruction.
+The observation of a jump or sharp crossover in R_H(B) at B_N (in the T \rightarrow 0 limit) is a cornerstone of the Kondo breakdown scenario for YbRh$_2Si_2$. In this picture, the Yb f-electrons transition from being itinerant and part of a "large" Fermi surface (e.g., in the FL state above B_N) to being localized and forming magnetic moments below a certain energy scale or on one side of the QCP, resulting in a "small" Fermi surface (or vice-versa, depending on the specific interpretation of "large" vs "small" FS on either side of B_N). This change in f-electron character directly alters the effective carrier density and thus R_H. The coincidence of this electronic topological transition with the magnetic QCP is a key feature of the unconventional nature of YbRh$_2Si_2$.
+Experimental Configuration for Hall Measurements: It is important to note the geometry. Typically, current J flows in the ab-plane. For B \perp c, the field B is also in the ab-plane, and can be either parallel or perpendicular to J. The Hall voltage is measured transverse to both J and B. For B \parallel c, B is perpendicular to J. Some studies use a tuning field B_2 (here, B \perp c) parallel to the current to drive the system through the QCP, while the Hall effect itself is measured with a perpendicular field component (e.g., the Earth's field or a small deliberately applied B_1 \perp c if B_2 is the primary tuning parameter, or B_1 \parallel c if B_2 \perp c is the tuning parameter). The specifics of the setup are crucial for interpreting Hall data.
+D. Characteristic Relaxation Rates (1/\tau^*(B)) from NMR/ESR
+Nuclear Magnetic Resonance (NMR) and Electron Spin Resonance (ESR) are local probes sensitive to static and dynamic magnetic properties. The nuclear spin-lattice relaxation rate (1/T_1) in NMR, often presented as 1/(T_1T), probes low-frequency spin fluctuations. A divergence or critical enhancement of 1/(T_1T) near B_N would indicate critical slowing down of spin fluctuations.
+Data (NMR $^{29}$Si, primarily B \perp c):
+* Ishida et al. conducted ^{29}$Si NMR experiments on YbRh$_2Si$_2$ with B \perp c. Their measurements were performed at fields down to H \approx 0.5 kOe (0.05 T), which is very close to B_N \perp c.
+   * They observed a strong dependence of both the Knight shift K and 1/T_1 on the external field, especially for H < 5 kOe.
+   * At their lowest measurement field of H \approx 1.5 kOe (0.15 T, slightly above B_N \perp c), 1/(T_1T) was found to continue increasing down to the lowest temperature of 50 mK. This behavior suggests the persistent development of antiferromagnetic (finite-q) spin fluctuations that compete with q=0 (ferromagnetic-like) spin fluctuations in the vicinity of the QCP near H=0.5 kOe.
+* More recent \muK studies discuss the "fast relaxation regime" relevant to hyperfine interactions in YbRh$_2Si_2$ but do not present new 1/T_1 versus B data aimed at characterizing critical scaling with B.
+* Detailed data showing a clear critical scaling of 1/\tau^*(B) directly with (B-B_N) is somewhat sparse in the provided material. The work by Ishida et al. primarily highlights the temperature dependence of 1/(T_1T) at fields near B_N \perp c.
+Data (ESR):
+* While ESR studies on YbRh$_2Si_2$ exist (e.g., cited in as J. Sichelschmidt et al., J. Phys. Condens. Matter 19 (2007) 116204), no specific data on relaxation rates versus B near B_N is available in the provided snippets.
+The NMR results indicating a competition between q=0 and finite-q fluctuations near B_N \perp c suggest a complex critical magnetic state. While the QCP is associated with the suppression of AFM order, the proximity to, or enhancement of, ferromagnetic-like fluctuations could significantly influence the critical properties. This is consistent with some theoretical proposals, such as the quantum tricritical point scenario , which can naturally incorporate enhanced uniform susceptibility alongside critical AFM fluctuations.
+V. Temperature Dependence of Observables at or very near the Critical Field B_N
+Examining the temperature dependence of various physical quantities precisely at or very close to the critical field B_N is essential for characterizing the NFL state associated with the QCP.
+A. Specific Heat Coefficient (C/T vs. T at B \approx B_N)
+At a QCP, the electronic specific heat coefficient C/T is expected to diverge with decreasing temperature, reflecting the critical enhancement of the quasiparticle effective mass. Common forms of divergence include C/T \sim -\ln(T/T_0) or C/T \sim T^{-\epsilon_C}.
+Data for B \perp c (B_N \approx 0.06 T):
+* Multiple studies consistently report a strong divergence of C/T at B_N \perp c. As shown in (Fig 4a), at H_c \approx 0.055 T, C_{el}/T follows a T^{-0.4} power law for T < 0.3 K. At higher temperatures (up to \sim 10 K, inferred from B=0 data in Fig 4b of which shows similar logarithmic behavior), a -\ln T dependence is observed.
+* (Fig 2A) and corroborate this, stating that at B_N = 60 mT (B \perp c), \gamma(T) = C_{4f}/T diverges with a power-law exponent of approximately -0.3 for T < 0.3 K, and exhibits a logarithmic T-dependence at higher temperatures.
+* (Fig 2b) also shows C/T versus T at H=0.06 T diverging down to the lowest measured temperature of \sim 70 mK. The observation of a power-law divergence C/T \sim T^{-\epsilon_C} with \epsilon_C \approx 0.3-0.4 at B_N \perp c is more singular than a purely logarithmic divergence often associated with 2D AFM critical fluctuations. This specific exponent provides a quantitative benchmark for theories and suggests that the QCP in YbRh$_2Si_2$ may not be described by simple 2D or 3D SDW models, potentially favoring scenarios like local quantum criticality which can yield such fractional exponents.
+Data for B \parallel c (B_N \approx 0.66 T):
+* The phase diagram for H \parallel c indicates an NFL region (resistivity exponent \alpha=1) extending to low temperatures at H_c. While direct plots of C/T versus T at H_N \parallel c are not explicitly provided for pure YbRh$_2Si_2$ in the snippets, the presence of NFL resistivity implies anomalous behavior in C/T.
+* Thermal conductivity measurements at B_c \parallel c note the destruction of Fermi liquid signatures, which is consistent with a diverging C/T.
+* Phase diagrams for Ge-doped YbRh$_2Si_2$ for B \parallel c also show an NFL phase where C/T would be anomalous.
+* Further literature search is needed for explicit C/T vs T data at B_N \parallel c for pure YbRh$_2Si_2$.
+B. Electrical Resistivity (\rho vs. T at B \approx B_N)
+At the QCP, the electrical resistivity \rho(T) typically deviates from the T^2 dependence characteristic of a Fermi liquid. A linear temperature dependence, \rho(T) - \rho_0 \sim T, is a frequently observed NFL signature.
+Data for B \perp c (B_N \approx 0.06 T):
+* A linear-in-T resistivity is robustly observed at B_N \perp c. (Fig 2B) shows \rho(T) at B_N = 60 mT, which is linear in T below approximately 1 K. More precisely, \Delta\rho(T) = \rho(T) - \rho_0 = A'T is reported for T < 0.1 K on very clean single crystals.
+* (Fig 4c) also shows \rho(T) appearing linear over a considerable range at H_c \approx 0.055 T. This linear behavior is confirmed in (Fig 2B, Fig 4D). The consistent observation of \rho \sim T (along with C/T \sim -\ln T or T^{-\epsilon_C}) at B_N \perp c over a wide temperature range (e.g., T-linear \rho up to 10 K ) is a key NFL characteristic of YbRh$_2Si_2$. This extended temperature regime of NFL behavior, much larger than T_N(0), implies that quantum critical fluctuations are potent and persist to relatively high temperatures, defining a broad "quantum critical fan" in the T-B phase diagram. This robustness challenges theoretical models that might predict NFL behavior only in a very narrow region around the QCP.
+Data for B \parallel c (B_N \approx 0.66 T):
+* The T-H phase diagram for H \parallel c includes an orange region where the resistivity exponent \alpha=1 (i.e., \rho - \rho_0 \sim T), and this region encompasses H_c. Figure 1c of shows remarkably robust T-linear resistivity over three decades in temperature for Ge-doped YbRh$_2Si_2$ (this specific plot is for B=0 in the doped system tuned to its QCP, but illustrates the phenomenon).
+* For Ge-doped YbRh$_2Si_2$, the resistivity exponent \epsilon \approx 1 is found at B_N \parallel c.
+* While direct \rho(T) plots at B_N \parallel c for pure YbRh$_2Si_2$ are not prominent in the provided material, NFL behavior (\alpha=1) is strongly indicated.
+C. Other Quantities (P_{obs}(T) where P_{obs} is an energy scale, D_{obs} related to T)
+This category can encompass various temperature-dependent behaviors at B_N.
+* Magnetic Grüneisen Ratio \Gamma_{mag}(T) at B_N \perp c: As discussed in Section II.B, \Gamma_{mag} diverges as T^{-0.7} for B \perp c at B_N.
+* Hall Coefficient R_H(T) at B_N: The temperature dependence of the Hall coefficient at the critical field can also exhibit critical behavior. For B \parallel c at B=0 (near the QCP for undoped YbRh$_2Si_2$), R_H(T) shows a complex temperature evolution. For B \perp c, the width of the Hall crossover in R_H(B) scales linearly with temperature, implying that at B_N, the features associated with the crossover are maximally sharp only at T=0.
+VI. Established Scaling Laws and Exponents
+A critical aspect of characterizing a QCP is the determination of scaling exponents for various physical quantities with respect to temperature T (at B=B_N) or the tuning parameter |B-B_N| (as T \rightarrow 0). These exponents are crucial for identifying the universality class of the QCP.
+A. Summary of Known Scaling Exponents
+The collection of diverse, often fractional, scaling exponents observed in YbRh$_2Si_2$ strongly suggests an unconventional QCP, differing from the predictions of standard SDW theory (which typically involves integer or simpler fractional exponents related to the dynamical exponent z and dimensionality d). This mismatch implies that additional physical mechanisms, such as Kondo breakdown, f-electron localization/delocalization, or proximity to other instabilities (e.g., ferromagnetic, as suggested by ), play a crucial role. The term "unconventional QCP" is well-justified by this complex array of exponents.
+For B \perp c (B_N \approx 0.06 T):
+* Specific Heat Coefficient C/T:
+   * vs. T (at B_N): \sim T^{-0.3} to T^{-0.4} for T < 0.3 K ; \sim -\ln T at higher T.
+   * vs. (B-B_N) (T \rightarrow 0, B > B_N): \sim (B-B_N)^{-1/3} (inferred from Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})_2$ , suggested for pure YbRh$_2Si_2$).
+* Electrical Resistivity \rho - \rho_0:
+   * vs. T (at B_N): \sim T^1 (exponent \alpha=1).
+   * Temperature exponent \alpha in \rho - \rho_0 \sim T^\alpha: \alpha=2 in the LFL regime (B > B_N, low T).
+* Magnetic Grüneisen Ratio \Gamma_{mag}:
+   * vs. T (at B_N): \sim T^{-0.7}.
+   * vs. (B-B_N) (T \rightarrow 0, B > B_N): \sim (B-B_N)^{-1} (derived from G_r definition ).
+* Magnetic Susceptibility \chi:
+   * vs. T (at B_N or B=0, T > 0.3 K): 1/\chi \sim T^{-0.6} (for B=0 ).
+* Hall Effect Crossover Width:
+   * FWHM of R_H(B) crossover vs. T: \sim T.
+For B \parallel c (B_N \approx 0.66 T):
+* Electrical Resistivity \rho - \rho_0:
+   * vs. T (at B_N): \sim T^1 (exponent \alpha=1) (indicated by phase diagrams , and for Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})_2$ ).
+* Néel Temperature T_N(B):
+   * vs. (B_N-B): T_N(B) = T_N(0)(1 - B/B_N)^{0.36} (typical evolution, reported for Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})_2$ , may apply to pure).
+* AC Susceptibility \chi_{ac} (Ge-doped YbRh$2$(Si${0.95}Ge_{0.05})_2$):
+   * Temperature of peak T_{max} vs. (B-B_N): T_{max} \sim (B-B_N)^{0.75}.
+General Scaling Forms:
+* Dynamical Spin Susceptibility \chi''(\omega,T) at B_N:
+   * Exhibits \omega/T scaling: \chi''(\omega,T) = T^{-\alpha'} \mathcal{F}(\omega/k_B T).
+   * The exponent \alpha' \approx 0.75 was reported for YbRh$2$(Si${0.95}Ge_{0.05})_2$ from INS (Gegenwart et al., Science 2007, context from ). This \omega/T (or E/T) scaling is a profound characteristic of the QCP, implying that at B_N, temperature is the sole energy scale governing the dynamics of spin fluctuations. This indicates a divergence of intrinsic microscopic energy scales. The manner in which this scaling is eventually cut off by the energy scale associated with |B-B_N| (which defines the characteristic energy \omega^*(B) discussed in Section III.D) is critical for delineating the quantum critical region.
+B. Information on the Estimated Width or Characteristic Field Scale (B_{scale} or B^*) of the Quantum Critical Region
+The "width" of the quantum critical region refers to the range in the tuning parameter (here, magnetic field) over which quantum critical fluctuations significantly influence the system's properties at low temperatures.
+For B \perp c:
+* The FWHM of the Hall coefficient crossover, R_H(B), scales linearly with temperature: FWHM \propto T. At any given low temperature, this proportionality defines a characteristic field scale B_{scale}(T) for the crossover. For instance, at T=100 mK, the FWHM might be on the order of a few tens of mT. This implies that the critical region is sharply defined in field only as T \rightarrow 0.
+* The NFL regime, characterized by phenomena like T-linear resistivity, forms a "fan-like" region in the T-B phase diagram, widening as temperature increases from the QCP.
+For B \parallel c:
+* In Ge-doped YbRh$2$(Si${0.95}Ge{0.05})2$, compelling arguments have been made for the existence of a zero-temperature NFL phase that extends over a finite range of magnetic fields, $B{c1} \le B \le B{c2}$ (approximately 0.3 T to 0.66 T for B \parallel c). This would imply a substantial intrinsic width B_{scale} = B_{c2} - B_{c1} \approx 0.36 T for this NFL phase. The existence of such a finite critical phase at T=0, rather than a single critical point, is a radical departure from conventional QCP phenomenology. While this is reported for Ge-doped samples, its applicability or extent in pure YbRh$_2Si_2$ remains an important question. If such a region exists, it challenges the very definition of a QCP as an isolated point in parameter space and suggests that the system can remain critical over a continuous range of the tuning parameter. The authors of argue this is not merely due to disorder-smearing of a single QCP but represents a novel metallic phase.
+* The T^*(B) line itself can be considered to define an energy scale that bounds the quantum critical region. Its field dependence indicates how far the influence of the QCP extends into the T-B plane.
+The following table provides a consolidated summary of the key reported scaling exponents.
+Table 3: Summary of Critical Exponents and Scaling Laws for YbRh$_2Si_2$ near its QCP
+Physical Quantity
+	Scaling Variable
+	Observed Scaling Law / Exponent Value
+	Field Direction
+	Conditions/Temp. Range
+	Key Reference(s)
+	C/T (Specific Heat Coeff.)
+	T (at B_N)
+	\sim T^{-0.3} to T^{-0.4}
+	B \perp c
+	T < 0.3 K
+	
+
+	
+
+	T (at B_N)
+	\sim -\ln T
+	B \perp c
+	Higher T (>0.3 K)
+	
+
+	
+
+	(B-B_N) (T \rightarrow 0, B > B_N)
+	\sim (B-B_N)^{-1/3}
+	B \perp c
+	(from Ge-doped)
+	
+
+	\rho - \rho_0 (Resistivity)
+	T (at B_N)
+	\sim T^1 (exponent \alpha=1)
+	B \perp c
+	T < 0.1 K (up to \sim 1 K or higher)
+	
+
+	
+
+	T (at B_N)
+	\sim T^1 (exponent \alpha=1)
+	B \parallel c
+	(Indicated, Ge-doped shows this)
+	
+
+	\Gamma_{mag} (Mag. Grüneisen)
+	T (at B_N)
+	\sim T^{-0.7}
+	B \perp c
+	T \gtrsim 70 mK
+	
+
+	
+
+	(B-B_N) (T \rightarrow 0, B > B_N)
+	\sim (B-B_N)^{-1}
+	B \perp c
+	
+
+	
+
+	1/\chi (Inv. Mag. Susc.)
+	T (at B_N or B=0)
+	\sim T^{-0.6}
+	B \perp c
+	B=0, T > 0.3 K
+	
+
+	FWHM of R_H(B) Crossover
+	T
+	\sim T
+	B \perp c
+	Low T
+	
+
+	T_N(B) (Néel Temperature)
+	(B_N-B)
+	T_N(0)(1 - B/B_N)^{0.36}
+	B \parallel c
+	(Ge-doped)
+	
+
+	T_{max} in \chi_{ac}(T)
+	(B-B_N)
+	\sim (B-B_N)^{0.75}
+	B \parallel c
+	(Ge-doped)
+	
+
+	\chi''(\omega,T) (Dyn. Susc.)
+	\omega/T (at B_N)
+	T^{-\alpha'} \mathcal{F}(\omega/k_B T), \alpha' \approx 0.75
+	B \perp c
+	(from Ge-doped, QCP at B=0)
+	Science 315, 969 (2007) (via context)
+	VII. Concluding Remarks and Future Directions
+A. Synthesis of Findings
+The heavy fermion compound YbRh$_2Si_2$ stands as a pivotal system for the experimental investigation of quantum critical phenomena. The data synthesized in this report underscore several key characteristics of its field-tuned antiferromagnetic QCP:
+1. Pronounced Anisotropy: The critical field B_N differs by an order of magnitude between B \perp c (\sim 0.06 T) and B \parallel c (\sim 0.66 T), reflecting highly anisotropic magnetic interactions.
+2. Unconventional NFL Behavior: At B_N, the system exhibits robust non-Fermi liquid characteristics, notably a linear-in-temperature electrical resistivity (\rho \sim T) and a diverging electronic specific heat coefficient (C/T \sim -\ln T or T^{-\epsilon_C} with \epsilon_C \approx 0.3-0.4 for B \perp c).
+3. Fermi Surface Reconstruction: Strong evidence, particularly from Hall effect measurements showing a jump in R_H(B) at B_N (for T \rightarrow 0), points towards an abrupt change in Fermi surface volume at the QCP. This is a central feature supporting Kondo breakdown scenarios.
+4. Diverging Magnetic Grüneisen Ratio: \Gamma_{mag} diverges as T^{-0.7} at B_N \perp c and scales as (B-B_N)^{-1} in the adjacent FL phase, providing thermodynamic confirmation of the QCP.
+5. Characteristic Energy Scales: Multiple energy scales, including T_N(B), T^*(B) (or T_{FL}(B)), and \omega^*(B) (from \omega/T scaling), all vanish at B_N, delineating the complex phase diagram and the extent of the quantum critical regime.
+6. \omega/T Scaling: The dynamical spin susceptibility exhibits \omega/T scaling at the QCP (primarily evidenced in Ge-doped samples but inferred for pure YbRh$_2Si_2$), a hallmark of quantum critical dynamics where temperature is the sole relevant energy scale.
+7. Complex Exponents: The array of often fractional scaling exponents for various physical quantities suggests that the QCP in YbRh$_2Si_2$ is unconventional and does not readily fit into standard itinerant SDW theories.
+These findings collectively establish YbRh$_2Si_2$ as a benchmark material for theories aiming to describe physics beyond the Landau paradigm of phase transitions and Fermi liquids.
+B. Open Questions and Areas for Further Experimental/Theoretical Investigation
+Despite the extensive research, several aspects warrant further investigation:
+1. Data for B \parallel c: For some quantities, such as the magnetic Grüneisen ratio and detailed field dependence of C/T across B_N \parallel c, experimental data for pure YbRh$_2Si_2$ are less comprehensive than for B \perp c. Further measurements in this orientation would be valuable for a complete understanding of the anisotropy of the QCP.
+2. Ultra-Low Temperature Physics: The discovery of hyperfine interaction effects and the emergence of a distinct electro-nuclear AFM2 phase at microkelvin temperatures for B \perp c opens new avenues. Elucidating the interplay between electronic and nuclear magnetism and its impact on the "electronic" QCP at the very lowest temperatures is crucial.
+3. Dynamical Properties: While \omega/T scaling is established, more direct INS measurements of \chi''(\omega,B,T) on pure YbRh$_2Si_2$ that systematically track the evolution of the characteristic energy scale \omega^*(B) as B is tuned through B_N (for both field directions) would provide more precise quantitative input for theories.
+4. Nature of the T^*(B) Line: Further clarifying the precise nature of the T^*(B) line, especially its connection to f-electron localization/delocalization and the specifics of the Fermi surface transformation for both field orientations, remains a key objective.
+5. Theoretical Framework: Continued theoretical efforts are needed to develop a comprehensive model that can quantitatively account for the full spectrum of observed phenomena, including the specific values of the critical exponents, the \omega/T scaling function, the Fermi surface reconstruction, and the role of anisotropy and multi-scale physics. The possibility of a finite NFL phase at T=0, as suggested for Ge-doped samples under B \parallel c , also requires further theoretical exploration for pure YbRh$_2Si_2$.
+Addressing these open questions will undoubtedly deepen the understanding of quantum criticality in YbRh$_2Si_2$ and contribute to the broader field of strongly correlated electron systems.
+Works cited
+1. arXiv:0712.2045v2 [cond-mat.str-el] 31 Jan 2008, https://arxiv.org/pdf/0712.2045 2. Nuclear-Order-Induced Quantum Criticality and Heavy-Fermion Superconductivity at Ultra-low Temperatures in YbRh2Si2 - Frontiers, https://www.frontiersin.org/journals/electronic-materials/articles/10.3389/femat.2022.869495/full 3. d-nb.info, https://d-nb.info/1260979792/34 4. [0807.3420] Low-temperature thermopower study of YbRh2Si2 - arXiv, https://arxiv.org/abs/0807.3420 5. Divergence of the Magnetic Gru¨neisen Ratio at the Field-Induced Quantum Critical Point in YbRh2Si2, https://d-nb.info/1260979482/34 6. arXiv:0809.3705v2 [cond-mat.str-el] 26 Nov 2008, https://arxiv.org/pdf/0809.3705 7. Divergence of the Magnetic Grüneisen Ratio at the Field-Induced Quantum Critical Point in Y b R h 2 ⁢ S i 2 - Physical Review Link Manager, https://link.aps.org/doi/10.1103/PhysRevLett.102.066401 8. [0809.3705] Divergence of the Magnetic Grüneisen Ratio at the Field-Induced Quantum Critical Point in YbRh$_2$Si$_2$ - arXiv, https://arxiv.org/abs/0809.3705 9. arXiv:1207.4411v1 [cond-mat.str-el] 18 Jul 2012, https://arxiv.org/pdf/1207.4411 10. Magnetic properties close to the quantum critical point in YbRh2Si2, https://d-nb.info/1262242576/34 11. [2503.21662] Electronic structure dimensionality of the quantum-critical ferromagnet YbNi4P2 - ar5iv, https://ar5iv.labs.arxiv.org/html/2503.21662 12. Electronic structure dimensionality of the quantum-critical ferromagnet YbNi 4 P 2 - arXiv, https://arxiv.org/html/2503.21662v1 13. arxiv.org, https://arxiv.org/abs/1004.0107 14. [1003.2143] Effect of chemical substitution and pressure on YbRh2Si2 - arXiv, https://arxiv.org/abs/1003.2143 15. Quantum Critical Heavy Fermion Metal YbRh2Si2 1. Introduction Understanding the collective electronic properties of emergent mat - KITP, https://www.kitp.ucsb.edu/sites/default/files/preprints/2015/15-015_0.pdf 16. Verification of the Wiedemann-Franz Law in YbRh2Si2 at a Quantum Critical Point, https://www.researchgate.net/publication/231513357_Verification_of_the_Wiedemann-Franz_Law_in_YbRh2Si2_at_a_Quantum_Critical_Point 17. Evidence for a Non-Fermi-Liquid Phase in Ge-Substituted YbRh2Si2 - ResearchGate, https://www.researchgate.net/publication/44611045_Evidence_for_a_Non-Fermi-Liquid_Phase_in_Ge-Substituted_YbRh2Si2 18. Magnetic Phase Diagram of YbRh 2 Si 2 : the Influence of Hyperfine Interactions - arXiv, https://arxiv.org/html/2501.17560v2 19. arXiv:2501.17560v2 [cond-mat.str-el] 13 May 2025, https://arxiv.org/pdf/2501.17560 20. YbRh2Si2: spin fluctuations in the vicinity of a quantum critical point at low magnetic field - PubMed, https://pubmed.ncbi.nlm.nih.gov/12225219/ 21. YbRh2Si2: Pronounced Non-Fermi-Liquid Effects above a Low-Lying Magnetic Phase Transition - ResearchGate, https://www.researchgate.net/publication/243475888_YbRh2Si2_Pronounced_Non-Fermi-Liquid_Effects_above_a_Low-Lying_Magnetic_Phase_Transition 22. Dynamical Scaling and Planckian Dissipation Due to Heavy ..., https://link.aps.org/pdf/10.1103/PhysRevLett.134.106501 23. Dynamical Scaling and Planckian Dissipation Due to Heavy-Fermion Quantum Criticality - Arnold Sommerfeld Center, https://www.theorie.physik.lmu.de/lsvondelft/pdf/dynamic-gleis-24.pdf 24. Non-Fermi Liquid behavior in CeIrIn5 near a metamagnetic transition., https://ia800807.us.archive.org/8/items/arxiv-cond-mat0404333/cond-mat0404333.pdf 25. Magnetic-Field Dependence of the YbRh2Si2 Fermi Surface, https://arxiv.org/abs/0807.3970 26. arXiv:2210.03673v1 [cond-mat.str-el] 7 Oct 2022 - ResearchGate, https://www.researchgate.net/publication/364290301_Electro-nuclear_transition_into_a_spatially_modulated_magnetic_state_in_YbRh_2Si_2/fulltext/63438cfbff870c55ce146bc7/Electro-nuclear-transition-into-a-spatially-modulated-magnetic-state-in-YbRh-2Si-2.pdf 27. Magnetic Phase Diagram of YbRh$_{2}$Si$_{2}$: the Influence of Hyperfine Interactions, https://www.researchgate.net/publication/388495072_Magnetic_Phase_Diagram_of_YbRh_2Si_2_the_Influence_of_Hyperfine_Interactions

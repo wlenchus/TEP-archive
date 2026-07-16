@@ -1,0 +1,789 @@
+﻿================================================================================
+ISO-PURITY TRANSPORT AND THE BLOCH VELOCITY BOUND AT d_S = 2
+================================================================================
+
+
+A standalone technical note documenting the derivation, proof, and honest 
+placement of the bound |v| <= 2 Delta_psi(H) on the total Bloch velocity of a 
+qubit reduced state under bipartite unitary evolution. Prepared as a companion 
+to the TEP Tier 1.1 purity speed limit paper, capturing material that did not 
+fit there but is worth preserving for future reference and possible d >= 3 
+generalization.
+
+
+
+
+================================================================================
+1. PURPOSE AND STATUS OF THIS NOTE
+================================================================================
+
+
+This note documents an investigation into iso-purity transport at d_S = 2 — the 
+question of what (if any) dynamics on a qubit reduced state exist orthogonally 
+to purity change under bipartite unitary evolution. The investigation proceeded 
+in three stages:
+
+
+   (i)  Numerical exploration establishing that iso-purity transport exists, is 
+        non-trivial at d_S = 2, and is bounded by a state-independent constant.
+   (ii) Analytical reduction to a matrix inequality ||A - A†||_F^2 <= 2, proven 
+        by direct parameterization in the Schmidt basis.
+  (iii) Recognition that the resulting bound |v| <= 2 Delta_psi(H) is a direct 
+        consequence of the Mandelstam-Tamm inequality applied to the optimal 
+        direction observable — making it not a new theorem but a specific 
+        instantiation of an existing result.
+
+
+We record the work in this order because the derivation — though its endpoint 
+coincides with an immediate MT corollary — contains structural content worth 
+preserving: an explicit Schmidt-basis form for the saturating perpendicular 
+state, a constructive characterization of saturating Hamiltonians, and a 
+clarification of the relationship between iso-purity transport and the 
+dimension d_S = 2 specifically.
+
+
+Epistemic status: the bound |v| <= 2 Delta_psi(H) is proven (Tier 1). Its 
+identification as a consequence of MT is straightforward (Tier 1). The 
+discussion of what the constructive proof adds beyond MT (Section 7) is a 
+methodological observation (Tier 2). Open questions in Section 10 are Tier 3.
+
+
+
+
+================================================================================
+2. THE QUESTION
+================================================================================
+
+
+The TEP Tier 1.1 bound governs the rate of change of the reduced-state 
+spectrum via a single spectral functional:
+
+
+   |d gamma / dt|  <=  4 ||H|| sqrt(F),     F := p_3 - gamma^2
+
+
+At d_S = 2, one might initially suspect that this bound encompasses all 
+non-trivial dynamics of rho_S — after all, a qubit spectrum (lambda, 1-lambda) 
+is determined by a single number, so it is tempting to conflate "moves the 
+reduced state" with "moves gamma". This suspicion is wrong: iso-purity 
+transport at d_S = 2 exists and can be substantial, corresponding to 
+eigenvector rotation of rho_S at fixed spectrum.
+
+
+Three questions organize the investigation:
+
+
+   (a) Does iso-purity transport exist at d_S = 2?
+   (b) If so, how fast can it proceed — is there a complementary bound on the 
+       perpendicular component of the Bloch velocity?
+   (c) What is the structural character of iso-purity transport at d_S = 2, 
+       and how does it relate to the rank-2 bivector W of the TEP framework?
+
+
+We answer all three: yes, |v_perp| <= 2 ||H|| at d_S = 2, and iso-purity 
+transport at d_S = 2 is pure eigenvector rotation (no moment-change component, 
+since all spectral moments are gamma-determined at d_S = 2).
+
+
+
+
+================================================================================
+3. NUMERICAL EXPLORATION
+================================================================================
+
+
+Setup: fix a pure global state |psi> = sqrt(p)|00> + sqrt(1-p)|11> in Schmidt 
+form. The reduced state rho_S = diag(p, 1-p) has Bloch vector r = (0, 0, 
+2p-1), purity gamma = (1 + r^2)/2. Sample 10^5 random Hermitian Hamiltonians 
+H on C^2 tensor C^2, normalized to ||H|| = 1, and compute the Bloch velocity 
+v = dr/dt of the reduced state. Extract v_|| = v . r-hat (parallel component, 
+drives gamma-change) and v_perp = v - v_|| r-hat (perpendicular component, 
+iso-purity).
+
+
+Findings:
+
+
+   - Iso-purity transport exists. Many Hamiltonians yield |d gamma / dt| 
+     approximately 0 while |v_perp| is order unity.
+
+
+   - The maximum iso-purity rate is state-independent. Across p in {0.55, 
+     0.65, 0.75, 0.85, 0.95}, random sampling yields max|v_perp| approximately 
+     1.7-1.9; subsequent multi-start Nelder-Mead optimization yields 
+     max|v_perp| = 2.000 to four decimal places, independent of p.
+
+
+   - The maximum total Bloch velocity is 2 ||H||. Optimization confirms 
+     max|v| = 2.000 for every tested Schmidt parameter including p = 0.5 
+     (maximally entangled) and p = 0.99 (nearly product), as well as three 
+     generic (non-Schmidt-form) random pure states.
+
+
+   - Individual component maxima are not jointly achievable. At the 
+     Hamiltonian maximizing v_||, v_perp is approximately 0; at the 
+     Hamiltonian maximizing v_perp, v_|| is approximately 0; the sum of 
+     squared individual maxima (7.00 at p = 0.75) is strictly larger than 
+     max|v|^2 = 4.00.
+
+
+The state-independence of max|v| was not expected at the outset. A 
+system-local Hamiltonian on rho_S alone gives max|v| = 2|r| ||H_S||, which 
+is state-dependent (zero at r = 0, the maximally-mixed fixed point). But 
+bipartite Hamiltonians acting non-trivially across the S-E boundary achieve 
+the state-independent max|v| = 2 ||H||, demonstrating that bipartite coupling 
+removes the r-dependent "braking" of the reduced-state rotation.
+
+
+
+
+================================================================================
+4. ANALYTICAL SETUP
+================================================================================
+
+
+Fix a pure global state |psi> and a Hermitian Hamiltonian H with <psi|H|psi> 
+= c. Decompose H|psi> into its parallel and orthogonal parts relative to 
+|psi>:
+
+
+   H|psi>  =  c |psi>  +  Delta |psi_perp>
+
+
+where Delta = Delta_psi(H) = sqrt(<psi|H^2|psi> - c^2) is the energy variance 
+on |psi> and |psi_perp> is a unit vector orthogonal to |psi>. Then
+
+
+   [H, |psi><psi|]  =  H |psi><psi|  -  |psi><psi| H
+                    =  (c|psi> + Delta|psi_perp>)<psi|  -  |psi>(c<psi| + Delta<psi_perp|)
+                    =  Delta ( |psi_perp><psi|  -  |psi><psi_perp| )
+
+
+The c-terms cancel because c is real (H Hermitian). Apply the partial trace 
+over E:
+
+
+   d rho_S / dt  =  -i Tr_E [H, |psi><psi|]  =  -i Delta (A - A†)
+
+
+where A := Tr_E |psi_perp><psi| is an operator on the 2-dim Hilbert space 
+H_S. Note A - A† is anti-Hermitian, so -i(A - A†) is Hermitian — as required 
+for d rho_S / dt.
+
+
+The Frobenius norm:
+
+
+   || d rho_S / dt ||_F  =  Delta · || A - A† ||_F
+
+
+The Bloch velocity: rho_S = (I + r . sigma)/2, so d rho_S / dt = (1/2) v . 
+sigma, which gives
+
+
+   || d rho_S / dt ||_F^2  =  (1/4) sum_k v_k^2 · ||sigma_k||_F^2  =  |v|^2 / 2
+
+
+Therefore |v| = sqrt(2) · || d rho_S / dt ||_F, and
+
+
+   |v|  =  sqrt(2) · Delta · || A - A† ||_F
+
+
+To prove |v| <= 2 Delta, it suffices to show || A - A† ||_F^2 <= 2.
+
+
+Preliminary check: the commutator Frobenius norm.
+   
+   || [H, |psi><psi|] ||_F^2  =  Tr( (A-A†)†(A-A†) ) · Delta^2 ... ? 
+
+
+No, more directly: since [H, |psi><psi|] = Delta · (|psi_perp><psi| - 
+|psi><psi_perp|), an anti-Hermitian operator with specific structure,
+
+
+   || [H, |psi><psi|] ||_F^2
+     =  Delta^2 · Tr ( (|psi><psi_perp| - |psi_perp><psi|)(|psi_perp><psi| - |psi><psi_perp|) )
+     =  Delta^2 · ( <psi_perp|psi_perp><psi|psi> - <psi_perp|psi><psi_perp|psi>
+                    - <psi|psi_perp><psi|psi_perp> + <psi|psi><psi_perp|psi_perp> )
+
+
+The cross terms vanish by orthogonality <psi|psi_perp> = 0; the diagonal 
+terms are each 1 by normalization. So
+
+
+   || [H, |psi><psi|] ||_F^2  =  2 Delta^2.
+
+
+A naive bound on d rho_S / dt via the partial trace: in general, 
+||Tr_E X||_F <= sqrt(d_E) ||X||_F (Cauchy-Schwarz on the E-sum). For d_E = 2, 
+this gives ||d rho_S / dt||_F <= sqrt(2) sqrt(2 Delta^2) = 2 Delta, 
+equivalently |v| <= 2 sqrt(2) Delta. This is loose by a factor of sqrt(2) 
+relative to the tight bound proved below; the slack reflects that the naive 
+partial-trace bound doesn't exploit the specific anti-Hermitian structure of 
+[H, |psi><psi|].
+
+
+
+
+================================================================================
+5. PROOF THAT ||A - A†||_F^2 <= 2
+================================================================================
+
+
+Use Schmidt form |psi> = sqrt(p) |00> + sqrt(q) |11> with q = 1 - p. Write 
+|psi_perp> in the computational basis {|00>, |01>, |10>, |11>}:
+
+
+   |psi_perp>  =  a |00>  +  b |01>  +  c |10>  +  d |11>
+
+
+with a, b, c, d in C.
+
+
+Constraints:
+
+
+   (C1) Normalization: |a|^2 + |b|^2 + |c|^2 + |d|^2 = 1
+   (C2) Orthogonality to |psi>: <psi_perp|psi> = sqrt(p) a-bar + sqrt(q) d-bar 
+        = 0. Splitting into real and imaginary parts:
+           Re(d) = -sqrt(p/q) Re(a)
+           Im(d) = -sqrt(p/q) Im(a)
+        So |d|^2 = (p/q) |a|^2, and (C1) becomes |a|^2 / q + |b|^2 + |c|^2 = 1.
+
+
+Computing A entry-by-entry. In the convention A_ij = <psi_j^E | psi_perp^i> 
+where |psi> decomposes as sum over i of |i>_S ⊗ |psi_i^E> with |psi_0^E> = 
+sqrt(p) |0>, |psi_1^E> = sqrt(q) |1>:
+
+
+   A  =  [ [ sqrt(p) a,  sqrt(q) b ],
+           [ sqrt(p) c,  sqrt(q) d ] ]
+
+
+Compute ||A - A†||_F^2 directly. Writing a = a_r + i a_i (and similarly for 
+b, c, d), and using (C2) to write d_r = -sqrt(p/q) a_r, d_i = -sqrt(p/q) a_i:
+
+
+(A - A†)_{00} = sqrt(p) (a - a-bar) = 2 i sqrt(p) a_i
+(A - A†)_{11} = sqrt(q) (d - d-bar) = 2 i sqrt(q) d_i = -2 i sqrt(p) a_i
+(A - A†)_{01} = sqrt(q) b - sqrt(p) c-bar
+(A - A†)_{10} = sqrt(p) c - sqrt(q) b-bar
+
+
+Frobenius norm squared:
+   ||A - A†||_F^2  =  |2i sqrt(p) a_i|^2  +  |2i sqrt(q) d_i|^2
+                    +  |sqrt(q) b - sqrt(p) c-bar|^2
+                    +  |sqrt(p) c - sqrt(q) b-bar|^2
+
+
+   =  4 p a_i^2  +  4 q d_i^2  +  (q |b|^2 - 2 sqrt(pq) Re(b c) + p |c|^2)
+                                +  (p |c|^2 - 2 sqrt(pq) Re(c b) + q |b|^2)
+
+
+Using d_i^2 = (p/q) a_i^2 and combining:
+
+
+   ||A - A†||_F^2  =  8 p a_i^2  +  2 q |b|^2  +  2 p |c|^2  -  4 sqrt(pq) Re(bc)
+
+
+Bounds on the free parameters:
+   - a_i^2 <= |a|^2 = q (1 - |b|^2 - |c|^2), achieved when a is purely imaginary.
+   - Re(bc) >= -|b| |c|, achieved when arg(b) + arg(c) = pi (anti-aligned phases).
+
+
+Substituting optimal (and writing x = |b|, y = |c|):
+
+
+   ||A - A†||_F^2  <=  8 p q (1 - x^2 - y^2)  +  2 q x^2  +  2 p y^2  +  4 sqrt(pq) x y
+                   =:  g(x, y)
+
+
+with domain x, y >= 0, x^2 + y^2 <= 1 (from |a|^2 >= 0).
+
+
+Maximize g. Reparameterize x = R cos theta, y = R sin theta for R in [0,1], 
+theta in [0, pi/2]:
+
+
+   g  =  8 p q (1 - R^2)  +  R^2 [ 2 q cos^2 theta  +  2 p sin^2 theta 
+                                    +  2 sqrt(pq) sin 2 theta ]
+      =  8 p q (1 - R^2)  +  R^2 · h(theta)
+
+
+where the theta-dependent factor simplifies via p + q = 1 and the double-angle 
+identities:
+
+
+   h(theta)  =  (p + q)  +  (q - p) cos 2theta  +  2 sqrt(pq) sin 2theta
+             =  1  +  (q - p) cos 2theta  +  2 sqrt(pq) sin 2theta
+
+
+Maximizing h over theta:
+
+
+   max_theta h(theta)  =  1  +  sqrt( (q - p)^2  +  4 p q )
+                      =  1  +  sqrt( p^2 - 2 p q + q^2 + 4 p q )
+                      =  1  +  sqrt( (p + q)^2 )
+                      =  1  +  1  =  2.
+
+
+So max_theta h(theta) = 2 for all p in (0, 1).
+
+
+Now maximize g over R: g(R) = 8 p q (1 - R^2) + R^2 · h_max, which is a 
+weighted average of 8 p q (at R = 0) and h_max = 2 (at R = 1). Since p q <= 
+1/4 (with equality at p = q = 1/2), we have 8 p q <= 2, so the weighted 
+average is maximized at R = 1:
+
+
+   max g  =  h_max  =  2.
+
+
+Therefore ||A - A†||_F^2 <= 2 with equality achievable. QED.
+
+
+Corollary (the Bloch velocity bound).
+
+
+   |v|  =  sqrt(2) · Delta_psi(H) · ||A - A†||_F  <=  sqrt(2) · Delta_psi(H) · sqrt(2)
+        =  2 · Delta_psi(H)  <=  2 ||H||
+
+
+with equality in the first inequality when ||A - A†||_F = sqrt(2) (optimal 
+|psi_perp> per the proof above) and equality in the second when H has a 
+spectrum centered such that Delta_psi(H) = ||H||.
+
+
+
+
+================================================================================
+6. HONEST PLACEMENT: THIS IS MANDELSTAM-TAMM
+================================================================================
+
+
+The bound |v| <= 2 Delta_psi(H) follows in three lines from the Mandelstam-
+Tamm inequality.
+
+
+Mandelstam-Tamm: for any Hermitian observable A, 
+
+
+   |d <A> / dt|  <=  2 Delta(A) · Delta(H).
+
+
+Apply this to the direction observable A_n = sigma . n-hat ⊗ I_E for an 
+arbitrary unit vector n-hat in R^3. Since (sigma . n-hat)^2 = I, we have
+
+
+   Delta_psi(A_n)^2  =  <A_n^2>_psi  -  <A_n>_psi^2  =  1  -  (r . n-hat)^2  <=  1
+
+
+with equality when n-hat is perpendicular to r. Therefore
+
+
+   |d <A_n> / dt|  =  |n-hat . (dr/dt)|  =  |n-hat . v|  <=  2 sqrt(1 - (r . n-hat)^2) Delta_psi(H)  <=  2 Delta_psi(H).
+
+
+Maximizing the left side over unit n-hat gives max|n-hat . v| = |v|; the 
+right side is maximized at n-hat perpendicular to r, giving the universal 
+value 2 Delta_psi(H). So
+
+
+   |v|  <=  2 Delta_psi(H).
+
+
+This is MT applied to the worst-case direction observable; the geometric 
+content is already present in MT, merely repackaged in Bloch coordinates. The 
+identification does not require any of the Schmidt-basis machinery of Section 5.
+
+
+
+
+================================================================================
+7. WHAT THE CONSTRUCTIVE PROOF ADDS
+================================================================================
+
+
+Given that the bound follows directly from MT, one might ask why the 
+Schmidt-basis proof of Section 5 is worth preserving at all. Three reasons, 
+in increasing order of utility:
+
+
+(a) Explicit characterization of saturating states.
+    The MT derivation gives the bound but does not, by itself, identify the 
+    Hamiltonian or global state that achieves saturation. The Schmidt-basis 
+    proof identifies |psi_perp> explicitly: at saturation the a-component is 
+    purely imaginary (a = i |a|), and the b, c components have anti-aligned 
+    phases (Re(bc) = -|b||c|), parameterized by (|b|, |c|) on the unit 
+    circle. This gives a 2-parameter family of optimal |psi_perp> states, 
+    each of which determines a corresponding saturating Hamiltonian (up to 
+    global phase and centering).
+
+
+(b) Explicit verification of saturability at every p.
+    The MT derivation establishes 2 Delta_psi(H) as an upper bound, but does 
+    not immediately show that bipartite Hamiltonians on C^2 ⊗ C^2 are rich 
+    enough to actually achieve this bound for every choice of |psi>. The 
+    Schmidt-basis proof shows max ||A - A†||_F^2 = 2 uniformly in p, 
+    establishing state-independent saturability.
+
+
+(c) Pathway to d_S >= 3 generalization.
+    The MT-per-direction argument is specific to the Bloch-vector geometry of 
+    a qubit reduced state. For d_S >= 3, the relevant generators are the 
+    SU(d_S) generators (a (d_S^2 - 1)-dim basis of traceless Hermitians), and 
+    the direction-observable approach requires careful handling of the 
+    non-commutativity of these generators. The Schmidt-basis proof structure 
+    generalizes: |psi_perp> has d_S d_E - 1 complex components, the A matrix 
+    is d_S x d_S, and the optimization problem is higher-dimensional but 
+    amenable to the same approach. Whether max ||A - A†||_F^2 remains a 
+    state-independent constant at d_S >= 3 is open; even if it does, the 
+    interpretation changes because the reduced state has spectral invariants 
+    beyond gamma.
+
+
+
+
+================================================================================
+8. RELATION TO THE TEP BOUND
+================================================================================
+
+
+The TEP Tier 1.1 bound |d gamma / dt| <= 4 ||H|| sqrt(F) and the 
+Bloch-velocity bound |v| <= 2 Delta_psi(H) are logically independent 
+inequalities. Both must hold simultaneously; neither is a specialization or 
+refinement of the other.
+
+
+8.1. Different objects.
+
+
+The TEP bound is a statement about a spectral functional of rho_S:
+   - State-side factor: sqrt(F(rho_S)) depends only on the spectrum of rho_S.
+   - Energy-side factor: ||H|| (operator norm of H).
+
+
+The Bloch bound is a statement about the full variance of H:
+   - State-side factor: sqrt(1 - (r . n-hat)^2), maxed at 1.
+   - Energy-side factor: Delta_psi(H) (energy variance on the pure global state).
+
+
+These live in different coordinate systems on the problem.
+
+
+8.2. Different vanishing conditions.
+
+
+TEP vanishes when F = 0. This occurs at the spectral fixed points of rho_S: 
+gamma = 1/d_S (maximally mixed) and gamma = 1 (pure). Neither condition 
+implies the state is static under dynamics; rather, both imply that the 
+spectrum cannot change instantaneously (though eigenvectors still can).
+
+
+Bloch bound vanishes when Delta_psi(H) = 0. This occurs when |psi> is an 
+eigenstate of H, which trivially implies no state evolution at all.
+
+
+These are genuinely different conditions; a state can have F > 0 but 
+Delta_psi(H) = 0 (if H is chosen with |psi> as an eigenstate) or Delta_psi(H) 
+> 0 but F = 0 (if rho_S is at a spectral fixed point).
+
+
+8.3. Non-combinability into a tighter joint bound.
+
+
+Write v = v_|| r-hat + v_perp, with v_|| = v . r-hat and v_perp the 
+perpendicular component. Then |v|^2 = v_||^2 + |v_perp|^2, and the two 
+bounds project as:
+
+
+   TEP bound:    v_||^2  <=  (4 sqrt(F) ||H|| / r)^2  =  4 (1 - r^2) ||H||^2
+                 (using |d gamma / dt| = r v_||, and F = r^2 (1 - r^2)/4 at 
+                 d_S = 2)
+   Bloch bound:  v_||^2  +  |v_perp|^2  <=  4 Delta_psi(H)^2  <=  4 ||H||^2
+
+
+One might hope to combine these to extract a bound on |v_perp| alone: from 
+the Bloch bound, |v_perp|^2 <= 4 Delta^2 - v_||^2, and substituting the TEP 
+upper bound on v_||^2 would give |v_perp|^2 <= 4 Delta^2 - 4(1 - r^2) ||H||^2, 
+or even tighter forms. This substitution is invalid. The TEP bound is an 
+upper bound on v_||^2, not a lower bound; substituting it into the sum-
+constraint 4 Delta^2 - v_||^2 gives a weaker, not stronger, bound on 
+|v_perp|^2. (Numerically: at r = 0.1 the proposed bound would give 
+|v_perp|^2 <= 0.04 ||H||^2, but actually max|v_perp| approximately 1.8 ||H||, 
+a factor-of-9 violation.)
+
+
+The correct structural statement is that the feasible region in (v_||, 
+v_perp) space is the intersection of:
+   - the TEP strip: |v_|| | <= 2 sqrt(1 - r^2) ||H||
+   - the Bloch disk: v_||^2 + |v_perp|^2 <= 4 Delta_psi(H)^2
+
+
+Both constraints are active in different regimes. At the TEP-saturating H, 
+v_|| is maximal and v_perp is small; at the Bloch-saturating H, v_perp is 
+near 2 Delta_psi(H) and v_|| is small.
+
+
+8.4. Sum of squared individual maxima overcounts.
+
+
+At r = 0.5, p = 0.75:
+   - max v_|| over H (TEP saturating) = 2 sqrt(1 - r^2) = sqrt(3) ≈ 1.732
+   - max |v_perp| over H (Bloch saturating) = 2 (independent of r)
+   - Sum of squared individual maxima = 3 + 4 = 7
+   - Actual max |v|^2 = 4
+
+
+The gap (7 vs 4) quantifies the trade-off: the two maxima are not 
+simultaneously achievable. The TEP-saturating H puts all of its 
+commutator-energy into the parallel (spectrum-changing) direction; the 
+Bloch-saturating H puts all of it into the perpendicular (eigenvector-
+rotation) direction.
+
+
+
+
+================================================================================
+9. ISO-PURITY AT d_S = 2: PHYSICAL INTERPRETATION
+================================================================================
+
+
+At d_S = 2, the reduced state rho_S is parameterized completely by its 
+3-dimensional Bloch vector r. The purity gamma = (1 + r^2)/2 depends only on 
+|r|, so dynamics of rho_S splits into:
+
+
+   - Radial: changes |r|, hence changes gamma. One-dimensional.
+   - Angular: changes r-hat at fixed |r|. Two-dimensional (the tangent plane 
+     to the Bloch sphere of radius r).
+
+
+At d_S = 2, the full moment hierarchy p_k = Tr(rho_S^k) is determined by 
+gamma alone (since the spectrum has only two values summing to 1). So angular 
+motion at d_S = 2 preserves not just gamma, but every spectral moment — and 
+hence the full spectrum. Angular motion at d_S = 2 is therefore pure 
+eigenvector rotation.
+
+
+This clarifies how to read the TEP framework's rank-2 bivector structure at 
+d_S = 2. The framework describes W as a rank-2 antisymmetric matrix on R^d, 
+and refers to the (d - 2)-dimensional orthogonal complement of W in the 
+antisymmetric matrix space as containing "purity-invisible moment-changing 
+modes". At d = 2, this complement has dimension d - 2 = 0: there are no 
+moment-changing iso-purity modes, as the preceding paragraph established.
+
+
+But iso-purity motion itself is non-trivial at d = 2, occupying 2 of the 3 
+Bloch-vector directions. The resolution is that these 2 directions are 
+eigenvector rotations rather than moment changes: they rotate |a> and |1-a> 
+within H_S without changing (lambda_0, lambda_1). The W-complement 
+dimensionality counts moment-changing modes only, and correctly reports 0 at 
+d = 2; the eigenvector-rotation modes live in a separate space (the tangent 
+space to the unitary orbit of rho_S, which has dimension d_S^2 - d_S = 2 at 
+d_S = 2).
+
+
+At d_S >= 3, the structure splits into three pieces:
+   - 1 direction: W-itself, the rank-2 plane that changes gamma. 
+     Bounded by TEP.
+   - (d_S - 2) directions: moment-changing iso-purity modes (change higher 
+     moments p_3, p_4, ... while preserving gamma). Not bounded by TEP 
+     directly; a separate analysis is needed.
+   - (d_S^2 - d_S) directions: eigenvector rotations at fixed spectrum. 
+     Bounded by the reduced-state velocity bound (which at d_S >= 3 may have 
+     a different state-independent or state-dependent constant).
+
+
+A complete kinematic description of reduced-state dynamics at d_S >= 3 would 
+require characterizing all three pieces. The work here handles the first 
+(TEP) and last (Bloch velocity) directly at d_S = 2; the middle piece does 
+not exist at d_S = 2.
+
+
+
+
+================================================================================
+10. OPEN QUESTIONS AND LIMITATIONS
+================================================================================
+
+
+10.1. Generalization to d_S >= 3.
+
+
+The bound |v| <= 2 Delta_psi(H) does not obviously generalize as stated, 
+because the Bloch-vector parameterization is specific to d_S = 2. For d_S >= 
+3, the reduced state lives in the (d_S^2 - 1)-dim space of Hermitian 
+traceless operators, and the analog of |v| is the norm of the tangent 
+vector in that space. The Schmidt-basis proof structure extends: |psi_perp> 
+has d_S d_E - 1 complex components, A is d_S x d_S, and the analog of 
+||A - A†||_F^2 is an optimization over a higher-dimensional constraint 
+manifold. Whether this optimum is state-independent (2, as at d_S = 2) or 
+state-dependent at d_S >= 3 is open.
+
+
+Plausible conjecture (not proven): max ||A - A†||_F^2 = 2 at d_S >= 3 with 
+d_E = d_S for bipartite pure states, by the same Schmidt-basis structure. But 
+this needs to be verified.
+
+
+10.2. Mixed initial states.
+
+
+The proof assumes pure rho_tot (so that the orthogonality |psi_perp> 
+perpendicular to |psi> is well-defined). For mixed rho_tot, the analog 
+replaces Delta_psi(H) with the SLD (symmetric logarithmic derivative) 
+variance, and the commutator [H, rho_tot] no longer has the simple 
+|psi_perp><psi| - h.c. structure. The MT extension to mixed states is 
+standard; the corresponding Schmidt-basis generalization should go through, 
+perhaps with adjusted constants.
+
+
+10.3. Non-unitary dynamics.
+
+
+Under CPTP (Lindbladian) evolution, rho_tot does not remain pure from a pure 
+initial state, so the framework of Section 4 breaks. A complete treatment 
+would require either (a) Stinespring-dilating the CPTP map to unitary 
+evolution on a larger Hilbert space and applying the bound there, with 
+constants adjusted for the dilation, or (b) a direct derivation of an 
+iso-purity bound for Lindbladian dynamics. Neither has been attempted here.
+
+
+10.4. Relation to channel additivity.
+
+
+The TEP framework conjectures a connection between the rank-2 bivector W and 
+the additivity gap of quantum channels (specifically, that the gap is bounded 
+by 2 sqrt(2) - 2). Whether the iso-purity rotation modes play any role in 
+this conjectured bound is unclear; they do not appear in W itself, but they 
+do affect the achievable channels (since any CPTP map can be dilated to 
+unitary evolution involving both W-directions and iso-purity modes).
+
+
+10.5. Lie-algebraic structure of optimal Hamiltonians.
+
+
+The Schmidt-basis proof identifies a 2-parameter family of |psi_perp> states 
+at saturation. The corresponding Hamiltonians form a family of rank-?? 
+generators on C^2 ⊗ C^2. Characterizing this family Lie-algebraically (e.g., 
+as a homogeneous space of SU(4) by some stabilizer) might reveal additional 
+structure.
+
+
+
+
+================================================================================
+11. SUMMARY
+================================================================================
+
+
+The bound |v| <= 2 Delta_psi(H) on the Bloch velocity of a qubit reduced 
+state under bipartite unitary evolution from a pure global state is 
+established via two independent routes:
+
+
+   (a) Directly from Mandelstam-Tamm applied to the optimal direction 
+       observable: |n-hat . v| <= 2 sqrt(1 - (r . n-hat)^2) Delta_psi(H), 
+       maxed over n-hat perpendicular to r.
+   (b) Via Schmidt-basis decomposition: expanding [H, |psi><psi|] = 
+       Delta(|psi_perp><psi| - h.c.), tracing out E to get d rho_S / dt 
+       = -i Delta (A - A†), and proving max ||A - A†||_F^2 = 2 by direct 
+       parameterization and optimization.
+
+
+Route (a) is immediate and establishes the bound as a consequence of MT; it 
+provides no new kinematic content beyond MT itself. Route (b) is longer but 
+yields three useful by-products: an explicit characterization of saturating 
+states, state-independent saturability verification, and a template for d_S 
+>= 3 generalization.
+
+
+The bound is logically independent of the TEP Tier 1.1 purity speed limit. 
+Neither implies the other; both must hold simultaneously; their individual 
+maxima are achieved at different Hamiltonians and cannot be combined into a 
+tighter joint constraint by simple algebraic substitution.
+
+
+At d_S = 2, iso-purity transport is pure eigenvector rotation of rho_S; 
+moment-changing iso-purity modes do not exist because all spectral moments 
+are gamma-determined at d_S = 2. This is a dimensional specialization of the 
+more general d_S >= 3 picture, where iso-purity transport splits into 
+moment-changing and eigenvector-rotating pieces.
+
+
+
+
+================================================================================
+APPENDIX A: NUMERICAL PROTOCOLS
+================================================================================
+
+
+All numerics in this note were generated via direct matrix computation in 
+numpy and scipy.optimize.
+
+
+Sampling protocol (Section 3). For each Schmidt parameter p in {0.55, 0.65, 
+0.75, 0.85, 0.95}:
+   1. Generate random Hermitian H on C^4 via symmetrization of a Gaussian 
+      complex matrix.
+   2. Normalize to ||H|| = 1 via operator-norm division.
+   3. Compute d rho_S / dt = -i Tr_E ([H, |psi><psi|]) via direct block-matrix 
+      partial trace.
+   4. Extract v = (Tr(sigma_1 d rho_S / dt), ..., Tr(sigma_3 d rho_S / dt)).
+   5. Decompose v = v_|| r-hat + v_perp; record |v_|| |, |v_perp|, |v|.
+   6. Accumulate maxima over 10^5 samples.
+
+
+Optimization protocol. For more precise bounds, use scipy.optimize.minimize 
+with Nelder-Mead over a 16-parameter real representation of Hermitian 4 x 4 
+matrices. Multi-start with 15 random initial conditions. Results to 4-6 
+decimal places.
+
+
+Verified results:
+   - max |v| / Delta_psi(H) = 2.000 for Schmidt p in {0.5, 0.6, 0.75, 0.9}, 
+     three random pure states, the product state |00>, and the Bell state.
+   - max ||A - A†||_F^2 = 2.000 for Schmidt p in {0.5, 0.6, 0.75, 0.9} under 
+     constraints (C1) and (C2).
+   - max g(x, y) = 2.000 for Schmidt p in {0.5, 0.6, 0.75, 0.9} under x, y 
+     >= 0, x^2 + y^2 <= 1.
+
+
+These three verifications are consistent, as expected from the proof chain.
+
+
+
+
+================================================================================
+APPENDIX B: NOTATION
+================================================================================
+
+
+   rho_tot          Total state on H_S ⊗ H_E.
+   rho_S            Reduced state on H_S (= Tr_E rho_tot).
+   |psi>            Pure global state (rho_tot = |psi><psi|).
+   |psi_perp>       Unit vector orthogonal to |psi>, with H|psi> = c |psi> 
+                    + Delta |psi_perp>.
+   H                Hermitian Hamiltonian on H_S ⊗ H_E.
+   ||H||            Operator norm (largest absolute eigenvalue).
+   Delta_psi(H)     Energy variance on |psi>: sqrt(<H^2>_psi - <H>_psi^2).
+   gamma            Reduced purity: Tr(rho_S^2).
+   p_k              k-th spectral moment: Tr(rho_S^k).
+   F                Gap functional: p_3 - gamma^2.
+   r                Bloch vector of rho_S: rho_S = (I + r . sigma)/2.
+   v                Bloch velocity: dr/dt.
+   v_||, v_perp     Parallel and perpendicular components of v relative to r.
+   A                Tr_E |psi_perp><psi|, the reduced bivector.
+   p, q             Schmidt coefficients: |psi> = sqrt(p) |00> + sqrt(q) |11>,
+                    q = 1 - p.
+   sigma_k          Pauli matrices (k = 1, 2, 3).
+   ||X||_F          Frobenius norm: sqrt(Tr(X† X)).
+
+
+
+
+================================================================================
+END OF NOTE
+================================================================================

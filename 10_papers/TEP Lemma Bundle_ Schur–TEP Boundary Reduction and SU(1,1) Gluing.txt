@@ -1,0 +1,304 @@
+﻿Lemma Bundle: Schur–TEP Boundary Reduction and SU(1,1) Gluing
+—
+
+
+Associations
+
+
+Schur complement = boundary reduction (DtN / effective law)
+
+
+Boundary gluing = composition law
+
+
+2-terminal boundary laws act by Möbius transforms ⇒ SU(1,1)
+
+
+KAK  is the normal form of that boundary action
+
+
+Equipotential = a null direction of the boundary operator
+
+
+Fourier ↔ Gaussian connection space = compact phase × noncompact rapidity
+
+
+—
+
+
+Setup
+
+
+Let a passive linear bulk be described (static or at fixed frequency) by a symmetric operator/matrix  (e.g., Laplacian / stiffness / admittance). Partition variables into boundary terminals  and interior nodes :
+
+
+\begin{pmatrix} j_b \\ j_i \end{pmatrix}
+=
+\begin{pmatrix}
+L_{bb} & L_{bi}\\
+L_{ib} & L_{ii}
+\end{pmatrix}
+\begin{pmatrix} v_b \\ v_i \end{pmatrix},
+\qquad L=L^\top,
+
+
+Assume well-posed interior elimination:  invertible on the relevant subspace (or use a pseudoinverse with the usual gauge fixing for Laplacians).
+
+
+
+
+---
+
+
+Proposition 1 (TEP boundary law is a Schur complement / DtN map)
+
+
+Imposing interior equilibrium (no interior injections)  yields:
+
+
+v_i = -\,L_{ii}^{-1} L_{ib} \, v_b,
+
+
+\boxed{
+j_b = L_{\mathrm{eff}}\, v_b,
+\qquad
+L_{\mathrm{eff}}:=L_{bb} - L_{bi} L_{ii}^{-1} L_{ib}.
+}
+
+
+Interpretation:  is the Dirichlet-to-Neumann map (DtN) of the bulk: boundary potentials  boundary fluxes.
+
+
+Passive inheritance: if  is positive semidefinite (static) or positive-real (dynamic ), then  inherits the same property (standard PR / M-matrix Schur complement preservation).
+
+
+
+
+---
+
+
+Corollary 1.1 (Your identity is the “zero-Schur” special case)
+
+
+Your observed similarity
+
+
+L_{bb} \stackrel{?}{=} L_{bi} L_{ii}^{-1} L_{ib}
+
+
+\boxed{L_{\mathrm{eff}}=0.}
+
+
+That is not generically true as an operator identity. What is generically true in Laplacian-like settings is the weaker but physically meaningful statement:
+
+
+\boxed{L_{\mathrm{eff}}\,\mathbf{1}=0}
+
+
+
+
+---
+
+
+Proposition 2 (Equipotential modes are null directions of the boundary law)
+
+
+If the bulk is Laplacian/admittance-like (row sums zero / conservation), then a uniform boundary potential produces no gradient and hence no flux:
+
+
+\boxed{v_b = c\,\mathbf{1} \;\Rightarrow\; j_b=0 \;\Rightarrow\; L_{\mathrm{eff}}\mathbf{1}=0.}
+
+
+This is the precise “equipotential” statement in boundary-operator form: equipotential corresponds to a kernel direction of , not necessarily to .
+
+
+
+
+---
+
+
+Proposition 3 (Two-terminal reduction induces a Möbius action on a boundary ratio)
+
+
+Now specialize to a two-terminal boundary (a 2-port). Then  (or ) is  symmetric.
+
+
+Pick any boundary “ratio coordinate” that’s physically meaningful—typical choices:
+
+
+an impedance-like ratio  in a chosen basis,
+
+
+a reflection coefficient  relative to a reference ,
+
+
+or a spin/log-ratio variable in optical helicity channels, etc.
+
+
+
+
+Under gluing (cascading two bulks along a shared interface), the induced boundary law composes by elimination. At the level of the ratio , this becomes a linear-fractional transform:
+
+
+\boxed{z \mapsto \frac{a z + b}{c z + d}}
+\qquad\text{(Möbius transform)}
+
+
+
+
+---
+
+
+Proposition 4 (Passivity forces the Möbius action into SU(1,1) geometry)
+
+
+If the bulk is passive/causal, then the boundary ratio  lies in a positivity domain:
+
+
+impedance  typically lives in the right half-plane , or
+
+
+reflection  lives in the unit disk .
+
+
+
+
+Passivity implies the Möbius transform preserves that domain. The automorphisms of these domains are exactly the Möbius actions of:
+
+
+ on the upper half-plane (real coefficients), or
+
+
+ on the unit disk.
+
+
+
+
+So the “boundary gluing group” for passive two-terminal reductions is naturally SU(1,1) (or a close real form, depending on coordinate conventions).
+
+
+
+
+---
+
+
+Proposition 5 (KAK decomposition is the canonical split into phase vs boost)
+
+
+Any  admits:
+
+
+\boxed{
+M = R(\phi_L)\,B(\eta)\,R(\phi_R)
+}
+
+
+where  is a compact rotation (phase) and  is a noncompact boost (rapidity).
+
+
+A standard boost choice is
+
+
+B(\eta)=\begin{pmatrix}
+\cosh(\eta/2) & \sinh(\eta/2)\\
+\sinh(\eta/2) & \cosh(\eta/2)
+\end{pmatrix}.
+
+
+TEP dictionary (one consistent convention)
+
+
+If you identify a reflection-like magnitude , then
+
+
+\boxed{x = \tanh(\eta/2), \qquad u = 1-x^2 = \mathrm{sech}^2(\eta/2), \qquad G = \frac{1}{\sqrt{u}}=\cosh(\eta/2).}
+
+
+Meaning:
+
+
+ is the additive “bulk action / log-budget” coordinate,
+
+
+the ’s are the compact “mixing/phase” coordinates,
+
+
+and gluing is simply matrix multiplication .
+
+
+
+
+
+
+---
+
+
+What “connection space” between Fourier and Gaussians looks like under boundary gluing
+
+
+The clean geometric picture
+
+
+Once you pass to KAK coordinates, the natural parameter space is essentially:
+
+
+\boxed{\text{Connection space} \;\sim\; S^1_{\phi}\times \mathbb{R}_{\ge0,\eta}}
+
+
+Fourier modes live on the compact direction: .
+
+
+Gaussian behavior is the natural prior/limit law on the additive coordinate  (CLT / heat kernel / maximum entropy under variance).
+
+
+
+
+So the slogan becomes precise:
+
+
+> Fourier describes the compact “rotation budget”; Gaussians describe the additive “boost budget” once you use the rapidity coordinate.
+
+
+
+
+
+
+Your bounded loop:
+
+
+[\text{Fourier identity} \to \text{boundary} \to \text{equipotential} \to \text{boundary} \to \text{Gaussian identity}]
+
+
+A faithful visualization is:
+
+
+Poincaré disk view (SU(1,1) natural habitat)
+
+
+Use the unit disk in a reflection-like coordinate  ().
+
+
+Boundary circle  is the “pure phase”/Fourier edge.
+
+
+Equipotentials are constant hyperbolic radius curves .
+
+
+Boosts move radially (change ); rotations move along circles (change ).
+
+
+
+
+Then your “space bounded by …” is literally an annular sector: two arcs (one near the boundary circle, one at some interior radius) joined by two radial/geodesic legs.
+
+
+Why this matters (orthogonal mode / protected degree)
+
+
+The “orthogonal mode” you were hunting is exactly the phase sector (the  parts) and the noncommutativity curvature of mixing boosts and rotations. A sharp invariant is the commutator holonomy:
+
+
+C = R(\phi)\,B(\eta)\,R(-\phi)\,B(-\eta),
+
+
+That’s the cleanest mathematical meaning of “matrix anisotropy/mixing angle as a protected mode” alongside a trivial-looking radial /.

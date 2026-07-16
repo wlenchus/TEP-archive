@@ -1,0 +1,754 @@
+﻿--- PAGE 1 ---
+ELSEVIER
+Results in Physics 22 (2021) 103818
+Contents lists available at ScienceDirect
+Results in Physics
+journal homepage: www.elsevier.com/locate/rinp
+Biaxial hyperbolic metamaterial THz broadband absorber utilizing
+anisotropic two-dimensional materials
+Jing Liu, Wei Chen,, , Wen-Zhuang Maª, , Yu-Shan Chen, Xu-Chu Deng, Ping-Ping Zhuang,
+Qiubo Ye
+School of Information Engineering, Jimei University, Xiamen 361021, China
+Navigation Institute, Jimei University, Xiamen 361021, China
+ARTICLE INFO
+Keywords:
+Hyperbolic metamaterials
+Black phosphorus
+Broadband absorber
+Physics
+Check for
+updates
+ABSTRACT
+We propose a biaxial hyperbolic metamaterials (HMMs) sawtooth absorber using anisotropic black phosphorus
+(BP) and demonstrate that it can achieve a topological transition from an elliptical dispersion to a hyperbolic
+dispersion. We also show the material to be an epsilon-near-zero HMM and validate an effective medium theory.
+Due to    anisotropic permittivity and light confinement, our absorber achieves an average absorption of up to
+93.4%, omnidirectionality (up to   ), and polarization sensitivity from 30 to    We gain physical insights
+about the high absorption using electric field distributions and absorbed power distribution. Unlike the physical
+mechanism of common multilayer metal/dielectric sawtooth absorbers, which is related to slow-light effect, the
+absorption of our proposed absorber is attributed to the localized surface plasmon resonance, plasmon polar-
+itons. Our proposed HMM can be applied in the infrared to terahertz region and we conclude by providing
+practical guidelines for future research on biaxial hyperbolic metamaterials and anisotropic two-dimensional
+materials.
+Introduction
+Natural materials represent only part of the theoretical electromag-
+netic model. Metamaterials (MMs), which are specially designed mate-
+rials that allow strong electric-field localization and light confinement at
+subwavelength levels owing to light-matter interactions, have been
+used for sub-diffraction-limited images [1] the fabrication of special
+lenses [2] electromagnetic stealth [3,4] color printing applications [5]
+and perfect absorption [6-10]. Metamaterial absorbers are an important
+developing branch of MMs and have attracted substantial research
+attention due to their various applications, which include radiative
+cooling [11] thermal energy devices [12] color filters [13] selective
+thermal emitters [14] and bio-sensing [15]. Moghimi et al. proposed an
+infrared broadband absorber for an infrared stealth device [16]. Wu
+et al. presented an Earth's atmospheric transparency window absorber
+for radiative cooling [17]. Lin et al. proposed a solar absorber that can
+achieve efficient photothermal conversion and rapidly heat up to 160°
+under solar radiation [18]. However, design challenges increase signif-
+icantly when it comes to infrared (IR) absorbers because the plasmonic
+characteristics of metal-based configurations deteriorate rapidly for long
+wavelengths [19]. Recently, Wang et al. have constructed many valu-
+able terahertz (THz) absorbers through various metamaterial arrays
+[20-29]. In addition, Guo et al. proposed some ultra-broadband, wide-
+angle Thz perfect absorber [30,31]. Although metal is the most common
+conductive building block in MAs, it has crucial disadvantages, such as
+excessive thickness, narrow absorption range, and limited adjustment
+capability.
+Two-dimensional materials (2DMs) are useful constituents, usually
+comprising a conducting sheet of single-atom thickness that can be
+dominated by plasmons and dynamically tuned by electrostatic gating
+[32-34]. Since graphene was isolated by the Manchester group in 2004,
+2DMs consisting of a monolayer or a small number of layers of atoms
+have been extensively studied because of their unusual photonic and
+electronic properties [35]. 2DMs can present plasmon polaritons,
+phonon polaritons, and even new hybrid plasmon-phonon-polaritons
+[36].
+Recently, the novel 2DM black phosphorus (BP) has attracted
+research attention due to its superior performance, initiating a new
+* Corresponding authors at: Navigation Institute, Jimei University, Xiamen 361021, China (W. Chen); School of Information Engineering, Jimei University, Xiamen
+361021, China (Q.-B. Ye).
+E-mail addresses: weichen@jmu.edu.cn (W. Chen), qbye@jmu.edu.cn (Q. Ye).
+https://doi.org/10.1016/j.rinp.2021.103818
+Received 16 November 2020; Received in revised form 23 December 2020; Accepted 3 January 2021
+Available online 22 January 2021
+2211-3797/ 2021 The Authors. Published by Elsevier B.V. This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/).
+--- PAGE 2 ---
+J. Liu et al.
+Table 1
+Comparison between various BP-based absorbers at infrared frequencies.
+"Reference
+","Bandwidth""
+","Angular Stability
+","Polarization
+"
+"[33]
+","~3µm
+","Up to 60°
+","Dependent
+"
+"[40]
+","~12µm
+","NO
+","Dependent
+"
+"[57]
+","~3µm
+","NO
+","Dependent
+"
+"This work
+","~60µm
+","Up to 70°
+","Dependent
+"
+Results in Physics 22 (2021) 103818
+Table 2
+Comparison of our BP-based absorber with traditional absorber at infrared
+frequencies.
+"Reference
+","Bandwidth
+","Angular Stability
+","Polarization
+"
+"[6]
+","~5.6µm
+","Up to 55°
+","Independent
+"
+"[16]
+","-16µm
+","NO
+","Independent
+"
+"[17]
+","~20µm
+","Up to 55
+","Dependent
+"
+"This work
+","-60µm
+","Up to 70°
+","Dependent
+"
+research boom after the excitement generated by graphene. BP nano-
+sheets and BP quantum dots are being widely used in biomedical im-
+aging and cancer treatment research [37,38]. Theoretical and
+experimental research has shown that BP supports localized surface
+plasmon resonances in the IR to THz spectrum, which can enhance ab-
+sorption [39]. Zhu et al. proposed an anisotropic ultra-broadband
+absorber consisting of multilayer BP ribbons, which achieved high ab-
+sorption in the    wavelength range [40]. Qing et al. reported
+and investigated an ideal absorber based on a BP monolayer, a photonic
+crystal, and a perfect electric conductor to heighten electromagnetic
+wave absorption in a narrow THz region [41]. Subsequently, Cai et al.
+designed an IR broadband    anisotropic absorber consisting of
+multilayer graphene-BP pairs [42]. However, the majority of previous
+absorbers based on BP have similar shortcomings: low efficiency, single
+absorption frequency, and narrow working bandwidth, which severely
+limit their industrial applications in the IR to THz region. This is mainly
+because the intensity of the plasmon resonances in a BP monolayer is
+quite weak. THz waves have frequencies from 0.1 to 10 THz (30 to 3000
+µm) and are widely applied in spectroscopy, medical imaging, modula-
+tors, security, and communication technology [43-46]. But to date, it
+has proven challenging to design an ultra-broadband THz absorber using
+BP.
+An intriguing class of MMs is hyperbolic metamaterials (HMMs), so
+named because of their hyperbolic equifrequency wavevector disper-
+sion, caused by their highly anisotropic features. The resulting hyper-
+bolic equifrequent dispersion curve leads to dramatic changes in the
+materials light propagation behaviors [32,47]. HMMs are capable of
+limiting the electromagnetic field in a very small space while at the same
+time allowing it to propagate in the form of volume plasmon polaritons
+(VPPs), which MMs cannot do [48]. HMMs with near-zero parameters
+are an intriguing and important class and have been extensively studied;
+these include epsilon-near-zero (ENZ) HMMs, with permittivity near
+zero; mu-near-zero HMMs, with permeability near zero; and index-near-
+zero HMMs, with both permittivity and permeability near zero [49].
+HMMs have demonstrated many promising features, such as broad-
+band and omnidirectional optical absorption, the ability to control
+leaky-wave radiation, and applicability in hot-electric devices, super-
+lenses, and spontaneous emission enhancement [50-52]. In homoge-
+nous natural hyperbolic materials, the working wavelengths are always
+fixed. For example, the hyperbolic properties of the crystal structure of
+  
+
+occur at 420 nm. Recently, 2DM-dielectric multilayers have been
+proposed as candidates for HMMs. The HMM makes it possible to
+incorporate an ultrathin super-graphene-based absorber into detectors
+and thereby enhance light absorption [53]. Chang et al. reported the
+numerical and experimental realization of an HMM structure of multi-
+layer alternating graphene-    pairs [54]. A biaxial HMM consisting
+of multilayer alternating BP-gold in the range of 400-900 nm was pro-
+posed and discussed by Song et al. [55]. However, to our knowledge, no
+one has extensively researched the design of an HMM broadband
+absorber utilizing BP.
+Herein, we for the first time propose an ultra-broadband absorber
+based on BP HMMs, which is composed of multilayer alternating BP/
+dielectric structures stacked on an iron mirror. Compared with previous
+studies, the proposed HMM provided previously unattained hyperbolic
+dispersion curves in which the dielectric constant in the z-direction of
+the structure showed the opposite symbol to that in the x- or y di-
+"Bandwidths of absorption above 90%
+Angular stability marked with NO means not mentioned in the references
+rections from 42.879 to 100 μm. We also demonstrate that the epsilon
+  
+ was near zero at    and the epsilon    is near zero at   
+  
+ Numerical calculations showed that the average absorption
+reached 93.4% from 30 to    (3.3-10 THz), which to the best of our
+knowledge offers better absorption performance than any previously
+reported absorber operating in the IR to THz region
+[16,17,40-43,56,57] as shown in Tables 1 and 2. Insight into the ma-
+terial's physical structure was gained using electric field distributions
+and absorbed power distribution. Different from the physical mecha-
+nism of previous met-al/dielectric sawtooth absorbers, which is owing
+to slow-light effect, the absorption of our proposed absorber is attributed
+to the localized surface plasmon resonance (LSPR), VPP. Our findings
+provide a new approach for a topological transition from an elliptical
+dispersion to a hyperbolic dispersion using anisotropic ENZ 2DM and
+may have extensive applications in anisotropic ultra-broadband polar-
+izers and imaging systems in the IR to THz region.
+Fig. 1(a) presents our proposed HMM, which was composed of
+multiple    layers. BP is an anisotropic material with a crystal axis-
+dependent dielectric consist owing to its wrinkled crystal structure. The
+schematics of a monolayer of BP along the armchair direction (x-z plot)
+and the zigzag direction (y-z plot) are plotted in Fig. 1(b) and (c). The
+dielectric constant of    was    The dielectric constant of BP was
+derived as follows.
+Results
+In the simulations, the semi-classical Drude model was used to
+describe the complex surface conductivity of monolayer BP [58]:
+δ
+πω
+iD
+пле
+m
+where    indicates the direction along the x and y
+axes; wand ħare, respectively, the angular frequency of the incident
+electromagnetic wave and the reduced Planck's constant;   
+indicates the relaxation rate;    is the Drude weight;    is
+the parameter describing electron doping; and    is the electron mass
+along the x and y axes, corresponding to    my
+0.7m (wherem isthestaticelectronmass) [59].
+For a monolayer of BP, the thickness can be set to    nm, which
+has been proven to be reasonable [34]. The permittivity for a monolayer
+of BP (with 2D conductivity) was calculated as follows:
+ισ
+E+
+Eowd
+where the relative permittivity and the permittivity of free space are
+  
+ and   , respectively. The permittivity
+  
+ is plotted in Fig. 2. Such an anisotropic epsilon curve is
+due solely to the anisotropic properties of the intrinsic material, which
+could be utilized to design new kinds of anisotropic plasmonic devices.
+The imaginary part of    is more than that of   , meaning more
+energy loss occurs in the x-axis direction. Although BP exhibits hyper-
+bolic properties, it is required to form plasma devices, together with the
+2
+--- PAGE 3 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 1. (a) Diagram of multilayer BP    HMM,    nm,    nm. Illustrations of the x-z plot view (b) with monolayer BP and the y-z plot view (c) with
+monolayer BP.
+dielectric layer.
+Fig. 2. The permittivity in the x (a), y (b), and (c) z directions of the orthogonal system for a monolayer of BP.
+The effective dielectric constant tensors & of a hyperbolic material
+can be deduced in the following form as originally determined from
+optical crystals [34]:
+  
+
+where   ,    and    denote the dispersion elements along the x, y,
+and z directions. Generally, the dielectric constant tensors in all di-
+rections are equal for isotropic materials:
+  
+
+whereas at least one of the permittivity tensors is different for
+anisotropic materials. Conventionally, HMMs are designed as aniso-
+tropic materials that exhibit a uniaxial hyperbolic curve:
+  
+
+which corresponds to a hyperboloid equifrequency surface [60]. It is
+interesting to note that for anisotropic HMMs, the tensors in all di-
+rections are unequal, which means:
+  
+
+In addition, an alternating multilayer structure can be homogenized
+and regarded as an MM using effective medium theory (EMT). Thus, the
+effective permittivity tensors along the x, y, z directions    can
+be indicated by:
+  
+
+  
+
+1/
+(1-1)
+Ed
+where    is the thickness ratio of the BP and dielectric
+layers. Obviously, the effective permittivity tensors of the whole HMM
+structure are connected to the original material's permittivity properties
+and thickness ratio. Therefore, each BP/dielectric layer can be consid-
+ered a layer made of homogeneous material with anisotropic permit-
+tivity. The diagram of effective medium absorber (EMA) is presented in
+Fig. 3(a), indicating a homogeneous material with anisotropic permit-
+tivity. Fig. 3(b) and (c) shows the effective permittivity of the BP HMM.
+The HMM's permittivity differs significantly from that of pristine BP due
+to the small thickness ratio. The imaginary part of    is several times
+larger than the real part in most spectral ranges that we discuss, showing
+the optical loss of this HMM to be quite high. The equatione   
+  
+    indicates hyperbolic characteristics propagating high k-
+modes [48]. On the other hand,    is always constant and positive, and
+the real part of    changes from positive to negative at   
+indicating an optical topological transition from an elliptical dispersion
+to a hyperbolic dispersion. Therefore, this model is a   -near-zero HMM
+at   . With respect to   , an optical topological transition is
+3
+--- PAGE 4 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 3. (a) Schematic diagram of effective medium theory model for proposed HMM; (b), (c) effective permittivity curve in the three directions for    HMM. At
+wavelengths of 42.879 and 75.874 µm,    and    are near zero; (d), (e) equifrequency curves of HMM for    and    indicate hyperbolic, elliptical, and epsilon-near-
+zero dispersions for TM waves (polarization angle   ).
+Fig. 4. (a) Cross-sectional view of the proposed absorber, consisting of 20 pairs of BP    layers supported by an iron mirror; the thicknesses of    and Fe were
+1400 and 100 nm; (b) anisotropic absorption spectrum of our absorber when polarization angle    45, and   .
+also indicated at 75.874µm.
+Based on Maxwell's equations for transverse magnetic (TM) waves,
+the unique properties of an anisotropic hyperbolic material can be
+described using the equifrequency surface, which means [55]:
+  
+
+wherek,   , andk, are components nts of the wave vector along the x, y,
+and z axes, respectively;    is the free-space wavenumber; is the
+frequency of light; and c is the speed of light. Since the equifrequency
+curves of   , are similar to those of   , we can plot the
+respective equifrequency curves of      , as shown in Fig. 5(d), (e).
+One can see that the equifrequency curves of our proposed model
+indicate hyperbolic, elliptical, and epsilon-near-zero dispersions for   
+and   .
+Discussion
+Maxwell's Solver is one of the most commonly employed finite-
+different time-domain (FDTD) simulation techniques for calculating
+optical properties. In order to calculate the absorption spectrum, the
+proposed absorber is numerically calculated and optimized utilizing the
+FDTD solutions [61]. Simulations for the structure are performed in 2D
+layout and a unit cell of    along the x-axis,    along the y-axis.
+Planar broadband linearly polarized wave propagates along with the y-
+direction. The periodic boundary conditions are set along the x di-
+rections, and an ideally matched layer boundary condition is used along
+the y-direction. Besides, we respectively set the mesh, the simulation
+4
+--- PAGE 5 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 5. (a) Planar HMM parameter optimization diagram; based on the actual preparation technology and PSO algorithm, the optimal parameters were determined to
+be:   ,   ,    (b) Absorption spectra of the proposed sawtooth structure compared to that of the planar structure. Absorbance spectra vs
+different thickness of BP (c) and different metal mirror (d).
+time, and the auto shut off to be 0.2 nm, 8000 fs, and    according to
+previous research. The photonic property of Au is described using a
+Drude mode [40]. The dielectric constant of iron and Ni were taken from
+the CRC Handbook of Chemistry & Physics [62]. The proposed HMM
+structure is placed on an iron mirror as shown in Fig. 4(a), to prevent
+light transmission. Thus, absorption = 1 reflection. One can see from
+Fig. 4(b) that the absorption of planar HMM is polarization sensitive
+because BP is an anisotropic material with crystal axis-dependent
+permittivity owing to its wrinkled crystal structure. In the case of
+polarized light along the x-axis   , there is a high absorption peak at
+  
+ When light is polarized along the y-axis (90°), the ab-
+sorption peak shifts to a longer wavelength,    as expected,
+owing to the higher effective electron mass    along the y-axis (polar-
+ization angle   ). However, the absorption efficiency goes down
+since the imaginary part of    is more than that of   , which equates to
+energy loss. Interestingly, when the polarization angle is   ,    along
+the x-axis    and    along y-axis    can be excited simultaneously.
+For most wavelengths, the absorption at    is between the values at
+  
+ and    except for the range around ENZ. In short, the absorption of
+planar HMM is poor and difficult to apply in practice. Previously, Liu
+et al. demonstrated that BP nanoribbon and nanopatch arrays can
+strongly confine IR radiation in an atomically thin layer [33]. Cui et al.
+cut a planar HMM consisting of alternating layers of flat metal and
+dielectric plates into a sawtooth slab [63]. Subsequently, various
+sawtooth MMs were proposed and tested to obtain perfect absorption
+[64-67]. Hence, we know it is possible to optimize the structural pa-
+rameters to achieve ideal absorption.
+A particle swarm optimization (PSO) algorithm was derived from
+studying the behavior of predatory birds that search for optimal solu-
+tions through cooperation and information sharing among individuals in
+a group. First, PSO randomly generated each particle with different
+structural parameters within a specified range. Next, the FDTD method
+was used to calculate the average absorption of each particle at wave-
+lengths from 30 to   . The optimal average absorption was set to 1.
+Both the calculated and the optimal values were then substituted into a
+fitness function, and the optimization process ended when the maximum
+number of iterations was reached or the optimal average absorption was
+satisfied. If it wasn't, the particles would update their positions ac-
+cording to the fitness function. The proposed optimization process was
+then repeated until the standard stopped. More information on PSO can
+be found in the literature [68,69]. Based on the actual preparation
+technology and material parameters, the optimal parameters were
+determined to be:   ,   , and   . A planar HMM
+parameter optimization diagram is presented in Fig. 5(a). Our proposed
+structure is continuous in the y direction. Moreover, the previous study
+has proved that this structure with a graded refractive index [17]. One
+can see from Fig. 5(b) that the absorption performance of the sawtooth
+structure is much better than that of the planar structure. In order to
+5
+--- PAGE 6 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 6. (a) Absorption spectra of the HMA (cyan line) and EMA (blue line) shown in Fig. 5(c); (b) absorption spectra of the HMA for polarization angles of    and 90".
+(For interpretation of the references to color in this figure legend, the reader is referred to the web version of this article.)
+Fig. 7. The absorbed power spectra along the x-z plot, and distributions of the electric field along the x-z plot of the sawtooth EMA for TM waves at different
+absorption peaks: peak A   , peak   
+enrich our work, we have simulated different thicknesses of BP and
+metallic material mirrors in Fig. 5(c) and (d). One can see that mono-
+layer BP is the optimal thickness and the material of mirrors has almost
+no effect on the absorption. The fabrication of this structure using a wet
+chemical self-assembly technique and femtosecond laser writing has
+been reported in [18]. 2DMs of 1 nm thickness were grown by a wet
+chemical self-assembly technique, a metal mirror and 2 nm-thick
+dielectric layer were deposited by physical vapor deposition, and the
+grating was fabricated by femtosecond laser writing. In addition, the
+creation of large-area monolayer BP layers utilizing either an exfoliation
+method or a chemical vapor deposition method has been widely re-
+ported [70-72].
+One can see from Fig. 6(a) that the absorption of the sawtooth HMA
+is more than 93.4% in the wavelength range of 30-90 µm (3.3-10 THz).
+Moreover, we find that the sawtooth EMA has an absorption spectrum
+very similar to the HMA's. Such agreement illustrates that the EMT used
+here is valid. Some negligible errors are due to the setting of the mesh,
+the degree of fit of the material, and the low thickness ratio of BP. In
+particular, the location of peak A for the HMA and EMA varies greatly,
+due to poor material fitting at this wavelength. Interestingly, for the
+6
+--- PAGE 7 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 8. Cross-sectional (x-z plot) distributions of electric field E (a) (c), and electric field amplitude along x-z plot Ez (b) (d) at absorption peak A   
+and peak B   
+EMA, the absorption peaks A and B are exactly at the wavelength po-
+sitions of    near to zero and    near to zero. Previous studies have
+demonstrated that for wavelengths leading to    near-perfect
+absorption arises and persists over a range of wavelengths [73-76]. In
+addition, one can see from Fig. 6(b) that the absorption is polarization
+sensitive, which is simply due to the material's intrinsic anisotropy.
+Such anisotropic absorption could in future be utilized to engineer a new
+class of anisotropic devices for the IR to THz region. Generally, since BP
+is an anisotropic two-dimensional material, the BP-based absorber is
+polarization-dependent. However, Wang et al. firstly proposed a
+polarization-independent infrared absorber based on BP [59]. More-
+over, they declared that the polarization-independent property is
+attributed to the fourfold rotational symmetry in this BP metamaterial.
+To increase our understanding of the electromagnetic wave absorp-
+Fig. 9. Distributions of vectors of energy flow (plots of Poynting vector) at peak A (a) and peak B (b). The arrows represent energy flow vectors and scale of each
+arrow represents the intensity.
+7
+--- PAGE 8 ---
+J. Liu et al.
+Results in Physics 22 (2021) 103818
+Fig. 10. Cross-sectional (x-z plot) distributions of electric field E at absorption peak A (a), peak B (b).
+tion in our EMA, we calculate the absorbed power distribution (Pabs) and
+the electric field distributions E in the homogeneous EMA at two
+different absorption peaks, as shown in Fig. 7. The value of    for
+nonmagnetic materials can be obtained by the formula:   
+  
+ in whiche" is the imaginary part of the dielectric constant, is
+the angular frequency of the incident light, and E is the total electric
+field distribution. Our analyses showed that high absorption efficiency
+was attributable to the top part of the homogeneous sawtooth, and the
+electric field was localized in the top part of the nanogap between the
+sawtooths at peak A    For the peak   
+high absorption efficiency was attributable to the top and bottom part of
+the homogeneous sawtooth, and the electric field was localized in the
+top and bottom part of the nanogap between the sawtooths. This is
+because the top part of the sawtooth was in direct contact with the air
+and incident light, and it was more likely to provide electric-field
+localization and light confinement. In sum, perfect absorption from 30
+to 90 µm was due to using sub-wavelength sawtooth gratings, which
+were able to confine local fields.
+In order to gain further physical insights into electric-field localiza-
+tion, we also calculated the normalized field distributions E and elec-
+tric field amplitude    in the inhomogeneous sawtooth structure at two
+different absorption peaks, as shown in Fig. 8. One can see from Fig. 8(a)
+that (VPPs) were excited when the sawtooth HMM based on a BP
+monolayer was used. The indefinite hyperbolic k-space greatly increased
+the photonic density of states, which in turn made the HMM able to limit
+the electromagnetic field in a very small space while simultaneously
+allowing it to propagate in the form of VPPs (see Fig. 9) [60]. Similar to
+Fig. 7, the electric field was localized in the top part of the nanogap
+between the sawtooths at peak A. In order to confirm the existence of
+localized plasmon resonances, we calculated the electric field amplitude
+  
+. Fig. 8(b) and (d) clearly illustrate the electric dipole behavior; as
+expected, almost every BP layer in the HMM was excited. This is the
+basic principle of LSPR. One can see from Fig. 8(c) that for peak B,
+similar to Fig. 7, the electric field was localized in the bottom part of the
+nanogap between the sawtooths. However, hardly any VPPs were pre-
+sent, since the intensity of the LSPR was much greater than that of the
+VPPs, indicating that peak B was mainly attributable to LSPR. Detailed
+figures of the electric field distributions can be seen in Fig. 10. The
+physical concepts between the VPPs and LSPR are different. Surface
+plasmon polaritons (SPPs) are transmission dispersive electromagnetic
+waves coupled with the electron plasma of the conductor at the interface
+of the medium [77]. The volume plasmon polariton is formed by the
+coupling of short-range surface plasmon polariton excitations in the
+individual metal layers. So various groups call them multilayer plas-
+mons, or VPPs [48]. Local-SPPs (LSPs) are excited by conduction band
+electrons in metal nanostructures coupled with electromagnetic fields.
+Fig. 11. (a) Absorption spectra versus incident angle for TM wave. (b) Cross-sectional (x-z plot) distributions of electric field E at peak A when incident angle is 40°.
+8
+--- PAGE 9 ---
+J. Liu et al.
+Therefore, LSPs generally exist in sub-wavelength nanostructures. There
+is an obvious binding force on the surface of the nanostructure acting on
+the surface electrons to cause resonance and amplify the electric field in
+the near field region of the structure. This resonance is called local
+surface plasmon resonance (LSPR) [77].
+In the above-described processes, an incident TM light was set
+vertically incident. However, omnidirectional broadband absorption is
+desirable for many practical applications, so the absorption spectra
+versus incident angle is plotted in Fig. 11(a). One can see that the lowest
+absorption remains higher than 80% as the incident angle increases up
+to    in the range of 30 to 90µm. The prominent incident angle stability
+resulted from the VPPs in the HMM and LSPR being excited by the BP
+layer, which was insensitive to the incident angle as shown in Fig. 11(b).
+This therefore indicates that the effect of incident angle can be ignored
+in practical applications.
+Conclusion
+In conclusion, we have proposed a planar HMM structure utilizing
+anisotropic monolayer BP and demonstrated the hyperbolic character-
+istic of the proposed structure. The HMM's permittivity differed signif-
+icantly from that of pristine BP due to the filling ratio of BP. We utilized a
+PSO algorithm to optimize the structure of the HMM and confirmed the
+optimal structure was a sawtooth slab, which excited the local and
+volume plasmon modes of both HMMs. Numerical results showed that
+the average absorption was up to 93.4% from 30 to    (3.3 to 10
+THz), and the absorption was omnidirectional and polarization sensi-
+tive. These results show that our proposed HMM absorber could easily
+be applied in the IR to THz region, and this study provides practical
+guidelines for future research on biaxial HMMs and anisotropic 2DMs.
+Funding
+This work was supported by the Fujian Provincial Department of
+Science and Technology [2019H0022]; Science Fund for Distinguished
+Young Scholars of Fujian Province [2020J06025]; Youth Talent Support
+Program of Jimei University [ZR2019002]; Innovation Fund for Young
+Scientists of Xiamen [3502220206021]; Xiamen Marine and Fishery
+Development Special Fund [20CZB014HJ03].
+CRediT authorship contribution statement
+Jing Liu: Data curation, Funding acquisition, Methodology. Wei
+Chen: Conceptualization, Project administration, Resources, Software,
+Writing - original draft. Wen-Zhuang Ma: Formal analysis, Supervision,
+Validation, Visualization. Yu-Shan Chen: Investigation. Xu-Chu Deng:
+Writing review & editing. Ping-Ping Zhuang: Writing review &
+editing. Qiubo Ye: Writing review & editing.
+Declaration of Competing Interest
+The authors declare that they have no known competing financial
+interests or personal relationships that could have appeared to influence
+the work reported in this paper.
+Acknowledgements
+Wei Chen would like to thank his abecedarian in metamaterials. Prof.
+Bin Tang from Changzhou University. He is good at teaching, and now I
+am deeply addicted to this field. Meanwhile, Wei Chen would like to
+thank his good friend, Dr. Feng Wu, who has successfully graduated
+from Tongji University. He has given me a lot of help. May he succeed in
+becoming an excellent university teacher in Guangdong Polytechnic
+Normal University!
+References
+Results in Physics 22 (2021) 103818
+[1] Fang N, Lee H, Cheng S. Xiang Z. Sub diffraction-limited optical imaging with a
+silver superlens. Science 2005;308(5721):534-7.
+[2] Ma C, Liu 2. Focusing light into deep subwavelength using metamaterial immersion.
+lenses. Opt Express 2010;18(5):4838.
+[3] Landy N. Smith DR. A full-parameter unidirectional metamaterial cloak for
+microwaves. Nat Mater 2013;12(1):25-8.
+[4] Zhang G, Qi P, Wang X, Lu Y, X, Tu R, et al. Selective etching of metallic carbon
+nanotubes by gas-phase reaction. Science 2006;314(5801):974-7.
+[5] Cheng F, Gao J, Luk TS, Yang X. Structural color printing based on plasmonic
+metasurfaces of perfect light absorption. Sci Rep-UK 2015;5(1):11045.
+[6] Landy N. Sajuyigbe S. Mock J, Smith DR, Padilla WJ. A perfect metamaterial
+absorber. Phys Rev Lett 2008;100(20):207402.
+[7] Aydin K, Ferry VE, Briggs RM, Arwater HA. Broadband polarization-independent
+resonant light absorption using ultrathin plasmonic super absorbers. Nat Commun
+2011:2(1):517
+[8] Tang B, Zhu Y, Zhou X, Huang L, Lang X. Wide-angle polarization-independent
+broadband absorbers based on concentric multisplit ring arrays. IEEE Photonics J
+2017 9(6):1-7.
+[9] Liu J, Chen W, Zheng J, Chen Y, Yang C. Wide-angle polarization-independent
+ultra-broadband absorber from visible to infrared. Nanomaterials 2020 10(1):27,
+[10] Chen W, Liu J, Ma W, Yu G, Chen J. Cai H, et al. Numerical study of multilayer
+planar film structures for ideal absorption in the entire solar spectrum. Appl Sci
+2020;10(9):3276.
+[11] LI T, Zhai Y, He S, Gan W, Wei Z, Heidarinejad M, et al. A radiative cooling
+structural material. Science 2019;364(6442):760-3.
+[12] Wu D, Liu Y, Xu Z, Yu Z, Yu L, Chen L, et al. Numerical study of the wide-angle
+polarization-independent ultra-broadband efficient selective solar absorber in the
+entire solar spectrum. Solar RRI. 2017;1(7):1700049.
+[13] Lu JY, Nam SH, Wilke K, Raza A, Lee YE, AlGhaferi A, et al. Localized surface
+plasmon-enhanced ultrathin film broadband nanoporous absorbers. Adv Opt Mater
+2016 4(8):1255-64.
+[14] Zhu H, Li Q, Zheng C, Hong Y, Xu Z, Wang H, et al. High-temperature infrared
+camouflage with efficient thermal management. Light Sci Appl 2020;9(1):60.
+[15] Zhang W, Man P, Wang M Shi Y, Xu Y, Li Z, et al. Roles of graphene nanogap for
+the AgNFs electrodeposition on the woven Cu net as flexible substrate and its
+application in SERS. Carbon 2018;133:300-5.
+[16] Moghimi MJ, Lin G, Jiang H. Broadband and ultrathin infrared stealth sheets. Adv.
+Eng Mater 2018;20(11):1800038.
+[17] Wu D, Liu C, Xu Z, Liu Y, Yu Z, Yu L, et al. The design of ultra-broadband selective
+near-perfect absorber based on photonic structures to achieve near-ideal daytime
+radiative cooling. Mater Design 2018 139:104-11.
+[18] Lin H, Sturmberg BCP, Lin K, Yang Y, Zheng X, Chong TK, et al. A 90-nm-thick
+graphene metamaterial for strong and extremely broadband absorption of
+umpolarized light. Nat Photon 2019;13(4):270-6.
+[19] Evlyukhin AB, Nerkararyan KV, Bozhevolnyi St. Core-shell particles as efficient
+broadband absorbers in infrared optical range. Opt Express 2019;27(13):17474.
+[20] Wang B, Zhai X. Wang G, Huang W, Wang L. A novel dual-band terahertz
+metamaterial absorber for a sensor application. J Appl Phys 2015. 2015-01-07 117
+(1):14504.
+[21] Wang B, Wang G, Sang T. Simple design of novel triple-band terahertz
+metamaterial absorber for sensing application. J phys D, Applied Phys 2016.
+2016-01-01:49(16):165307.
+[22] Wang B, Tang C, Niu Q. He Y, Chen R. A broadband terahertz metamaterial
+absorber enabled by the simple design of a rectangular-shaped resonator with an
+elongated slot. Nanoscale Adv 2019. 2019-01-01:1(9):3621-5.
+[23] Wang B, He Y, Lou P, Zhu H. Multi-band terahertz superabsorbers based on
+perforated square-patch metamaterials. Nanoscale Adv 2021.
+[24] Wang B. Quad-band terahertz metamaterial absorber based on the combining of
+the dipole and quadrupole resonances of two SRRs. IEEE J Sel Top Quant 2017 23
+(4):1-7.
+[25] Wang B, Wang G, Wang L, Zhai X. Design of a five-band terahertz absorber based
+on three nested split-ring resonators. IEEE Photonics Tech L 2016 2016-01-01:28
+(3):307-10..
+[26] Wang B, Wang G, Wang L. Design of a novel dual-band terahertz metamaterial
+absorber. Plasmonics 2016;11(2):523-30.
+[27] Wang B, Tang C., Niu Q, He Y, Chen T. Design of narrow discrete distances of dual-/
+triple-band terahertz metamaterial absorbers. Nanoscale Res Lett 2019;14(1).
+[28] Wang B, Wang G, Sang T, Wang L. Six-band terahertz metamaterial absorber based
+on the combination of multiple-order responses of metallic patches in a dual-layer
+stacked resonance structure. Sci Rep-UK 2017:7(1)
+[29] Wang B, He Y, Lou P, Huang W, Pi F. Penta-band terahertz light absorber using five
+localized resonance responses of three patterned resonators. Results Phys 2020;16:
+102930,
+[30] Guo S, Mao M. Zhou Z, Zhang D. The wide-angle broadband absorption and
+polarization separation in the one-dimensional magnetized ferrite photonic crystals
+arranged by the Dodecanacci sequence under the transverse magnetization
+configuration. J Phys D Appl Phys 2021;54(1):015004.
+[31] Guo S, Hu C, Zhang H. Unidirectional ultrabroadband and wide-angle absorption in
+graphene-embedded photonic crystals with the cascading structure comprising the
+Octonacci sequence. JOSA-B 2020;37(9):2678.
+[32] Othman MAK, Guelu C, Capolino F. Graphene-based tunable hyperbolic
+metamaterials and enhanced near-field absorption. Opt Express 2013;21(6):7614.
+9
+--- PAGE 10 ---
+J. Liu et al.
+[33] Cal Y, Xu K, Feng N, Guo R, Lin H, Zhu J. Anisotropic infrared plasmonic
+broadband absorber based on graphene-black phosphorus multilayers. Opt Express
+2019;27(3):3101.
+[34] Liu Z, Aydin K. Localized surface plasmons in nanostructured monolayer black
+phosphorus. Nano lett 2016;16(6):3457-62,
+[35] Balandin A, Ghosh S, Bao W, et al. Superior thermal conductivity of single-layer
+graphene. Nano Lett 2008;8(3):902-7.
+[36] Huang X, Cai Y, Feng X, Tan WC, Hasan DMN, Chen L, et al. Black phosphorus
+carbide as a tunable anisotropic plasmonic metasurface. ACS Photon 2018;5(8):
+3116-23.
+[37] Li Z, Hu Y. Fu Q. Lưu Y, Wang J, Song J, et al. NIR/ROS-Responsive Black
+Phosphorus QD vesicles as immunoadjuvant carrier for specific cancer
+photodynamic immunotherapy. Adv Funct Mater 2019:30(3):1905758.
+[38] Lyu Y, Li J, Pu K. Second near-infrared absorbing agents for photoacoustic imaging
+and photothermal therapy. Small Methods 2019;3(11):1900553.
+[39] , Lu J, Gupta P, Qiu M. Engineering optical absorption in graphene and other
+2D Materials: Advances and applications. Adv Opt Mater 2019;7(20):1900595.
+[40] Zhu Y, Tang B, Jiang C. Tunable ultra-broadband anisotropic absorbers based on
+multi-layer black phosphorus ribbons. Appl Phys Express 2019 12(3):32009.
+[41] Tailoring anisotropic perfect absorption in monolayer black phosphorus by critical
+coupling at terahertz frequencies. Opt. Express. 2018; 26(25):32442.
+[42] Liu J, Chen W. Ma W, Yu G, Zheng J, Chen Y, et al. Ultra-broadband infrared
+absorbers using iron thin layers. IEEE Access 2020;8:43407-12.
+[43] Federici J, Moeller L. Review of terahertz and subterahertz wireless
+communications. J Appl Phys 2010;107(11):111101.
+[44] Jepsen PU, Cooke DG, Koch M. Terahertz spectroscopy and imaging - Modern
+techniques and applications. Laser Photon Rev 2011 5(1):124-66.
+[45] Song Z, Wang K, Li J, Lâu QH. Broadband tunable terahertz absorber based on
+vanadium dioxide metamaterials. Opt Exp 2018:26(6):7148,
+[46] Xu Z, Wo D, Liu Y, Liu C, Yu Z, Yu L, et al. Design of a tunable ultra-broadband
+terahertz absorber based on multiple layers of graphene ribbons. Nanoscale Res
+Lett 2018:13(1):143,
+[47] Huo P, Zhang S. Liang Y, Lu Y, Xu T. Hyperbolic metamaterials and metasurfaces:
+Fundamentals and applications. Adv Opt Mater 2019:7(14):1801616.
+[48] Zhukovsky SV, Kidwai O. Sipe JE. Physical nature of volume plasmon polaritons in
+hyperbolic metamaterials. Opt Express 2013 21(12):14982,
+[49] Luo J, Xu P, Chen H, Hou B Gao L, Lai Y. Realizing almost perfect bending
+waveguides with anisotropic epsilon-near-zero metamaterials. Appi Phys Lett
+2012 100(22):221903,
+[50] Wu F, Lu G, Guo Z, Jiang H, Xue C, Zheng M, et al. Redshift gaps in one
+dimensional photonic crystals containing hyperbolic metamaterials, Phys Rev Appl
+2018;10(6):064022.
+[51] Wa F, Wu J, Fan C, Guo Z, Xue C, Jiang H, et al. Omnidirectional optical filtering
+based on two kinds of photonic band gaps with different angle-dependent
+properties, Europhys Lett 2020;129(3):34004.
+[52] Ferrari L., Wu C, Lepage D, Zhang X, Liu Z. Hyperbolic metamaterials and their
+applications. Prog Quant electron 2015:40:1-40.
+[53] Poddubny A, lorsh I, Belov P, Kivshar Y. Hyperbolic metamaterials. Nat Photon
+2013 7(12):948-57.
+[54] Lu G, Wu F, Zheng M, Chen C, Zhou X, Diao C, et al. Perfect optical absorbers in a
+wide range of incidence by photonic heterostructures containing layered
+hyperbolic metamaterials. Opt Exp 2019 27(4):5326.
+Results in Physics 22 (2021) 103818
+[55] Mid-infrared Hyperbolic Metamaterial Based on Graphene- dielectric Multilayers.
+OSA CLEO: QELS Fundamental Science San Jose, California, 2015.
+[56] Chang Y, Liu C, Liu C, Zhang S, Marder SR, Narimanov EE, et al. Realization of mid-
+infrared graphene hyperbolic metamaterials, Nat Commun 2016;7(1):10568,
+[57] F. Xiong J. Zhang Z. Zhu X. Yuan S. Qin Strong anisotropic perfect absorption in
+monolayer black phosphorous and its application as tunable polarizer Journal of
+optics 19(7):75002 (2010). 2017.
+[58] Song X, Liu Z, Xiang Y, Aydin K. Biaxial hyperbolic metamaterials using anisotropic
+few-layer black phosphorus, Opt Express 2018:26(5):5469,
+[59] Wang J, Jiang Y, Hu Z. Dual-band and polarization-independent infrared absorber
+based on two-dimensional black phosphorus metamaterials. Opt Express 2017:25
+(18):22149.
+[60] Low T, Roldan R, Wang H, Xia F, Avouris P, Moreno LM, et al. Plasmons and
+screening in monolayer and multilayer black phosphorus. Phys Rev Lett 2014:113
+(10):106802.
+[61] Taflove A. Computational Electromagnetics: The Finite-Difference Time-Domain
+Method. 2nd ed. Artech House: Massachusetts, MA, USA; 2005.
+[62] Weast RC. Handbook of Chemistry and Physics. 55th ed. Florida, FL, USA: CRC
+Press 1974.
+[63] Cui Y, Fung KH, Xu J, Ma H, Jin Y, He S, et al. Ultrabroadband light absorption by a
+sawtooth anisotropic metamaterial slah. Nano Lett 2012 12(3):1443-7.
+[64] Deng H, Stan L, Czaplewski DA, Gao J, Yang X. Broadband infrared absorbers with
+stacked double chromium ring resonators. Opt. Exp 2017:25(23):28295.
+[65] Deng H, Mathai CJ, Gangopadhyay S, Gao J, Yang X. Ultra-broadband infrared
+absorption by tapered hyperbolic multilayer waveguides. Opt Express 2018:26(5);
+6360.
+[66] Xue W, Chen X, Peng Y, Yang R. Grating-type mid-infrared light absorber based on
+silicon carbide material. Opt Express 2016;24(20):22596,
+[67] Liang Q, Wang T, Lu Z, Sun Q, Fu Y, Yu W. Metamaterial-based two dimensional
+plasmonic subwavelength structures offer the broadest waveband light harvesting.
+Adv Opt Mater 2013:1(1):43-9.
+[68] Ma W, Cheng F, Liu Y. Deep-learning-enabled on-demand design of chiral
+metamaterials. ACS Nano 2018;12(6):6326-34.
+[69] Tao Z, You J, Zhang J, Zheng X, Liu H, Jiang T. Optical circular dichroism
+engineering in chiral metamaterials utilizing a deep learning network. Opt Lett
+2020 45(6):1403.
+[70] Li L, Yu Y, Ye GJ, Ge Q, Ou X, Wu H, et al. Black phosphorus field-effect transistors
+Nat Nanotechnol 2014;9(5):372-7.
+[71] Liu Z, Wells SA, Butun S, Palacios E, Hersam MC, Aydin K. Extrinsic polarization
+controlled optical anisotropy in plasmon-black phosphorus coupled system.
+Nanotechnology 2018:29(28):285202,
+[72] Huang 5, Ling X. Black phosphorus: Optical characterization, properties and
+applications. Small 2017;13(38):1700823.
+[73] Zhong S, Ma Y, He S. Perfect absorption in ultrathin anisotropic -near-zero
+metamaterials. Appl Phys Lett 2014;105(2):23504.
+[74] Halterman K, Elson JM. Near-perfect absorption in epsilon-near-zero structures
+with hyperbolic dispersion. Opt Express 2014;22(6):7337.
+[75] Yoon J, Zhou M, Badsha MA, Kim TY, Jun YC, Hwangbo CK. Broadband epsilon-
+near-zero perfect absorption in the near-infrared. SCI REP-UK 2015;5(1):12788.
+[76] Guo Z, Wo F, Xue C, Jiang H, Sun Y, Li Y, et al. Significant enhancement of
+magneto-optical effect in one-dimensional photonic crystals with a magnetized
+epsilon-near-zero defect. J Appl Phys 2018:124(10):103104,
+[77] Maier SA. Plasmonics: Fundamentals and applications. US: Springer, 2007.
+10

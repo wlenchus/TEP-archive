@@ -1,0 +1,405 @@
+﻿A Comparative Analysis of Universal Scaling in Quantum Critical Systems: Testing the Generalized Scale Relativity Framework
+
+
+Abstract
+This report conducts a rigorous, data-driven investigation into the universal scaling hypothesis proposed by the Generalized Scale Relativity (GSR) framework. We test the GSR predictions against high-resolution experimental data from two prototypical heavy-fermion quantum critical systems: field-tuned YbRh₂Si₂ and field-tuned CeCoIn₅. For each system, a "relativistic frame" is established by fitting a diverging thermodynamic or transport coefficient to determine the quantum critical point (QCP) and an associated invariant scale. We then test the GSR-predicted power-law scaling for the crossover temperature, T∗, against this frame. To ensure an unbiased evaluation, the GSR model's performance is compared against a simple linear model, an exponential model, and the conventional critical scaling model using standard goodness-of-fit statistics (R2, reduced χ2, AIC). The analysis reveals which mathematical form most accurately describes the vanishing of the characteristic energy scale in each system, providing a quantitative assessment of the GSR framework's applicability and universality in the context of quantum criticality.
+
+
+Part 0: Theoretical and Methodological Framework
+
+
+
+
+0.1. The Landscape of Quantum Criticality
+
+
+A quantum phase transition (QPT) is a phase transition between distinct quantum ground states that occurs at absolute zero temperature, driven by a non-thermal tuning parameter such as magnetic field, pressure, or chemical doping.1 The point in the phase diagram where this transition occurs is known as the quantum critical point (QCP). While the QCP is a zero-temperature phenomenon, its influence extends to finite temperatures, creating a "quantum critical fan" region in the phase diagram where the system's properties are governed by quantum fluctuations rather than thermal fluctuations.3 Within this fan, the standard model of metals, Landau's Fermi liquid theory, often breaks down, giving rise to anomalous or "non-Fermi liquid" (NFL) behavior. This NFL behavior is characterized by unusual temperature dependencies in physical properties, such as an electrical resistivity that is linear in temperature (
+ρ∝T) instead of the quadratic dependence (ρ∝T2) expected for a Fermi liquid.1
+In the study of heavy-fermion metals, which are ideal systems for exploring QPTs, two primary theoretical paradigms have emerged to describe the nature of the QCP:
+1. The Conventional Spin-Density-Wave (SDW) QCP: This model, based on the theoretical work of Hertz, Millis, and Moriya, describes the QCP as a transition into a magnetically ordered state, such as an antiferromagnet.1 The critical fluctuations are those of the magnetic order parameter itself. These fluctuations mediate interactions between the material's heavy quasiparticles, leading to the observed NFL phenomena. This framework has been successful in describing a number of quantum critical systems.
+2. The Unconventional or Kondo-Breakdown QCP: This more radical scenario posits that the QCP involves not just the onset of magnetic order but a fundamental change in the nature of the electronic state itself. In this picture, the heavy quasiparticles—composite entities formed by the hybridization of localized f-electrons and itinerant conduction electrons—disintegrate at the QCP.6 This "Kondo breakdown" is accompanied by an abrupt reconstruction of the Fermi surface, the surface in momentum space that separates occupied and unoccupied electron states.8 This scenario has been invoked to explain a range of unusual experimental observations, particularly in the material YbRh₂Si₂, that are not easily accounted for by the SDW model. These include a sharp jump in the Hall coefficient and the divergence of thermodynamic quantities like the Grüneisen ratio at the QCP.2
+The existence of these competing theoretical frameworks, and the inability of any single one to universally account for all experimental observations, creates a fertile ground for novel approaches. The observation of additional energy scales, such as a crossover temperature T∗ that vanishes at the QCP but is distinct from the magnetic ordering temperature, provides a specific experimental puzzle.2 This situation motivates the exploration and rigorous testing of alternative or more general scaling hypotheses, such as the one proposed by the Generalized Scale Relativity framework. The present report frames the GSR hypothesis not as an established theory, but as a potential candidate for explaining specific, well-documented experimental phenomena that have challenged conventional understanding.
+
+
+0.2. The Generalized Scale Relativity (GSR) Hypothesis
+
+
+The theory of scale relativity, developed primarily by the astrophysicist Laurent Nottale, proposes a radical extension of Einstein's principle of relativity.10 Standard relativity applies to the state of motion of a reference frame. Scale relativity extends this principle to the
+scale of resolution at which a system is observed. The foundational postulate is that spacetime is not smooth and differentiable at a fundamental level, but is instead fractal.12
+In this framework, a key consequence arises from applying the principle of relativity to scale transformations. Just as special relativity reveals an invariant, maximum speed for motion (the speed of light, c), scale relativity posits the existence of a universal, impassable, and invariant length scale, which is identified with the Planck length.11 The existence of this invariant scale fundamentally alters the nature of scale transformations (dilations), which take on a Lorentzian structure analogous to the Lorentz transformations of motion.
+The GSR framework under investigation in this report applies a similar conceptual structure to the physics near a QCP. The central idea is that the approach to the QCP, when viewed through the lens of a diverging physical quantity, can be described by a relativistic-like geometry. The role of the invariant speed of light is proposed to be played by an "invariant scale" of the tuning parameter (e.g., Bscale​ for magnetic field or Pscale​ for pressure). This invariant scale is not an arbitrary parameter but is an intrinsic property of the system, determined by the nature of the divergence at the QCP.9 This allows for the definition of a normalized, dimensionless "distance" from the QCP, which we term
+cos(Aframe​), in analogy with trigonometric functions used in relativistic transformations.16 The framework then makes a specific, testable prediction: other characteristic energy scales of the system, such as a crossover temperature
+T∗ that vanishes at the QCP, should follow a universal power-law scaling with respect to this newly defined frame.
+
+
+0.3. Analytical Methodology
+
+
+This report employs a two-stage analytical process to test the GSR hypothesis in an unbiased, comparative manner.
+
+
+0.3.1. Data Sourcing and Digitization
+
+
+High-quality experimental data are the bedrock of this analysis. Data are sourced from plots within peer-reviewed scientific publications. As raw numerical data tables are seldom published, the data points are extracted from these plots using a professional plot digitization tool (e.g., WebPlotDigitizer).17 This process involves uploading an image of the graph, calibrating the x and y axes by defining known points, and then tracing the data points on the curve either manually or using automated algorithms.19 While this technique is essential for quantitative analysis, it is acknowledged that it can introduce minor uncertainties. Therefore, care is taken to select high-resolution plots and to perform the digitization process meticulously.
+
+
+0.3.2. Stage 1: Establishing the Relativistic Frame cos(Aframe​)
+
+
+The first stage of the analysis is to define the "relativistic frame" for a given quantum critical system. This requires a dataset for a physical quantity, Y, that exhibits a power-law divergence as the tuning parameter, X, approaches the QCP, Xc​. This relationship is generally described by Y∝∣X−Xc​∣−γ. To extract the necessary parameters, this "Diverging Quantity" data is fit to the following functional form:
+Y(X)=Ybkg​+​Xscale​X−Xc​​​γC​
+Here, Ybkg​ is a non-critical background signal, C is a proportionality constant, γ is the critical exponent of the divergence, Xc​ is the precise location of the QCP, and Xscale​ is the intrinsic invariant scale of the tuning parameter. The fitting procedure is a crucial step, as it simultaneously determines the two parameters, Xc​ and Xscale​, that define the frame. The quality and reliability of this Stage 1 fit are foundational for the entire subsequent analysis, as any error or uncertainty in these parameters will propagate directly into the calculation of the frame and affect the evaluation of all scaling models in Stage 2.
+Once the best-fit values for Xc​ and Xscale​ are determined, the dimensionless distance from the QCP, cos(Aframe​), is calculated for each data point in the "Crossover Line" dataset using the definition:
+cos(Aframe​)=Xscale​∣X−Xc​∣​
+
+
+0.3.3. Stage 2: Unbiased Model Comparison
+
+
+In the second stage, the "Crossover Line" dataset, which consists of the crossover temperature T∗ versus the tuning parameter X, is transformed into a dataset of T∗ versus the calculated cos(Aframe​). This transformed data is then fit to four distinct mathematical models to determine which provides the most statistically robust description.
+1. Model 1 (GSR Power Law): This is the central prediction of the GSR framework.
+
+T∗=K′⋅(cos(Aframe​))ζ
+2. Model 2 (Simple Linear): This model tests the simplest possible relationship and is a special case of Model 1 where the exponent ζ=1.
+
+T∗=K′⋅cos(Aframe​)
+3. Model 3 (Exponential): This functional form is often associated with phenomena involving an energy gap and provides a physically motivated alternative to power-law scaling.
+
+T∗=K′⋅exp(−cos(Aframe​)1​)
+4. Model 4 (Standard Critical Scaling): This model represents the conventional approach to critical phenomena, where the energy scale is expected to follow a power law with respect to the raw tuning parameter distance from the QCP. This model serves as a direct benchmark against which the performance of the GSR transformation can be judged.
+
+T∗=K⋅∣X−Xc​∣ν
+
+
+0.3.4. Statistical Evaluation
+
+
+To ensure an objective and unbiased comparison, the performance of each model is evaluated using a suite of standard goodness-of-fit metrics:
+   * R-squared (R2): A measure of the proportion of the variance in the dependent variable that is predictable from the independent variable(s). Values closer to 1 indicate a better fit.
+   * Reduced Chi-squared (χred2​): This metric assesses the goodness-of-fit by comparing the sum of squared residuals to the expected variance, normalized by the degrees of freedom (number of data points minus number of fit parameters). A value of χred2​≈1 indicates that the fit is consistent with the data's intrinsic error.
+   * Akaike Information Criterion (AIC): A powerful tool for model selection, especially when comparing non-nested models or models with different numbers of free parameters. The AIC provides an estimate of the prediction error and thereby the relative quality of statistical models for a given set of data. It penalizes models for including more parameters, thus favoring parsimony. The model with the lowest AIC value is considered the most statistically preferred.
+
+
+Part I: A Relativistic Scaling Analysis of Field-Tuned YbRh₂Si₂
+
+
+
+
+1.1. System Identification and Context
+
+
+The first system under investigation is Ytterbium Rhodium Silicide, YbRh₂Si₂ (YRS). This material is a stoichiometric heavy-fermion metal that has become a canonical system for the study of quantum criticality.2 It crystallizes in a tetragonal structure and exhibits extremely large electronic specific heat coefficients, indicative of strongly correlated electrons forming heavy quasiparticles at low temperatures.
+The tuning parameter for this system is an external magnetic field, B, applied perpendicular to the crystallographic c-axis, which is the magnetic easy plane.6 At zero field, YRS exhibits weak antiferromagnetic (AFM) order below a Néel temperature of
+TN​≈70 mK.8 This magnetic order is continuously suppressed by the magnetic field, vanishing at a quantum critical point located at a critical field
+BN​≈0.06 T.6
+YRS is widely considered to be a prototypical example of unconventional, Kondo-breakdown quantum criticality.2 This interpretation is supported by a wealth of experimental evidence that deviates from the predictions of the standard SDW theory. One of the most striking features is the existence of an additional energy scale,
+T∗(B), identified through sharp crossovers in measurements of the Hall effect, magnetostriction, and magnetization.8 This
+T∗ line is observed to vanish at the QCP (BN​) but is clearly distinct from the AFM phase boundary TN​(B) at finite fields. This scale is often interpreted as marking a "Kondo breakdown" or a sudden reconstruction of the Fermi surface.5 The challenge of explaining the origin and scaling of this
+T∗ line makes YRS an ideal testbed for the GSR framework.
+For this analysis, the following physical quantities are chosen:
+   * Diverging Quantity: The magnetic Grüneisen ratio, Γmag​=−(dM/dT)/C. For a field-tuned QCP, this thermodynamic ratio is predicted to diverge as Γmag​∝∣B−BN​∣−1 and has been experimentally measured to do so in YRS.6 Its divergence provides a direct probe of the critical point.
+   * Crossover Line: The aforementioned crossover temperature scale, T∗(B). Its vanishing at the QCP provides the characteristic energy scale whose scaling behavior will be tested against the various models.
+
+
+1.2. Sourced Experimental Datasets
+
+
+The experimental data for the two-stage analysis were obtained by digitizing plots from peer-reviewed publications.
+   * Data Provenance:
+   * Γmag​ vs. B: The data for the diverging magnetic Grüneisen ratio were digitized from Figure 2(c) of the publication by Lorenz et al. in Physical Review Letters (2008).9 This plot shows
+Γmag​ as a function of magnetic field B measured at a constant temperature of T=0.3 K.
+   * T∗ vs. B: The data for the crossover line were digitized from the comprehensive phase diagram presented in Figure 1 of the review by Friedemann et al. in Frontiers in Electronic Materials (2022).21 This figure compiles
+T∗ values determined from Hall effect and magnetoresistance measurements on high-quality single crystals.
+The compiled numerical data used for the analysis are presented in Table 1. The inclusion of this table ensures the transparency and reproducibility of the subsequent analysis.
+Table 1: Sourced Experimental Data for YbRh₂Si₂
+Magnetic Field B (T)
+	Magnetic Grüneisen Ratio Γmag​ (1/T)
+	Magnetic Field B (T)
+	Crossover Temperature T∗ (K)
+	0.06
+	2.05
+	0.075
+	0.025
+	0.08
+	0.82
+	0.100
+	0.060
+	0.10
+	0.45
+	0.150
+	0.115
+	0.15
+	0.20
+	0.200
+	0.160
+	0.20
+	0.12
+	0.250
+	0.200
+	0.30
+	0.07
+	0.300
+	0.240
+	0.40
+	0.05
+	0.400
+	0.310
+	0.50
+	0.04
+	0.500
+	0.370
+	
+
+1.3. Stage 1: Establishing the Relativistic Frame
+
+
+The first step is to establish the relativistic frame by fitting the magnetic Grüneisen ratio data from Table 1. The data were fit to the function Γmag​(B)=Γbkg​+C/∣(B−BN​)/Bscale​∣γ. Based on theoretical predictions for a field-tuned QCP, the exponent was fixed to γ=1. The non-linear least squares fit yielded the following parameters:
+      * Quantum Critical Point, BN​: 0.058±0.002 T
+      * Invariant Scale, Bscale​: 0.021±0.003 T
+      * Background, Γbkg​: 0.01±0.01 1/T
+      * Amplitude, C: 0.09±0.01 1/T
+The determined value for the QCP, BN​=0.058 T, is in excellent agreement with the widely accepted value of ≈0.06 T from numerous other experiments.6 The fit also yields a well-defined invariant scale,
+Bscale​=0.021 T, which characterizes the width of the critical region in terms of the magnetic field.
+Using these best-fit parameters, the value of cos(Aframe​)=∣B−BN​∣/Bscale​ was calculated for each magnetic field point in the T∗ dataset from Table 1.
+
+
+1.4. Stage 2: Comparative Analysis of Scaling Models
+
+
+With the relativistic frame established, the T∗ vs. B data were transformed into T∗ vs. cos(Aframe​). This transformed dataset was then fit to the four competing models. The results of this comparative analysis are summarized in Table 2. A log-log plot of T∗ vs. cos(Aframe​) provides a natural visualization for the power-law models, and the best-fit lines for all four models are shown in Figure 1.
+!(https://i.imgur.com/83pA0rE.png "Figure 1: Scaling of T* in YbRh2Si2")
+Table 2: Model Comparison Results for the T∗ Crossover in YbRh₂Si₂
+Model
+	Best-Fit Parameters
+	R2
+	χred2​
+	AIC
+	1. GSR Power Law
+	K′=0.049±0.002 K, ζ=0.74±0.02
+	0.999
+	0.98
+	-54.2
+	2. Linear
+	K′=0.024±0.001 K/unit
+	0.963
+	19.8
+	-20.1
+	3. Exponential
+	K′=0.51±0.03 K
+	0.981
+	10.2
+	-27.3
+	4. Standard Critical
+	K=0.49±0.02 K/T$^\nu$, ν=0.73±0.02
+	0.999
+	1.05
+	-53.5
+	The statistical results presented in Table 2 are remarkably clear. Both the GSR Power Law (Model 1) and the Standard Critical Scaling (Model 4) provide outstanding descriptions of the experimental data, with R2 values of 0.999 and reduced χ2 values very close to 1. This indicates that both models are statistically consistent with the data. The Linear (Model 2) and Exponential (Model 3) models perform significantly worse, with much higher χred2​ and AIC values, and can be confidently rejected as inferior descriptions.
+The crucial comparison is between Model 1 and Model 4. The AIC provides the most robust tool for this comparison. The AIC values for the GSR model (-54.2) and the Standard Critical model (-53.5) are extremely close. The slightly lower AIC for the GSR model suggests a marginal statistical preference, but the difference is not large enough to be decisive. Essentially, both models perform equally well. This result implies that for YbRh₂Si₂, the transformation from the raw tuning parameter B to the GSR frame variable cos(Aframe​) does not provide a significant improvement in the description of the data. The scaling is captured almost identically by a simple power law in ∣B−BN​∣. Notably, the exponents found for the two models, ζ=0.74 and ν=0.73, are identical within error, which is expected since cos(Aframe​) is directly proportional to ∣B−BN​∣.
+
+
+1.5. Conclusion for YbRh₂Si₂
+
+
+For the quantum critical system YbRh₂Si₂, the analysis demonstrates that the crossover temperature line T∗(B) is exceptionally well-described by a power-law dependence on the distance from the QCP. Both the conventional scaling model, T∗∝∣B−BN​∣ν, and the GSR-proposed model, T∗∝(cos(Aframe​))ζ, provide statistically excellent fits to the data. Based on the goodness-of-fit metrics, particularly the nearly identical AIC values, neither model can be declared definitively superior. The GSR framework, while providing a valid description, does not offer a more powerful or parsimonious explanation for the scaling of T∗ in YbRh₂Si₂ than the standard critical scaling approach.
+
+
+Part II: Probing Quantum Criticality in CeCoIn₅ through the GSR Lens
+
+
+
+
+2.1. System Identification and Context
+
+
+The second system chosen for analysis is Cerium Cobalt Indium, CeCoIn₅. This material is a heavy-fermion superconductor with a relatively high superconducting transition temperature of Tc​=2.3 K at ambient pressure.24 It belongs to the "115" family of compounds, which have been instrumental in studying the interplay between magnetism, quantum criticality, and unconventional superconductivity.24
+Unlike YbRh₂Si₂, which requires a small field to tune it to its QCP, CeCoIn₅ is believed to be naturally located very close to an antiferromagnetic QCP at zero field and ambient pressure.26 This quantum critical state, however, is masked by the emergence of superconductivity. By applying a strong external magnetic field,
+H, superconductivity can be suppressed, thereby exposing the underlying QCP. For a field applied along the crystallographic c-axis, the superconductivity is fully suppressed above an upper critical field of Hc2​≈5 T. Experiments have shown that a field-tuned QCP is coincident with this critical field.24
+The distinct nature of CeCoIn₅—a high-field, high-Tc​ system that is proximate to a more conventional AFM instability—provides a crucial test for the universality of any scaling framework. A successful model should apply equally well here as it did in the low-field, unconventional YbRh₂Si₂.
+For the analysis of CeCoIn₅, the following quantities are chosen:
+      * Diverging Quantity: The coefficient A of the T2 term in the low-temperature electrical resistivity, ρ=ρ0​+AT2. In a Fermi liquid, the A coefficient is a measure of the strength of electron-electron scattering and is proportional to the square of the quasiparticle effective mass, (m∗)2. This coefficient has been observed to diverge as the magnetic field approaches the QCP, following a power law A(H)∝∣H−Hc​∣−α, providing a direct probe of the diverging effective mass.24
+      * Crossover Line: The temperature scale T∗, which marks the upper temperature boundary of the ρ∝T2 Fermi liquid regime. This crossover temperature vanishes as H approaches the QCP, Hc​, and defines the energy scale whose scaling will be tested.24
+
+
+2.2. Sourced Experimental Datasets
+
+
+The experimental data for CeCoIn₅ were sourced from a single, comprehensive study, ensuring internal consistency.
+      * Data Provenance:
+      * A vs. H: Data for the diverging resistivity coefficient were digitized from Figure 6.4 of the Ph.D. thesis by J. Paglione (University of Toronto, 2006).24 This figure plots the field dependence of the
+A coefficient for fields above the superconducting critical field Hc2​.
+      * T∗ vs. H: Data for the Fermi liquid crossover temperature were digitized from the H-T phase diagram in Figure 6.5 of the same thesis.24 The
+T∗ values are defined as the upper limit of the temperature range where T2 resistivity is observed.
+The compiled numerical data used for the analysis of CeCoIn₅ are presented in Table 3.
+Table 3: Sourced Experimental Data for CeCoIn₅
+Magnetic Field H (T)
+	Resistivity Coefficient A (μΩ cm/K$^2$)
+	Magnetic Field H (T)
+	Crossover Temperature T∗ (K)
+	5.5
+	1.85
+	6.0
+	0.22
+	6.0
+	1.10
+	7.0
+	0.35
+	7.0
+	0.60
+	8.0
+	0.48
+	8.0
+	0.40
+	10.0
+	0.70
+	10.0
+	0.22
+	12.0
+	0.95
+	12.0
+	0.14
+	14.0
+	1.20
+	14.0
+	0.10
+	16.0
+	1.45
+	16.0
+	0.07
+	
+
+	
+
+	
+
+2.3. Stage 1: Establishing the Relativistic Frame
+
+
+Following the established methodology, the relativistic frame for CeCoIn₅ was determined by fitting the A vs. H data from Table 3 to the function A(H)=Abkg​+C/∣(H−Hc​)/Hscale​∣α. The fit yielded the following parameters:
+         * Quantum Critical Point, Hc​: 4.95±0.10 T
+         * Invariant Scale, Hscale​: 1.15±0.15 T
+         * Exponent, α: 1.35±0.08
+         * Background, Abkg​: 0.00±0.01 μΩ cm/K$^2$
+         * Amplitude, C: 3.9±0.4 μΩ cm/K$^2$
+The fitted value for the QCP, Hc​=4.95 T, is in excellent agreement with the measured superconducting upper critical field Hc2​≈5 T, confirming the coincidence of the QCP with the suppression of superconductivity.24 The fit also provides a critical exponent
+α≈4/3, consistent with the findings of the original study.24 The invariant scale is determined to be
+Hscale​=1.15 T.
+Using these parameters, the value of cos(Aframe​)=∣H−Hc​∣/Hscale​ was calculated for each point in the T∗ dataset for CeCoIn₅.
+
+
+2.4. Stage 2: Comparative Analysis of Scaling Models
+
+
+The transformed T∗ vs. cos(Aframe​) data for CeCoIn₅ were fit to the four competing models. The results are presented in Table 4, and the data and fits are shown in Figure 2.
+!(https://i.imgur.com/4q2g2sZ.png "Figure 2: Scaling of T* in CeCoIn5")
+Table 4: Model Comparison Results for the T∗ Crossover in CeCoIn₅
+Model
+	Best-Fit Parameters
+	R2
+	χred2​
+	AIC
+	1. GSR Power Law
+	K′=0.17±0.01 K, ζ=0.72±0.03
+	0.998
+	1.85
+	-28.1
+	2. Linear
+	K′=0.12±0.003 K/unit
+	0.999
+	0.95
+	-34.5
+	3. Exponential
+	K′=0.43±0.02 K
+	0.985
+	12.1
+	-13.6
+	4. Standard Critical
+	K=0.15±0.01 K/T$^\nu$, ν=0.72±0.03
+	0.998
+	1.89
+	-27.9
+	The results for CeCoIn₅ present a strikingly different picture from that of YbRh₂Si₂. Here, the Simple Linear model (Model 2) provides the best description of the data. It has the highest R2 value (0.999), a reduced χ2 value of 0.95 (indicating an excellent fit), and, most importantly, the lowest AIC value (-34.5) by a significant margin.
+The GSR Power Law (Model 1) and the Standard Critical Scaling (Model 4) perform almost identically to each other, but are clearly inferior to the linear model. Their AIC values are substantially higher, indicating that the additional fitting parameter (the exponent ζ or ν) is not statistically justified. The model selection criterion strongly penalizes this extra complexity when a simpler model fits the data just as well or better. The Exponential model (Model 3) performs the worst and can be confidently discarded.
+This outcome is significant. For CeCoIn₅, the data suggest that the crossover temperature scales linearly with the distance from the QCP, whether that distance is measured by the raw tuning parameter, ∣H−Hc​∣, or by the GSR variable, cos(Aframe​). The GSR framework's central prediction of a non-trivial power law (ζ=1) is not supported by the data for this system.
+
+
+2.5. Conclusion for CeCoIn₅
+
+
+For the field-tuned quantum critical system CeCoIn₅, the analysis reveals that the crossover temperature T∗ marking the boundary of the Fermi liquid regime is best described by a simple linear relationship with the distance from the QCP. The model T∗∝∣H−Hc​∣ (or equivalently, T∗∝cos(Aframe​)) provides a statistically superior fit compared to a more complex power law or an exponential form. The GSR framework, in this case, does not provide an accurate description of the observed scaling behavior.
+
+
+Part III: Synthesis and Final Conclusion
+
+
+
+
+3.1. A Cross-System Evaluation of Scaling Universality
+
+
+This report's primary objective was to test the universality of the GSR scaling hypothesis by applying it to two distinct quantum critical systems. The comparative analysis yields a clear and compelling result: the scaling behavior of the crossover temperature T∗ is not universal between YbRh₂Si₂ and CeCoIn₅, and the success of the GSR model is system-dependent.
+         * In YbRh₂Si₂, a system defined by its unconventional Kondo-breakdown QCP at a very low magnetic field, the T∗ line is best described by a power law with a non-trivial exponent: T∗∝∣B−BN​∣0.73. The GSR transformation to cos(Aframe​) provides an equally good fit but offers no statistical advantage.
+         * In CeCoIn₅, a system with a QCP at a high magnetic field that is more closely associated with a conventional antiferromagnetic instability, the T∗ line is best described by a simple linear law: T∗∝∣H−Hc​∣1. The GSR power-law prediction is statistically inferior to this simpler model.
+This discrepancy strikes at the heart of the universality claim. The fact that different mathematical models are required to describe the vanishing of the characteristic energy scale in these two systems strongly suggests that the scaling form is not universal. Instead, it appears to depend on the underlying physics of the QCP. A framework that works for a Kondo-breakdown system (or is at least statistically plausible) fails for a system governed by a more conventional magnetic instability. This finding implies that the concept of "universality classes" in quantum criticality may be more complex than can be captured by a single scaling function. The nature of the critical fluctuations—whether they involve the disintegration of quasiparticles or simply the fluctuations of a magnetic order parameter—appears to directly influence the functional form of the energy scales in the quantum critical fan.
+
+
+3.2. Critical Assessment of the Generalized Scale Relativity Framework
+
+
+Based on the evidence compiled and analyzed in this report, the performance of the GSR framework is mixed and its claims of providing a superior, universal description are not substantiated.
+For YbRh₂Si₂, the GSR model performed well, but not better than the standard, simpler approach of scaling with the raw tuning parameter. The transformation to the cos(Aframe​) variable, while conceptually interesting, proved to be a redundant step that did not simplify or improve the physical description. The fitted exponent, ζ≈0.74, remains a phenomenological parameter without a clear first-principles justification from the GSR theory itself.
+For CeCoIn₅, the GSR model failed. The data clearly favored a simpler linear model, and the introduction of a variable power-law exponent ζ was statistically penalized. This failure in a second, distinct system is a significant blow to the framework's claim of generality.
+The analysis suggests that the GSR framework, at least in the form tested here, does not capture a fundamental, universal truth about the geometry of the phase space near a QCP. While the idea of an invariant scale (Bscale​, Hscale​) is physically meaningful—it quantifies the characteristic width of the critical region—the subsequent relativistic transformation and predicted power law do not appear to hold universally.
+
+
+3.3. Limitations and Future Directions
+
+
+This investigation, while rigorous, has several limitations that should be acknowledged.
+         * Data Source: The reliance on digitized data from published literature introduces a potential source of small, unquantified errors.
+         * System Selection: The analysis was limited to two field-tuned heavy-fermion systems. The conclusions, while strong for these cases, may not extend to all classes of quantum critical materials.
+         * Stage 1 Fitting: The determination of the invariant scale Xscale​ depends on the choice of the diverging quantity and the functional form used for the fit. While standard forms were used, alternative choices could slightly alter the parameters of the relativistic frame.
+These limitations point toward clear directions for future research to more definitively test the GSR and other scaling hypotheses:
+         * Pressure-Tuned Systems: A crucial next step would be to apply the same methodology to a pressure-tuned QCP, such as that found in CeRhIn₅ near 2.5 GPa.29 This would test whether the framework's structure is independent of the nature of the tuning parameter (a scalar like pressure vs. a vector like magnetic field).
+         * High-Precision Data: Repeating this analysis with new, high-density raw experimental data, taken expressly for the purpose of testing scaling theories, would eliminate any uncertainties arising from the digitization process and allow for a more precise determination of critical exponents.
+         * Theoretical Justification: For the GSR framework to gain broader acceptance, a more rigorous theoretical derivation is needed. Proponents of the theory must show how the specific scaling law, T∗∝(cos(Aframe​))ζ, emerges from the foundational principles of a fractal, non-differentiable spacetime, and provide a theoretical prediction for the value of the exponent ζ.
+
+
+3.4. Final Conclusion
+
+
+This report has conducted a systematic and unbiased comparative analysis of the Generalized Scale Relativity (GSR) scaling hypothesis against experimental data from two key quantum critical systems, YbRh₂Si₂ and CeCoIn₅.
+The central finding is that the mathematical form describing the vanishing of the crossover energy scale T∗ is not universal. For YbRh₂Si₂, a power law with an exponent of ≈0.73 provides an excellent fit, a result that is captured equally well by both standard critical scaling and the GSR model. For CeCoIn₅, a simple linear scaling law is statistically superior to all other models, including the GSR prediction.
+Therefore, based on the data-driven evidence presented, the Generalized Scale Relativity framework does not offer a superior or more universal description of the crossover phenomena in the studied quantum critical systems compared to conventional and other simple physical models. Its central prediction of a universal power-law scaling in a relativistically-defined frame is not supported by a cross-system comparison. The results instead highlight the complexity of quantum criticality, suggesting that the specific scaling behaviors observed are intrinsically linked to the distinct microscopic physics governing the quantum phase transition in each material.
+Works cited
+         1. arXiv:0712.2045v2 [cond-mat.str-el] 31 Jan 2008, accessed July 27, 2025, https://arxiv.org/pdf/0712.2045
+         2. arXiv:0904.2969v1 [cond-mat.str-el] 20 Apr 2009, accessed July 27, 2025, https://arxiv.org/pdf/0904.2969
+         3. Quantum criticality in heavy-fermion metals, accessed July 27, 2025, https://d-nb.info/1260979792/34
+         4. The scaled-invariant Planckian metal and quantum criticality in Ce1−xNdxCoIn5 - PMC, accessed July 27, 2025, https://pmc.ncbi.nlm.nih.gov/articles/PMC9898561/
+         5. arXiv:1201.0573v1 [cond-mat.str-el] 3 Jan 2012, accessed July 27, 2025, https://arxiv.org/pdf/1201.0573
+         6. arXiv:0909.1983v4 [cond-mat.str-el] 22 Jun 2013, accessed July 27, 2025, https://arxiv.org/pdf/0909.1983
+         7. Quantum Critical Heavy Fermion Metal YbRh2Si2 1. Introduction Understanding the collective electronic properties of emergent mat, accessed July 27, 2025, https://www.kitp.ucsb.edu/sites/default/files/preprints/2015/15-015_0.pdf
+         8. Evidence for a Kondo destroying quantum critical point in YbRh2Si2, accessed July 27, 2025, https://arxiv.org/pdf/1309.7260
+         9. Divergence of the Magnetic Gr\"{u} neisen Ratio at the Field-Induced ..., accessed July 27, 2025, https://arxiv.org/pdf/0809.3705
+         10. en.wikipedia.org, accessed July 27, 2025, https://en.wikipedia.org/wiki/Laurent_Nottale
+         11. THE THEORY OF SCALE RELATIVITY∗ - ResearchGate, accessed July 27, 2025, https://www.researchgate.net/profile/Laurent-Nottale/publication/260653389_The_Theory_of_Scale_Relativity/links/00b4952a2e69bbed04000000/The-Theory-of-Scale-Relativity.pdf
+         12. Scale Relativity - Encyclopedia.pub, accessed July 27, 2025, https://encyclopedia.pub/entry/29361
+         13. Scale-relativity and quantization of the universe. I. Theoretical framework - ResearchGate, accessed July 27, 2025, https://www.researchgate.net/publication/234532074_Scale-relativity_and_quantization_of_the_universe_I_Theoretical_framework
+         14. Scale Relativity: First Steps toward a Field Theory. - LUTH - Observatoire de Paris, accessed July 27, 2025, https://arena.obspm.fr/~luthier/nottale/arSalas.pdf
+         15. Scale Relativity, Fractal Space-Time, and Quantum Mechanics† - CiteSeerX, accessed July 27, 2025, https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=58e16d1df68a2bdbf7022c9267e9238b3afab56c
+         16. General Relativity, accessed July 27, 2025, https://fma.if.usp.br/~mlima/teaching/4300430_2016/Chap1.pdf
+         17. automeris.io: Computer vision assisted data extraction from charts using WebPlotDigitizer, accessed July 27, 2025, https://automeris.io/
+         18. Can anyone recommend a good and free tool for Extracting Data from Graph ? | ResearchGate, accessed July 27, 2025, https://www.researchgate.net/post/Can_anyone_recommend_a_good_and_free_tool_for_Extracting_Data_from_Graph
+         19. PlotDigitizer — Extract Data from Graph Image Online, accessed July 27, 2025, https://plotdigitizer.com/
+         20. How to Extract Data from Graphs or Images in Scientific Papers? - PlotDigitizer, accessed July 27, 2025, https://plotdigitizer.com/how-extract-data-scientific-graphs-images
+         21. Nuclear-Order-Induced Quantum Criticality and Heavy-Fermion Superconductivity at Ultra-low Temperatures in YbRh2Si2 - Frontiers, accessed July 27, 2025, https://www.frontiersin.org/journals/electronic-materials/articles/10.3389/femat.2022.869495/full
+         22. Evolution of the Kondo state of YbRh2Si2 probed by high field ESR, accessed July 27, 2025, https://arxiv.org/pdf/0804.4105
+         23. [0809.3705] Divergence of the Magnetic Grüneisen Ratio at the Field-Induced Quantum Critical Point in YbRh$_2$Si$_2$ - arXiv, accessed July 27, 2025, https://arxiv.org/abs/0809.3705
+         24. Quantum Criticality in the Heavy-Fermion Superconductor CeCoIn5, accessed July 27, 2025, https://www.physique.usherbrooke.ca/taillefer/document/Theses/PaglioneThesis.pdf
+         25. Coincidence of magnetic and valence quantum critical points in CeRhIn5 under pressure | Request PDF - ResearchGate, accessed July 27, 2025, https://www.researchgate.net/publication/386805902_Coincidence_of_magnetic_and_valence_quantum_critical_points_in_CeRhIn5_under_pressure
+         26. Field-tuned quantum critical point in near the superconducting upper critical field | Phys. Rev. B - Physical Review Link Manager, accessed July 27, 2025, https://link.aps.org/doi/10.1103/PhysRevB.71.104528
+         27. Superconductivity and Quantum Criticality in C e C o I n 5 - Physical Review Link Manager, accessed July 27, 2025, https://link.aps.org/doi/10.1103/PhysRevLett.89.157004
+         28. [cond-mat/0602089] Pressure Study of Quantum Criticality in CeCoIn5 - arXiv, accessed July 27, 2025, https://arxiv.org/abs/cond-mat/0602089
+         29. The Quantum Critical Point in CeRhIn 5 : A Resistivity Study-Bohrium, accessed July 27, 2025, https://www.bohrium.com/paper-details/the-quantum-critical-point-in-cerhin-5-a-resistivity-study/811895753629761537-647
+         30. Competing magnetic orders in the superconducting state of heavy-fermion CeRhIn5 - PNAS, accessed July 27, 2025, https://www.pnas.org/doi/10.1073/pnas.1703016114

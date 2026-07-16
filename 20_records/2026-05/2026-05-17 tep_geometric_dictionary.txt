@@ -1,0 +1,757 @@
+# A TEP Geometric Dictionary for the Riemann ζ-Field
+
+**Companion note to "A Dyadic Cascade Representation of the Riemann ξ
+Function with Renormalization-Group Structure"**
+
+**Working draft, May 2026**
+
+## Abstract
+
+We document an internally consistent geometric translation between the
+structural features of the Riemann ζ-field on the (σ, t)-plane and the
+rapidity-budget machinery of the Terminal Equivalence Principle (TEP).
+The translation identifies σ as a memory-weighting axis, t as an
+associativity-degree axis, the strip orientation θ_strip as a TEP state
+angle satisfying x_strip = sin(θ_strip), and the discrete-vs-continuous
+coarse-graining unit dl as a phase-space probe scale whose σ- and
+t-resolutions decompose under Heisenberg-style conjugacy controlled by
+θ_strip. The cascade rapidity α\_∞(s) = 2 log ζ(s/2) − log ζ(s) admits a
+logarithmic singularity at each Riemann zero, with operational
+regularity off-zero: matched-filter probes resolve α\_∞ to fixed
+relative accuracy on truncated domains (excluding δ_0-neighborhoods of
+zeros) with chirp-duration scaling as log log(1/δ_0). Riemann's argument
+principle becomes a TEP conservation law: the integer count of enclosed
+zeros is invariant under continuous deformation of the integration
+contour including rotation through θ_strip --- structurally analogous to
+a Lorentz-invariant scalar preserved across boost frames, with the
+cascade's passive-rapidity (η) and reactive-phase (φ) components
+transforming among themselves as harmonic conjugates. The dictionary is
+interpretive --- it does not produce new theorems about ζ or constrain
+zero locations --- but it provides a coherent framework-internal reading
+of how ζ's standard duality (primes ↔ zeros, sum ↔ integral)
+instantiates TEP's machinery, with quantitative operational thresholds
+for off-zero analysis.
+
+------------------------------------------------------------------------
+
+## 1. Introduction and scope
+
+The companion paper establishes a dyadic cascade representation of the
+Riemann ξ function, with explicit prime + elementary decomposition and
+quantitative renormalized convergence. That paper is structural
+mathematics, and its results stand independently. This note serves a
+different purpose: it documents the *interpretive correspondence*
+between the geometric features of ζ's complex domain and TEP's
+rapidity-budget framework, with appropriate care about what constitutes
+proven content versus heuristic translation.
+
+We claim no new mathematics about ζ here. The argument principle (§4)
+and the cascade rapidity decomposition (§3) are standard. What is new is
+the *assembly*: the demonstration that TEP's three-term budget x² + w +
+u = 1, the SU(1,1) cascade machinery, and the discrete/continuous
+Fourier duality between primes and the imaginary line align coherently
+with a single geometric dictionary on the (σ, t)-plane. Whether such a
+dictionary is *useful* is a separate question; this note demonstrates
+that it is at least *consistent*.
+
+------------------------------------------------------------------------
+
+## 2. Coordinate identification
+
+We adopt the identification
+
+> σ ↔ memory weight (temporal coordinate),\
+> t ↔ phase rotation (spatial coordinate)
+
+consistently throughout. The motivation: σ controls the magnitude
+weighting of cascade rungs $r_k = p_k^{-s/2}$ via
+$|r_k| = p_k^{-\sigma/2}$. As σ varies, the privilege of early primes
+over late primes shifts. Higher σ → strong early-prime privilege
+(forward arrow of cascade-time, dissipative). Lower σ → flatter
+weighting (slower decay, more democratic). σ = 1/2 is the *minimum-bias*
+line --- the slowest decay rate at which $r_k \to 0$ still holds, the
+line where no directional bias on early-vs-late primes is imposed by the
+magnitude decay.
+
+The phase rotation, $\arg(r_k) = -(t/2)\log p_k$, controls *where in the
+prime cycle* each rung sits. As t varies along the strip, the cumulative
+phase $\Phi_N(t) = -(t/2)\sum_{k\leq N}\log p_k$ traces a trajectory on
+the unit circle. This is positional structure in cascade-space.
+
+A critical refinement: every vertical strip carries memory. The σ = 1/2
+line is not "memory-free" --- it is the line of minimum
+memory-asymmetry. Memory itself is everywhere except along the t = 0
+real axis, where the cascade Möbius transformations become real scalars
+and commute (associative limit, see §5).
+
+------------------------------------------------------------------------
+
+## 3. The cascade rapidity decomposition
+
+Define the cascade rapidity
+
+> α\_∞(s) := log A(s), A(s) := ζ(s/2)² / ζ(s), (1)
+
+a meromorphic function on ℂ with branch points at zeros and poles of
+ζ(s/2) and ζ(s). Decompose into real and imaginary parts:
+
+> α\_∞(s) = η(s) + i φ(s) (2)
+
+with
+
+> η(s) = log\|A(s)\| (passive rapidity, magnitude),\
+> φ(s) = arg A(s) (reactive phase, modulo 2π).
+
+Since α\_∞ is holomorphic on its domain of regularity, the
+Cauchy--Riemann equations imply η and φ are harmonic conjugates:
+
+> ∂η/∂σ = ∂φ/∂t,\
+> ∂η/∂t = −∂φ/∂σ. (3)
+
+This is the analytic-function instance of the boost-rotation duality: η
+and φ form an SO(2)-rotation-equivariant pair under deformations in the
+(σ, t)-plane.
+
+The reactive phase φ(s) is naturally an arctan ratio:
+
+> φ(s) = 2 arg ζ(s/2) − arg ζ(s) = 2 arctan\[Im ζ(s/2) / Re ζ(s/2)\] −
+> arctan\[Im ζ(s) / Re ζ(s)\] (4)
+
+(modulo π wrap-around at branch crossings). This explicit arctan-ratio
+form was hinted at in the framework's early notes; (4) makes it precise.
+
+Riemann zeros register as π-jumps in φ. On the critical line, arg ζ(½ +
+it) jumps by π at each γ_n, while arg ζ(¼ + it/2) varies smoothly. The
+zero structure of ζ thus appears as discrete topological features in the
+*reactive phase component* of the cascade rapidity, not as anomalies in
+the *passive magnitude component*. This is consistent with --- and
+explains --- the falsified "constructive accumulation in deficit
+consumption" intuition: the zeros are phase-coordinate features, not
+magnitude-coordinate features at finite truncation.
+
+------------------------------------------------------------------------
+
+## 4. Strip integrations and the conservation law
+
+For a closed contour ∂R in the (σ, t)-plane bounding a region R that
+avoids the critical singular set,
+
+> ∮*{∂R} dα*∞(s) = 2πi · \[2 N\_{ζ(s/2)}(R) − N\_{ζ(s)}(R) − 2
+> P\_{ζ(s/2)}(R) + P\_{ζ(s)}(R)\] (5)
+
+where N_f(R) counts zeros of f inside R and P_f(R) counts poles. This is
+the argument principle applied to A(s) = ζ(s/2)²/ζ(s); we record it here
+in TEP-friendly notation.
+
+Equation (5) is a **conservation law** in two senses: (a) the integral
+is invariant under continuous deformation of ∂R within an analytic
+region (no singularities crossed), and (b) the integral is quantized in
+units of 2πi (topological invariant). In TEP rapidity language: the
+total cascade boost around any closed loop equals an integer multiple of
+2π, weighted by zero/pole counts at the natural scales s and s/2.
+
+For an ε-width vertical strip
+$[\sigma_0 − \varepsilon/2, \sigma_0 + \varepsilon/2] \times [t_1, t_2]$,
+the boundary integral encodes the count of zeros (at scale s and s/2)
+crossed in the t-range, independent of ε. As ε → 0, the strip
+degenerates to a vertical line segment, and the integral approaches a
+sum of π-jumps at zeros lying on σ = σ_0. The topological count is
+preserved.
+
+For an ε-width horizontal strip
+$[\sigma_1, \sigma_2] \times [t_0 − \varepsilon/2, t_0 + \varepsilon/2]$,
+the boundary integral encodes the magnitude profile of A(s) along the
+σ-direction at near-fixed t_0, plus boundary-jump contributions if t_0
+is at a zero. As ε → 0, the strip degenerates to a horizontal line
+segment, and the integral approaches the smooth η-difference η(σ_2, t_0)
+− η(σ_1, t_0).
+
+------------------------------------------------------------------------
+
+## 5. The strip dictionary
+
+We now state the geometric dictionary in tabular form. Two distinct
+gradient parameters control the cascade's character along each axis:
+
+  -----------------------------------------------------------------------
+  Axis                    Parameter               What varies
+  ----------------------- ----------------------- -----------------------
+  σ-direction             memory weight asymmetry early-vs-late prime
+                                                  privilege;
+                                                  arrow-of-cascade-time
+                                                  strength
+
+  t-direction             associativity degree    commutator scaling
+                                                  \[f_a, f_b\] of Möbius
+                                                  rungs (0 at t = 0, O(t)
+                                                  small, O(1) large)
+  -----------------------------------------------------------------------
+
+The σ = 1/2 line is the *symmetric memory-weighting* line --- minimum
+directional bias on early-vs-late primes --- but it is *not*
+memory-free. The t = 0 line is the *associative* line --- Möbius rungs
+are real and commute, so prime ordering is genuinely irrelevant. These
+are different structural conditions on the cascade. They cross at the
+single point s = 1/2 ∈ ℝ, which has no special analytic significance for
+ζ (ζ(1/2) ≈ −1.46).
+
+**Strip orientation as TEP state angle.** Define θ_strip ∈ \[0, π\] as
+the angle of the strip's long axis from the σ-direction. Then:
+
+  -------------------------------------------------------------------------------
+  θ_strip        strip type     x_strip = sin  u_strip = cos² character
+                                θ_strip        θ_strip        
+  -------------- -------------- -------------- -------------- -------------------
+  0, π           horizontal     0              1              discrete summation
+                 (long axis                                   over primes; budget
+                 along σ)                                     pure-absorption
+
+  π/2            vertical (long 1              0              continuous
+                 axis along t)                                integration over
+                                                              phase; budget
+                                                              pure-transmission
+
+  intermediate   diagonal       sin θ          cos² θ         mixed budget
+                                                              partition
+  -------------------------------------------------------------------------------
+
+This identification places the strip orientation directly inside TEP's
+three-term budget: a horizontal strip realizes the perfectly destructive
+limit (u = 1, all energy absorbed into the cascade, no boundary
+transmission), a vertical strip realizes the boundary-hit limit (x = 1,
+no absorption, full transmission), and intermediate strips realize mixed
+states with budget partitioned by sin² θ + cos² θ = 1.
+
+**Coarse-graining unit dl.** Distinct from the orientation θ_strip, dl
+characterizes the *aggregation mode* along the strip:
+
+  -----------------------------------------------------------------------
+  dl regime               operation               along which axis
+                                                  natively
+  ----------------------- ----------------------- -----------------------
+  dl → 0                  continuous integration  t-direction (continuous
+                          (∫)                     imaginary line)
+
+  dl → 1                  discrete summation (Σ)  σ-direction (primes are
+                                                  discrete)
+  -----------------------------------------------------------------------
+
+This reflects an intrinsic asymmetry of the ζ-field: the σ-direction has
+discrete structure built in (the primes are indexed $p_1, p_2, \ldots$,
+with σ controlling their relative weights), while the t-direction is
+purely continuous (no preferred sampling along the imaginary axis).
+Operations along σ are naturally Σ-type; operations along t are
+naturally ∫-type.
+
+The interplay between θ_strip and dl realizes a Fourier-uncertainty
+trade-off: a strip's "sampling rate" along its long axis trades against
+its "window width" perpendicular to it. Pure horizontal sampling has
+high σ-sampling rate (one prime per dl-step) but smears the t-coordinate
+over the ε-window. Pure vertical sampling has high t-sampling rate
+(continuous) but selects a single σ-value within the ε-window. Diagonal
+strips interpolate.
+
+**Positional weighting.** Two basis-aligned strips at the same
+orientation but different positions encode different cascade behaviors:
+
+-   Vertical strip at σ_0 = 1/2 (critical-line strip): forced-order
+    cascade with symmetric memory weighting; this is the locus of all
+    nontrivial ζ zeros.
+-   Vertical strip at σ_0 = 1.3: forced-order cascade with strong
+    early-prime privilege; convergent prime sum, no zeros (Hadamard--de
+    la Vallée Poussin).
+-   Horizontal strip at t_0 = γ_n: integration over σ at the level of a
+    Riemann zero; boundary-jump contributions register the zero.
+-   Horizontal strip at t_0 = 10 (off-zero): smooth integration over σ;
+    no jump contributions.
+
+The arrow-of-direction surfaces here. σ \> 1/2 and σ \< 1/2 are
+FE-related by σ ↔ 1 − σ; the σ \> 1/2 side is "dissipative" (early
+primes dominate, late-prime contribution suppressed), and σ \< 1/2 is
+"anti-dissipative" (formally --- the cascade leaves the strict-passive
+regime, but the metric-budget identity persists with appropriate
+signature). The functional equation maps these as
+time-reversal-conjugate frames. Similarly, +t and −t produce cascades
+with opposite chirality of phase accumulation: the cumulative phase
+$\Phi_N(t) = -(t/2)\sum\log p_k$ reverses sign, and the regions of the
+prime list that experience constructive interference shift to
+complementary subsets. This is structurally the cascade analog of the
+integer Dirichlet series weight-flip across Re(s) = 1, but operating
+through phase rather than through magnitude.
+
+------------------------------------------------------------------------
+
+## 5.5. Coarse-graining: how dl interpolates with strip orientation
+
+The coarse-graining unit dl introduced in §5 has clean operational
+meaning at the boundary cases (Σ-step along σ, dt along t) but requires
+unpacking at intermediate strip angles. The right framing is as a
+phase-space probe scale, with the strip orientation θ_strip controlling
+how the probe's resolution decomposes between σ and t directions.
+
+### 5.5.1. Phase-space probe interpretation
+
+A strip at angle θ_strip with center $(\sigma_0, t_0)$ and ε-width
+perpendicular to its long axis can be read as a windowed probe of the
+cascade observable. The probe's σ- and t-resolutions are not
+independent: they are linked by Heisenberg-style conjugacy, with the
+link mediated by the strip orientation.
+
+For a probe of long-axis length scale $dl$, the resolutions in the (σ,
+t)-coordinates are
+
+$$\Delta\sigma_\theta^2 = dl^2 \cos^2\theta + \frac{1}{dl^2}\sin^2\theta, \qquad \Delta t_\theta^2 = dl^2 \sin^2\theta + \frac{1}{dl^2}\cos^2\theta. \quad (6)$$
+
+These satisfy $\Delta\sigma_\theta\,\Delta t_\theta \geq 1/2$ with
+equality iff $dl = 1$ (the saturation locus) for any θ, or iff θ ∈ {0,
+π/2} (the axis-aligned cases).
+
+At the boundary cases:
+
+-   **θ = 0 (horizontal):** $\Delta\sigma_\theta = dl$,
+    $\Delta t_\theta = 1/dl$. The σ-resolution *is* dl; the t-window is
+    its conjugate $1/dl$. Sampling along σ at step dl smears across t at
+    scale $1/dl$.
+-   **θ = π/2 (vertical):** $\Delta\sigma_\theta = 1/dl$,
+    $\Delta t_\theta = dl$. The roles swap. The t-resolution is dl; the
+    σ-window is $1/dl$.
+
+At intermediate θ, dl is a coupled phase-space scale that contributes to
+both σ and t resolutions weighted by $(\cos\theta, \sin\theta)$. The
+same physical "step size" along the strip's long axis manifests as a
+σ-step or a t-step depending on orientation, with the conjugate variable
+picking up the remainder.
+
+### 5.5.2. Prime-density modulation
+
+The natural σ-step is not uniform across the σ-axis. By the Prime Number
+Theorem, the average gap between successive primes near $p$ is $\log p$,
+so the natural σ-step in *prime-natural* units at scale $p$ is
+$\Delta\ell_\sigma \sim 1/\log p$. The Heisenberg saturation locus
+$dl = 1$ is therefore in *absolute* (σ, t)-units, but in prime-natural
+units the same condition becomes $dl = \log p$, scale-dependent.
+
+The operational consequence: probes of the cascade at scale
+corresponding to prime $p_k$ have natural σ-resolution $1/\log p_k$, and
+the conjugate t-window for matched-filter probes is $\log p_k$. As
+$p_k \to \infty$, the σ-resolution improves while the t-window grows ---
+the cascade "self-refines" at higher prime scales, which is the
+operational form of the framework's earlier observation that prime
+sampling becomes finer as one moves to larger primes.
+
+### 5.5.3. Chirp and pulse coherence
+
+The Fourier-conjugacy reading of (6) admits a sharper interpretation
+through the chirp/pulse picture. A strip at angle θ_strip realizes a
+probe whose long-axis "duration" is independent of its "sweep
+direction":
+
+  -----------------------------------------------------------------------
+  Probe character                     Strip realization
+  ----------------------------------- -----------------------------------
+  **Long-duration chirp, slow sweep** long L, intermediate θ ---
+                                      distinguishably swept across both σ
+                                      and t; high temporal coherence
+                                      (fine ordering of contributions),
+                                      low spatial coherence (frequencies
+                                      smeared together)
+
+  **Short pulse**                     short L, any θ --- many frequencies
+                                      arrive simultaneously; low temporal
+                                      coherence, high spatial coherence
+
+  **Pure σ-sweep**                    long L, θ = 0 --- discrete
+                                      prime-by-prime accumulation;
+                                      horizontal strip in the geometric
+                                      dictionary
+
+  **Pure t-sweep**                    long L, θ = π/2 --- continuous
+                                      phase accumulation; vertical strip
+                                      in the geometric dictionary
+  -----------------------------------------------------------------------
+
+This recasts the geometric dictionary's strip-orientation parameter as a
+Fourier-conjugacy parameter on the same phase-space, with the intrinsic
+discrete-vs-continuous asymmetry of the ζ-field (primes discrete on σ,
+Lebesgue continuous on t) providing a fixed reference for what "sweep"
+and "duration" mean operationally.
+
+### 5.5.4. Poisson-CDF reconstruction threshold
+
+A concrete realization of the chirp-duration / event-count threshold is
+provided by the elementary identity
+
+$$x \cdot \frac{\Gamma(1+k, \log x)}{k!} \to x \quad \text{as } k \to \infty, \quad (7)$$
+
+where $\Gamma(1+k, \cdot)$ is the upper incomplete gamma function. The
+ratio $\Gamma(1+k, \log x)/k!$ is the cumulative distribution function
+of a Poisson($\log x$) random variable evaluated at $k$:
+
+$$\frac{\Gamma(1+k, \log x)}{k!} = e^{-\log x}\sum_{j=0}^{k}\frac{(\log x)^j}{j!} = \mathbb{P}\big[\text{Poisson}(\log x) \leq k\big]. \quad (8)$$
+
+For $x \gg 1$ (so $\log x > 0$), the saturation threshold is
+$k \sim \log x$: at $k \ll \log x$ the CDF is small, at
+$k \approx \log x$ it is at the half-mass point, and at $k \gg \log x$
+it converges super-exponentially to 1.
+
+The chirp-duration reading: $k$ is the "duration" of the reconstruction
+(number of accumulated Poisson events), and $\log x$ is the natural
+event-scale at the value $x$. Faithful reconstruction requires duration
+to substantially exceed the event-scale. In the framework's strip
+language, this gives a concrete operational threshold for the long-axis
+length L of a strip that resolves cascade observables at scale
+$|f| \sim x$:
+
+$$L_{\text{min}}(x) \sim \log x. \quad (9)$$
+
+For prime-supported observables at scale $p$, $\log x \sim \log p$
+matches the prime-density modulation of §5.5.2: the same $\log p$ factor
+appears as both the "natural σ-step" and the "minimum strip duration for
+reconstruction." The two readings are operationally consistent.
+
+------------------------------------------------------------------------
+
+## 5.6. Operational regularity of cascade rapidity off-zero
+
+The cascade rapidity $\alpha_\infty(s) = 2\log\zeta(s/2) - \log\zeta(s)$
+has a logarithmic singularity at each Riemann zero $\rho_n$:
+
+$$|\alpha_\infty(s)| \sim \log|s - \rho_n|^{-1} \quad \text{as } s \to \rho_n. \quad (10)$$
+
+The singularity is *soft* --- logarithmic rather than polynomial --- but
+it is a genuine divergence, not a removable feature.
+
+### 5.6.1. Uniform off-zero bound
+
+For any $\delta_0 > 0$, on any compact region K of the (σ, t)-plane, and
+on the truncated domain $K \setminus \bigcup_n B(\rho_n, \delta_0)$
+(compact set with $\delta_0$-neighborhoods of zeros excluded),
+$\alpha_\infty$ is uniformly bounded:
+
+$$\sup_{s \in K \setminus \bigcup_n B(\rho_n, \delta_0)} |\alpha_\infty(s)| \;\leq\; \log(1/\delta_0) + C(K), \quad (11)$$
+
+where $C(K)$ depends only on the compact region K (collecting
+contributions from regular parts of $\zeta$ and $\zeta(s/2)$ over K,
+plus their pole structure).
+
+This uniform bound is a *truncated-domain* statement: it holds away from
+zeros but does not extend across them. Within the excluded
+neighborhoods, $\alpha_\infty$ exhibits its full logarithmic
+singularity.
+
+### 5.6.2. Matched-filter resolution off-zero
+
+The Poisson-CDF reconstruction
+$\mathcal{P}(\alpha_\infty; k, k) := \alpha_\infty \cdot \Gamma(1+k, \log\alpha_\infty)/k!$
+resolves $\alpha_\infty$ to fixed *relative* accuracy on the truncated
+domain, with truncation depth scaling doubly-logarithmically:
+
+$$k \gtrsim \log\log(1/\delta_0) + \log(1/\varepsilon) \implies \frac{|\mathcal{P}_k(\alpha_\infty) - \alpha_\infty|}{|\alpha_\infty|} \leq \varepsilon \quad \text{on } K \setminus \bigcup_n B(\rho_n, \delta_0). \quad (12)$$
+
+This is operational regularity off-zero, mediated by the matched-filter
+probe. Its honest scope:
+
+-   **What it gives:** uniform *relative* accuracy on the truncated
+    domain with chirp-duration scaling as $\log\log(1/\delta_0)$ ---
+    exponentially better than the bare-ζ scaling $\log(1/\delta_0)$.
+-   **What it does not give:** a uniform *absolute* bound. The residual
+    $|\mathcal{P}_k - \alpha_\infty|$ at fixed $k$ grows with
+    $|\alpha_\infty|$ as $s$ approaches a zero; relative accuracy is
+    preserved, but absolute closeness is not. Matched-filter probes
+    provide *subordination* of the divergence at constant relative
+    scale, not *domination* in the absolute sense.
+
+### 5.6.3. The boundary obstruction
+
+The framework's earlier intuition --- that the cascade's hitting the
+unit-disc boundary $|x_\infty| = 1$ might be a finite-N detectable
+signature of zeros --- was falsified at the level of finite-N cascade
+dynamics (cf. project status summary, R.1--R.5). A clarifying
+reformulation:
+
+The three statements
+
+(i) $\zeta(s) = 0$,\
+(ii) $A(s) := \zeta(s/2)^2/\zeta(s) = \infty$,\
+(iii) $|x_\infty(s)| = 1$ at the +1 boundary
+
+are equivalent under the cascade map. Approaching the boundary along the
+σ-direction from $\rho_1$:
+
+  σ-distance   $|x_\infty|$   $1 - |x_\infty|$       $|1/\alpha_\infty|$
+  ------------ -------------- ---------------------- ----------------------
+  $10^{-1}$    0.9088         $9.1 \times 10^{-2}$   $3.5 \times 10^{-1}$
+  $10^{-3}$    0.99902        $9.8 \times 10^{-4}$   $1.3 \times 10^{-1}$
+  $10^{-5}$    0.99999        $9.8 \times 10^{-6}$   $8.3 \times 10^{-2}$
+  $10^{-7}$    0.9999999      $9.8 \times 10^{-8}$   $6.0 \times 10^{-2}$
+
+The boundary-distance $1 - |x_\infty|$ vanishes as $\delta^2$
+(polynomially), while $|1/\alpha_\infty|$ vanishes only as
+$1/\log(1/\delta)$ (logarithmically). Inverting to $1/\alpha_\infty$
+converts the cascade rapidity divergence into bounded zeros at $\rho_n$,
+but with logarithmic vanishing rate --- substantially slower than the
+boundary-distance.
+
+The structural point: $1/\alpha_\infty$ is bounded near zeros but
+encodes the same zero-information set as $\zeta$. Specifically, its
+zeros are exactly:
+
+-   $\rho_n$ (Riemann zeros, where $A \to \infty$,
+    $\alpha_\infty \to \infty$)
+-   $2\rho_n$ (zeros of $\zeta(s/2)$, where $A \to 0$,
+    $\alpha_\infty \to -\infty$)
+
+The inversion trades one form of singularity for another --- logarithmic
+divergences become logarithmic-order zeros --- but does not eliminate
+zero-information. The *type* of singularity changes; its presence does
+not.
+
+This is the genuine boundary obstruction: any holomorphic transform of
+$\alpha_\infty$ that is bounded everywhere must either (a) preserve all
+zero-information of ζ in some encoding, or (b) lose the connection to ζ
+entirely. There is no holomorphic regularization that cancels
+divergences at zeros while preserving their location. The cascade
+boundary in $x_\infty$-coordinates is the image of the ζ-zero set under
+a fixed analytic map; reaching the boundary *is* having a zero;
+relabeling does not constrain where zeros are.
+
+### 5.6.4. Operational summary
+
+The cascade rapidity is the natural framework observable for off-zero
+analysis:
+
+-   **Off-zero (truncated domain $\delta \geq \delta_0$):**
+    $|\alpha_\infty|$ uniformly bounded by $\log(1/\delta_0)$;
+    matched-filter probes of duration $k \sim \log\log(1/\delta_0)$
+    resolve $\alpha_\infty$ to fixed relative accuracy.
+-   **At zeros ($\delta = 0$):** $|\alpha_\infty|$ diverges
+    logarithmically; no finite-duration probe resolves the divergence;
+    inversion to $1/\alpha_\infty$ produces logarithmic-order zeros that
+    retain full zero-information.
+
+The framework's value is in operational efficiency on truncated domains,
+not in domination of zero-locations. The TEP-passive language records
+the cascade boundary as the ζ-zero locus in a structurally clean form;
+it does not constrain where on the critical strip those zeros lie. The
+off-zero operational regularity (12) is a genuine reduction from the
+bare-ζ scaling --- useful in computational practice and in
+framework-internal arguments --- but does not extend across zeros.
+
+------------------------------------------------------------------------
+
+## 6. Conservation under TEP boost
+
+Combining (3), (5), and the strip-as-state-angle dictionary: the
+topological zero count enclosed in a region R is invariant under
+continuous rotation of the bounding strip's orientation θ_strip. The (η,
+φ) decomposition of α\_∞ transforms among itself under such rotation ---
+the harmonic-conjugate equations (3) generate an SO(2) action on (η, φ)
+at each (σ, t) --- but the integer count is preserved.
+
+This is structurally identical to the relativistic statement that
+(energy, momentum) transform among themselves under Lorentz boost, while
+the invariant mass m² = E² − p² is preserved. In our context:
+
+-   (η, φ) plays the role of (energy, momentum),
+-   θ_strip plays the role of the boost angle,
+-   the integer zero count plays the role of invariant mass,
+-   the conservation law (5) plays the role of mass-shell invariance.
+
+The disanalogy with strict relativity: SO(2) here is Euclidean rotation,
+not SO(1,1) hyperbolic boost. The cascade target space (η, φ ∈ ℝ ×
+(ℝ/2π)) is naturally cylindrical because φ is multi-valued modulo 2π,
+and the metric on this cylinder is Euclidean. So we have a *compactified
+rapidity space* --- the natural target for a passive cascade --- rather
+than a Minkowski rapidity space. This is consistent with TEP's
+passive-rung structure (boundary-bounded, not boundary-blowup) rather
+than relativistic free-particle structure.
+
+------------------------------------------------------------------------
+
+## 7. The Markovian/forced-order dichotomy
+
+The geometric dictionary makes the classical PNT-vs-RH structural
+distinction TEP-natural:
+
+**Markovian (associative) regime --- t = 0 line:** Möbius rungs are real
+scalars, all commute. Order of primes is irrelevant. Cascade is fully
+Markovian. ζ is positive on this line (for σ \> 1, by Euler product;
+analytic continuation gives smooth values elsewhere on the real axis
+with the pole at σ = 1 and trivial zeros at σ = -2, -4, ...). No
+nontrivial zeros on the real axis.
+
+**Forced-order regime --- t ≠ 0:** Möbius rungs are complex; commutator
+\[f_a, f_b\] = O(t) at small t, O(1) at large t. Cascade is
+non-Markovian; prime ordering is structurally enforced.
+
+**Symmetric weighting --- σ = 1/2 line:** minimum directional bias of
+memory weighting. The line on which all known nontrivial zeros lie.
+
+**RH in this language:** the only nontrivial zeros of ζ occur where
+forced-order regime (t ≠ 0) meets symmetric weighting (σ = 1/2). The two
+structural conditions are individually loose --- forced-order holds for
+any t ≠ 0, symmetric weighting holds along an entire vertical line ---
+but their *zero-bearing intersection* is conjecturally a single line.
+This is RH expressed as a TEP-purity statement: zero-bearing is
+precisely the regime of maximal symmetric forced-order, which is
+conjecturally a one-dimensional locus.
+
+This restatement does not advance the proof of RH. It does locate the
+framework's natural reading of why σ = 1/2 is the "right" line: it is
+the unique line of symmetric memory weighting, and zeros (by RH) are
+conjectured to lie there because the symmetric-weighting condition
+combines with forced-order to single out a one-parameter family.
+
+------------------------------------------------------------------------
+
+## 8. What this dictionary delivers, what it doesn't
+
+**Delivered (real interpretive content):**
+
+1.  A coordinate identification σ ↔ memory, t ↔ space that is internally
+    consistent with the cascade's prime-ordering structure and
+    phase-rotation dynamics.
+2.  An explicit reading of the strip orientation as a TEP state angle,
+    placing strip geometry directly inside the budget x² + w + u = 1.
+3.  The coarse-graining parameter dl as a phase-space probe scale whose
+    σ- and t-resolutions decompose under Heisenberg-style conjugacy
+    controlled by θ_strip; concrete decomposition formula (6) and
+    saturation locus dl = 1.
+4.  Prime-density modulation of the resolution scale, with natural
+    σ-step $1/\log p$ at scale $p$ and conjugate t-window $\log p$.
+5.  The Poisson-CDF reconstruction threshold (7)-(9): faithful
+    matched-filter reconstruction at scale $x$ requires duration
+    $L \gtrsim \log x$, with the same factor appearing as both natural
+    σ-step and minimum strip duration.
+6.  The conservation law (5) as a TEP-language statement of the argument
+    principle, with topological zero count as the boost-invariant.
+7.  The Markovian (t = 0) / forced-order (t ≠ 0) gradient as a
+    continuous transition through the associativity strength of the
+    cascade Möbius composition.
+8.  The σ = 1/2 line as symmetric-memory-weighting (not memory-free) ---
+    a refinement of earlier framework language.
+9.  Operational regularity of $\alpha_\infty$ off-zero: uniform bound
+    $|\alpha_\infty| \leq \log(1/\delta_0) + C(K)$ on truncated domains
+    (11), with matched-filter resolution at chirp-duration
+    $k \gtrsim \log\log(1/\delta_0)$ (12).
+10. The boundary-obstruction clarification: cascade-boundary-reaching is
+    equivalent to having a Riemann zero (tautological); inversion
+    $\alpha_\infty \mapsto 1/\alpha_\infty$ converts logarithmic
+    divergences to logarithmic-order zeros but preserves
+    zero-information.
+11. RH stated in TEP-purity language: zeros lie where forced-order
+    intersects symmetric-weighting.
+
+**Not delivered:**
+
+1.  New mathematics about ζ. The dictionary translates known facts; it
+    does not produce new theorems.
+2.  New bounds on \|ζ\| or new constraints on zero locations.
+3.  *Domination* of $\alpha_\infty$ near zeros. The matched-filter probe
+    provides relative-accuracy subordination off-zero, not absolute
+    boundedness across zeros.
+4.  A path to RH via TEP-purity. The TEP statement of RH is no easier to
+    prove than the original; it is structurally equivalent.
+5.  A useful inversion to a bounded function. $1/\alpha_\infty$ is
+    bounded near zeros but encodes the same zero-information set as
+    $\zeta$; no holomorphic regularization eliminates this without
+    losing connection to ζ.
+6.  Direct physical correspondence. The (σ, t)-plane is a
+    complex-variable parameter space, not a physical spacetime. The
+    Lorentz-style invariance language (§6) is structural analogy, not
+    physical claim.
+
+**Honest scoping:** this dictionary is a *conceptual contribution* to
+the framework's interpretive coherence with quantitative operational
+thresholds for off-zero analysis, not a *technical contribution* to
+number theory. Its value is in providing the framework with a precise,
+internally-consistent vocabulary for describing ζ-features in TEP
+language --- making framework-internal arguments portable and rigorous,
+even when they don't produce external theorems. The off-zero operational
+regularity (§5.6) is a genuine reduction from bare-ζ scaling and useful
+in computational practice. The dictionary is publishable as a structural
+note paired with the dyadic cascade paper, framed appropriately as
+interpretive geometry with operational content rather than as
+ζ-progress.
+
+------------------------------------------------------------------------
+
+## 9. Conclusion
+
+The Riemann ζ-field admits a coherent TEP-rapidity-budget interpretation
+in which:
+
+-   σ encodes memory weighting and t encodes associativity degree;
+-   strip orientation θ_strip is a TEP state angle, sin θ_strip =
+    x_strip;
+-   the coarse-graining unit dl is a phase-space probe scale whose σ-
+    and t-resolutions decompose under Heisenberg-style conjugacy
+    controlled by θ_strip, with prime-density modulation at scale $p$
+    giving natural step $1/\log p$ and conjugate window $\log p$;
+-   the cascade rapidity decomposes into harmonic-conjugate (η, φ) ---
+    passive magnitude and reactive phase;
+-   Riemann zeros register as π-jumps in φ, not as features in η;
+-   $\alpha_\infty$ has logarithmic singularities at zeros but is
+    uniformly bounded off-zero, with matched-filter probes resolving it
+    to fixed relative accuracy at chirp-duration $\log\log(1/\delta_0)$
+    --- exponentially better than bare ζ;
+-   the cascade-boundary $|x_\infty| = 1$ is the image of the ζ-zero set
+    under the cascade map; reaching the boundary *is* having a zero;
+    inversion to $1/\alpha_\infty$ relabels the singularity type but
+    preserves the zero-information;
+-   the argument principle is a conservation law preserving the
+    topological zero count under continuous deformation including
+    rotation through θ_strip;
+-   the (η, φ) decomposition transforms among itself under such
+    rotation, with the integer zero count as boost-invariant scalar;
+-   RH is the TEP-purity statement that zero-bearing is precisely the
+    locus where forced-order meets symmetric-weighting --- a single line
+    by conjecture.
+
+This is interpretive geometry with operational content, not new
+mathematics about ζ-zero locations. The dictionary makes the framework's
+structural intuitions precise and portable, makes contact with standard
+results (argument principle, explicit formula, FE) at every step, and
+provides genuine quantitative reductions from bare-ζ analysis on
+truncated domains. It does not advance RH or provide new bounds on zero
+locations.
+
+We recommend this note be paired with the dyadic cascade paper as a
+companion document, with both framed as structural contributions: the
+dyadic paper as a multi-scale exact representation of ξ with
+quantitative renormalized convergence, and this note as the geometric
+dictionary that situates that representation within TEP's
+rapidity-budget framework, with operational thresholds for off-zero
+analysis.
+
+------------------------------------------------------------------------
+
+## References
+
+See companion paper "A Dyadic Cascade Representation of the Riemann ξ
+Function with Renormalization-Group Structure" for primary references.
+Additional context for the present note:
+
+-   The argument-principle conservation law (5) is standard; e.g.,
+    Titchmarsh, *The Theory of the Riemann Zeta-Function*, §3.
+-   The harmonic-conjugate (η, φ) decomposition is the standard
+    real/imaginary decomposition of a holomorphic function via
+    Cauchy--Riemann.
+-   The TEP three-term budget x² + w + u = 1 is documented in the
+    framework's working notes (V2 reference, §2).
+-   The state-angle parametrization x = sin θ is the standard
+    rapidity-to-budget conversion in passive-rung TEP.
+-   The Markovian / non-Markovian gradient via Möbius commutator scaling
+    is a direct consequence of the cascade's SU(1,1) structure; the
+    abelian limit at t = 0 is elementary.
+-   The Poisson-CDF identity (7) is elementary; the matched-filter
+    reading and chirp-duration / event-count threshold are standard in
+    time-frequency analysis.
+-   Phragmén--Lindelöf-style off-zero bounds for $\alpha_\infty$ follow
+    from standard bounds on $|\zeta(s)|$ in vertical strips (Titchmarsh,
+    §5).
+
+------------------------------------------------------------------------
+
+*This is a working draft. Notation, presentation, and section structure
+are subject to revision. Comments welcome.*

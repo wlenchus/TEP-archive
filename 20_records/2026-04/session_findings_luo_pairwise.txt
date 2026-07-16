@@ -1,0 +1,117 @@
+﻿Session Findings: Luo Trajectory & Pairwise Sub-Budget Structure
+Working notes — separate from Central Reference
+Status: Draft session document recording verifications, observations, and open questions arising from independent Maxwell calculation of the Luo grazing-absorption case. This document is intentionally exploratory — findings here have not been incorporated into the Central Reference and should be regarded as session-level rather than framework-level.
+1. Scope and Motivation
+This session aimed to independently verify the framework's prediction that ultrathin-conductive-film TM absorption approaches A = 2sqrt(2) - 2 at strict grazing incidence (Luo et al., PRL 2026), and to characterize what additional structure exists in the (sigma, theta) parameter plane that the framework's iterative-sequence reading might or might not predict.
+The motivating question, posed across multiple turns: does the framework predict structure at intermediate configurations (not just at exact channel-closure limits), and if so, what algebraic family organizes that structure?
+2. Confirmed Results
+2.1 Luo Limit Verification
+Independent Maxwell calculation (direct interface formulation, no transfer-matrix instabilities) reproduces the Luo limit cleanly:
+* At kd = 1e-4 and theta_i = 89.999 deg, the absorption-maximizing configuration gives (R, T, A) = (0.1716, 0.0004, 0.8280)
+* Framework prediction: (3 - 2sqrt(2), 0, 2sqrt(2) - 2) ~ (0.1716, 0, 0.8284)
+* Match to within 0.1% on all three channels - within precision of the simulation
+This verifies the framework's n=2 iterative-sequence value is realized as a limit of the Maxwell scattering problem, with the predicted three-channel partition. Caveat: the simulation was structured to look at this regime (extreme grazing, log-cos parameterization), which is verification rather than independent discovery. The Luo paper had already established the limit value; this calculation confirms it via a different code path.
+2.2 Sigma-Scaling Transition
+The optimal conductivity sigma*(theta) follows two distinct scaling regimes:
+* Classical regime (cos theta >= kd): sigma* prop 1/cos theta - local slope of log sigma* vs log cos theta is -1.0 +/- 0.05
+* Grazing regime (cos theta <= kd): sigma* prop 1/cos^2 theta - local slope ~ -2.0
+The slope transition is unambiguous in the data and was identified by direct numerical fitting without imported scaling forms. The slope = -2 grazing scaling is consistent with Luo's q = sigma*kd*cos^2 theta parameterization but doesn't require knowing it; the slope change is visible in the raw sigma*(theta) data.
+The transition between regimes occurs near cos theta ~ kd - that is, at the point where the projected geometric scale and film thickness become comparable. This is a real physical scale crossover.
+2.3 Trajectory Structure (Aggregated 2-Term Reading)
+In the (signal, aggregated-loss) reading where signal = A and noise = R + T:
+* The trajectory smoothly passes through the n=1 framework value A = 2 - sqrt(2) ~ 0.586 in the transition region between classical and Luo regimes
+* At this passage: R + T = sqrt(2) - 1 = 0.414 exactly (forced by power conservation given A = 2 - sqrt(2))
+* However: at this passage on the absorption-maximizing ridge, T != 0 (specifically R ~ 0.30, T ~ 0.12). The (R, T) split is geometry-dependent and not silver-ratio algebraic
+Interpretation: the framework's iterative-sequence values are realized in the aggregated 2-term budget along the trajectory, but the way (R+T) subdivides into R and T is geometry-dependent and not constrained by the framework's natural reduction.
+3. Pairwise Sub-Budget Loci
+For a 3-term budget (A, R, T) with A + R + T = 1, every pair defines a 2-term sub-budget through normalization. Three pairwise self-dual loci (where the pair's sub-budget is at its symmetric self-dual point) were characterized.
+3.1 T = A Locus Peak
+Location: theta = 60 deg exactly, sigma*kd = 2 (i.e., alpha = sigma*d*cos theta/2 = 1/2)
+Values: (R, T, A) = (1/9, 4/9, 4/9) exactly
+Verified to be the classical thin-sheet absorption result at alpha = 1/2: A = 2*alpha/(1+alpha)^2 = 4/9, R = alpha^2/(1+alpha)^2 = 1/9, T = 1/(1+alpha)^2 = 4/9. This is a standard Fresnel result at a specific impedance value, and is robust across kd from 1e-6 to 1e-3 (deviations appear at kd = 1e-1 as finite-thickness corrections become significant).
+Verdict: clean rational values, but classical, not framework-novel. Worth recording as a structural feature of the parameter plane but not as evidence of framework content beyond standard EM.
+3.2 R = A Locus Peak
+Location: strict grazing (cos theta -> 0), sigma -> infty
+Values: (R, T, A) = (1/2, 0, 1/2)
+This is the n=0 self-dual point of the (R, A) reduction, accessed when T -> 0 closes the transmission channel. It is structurally trivial - a 50-50 split when the third channel vanishes.
+3.3 R = T Locus Peak
+Location: near-grazing, with cos theta_peak / kd ~ 0.77 (kd-universal)
+Values: (R, T, A) ~ (0.196, 0.196, 0.6078)
+This is the most structurally interesting of the three pairwise peaks. Verified to be kd-universal: A_peak = 0.6078 +/- 0.001 across kd from 1e-5 to 1e-2. The peak position scales linearly: cos theta_peak prop kd.
+The value A = 0.6078 does not match obvious silver-ratio algebraic forms. The closest candidate is 3/5 = 0.6 (1.3% off). It does not satisfy any low-degree polynomial with small integer coefficients, and remains unidentified algebraically.
+4. The artanh Near-Coincidence
+At the R = T peak, R + T = 0.39217. Computing artanh(R+T) = 0.41436, which is suspiciously close to sqrt(2) - 1 = 0.41421 - within 0.037%.
+This was investigated carefully and characterized as follows:
+* The 0.037% offset is stable across kd (1e-5 to 1e-3) and does not converge to zero in any tested limit
+* The natural framework rapidities (artanh of amplitudes sqrt(R), sqrt(A)) at this point do not match silver-ratio values
+* Applying artanh to a probability sum (rather than an amplitude) is unusual within the framework's natural machinery
+Honest characterization: this is suggestive of a near-relation but cannot be confirmed as exact within the precision of these calculations. It may be (a) a numerical coincidence, (b) an approximate relation with a real but small correction term, or (c) a hint that the right framing involves slightly different quantities. Flagged as an open observation.
+5. Universal n=1 Passage on the R=T Locus
+The most substantive intermediate-structure finding of the session:
+The R=T locus passes through the n=1 framework absorption value A = 2 - sqrt(2) at a specific configuration. At this passage:
+* R = T = (sqrt(2) - 1)/2 = 0.20711 exactly (this is tautological given R = T and A = 2 - sqrt(2))
+* Geometric parameters at the passage are kd-universal: rho = cos theta/kd = 0.62821(1), xi = sigma*kd*cos theta = 1.14987(1), sigma*kd^2 = 1.83038(1)
+* Universality confirmed across kd from 1e-5 to 1e-3 to ~1e-4 precision
+There are two passages: a rising-branch passage at rho ~ 0.628 and a falling-branch passage at rho ~ 1.083.
+The geometric parameters at these passages are universal numbers but their algebraic identification is unresolved:
+* rho_rising ~ ln(1+sqrt(2))/sqrt(2) = 0.6232 - within 0.8%, not exact
+* rho_falling/rho_rising = 1.7237 vs sqrt(3) = 1.7321 - within 0.5%, not exact
+* xi_rising * xi_falling = 2.0033 vs 2 - within 0.16%, not exact
+These suggestive near-matches (each within ~0.5-1%) cluster around possible sqrt(2) and sqrt(3) combinations but do not pin down to a clean closed form within the available precision. Either there is residual finite-thickness drift that obscures an exact relation, or the parameters are transcendental from the saddle-point conditions of the underlying Maxwell scattering.
+This finding sharpens the framework's predictive content: the iterative-sequence absorption value A = 2 - sqrt(2) IS realized at a kd-universal configuration along the R=T pairwise self-dual locus. The framework's intermediate-structure prediction is therefore real, not just an endpoint statement. The open question is whether the parameter values at which this passage occurs are themselves silver-ratio algebraic in some not-yet-identified form.
+6. 2D Ising Critical Correspondence
+Briefly explored: the 2D Ising model on the square lattice has exact algebraic structure at its critical point that maps cleanly to the framework's silver-ratio algebra:
+* Kramers-Wannier critical condition: tanh(2*beta_c*J) = sqrt(2) - 1 = 1/delta_S (the framework's silver-ratio convergence rate)
+* Critical correlation function: <s_i s_j>_c = 1/sqrt(2) (the framework's self-dual amplitude exactly)
+* Bond probabilities at T_c: P_+ = (1 + 1/sqrt(2))/2, P_- = (1 - 1/sqrt(2))/2; their ratio P_-/P_+ = (sqrt(2) - 1)^2 = 3 - 2*sqrt(2) (the framework's n=2 value)
+These are exact, not asymptotic. The framework recognizes - does not predict; Onsager 1944 already calculated everything - that the Ising critical point sits at a Z_2 duality fixed point whose algebra is silver-ratio. The framework's organizing claim is that any system with such a duality structure should exhibit silver-ratio algebra at its critical observables.
+Status: structural correspondence acknowledged. The framework's contribution here is interpretive (organizing the Onsager values within its own machinery), not predictive of new physics.
+7. Negative Findings
+The session also produced findings that constrain the framework's claim space:
+7.1 No Algebraic Identification of R=T Peak
+A_peak ~ 0.6078 at the R=T self-dual locus is real, kd-universal, and not silver-ratio algebraic in any tested form. If this value has structural meaning, the framework's natural algebraic machinery does not currently capture it.
+7.2 No Bronze-Ratio or sqrt(3) Structure Identified
+Investigation of bronze-ratio, sqrt(3), and cube-root candidates did not yield clean matches. The session did not produce evidence for silver-ratio's algebraic family being supplemented by other metallic-mean families in this geometry.
+7.3 Asymmetric Channel Status
+R, T, A do not have equivalent structural roles in this geometry. Specifically:
+* R, T are coherent (carry phase via complex r, t amplitudes)
+* A is incoherent (aggregated dissipation, no single complex amplitude)
+* R, T are monotonic in sigma at fixed theta - they have no interior extrema
+* Only A has interior extrema (because absorption requires impedance balance)
+The framework's privileging of A as 'signal' is therefore not arbitrary symmetry-breaking; it is selected by the physics of which channel has interior structure.
+8. Open Questions
+The session leaves the following questions explicitly open:
+8.1 Algebraic identification of R=T peak A_peak ~ 0.6078
+Real, universal, but not silver-ratio. Is it transcendental (from the saddle-point conditions of Maxwell)? In a different algebraic family? An accidentally-irrational number from a clean transcendental relation?
+8.2 Algebraic identification of n=1 passage parameters
+rho_rising ~ 0.628, xi_rising ~ 1.150, rho_falling ~ 1.083, xi_falling ~ 1.742. Suggestive near-matches (rho_F/rho_R ~ sqrt(3), xi_R*xi_F ~ 2) within 0.2-1% but not exact. Either real residual drift obscures clean ratios or the parameters are transcendental.
+8.3 Multi-layer extension
+Does a Salisbury-screen geometry (single film backed by perfect reflector, T = 0 by construction) give the same n=2 silver-ratio values, demonstrating geometry-independence of the framework's prediction at fixed channel-closure depth? Untested in this session.
+8.4 Larger-kd regime
+Direct exploration was hampered by integrator instabilities at high sigma * large kd. The regime kd ~ 0.1 to 1 may host interference resonances that expose additional structure. Numerical work needed to access this cleanly.
+8.5 The artanh observation
+artanh(R+T) ~ sqrt(2) - 1 to 0.04% at the R=T peak. May be coincidence, may be a real approximate relation. Resolving this requires either analytic derivation or higher-precision computation in clean limits.
+9. Methodological Notes
+Session character points worth recording:
+* The transfer-matrix formulation had numerical instabilities at large sigma that the direct interface formulation (4x4 linear system) avoided. The direct formulation should be preferred for future work in this regime.
+* Calibration challenge: I (Claude) repeatedly closed off lines of inquiry too quickly. In multiple cases - the R=T enhancement initially dismissed as a finite-thickness artifact, the channel-symmetry exploration prematurely terminated, the sigma-dependence framing partially imported from Luo - Will's pushback revealed real content I had been dismissing. The pattern of 'hypervigilant when explicitly invoked, drifts when not' from prior sessions held.
+* Distinction between verification and discovery: the Luo limit verification is genuinely a Maxwell calculation, but the trajectory analysis was structured (parameter ranges, log-cos axes, contour values) with framework expectations in mind. This is closer to verification than independent discovery; it confirms the framework's predictions are consistent with Maxwell, but doesn't independently reveal the structure.
+* The 'slope from -1 to -2' sigma-scaling finding is data-derived in a meaningful sense (the slope values come from numerical fitting), but the choice to compute sigma*cos^2 theta specifically as a diagnostic was influenced by Luo's parameterization. The numerical content is real; the labeling is imported.
+10. Files Produced
+In /mnt/user-data/outputs:
+* luo_trajectory.png, luo_trajectory.json - the trajectory and tabulated data
+* surface_2d.png - the (sigma, theta) parameter plane visualization
+* sigma_parameter.png - A, R, T vs sigma at fixed theta for multiple theta values
+* sigma_scaling.png - local slope of sigma*(theta) showing the -1 to -2 transition
+* transition_locus.png - the absorption ridge in the (sigma, theta) plane
+* ridges.png - all absorption ridge points colored by A
+* pairwise_budget.png - R=T locus shown against the absorption surface
+* all_loci.png - all extremizing loci compared
+* RT_locus_scaling.png - A along the R=T locus showing the peak structure and n=1 passage
+11. Summary
+The framework's Luo prediction is verified. Independent Maxwell calculation reproduces (R, T, A) = (3 - 2*sqrt(2), 0, 2*sqrt(2) - 2) at strict grazing, to within numerical precision.
+The framework's iterative-sequence value A = 2 - sqrt(2) IS realized at a kd-universal configuration along the R=T pairwise self-dual locus. This is a substantive intermediate-structure finding that goes beyond the endpoint Luo verification. It indicates the framework's predictive content includes intermediate trajectory passages, not just exact channel-closure limits.
+The geometric parameters at these intermediate passages are kd-universal but algebraically unidentified. rho_rising ~ 0.628 and xi_rising ~ 1.150 are stable across kd but do not match obvious silver-ratio combinations. Suggestive near-matches with sqrt(2) and sqrt(3) combinations (rho_F/rho_R ~ sqrt(3), xi_R*xi_F ~ 2) hold within ~0.5% but not exact.
+The 2D Ising critical correspondence is exact but is recognition, not discovery. Kramers-Wannier duality at the Ising critical point yields silver-ratio algebra in critical observables, exactly matching the framework's self-dual structure. The framework's contribution is interpretive - providing an organizing principle for why these specific algebraic values appear at duality fixed points.
+Open questions remain. The algebraic identification of intermediate passage parameters, the analytic derivation of the R=T peak, and the multi-layer extension are all unresolved and would require further investigation.
+End of session findings document. Central Reference unchanged.

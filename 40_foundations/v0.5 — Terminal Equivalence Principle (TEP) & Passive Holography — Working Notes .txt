@@ -1,0 +1,1055 @@
+﻿# Terminal Equivalence Principle (TEP) & Passive Holography — Working Notes v0.5
+
+
+This document presents a compact, portable framework for understanding the relationship between interior dynamics and boundary observations in passive systems. It unifies concepts such as interior curl ↔ boundary divergence, momentum/pressure in K/I media, and a budget geometry that elucidates oscillation versus decay. The framework includes rigorous proofs, diagnostic tools, and design recipes.
+
+
+**Previous Version 0.3 Updates:** This version integrates key appendices: Appendix A detailing PR Schur/Kron reduction, Appendix B on DtN symbols and invariants, and Appendix C covering orthogonal–collinear dynamics, port-Hamiltonian mechanics, and a foundational "Log Kit" for invariant analysis. Additionally, new cross-references and "foreshadowing" links to subsequent appendices have been added (notably N: critical fold universality; O: boundary current & charges). Minor clarifications have been made throughout for improved consistency.
+
+
+-----
+
+
+**EXECUTIVE SUMMARY**
+
+
+**Terminal Equivalence Principle (TEP):** This principle states that eliminating a linear, reciprocal, and passive interior using Schur/Kron reduction results in an equivalent boundary law ($f\_b = \\Lambda\_{\\text{eff}}(s) u\_b$), where $\\Lambda\_{\\text{eff}}(s)$ is symmetric and positive-real. From an external perspective, any internal curl or "orthogonal" dynamics are effectively re-expressed as a divergence or "collinear" boundary law, potentially incorporating memory effects. This is akin to characterizing a complex electronic circuit by only its input/output terminals.
+
+
+**Passive Holography Principle (PHP):** For systems within the TEP class, the boundary Dirichlet-to-Neumann (DtN) operator fully encapsulates all externally observable dynamics. A key implication is that interiors differing only by "cycle-only surgeries" (e.g., star–mesh or Kron transformations) are holographically equivalent at their boundaries.
+
+
+**Constitutive Momentum Equivalence (CME):** In isotropic K/I media, where $c^2 = K / I\_{\\text{eff}}$, field momentum is uniquely defined as $g = I\_{\\text{eff}} (E \\times B)$. Under these conditions, the Abraham and Minkowski forms of field momentum coincide. Furthermore, interface forces are directly determined by gradients of $I\_{\\text{eff}}$ and $K$. The term "K/I media" broadly refers to materials whose properties are characterized by effective stiffness (K) and effective inertia ($I\_{\\text{eff}}$), relating to concepts like elasticity or dielectric behavior.
+
+
+**Orbit Limit:** This refers to the lossless boundary regime where the real part of the admittance $G(\\omega) = 0$ while the imaginary part $B(\\omega) \\neq 0$. In this scenario, minimal passive realizations necessitate the presence of internal cycles, and boundary scattering becomes unitary, conserving energy.
+
+
+**Budget–Curvature Correspondence (BCC):** This defines a metric $d\\Sigma^2 = u c^2 dt^2 - u^{-1} d\\ell^2$, where $x^2 = \\text{KE}/(\\text{KE}+\\text{PE})$ and $u = \\text{PE}/(\\text{KE}+\\text{PE})$. Gradients of the energy partition parameter 'u' manifest as a connection or curvature, leading to phenomena like phase drag and momentum exchange, all consistent with the DtN law.
+
+
+**Universal Near-Critical Fold Scaling (Appendix N):** As the system approaches the self-dual strip ($s \\to 1^-$), the Goos–Hänchen shift and Wigner delay exhibit a universal divergence scaling as $(1-s^2)^{-1/2}$. The prefactors for this scaling are determined by the specific membrane properties and polarization.
+
+
+**Conserved Boundary Phase Current & Charges (Appendix O):** A phase current $J = (1/2\\pi)(\\partial\_{k\_t}\\varphi, -\\partial\_\\omega \\varphi)$ is divergence-free within passive operational windows. Zeros, poles, and guided-mode arcs within the system carry integer charge, reflecting quantized winding numbers.
+
+
+-----
+
+
+**PART I — TERMINAL EQUIVALENCE PRINCIPLE (TEP)**
+
+
+Axioms: A1 (linearity & reciprocity), A2 (passivity/causality: positive-real boundary operator), A3 (connectedness & well-posedness).
+
+
+**Static Statement:** For a Laplacian/admittance operator $L$ partitioned into boundary ($b$) and interior ($i$) components, the effective boundary operator $L\_{\\text{eff}} = L\_{bb} - L\_{bi} L\_{ii}^{-1} L\_{ib}$ (Schur complement) acts as a Laplacian/divergence map.
+
+
+**Dynamic Statement:** By replacing $L$ with a frequency-dependent admittance $Y(s)$ or impedance $Z(s)$, the dynamic boundary law becomes $Y\_{\\text{eff}}(s) = Y\_{bb} - Y\_{bi} Y\_{ii}(s)^{-1} Y\_{ib}$. This effective admittance is symmetric, positive-real, and causal.
+
+
+**Proof Sketch:** Symmetry and reciprocity are preserved through the Schur complement operation, as is passivity (due to the M-matrix/PR Schur complement properties). The divergence form also remains (row sums are zero). Detailed proofs, including positive-real Schur proofs and Herglotz/Stieltjes representations, are provided in Appendix A. Appendix B provides fundamentals of DtN operators and half-space symbols.
+
+
+**Diagnostics & Contrapositives:** With $Y\_{\\text{eff}}(i\\omega) = G(\\omega) + i B(\\omega)$, where $G = G^T \\ge 0$ and $B = B^T$:
+
+
+  * **Nonreciprocity:** If $Y\_{\\text{eff}} \\neq Y\_{\\text{eff}}^T$, no reciprocal passive interior can exist.
+  * **Purely Reactive Band:** If $G \\equiv 0$ but $B \\neq 0$, any passive realization must incorporate energy storage, with minimal realizations featuring internal cycles.
+  * **Frequency Dependence:** A nonconstant $Y\_{\\text{eff}}(s)$ directly indicates the presence of internal dynamics. Conversely, a constant $G \\succ 0$ can be realized by a simple tree structure without cycles.
+
+
+**Orbit Limit:** The condition $G(\\omega) \\equiv 0$ and $B(\\omega) \\neq 0$ signifies unitary scattering and closed energy orbits. In this limit, the budget parameter $u \\to 1/2$, and the log-budget $\\eta = \\frac{1}{2} \\ln(\\text{PE}/\\text{KE}) \\to 0$. Near this orbit limit, $G$ and $\\partial\_\\omega B$ are Hilbert-paired (Kramers–Kronig relations).
+
+
+**Evidence Table (Boundary Cues → Interior Facts):**
+
+
+  * $Y\_{\\text{eff}} \\neq Y\_{\\text{eff}}^T \\Rightarrow$ Nonreciprocity/time-variance/topology (precludes a purely reciprocal passive interior).
+  * $G \\equiv 0, B \\neq 0 \\Rightarrow$ Energy storage; minimal cycles (precludes a purely resistive static interior).
+  * Strong $\\omega$-dependence $\\Rightarrow$ Internal states (precludes a memoryless static network).
+  * Constant $G \\succ 0 \\Rightarrow$ Realizable by a cut-only tree (does not necessitate cycles).
+
+
+-----
+
+
+**PART II — CONSTITUTIVE MOMENTUM EQUIVALENCE (CME)**
+
+
+**Identifications:** $\\varepsilon \\equiv I\_{\\text{eff}}$, $\\mu^{-1} \\equiv K$, and $c^2 = K / I\_{\\text{eff}}$.
+**Macroscopic Lagrangian:** $L\_{\\text{EM}} = \\frac{1}{2} (\\varepsilon E^2 - \\mu^{-1} B^2)$.
+**Noether (translations):**
+
+
+  * Energy density: $u = \\frac{1}{2} (\\varepsilon E^2 + \\mu^{-1} B^2)$
+  * Poynting vector: $S = E \\times H = K (E \\times B)$
+  * Momentum density: $g = S / c^2 = D \\times B = \\varepsilon (E \\times B) = I\_{\\text{eff}} (E \\times B)$
+  * Stress tensor: $T\_{ij} = \\varepsilon E\_i E\_j + \\mu^{-1} B\_i B\_j - \\frac{1}{2} \\delta\_{ij} (\\varepsilon E^2 + \\mu^{-1} B^2)$
+
+
+**Gradients/Time-Variation:** The momentum balance equation is $\\partial\_t g + \\nabla \\cdot T = -\\frac{1}{2} (E^2 \\nabla\\varepsilon + B^2 \\nabla\\mu^{-1}) - \\frac{1}{2} (\\dot{\\varepsilon} E^2 + (\\dot{\\mu}^{-1}) B^2)$. The right-hand side represents momentum exchange with the constitutive medium due to spatial and temporal variations of $I\_{\\text{eff}}$ and $K$.
+
+
+**Balazs Block via Boundary Reduction:** The Balazs shift, $\\Delta x = (U/M c^2) L (n\_g - 1)$, can be derived from the TEP framework. Entry and exit impulses, determined by $\\nabla I\_{\\text{eff}}$ and $\\nabla K$, account for the field momentum difference, and the DtN law directly reproduces this shift.
+
+
+-----
+
+
+**PART III — PASSIVE HOLOGRAPHY PRINCIPLE (PHP)**
+
+
+The boundary Dirichlet-to-Neumann (DtN) operator, $\\Lambda\_{\\text{eff}}(s)$, completely encodes all externally observable dynamics for systems within the TEP class. A key implication is that interiors that are related solely by "cycle-only surgeries" (e.g., star–mesh or Kron transformations) are holographically equivalent at their boundaries. Exceptions to this equivalence, or "escapes," include cases involving nonreciprocity and certain topological invariants which are not captured by the DtN operator alone.
+
+
+-----
+
+
+**PART IV — BUDGET–CURVATURE CORRESPONDENCE (BCC)**
+
+
+The Budget–Curvature Correspondence defines a metric $d\\Sigma^2 = u c^2 dt^2 - u^{-1} d\\ell^2$, where $u = \\text{PE}/(\\text{KE}+\\text{PE})$ represents the potential energy fraction and $x^2 = \\text{KE}/(\\text{KE}+\\text{PE})$ is the kinetic energy fraction. Geodesics within this metric (i.e., paths where $\\nabla u \\neq 0$) naturally reproduce phenomena such as phase drag and redshift. Furthermore, interface jumps predicted by this correspondence are consistent with the TEP impulses, offering gauge-equivalent perspectives on energy and momentum transfer.
+
+
+-----
+
+
+**PART V — ORTHOGONAL–COLLINEAR CALCULUS (CHEATSHEET)**
+
+
+The master equation for state evolution is given by $\\dot{z} = J \\nabla H - R \\nabla \\Phi + B u$. Here, $J$ is a skew-symmetric matrix ($J^T = -J$) representing orthogonal or reactive dynamics, while $R$ is a symmetric positive-semidefinite matrix ($R^T = R \\ge 0$) representing collinear or resistive dynamics.
+
+
+**Dictionary:**
+
+
+  - **Orthogonal** dynamics correspond to oscillation, curl, internal cycles, and the imaginary part of the spectrum.
+  - **Collinear** dynamics correspond to decay, divergence, network cuts, and the negative-real part of the spectrum.
+
+
+**Composition Rules:**
+
+
+  - Orthogonal (reactive) parts add in quadrature.
+  - Collinear (resistive) parts add arithmetically.
+
+
+-----
+
+
+**PART VI — LOG KIT**
+
+
+The "Log Kit" provides a set of logarithmic quantities that simplify analysis and maintain representation invariance.
+
+
+  - **Modal Log:** For a transfer matrix $T\_\\Delta$, its modal log $A = (1/\\Delta) \\text{Log}(T\_\\Delta)$ yields eigenvalues $\\sigma + i \\omega$, where $\\sigma$ relates to decay and $\\omega$ to oscillation.
+  - **Log-Budget (Rapidity):** Defined as $\\eta = \\frac{1}{2} \\ln(\\text{PE}/\\text{KE})$, this quantity linearizes "budget boosts" or tilts. Specifically, if PE/KE $= e^{-2\\eta}$, then boosts/tilts act as simple linear additions to $\\eta$.
+  - **Log-Amplitude:** Expressed as $\\ln \\psi = \\ln |\\psi| + i \\arg \\psi$, this transforms products of amplitudes into sums, simplifying complex wave propagation problems.
+
+
+-----
+
+
+**PART VII — RG FLOW ON $\\Lambda\_{\\text{eff}}$**
+
+
+This section explores the renormalization group (RG) flow of the effective boundary operator $\\Lambda\_{\\text{eff}}$.
+
+
+  - **Scale Parameter:** The scale is defined as $s = \\ln \\ell$, where $\\ell$ is a characteristic length.
+  - **RG Equation:** The evolution of $\\Lambda\_{\\text{eff}}$ with scale is given by $\\partial\_s \\Lambda\_{\\text{eff}} = \\beta(\\Lambda\_{\\text{eff}})$, where $\\beta$ is the beta function.
+  - **Fixed Points:** The flow exhibits several fixed points:
+      - **Resistive (Diffusive):** Characterized by purely dissipative behavior.
+      - **Reactive (Orbit):** Represents lossless, oscillatory behavior.
+      - **Telegrapher Lines:** Describes systems with both resistive and reactive components in a balanced way.
+  - **Critical Manifolds:** These correspond to scale-invariant budget $u$, indicating regions where the system's energy partition remains constant across scales.
+
+
+-----
+
+
+**PART VIII — SIMULATION SPEC: GRADED K/I SLAB**
+
+
+This outlines the specification for a simulation involving a slab with spatially graded K/I (stiffness/inertia) properties.
+
+
+**Inputs:**
+
+
+  - Spatially varying effective inertia $I\_{\\text{eff}}(x)$ and stiffness $K(x)$, or directly the budget profile $u(x)$.
+
+
+**Computations:**
+
+
+  - Calculate the local wave speed $c(x) = \\sqrt{K(x)/I\_{\\text{eff}}(x)}$.
+  - Determine the effective boundary operator $\\Lambda\_{\\text{eff}}(\\omega)$ using transfer matrix methods or Finite Element Method (FEM), subsequently extracting its real ($G(\\omega)$) and imaginary ($B(\\omega)$) parts.
+  - Compute geodesics of the Budget–Curvature (BCC) metric $d\\Sigma^2$.
+  - Calculate the momentum exchange density from the gradients of $I\_{\\text{eff}}$ and $K$.
+
+
+**Outputs:**
+
+
+  - Transmission ($T$) and reflection ($R$) coefficients.
+  - Group delay.
+  - The Balazs shift ($\\Delta x\_{\\text{Balazs}}$).
+  - Detailed budget profiles across the slab.
+
+
+-----
+
+
+**PART IX — TOUCHSTONES**
+
+
+This section lists key areas where the principles of TEP, PHP, and CME find concrete application and can be used for validation.
+
+
+  - **BEC/Polaritons:** These systems, particularly in their soliton regimes, offer insights into budget dynamics.
+  - **Metamaterials with Graded K/I:** Provide a rich platform to study budget redshift and pressure effects.
+  - **Thermal Plates:** Offer a macroscopic system for demonstrating the TEP, especially when considering triangular cross-couplings versus simple boundary shunts.
+
+
+-----
+
+
+**PART X — ALGEBRAIC GEOMETRY ASIDE (SPECULATIVE)**
+
+
+This highly speculative section proposes a connection between the TEP framework and concepts from algebraic geometry.
+
+
+  - **"TEP for Chain Complexes":** This concept suggests that homological Schur complements or transfer maps could be interpreted as a boundary functor.
+  - **Orbit Limit ↔ Exactness at Boundary:** The lossless "orbit limit" in the TEP framework might correspond to exactness conditions at the boundary in a homological context.
+  - **Escapes ↔ Nontrivial Cohomology:** The "escapes" from holographic equivalence (e.g., nonreciprocity) could be linked to the existence of nontrivial cohomology, indicating deeper structural properties not fully captured by the boundary operator.
+
+
+-----
+
+
+**Appendix A — Schur/Kron Reduction, Reciprocity & Passivity (static + dynamic)**
+
+
+**A.1 Static (time-independent) networks / media**
+
+
+Consider a symmetric conductance or Laplacian operator $L$ partitioned into boundary ($b$) and interior ($i$) components: $L = \\begin{bmatrix} L\_{bb} & L\_{bi} \\\\ L\_{ib} & L\_{ii} \\end{bmatrix}$. Given $L = L^T$, $L \\cdot \\mathbf{1} = 0$ (row sums vanish), and $L \\succcurlyeq 0$ (positive semidefinite), eliminating the interior nodes via "Kron reduction" yields the effective boundary divergence law $L\_{\\text{eff}} = L\_{bb} - L\_{bi} L\_{ii}^{-1} L\_{ib}$.
+
+
+**Properties:**
+
+
+  - Symmetry/reciprocity is preserved.
+  - Row sums vanish ($L\_{\\text{eff}} \\cdot \\mathbf{1} = 0$), maintaining the divergence form.
+  - Positivity (passivity) is preserved.
+  - Simple tree structures realize a constant $L\_{\\text{eff}}$; internal cycles are necessary to create frequency dependence in dynamic analogues.
+
+
+**A.2 Dynamic (frequency-domain) ports**
+
+
+Replace the static operator $L$ by a matrix admittance $Y(s)$, which is analytic for $\\text{Re } s \> 0$ and positive-real (PR). A function is PR if $Y(s) = Y^T(s)$ and $\\text{Re } Y(s) \\succcurlyeq 0$. Kron reduction yields $Y\_{\\text{eff}}(s) = Y\_{bb} - Y\_{bi} Y\_{ii}(s)^{-1} Y\_{ib}$.
+
+
+**Theorem (PR Schur stability):** If $Y(s)$ is PR and reciprocal, then $Y\_{\\text{eff}}(s)$ is also PR and reciprocal (assuming $Y\_{ii}$ is invertible pointwise). This means that passivity/causality and reciprocity are preserved when interior nodes are eliminated.
+
+
+When $s = i\\omega$, we can write $Y(i\\omega) = G(\\omega) + i B(\\omega)$, where $G = G^T \\succcurlyeq 0$ (conductance/dissipative part) and $B = B^T$ (susceptance/reactive part). The Kramers–Kronig relations state that $G(\\omega)$ is the Hilbert transform of $\\partial\_\\omega B(\\omega)$, and vice versa (up to constants).
+
+
+**A.3 Herglotz/Stieltjes representations (minimality & realizability)**
+
+
+Each scalar PR entry admits a representation $Y(i\\omega) = a + b i \\omega + \\int\_0^\\infty \\frac{d\\mu(\\nu)}{\\nu - i \\omega}$, with $a \\ge 0$, $b \\ge 0$, and a nonnegative measure $d\\mu$. This measure $d\\mu$ encodes losses (akin to "cuts" in a network), while reactive poles encode internal cycles. Simple tree structures realize a constant $G$; the presence of cycles is what creates dispersive (frequency-dependent) behavior in $B$.
+
+
+-----
+
+
+**Appendix B — Dirichlet-to-Neumann (DtN) Operators: Definition, Symbols & Invariants**
+
+
+**B.1 Definition (scalar case; vector generalizes)**
+
+
+For a domain $\\Omega$ with boundary $\\partial\\Omega$ and an elliptic operator $\\mathcal{L}$ (e.g., conductivity or reduced wave operator), the DtN map $\\Lambda$ sends a boundary potential $u\_b$ to a boundary flux $f\_b$. This is achieved by solving $\\mathcal{L} u = 0$ in $\\Omega$ with $u|\_{\\partial\\Omega} = u\_b$, and then taking $f\_b = n \\cdot (K \\nabla u)$ on $\\partial\\Omega$. For reciprocal, lossless media, $\\Lambda$ is symmetric and positive in the boundary energy form $\\int\_{\\partial\\Omega} u\_b (\\Lambda u\_b) ds = \\int\_\\Omega (\\nabla u)^T K (\\nabla u) dV \\ge 0$.
+
+
+**B.2 Half-space symbol (homogeneous)**
+
+
+In a homogeneous half-space with wave speed $c = \\sqrt{K/I\_{\\text{eff}}}$ and tangential wavenumber $k\_t$, the DtN operator's symbol is $\\Lambda(\\omega, k\_t) = \\sqrt{c^2 \\omega^2 - k\_t^2}$ (using the $\\text{Re } \\Lambda \\ge 0$ branch). In the Budget–Curvature Correspondence (BCC) parametrization with lapse $u$, the DtN symbol becomes $\\Lambda\_{\\text{BCC}}(\\omega, k\_t; u) = \\sqrt{u^2 c^2 \\omega^2 - k\_t^2} / u$. The self-dual (critical) line where a transition occurs is $k\_t = u c \\omega$.
+
+
+**B.3 Layering & composition**
+
+
+For stratified media, the boundary action $\\chi = \\int \\kappa(x) dx$, where $\\kappa = \\sqrt{k\_t^2 - c(x)^2 \\omega^2}$, adds across layers. SU(1,1) transfer cascades imply that actions add logarithmically: reflection phases sum, and magnitudes multiply.
+
+
+**B.4 Steklov spectrum (static limit)**
+
+
+At $\\omega = 0$, the DtN eigenproblem $\\partial\_n u = \\sigma u$ on $\\partial\\Omega$ defines the Steklov spectrum $\\{\\sigma\_k\\}$. Weyl-type counting functions are tied to the boundary measure. This spectrum is invariant under interior cycle surgeries, falling within the "holography class."
+
+
+**B.5 Conformal covariance (2D)**
+
+
+For a conformal map $f: \\Omega \\to \\Omega'$ with boundary weight $\\lambda = |f'|$, the DtN operators transform as $\\Lambda\_{\\Omega'} = M\_{\\lambda^{-1}} \\Lambda\_\\Omega M\_\\lambda$, where $M\_g$ multiplies a boundary function by $g$. The quadratic forms $\\int \\varphi \\Lambda \\varphi ds$ are preserved when $\\varphi' = \\varphi \\circ f^{-1}$ and $ds' = \\lambda ds$ (see Appendix D for details on inversion).
+
+
+-----
+
+
+**Appendix C — Orthogonal/Collinear Decomposition, Port-Hamiltonian Energy Balance & Log Calculus**
+
+
+**C.1 Orthogonal–collinear split (linear, time-invariant ports)**
+
+
+State evolution in port-Hamiltonian form is described by $\\dot{z} = J \\nabla H(z) - R \\nabla \\Phi(z) + B u$. Here, $J$ is a skew-symmetric matrix ($J^T = -J$) representing orthogonal or reactive dynamics (energy-conserving), while $R$ is a symmetric positive-semidefinite matrix ($R^T = R \\succcurlyeq 0$) representing collinear or dissipative dynamics (energy-dissipating). The output is $y = B^T \\nabla H$. The energy balance equation is $\\dot{H} = y^T u - \\langle \\nabla \\Phi, R \\nabla \\Phi \\rangle \\le y^T u$, which confirms passivity.
+
+
+**C.2 Boundary energetics (DtN view)**
+
+
+For boundary effort–flow pairs $(e\_b, f\_b)$ where $f\_b = \\Lambda\_{\\text{eff}}(i\\omega) e\_b$ and $\\Lambda\_{\\text{eff}} = G + i B$, the real part ($\\frac{1}{2} e\_b^T G e\_b$) represents dissipated power, while the imaginary part ($\\frac{1}{2} e\_b^T B e\_b$) represents reactive power. Orthogonal parts (reactances) add in quadrature through composition, while collinear parts (conductances) add arithmetically.
+
+
+**C.3 Phase current & cross-derivative identity**
+
+
+Define the phase potential $\\varphi(\\omega, k\_t) = \\arg r$ and its associated current $J = (1/2\\pi)(\\partial\_{k\_t} \\varphi, -\\partial\_\\omega \\varphi)$. In passive, lossless operational windows, $\\nabla \\cdot J = 0$ due to the commutation of mixed partial derivatives. The components of this current are the Goos–Hänchen shift ($L\_{\\text{GH}}$) and the Wigner delay ($\\tau\_W$). Near the critical fold as $s \\to 1^-$, both $L\_{\\text{GH}}$ and $\\tau\_W$ exhibit a universal divergence scaling as $(1 - s^2)^{-1/2}$, with prefactors determined by the specific port characteristics.
+
+
+**C.4 Log kit (representation-invariant bookkeeping)**
+
+
+The "Log Kit" facilitates analysis by transforming multiplicative operations into additive ones:
+
+
+  - **Log-amplitude:** $\\ln \\psi = \\ln |\\psi| + i \\arg \\psi$, which converts products of amplitudes into sums.
+  - **Log-budget (rapidity):** $\\eta = (1/2) \\ln(\\text{PE}/\\text{KE})$. This quantity adds linearly under "budget boosts," simplifying the analysis of energy partition changes. (For instance, if KE/PE $= e^{-2\\eta}$, then boosts/tilts act as simple linear additions to $\\eta$.)
+  - **Connector action:** The boundary action $\\chi = \\int \\kappa dx$ is additive, and its derivatives relate to physical quantities: $\\varphi = -2 \\partial\_{k\_t} \\chi$ and $\\tau\_W = 2 \\partial\_\\omega \\chi$.
+
+
+**C.5 Bounds & sum rules (sketch)**
+
+
+From the principle of positive-realness, we can derive Bode–Fano–type tradeoffs: $\\int -\\ln|r(\\omega, k\_t)| d\\omega \\le \\text{(stored reactive energy budget)}$. Additionally, the Kramers–Kronig relations enforce sum rules for $\\partial\_\\omega B$ and $G$, which serve as important diagnostics (further detailed in Appendix F).
+
+
+-----
+
+
+**Appendix D — Conformal inversion / dual-graph formulas (dualizing interior ↔ exterior)**
+
+
+This appendix explores the relationship between interior and exterior perspectives through conformal inversion and planar graph duality.
+
+
+**2D conformal inversion:** Let $f: \\Omega \\to \\Omega'$ be a conformal map with boundary weight $\\lambda(\\zeta) = |f'(\\zeta)|$ on the boundary. For harmonic problems, the Dirichlet-to-Neumann (DtN) operators obey the similarity transform $\\Lambda\_{\\Omega'} = M\_{\\lambda^{-1}} \\cdot \\Lambda\_{\\Omega} \\cdot M\_{\\lambda}$, where $M\_g$ multiplies a boundary function by $g$. Quadratic forms are invariant: $\\int\_{\\text{boundary}(\\Omega)} \\varphi \\cdot \\Lambda\_{\\Omega} \\cdot \\varphi ds$ equals $\\int\_{\\text{boundary}(\\Omega')} \\varphi' \\cdot \\Lambda\_{\\Omega'} \\cdot \\varphi' ds'$ with $\\varphi' = \\varphi$ composed with $f^{-1}$, and $ds' = \\lambda ds$. For inversion $f(z) = R^2 / \\overline{z}$ (which is orientation reversing), take $\\lambda(\\zeta) = R^2 / |\\zeta|^2$ and include the normal flip in the unit-normal convention.
+
+
+**Planar graph duality:** For a planar network, cycle–cut duality yields the same boundary law (up to unit factors). Kron (Schur) reduction commutes with planar dualization; thus, the principle of "internal curl → boundary divergence" holds equally on the dual network.
+
+
+-----
+
+
+**Appendix E — Budget rapidity adds under boosts (two-line proof)**
+
+
+Define energies KE, PE $\> 0$. The budget rapidity is defined as $\\eta = \\frac{1}{2} \\ln(\\text{PE}/\\text{KE})$. Under a "budget boost" or tilt that changes the ratio of PE to KE, the rapidities simply add linearly. For example, if we have successive boosts corresponding to rapidities $\\eta\_1$ and $\\eta\_2$, the total rapidity is $\\eta\_1 + \\eta\_2$. This additive property simplifies the analysis of how energy partition changes under various transformations.
+
+
+-----
+
+
+**Appendix F — Diagnostics (KK relations, PR checks, passivity)**
+
+
+This appendix details diagnostic tools for verifying the properties of the system, particularly focusing on Kramers–Kronig (KK) relations, positive-realness (PR) checks, and passivity.
+
+
+**F.1 Kramers–Kronig relations:** For a causal and stable linear system, the real and imaginary parts of its frequency response are related by the KK relations. For the effective admittance $Y\_{\\text{eff}}(i\\omega) = G(\\omega) + i B(\\omega)$, the relations are:
+
+
+$G(\\omega) = \\frac{1}{\\pi} \\mathcal{P} \\int\_{-\\infty}^{\\infty} \\frac{B(\\omega')}{\\omega' - \\omega} d\\omega'$
+
+
+$B(\\omega) = -\\frac{1}{\\pi} \\mathcal{P} \\int\_{-\\infty}^{\\infty} \\frac{G(\\omega')}{\\omega' - \\omega} d\\omega'$
+
+
+where $\\mathcal{P}$ denotes the principal value of the integral. These relations provide a powerful check for causality and consistency between the dissipative ($G$) and reactive ($B$) parts of the boundary operator.
+
+
+**F.2 Positive-realness checks:** A matrix function $Y(s)$ is positive-real if it is analytic for $\\text{Re } s \> 0$, $Y(s) = Y^T(s)$, and $\\text{Re } Y(s) \\succcurlyeq 0$ for $\\text{Re } s \> 0$. Various tests exist to verify PR, including checking the properties of the associated Herglotz/Stieltjes representation (Appendix A.3) and graphical methods like Nyquist plots for scalar cases.
+
+
+**F.3 Passivity:** Passivity is a fundamental property ensuring that the system does not generate energy. In the DtN framework, passivity is directly related to the positive-realness of the effective boundary operator $\\Lambda\_{\\text{eff}}(s)$ or $Y\_{\\text{eff}}(s)$. The energy balance equation in the port-Hamiltonian formulation (Appendix C.1) also provides a direct check for passivity.
+
+
+-----
+
+
+**Appendix G — Budget–Curvature Correspondence (BCC) Geodesics**
+
+
+This appendix elaborates on the geodesics within the Budget–Curvature Correspondence (BCC) metric.
+
+
+**G.1 BCC metric:** The metric is defined as $d\\Sigma^2 = u c^2 dt^2 - u^{-1} d\\ell^2$, where $u = \\text{PE}/(\\text{KE}+\\text{PE})$ and $c$ is the local wave speed. This metric describes a spacetime where the "lapse" function $u$ couples temporal and spatial intervals.
+
+
+**G.2 Geodesic equation:** The paths of energy/momentum transfer in this spacetime follow geodesics, which are determined by the variation of the action $S = \\int \\sqrt{d\\Sigma^2}$. The resulting geodesic equation describes how gradients in the energy partition parameter 'u' lead to phenomena like phase drag and redshift.
+
+
+**G.3 Consistency with TEP impulses:** The interface jumps and momentum exchange predicted by the BCC geodesics are consistent with the impulses calculated within the TEP framework (Appendix II), providing a unified perspective on energy and momentum transfer.
+
+
+-----
+
+
+**Appendix H — Universal Near-Critical Fold Scaling (previously Appendix N)**
+
+
+This appendix provides further details on the universal scaling observed near the critical fold, as introduced in previous versions’ Appendix N.
+
+
+**H.1 Critical fold:** The critical fold occurs as the system approaches the self-dual strip ($s \\to 1^-$), where a transition in behavior takes place.
+
+
+**H.2 Universal scaling:** Near this fold, both the Goos–Hänchen shift ($L\_{\\text{GH}}$) and the Wigner delay ($\\tau\_W$) exhibit a universal divergence scaling proportional to $(1 - s^2)^{-1/2}$. This scaling is independent of the specific details of the membrane or port, highlighting a universal aspect of the system's behavior near criticality.
+
+
+**H.3 Prefactors:** While the scaling exponent is universal, the prefactors for $L\_{\\text{GH}}$ and $\\tau\_W$ are determined by the specific membrane properties and polarization, allowing for characterization of the system.
+
+
+-----
+
+
+**Appendix I — Capillarity as a boundary operator (sigma, grad\_s sigma) with rapidity & ID recipe**
+
+
+**Setup & notation.** Boundary = smooth surface with unit normal n, surface gradient grad\_s, and Laplace–Beltrami Delta\_s = div\_s(grad\_s). Small normal displacement field h(s,t) (so the interface is x\_n = h). Fourier mode: h\_{k,omega} \\\* exp(i(k·s - omega t)), with k = |k|.
+
+
+**I.1 Linearized capillary energy -\> boundary force** Surface energy: E\_sigma = integral\_over\_boundary sigma dA. For small slopes, dA ≈ (1 + 1/2 |grad\_s h|^2) dA0. Variation w.r.t. h gives delta E\_sigma / delta h = - sigma \\\* Delta\_s h (sign per curvature convention). Normal traction from capillarity: f\_n^sigma = sigma \\\* Delta\_s h (Young–Laplace linearization: Delta p = sigma \\\* kappa ≈ sigma \\\* Delta\_s h). If sigma = sigma(T, c, …) varies tangentially, the tangential balance adds the Marangoni line force: f\_t^sigma = grad\_s sigma(T, c, …) (acts as boundary drive).
+
+
+**I.2 Dynamic boundary law (mode (omega, k))** Collecting contributions at the boundary port (normal force vs displacement/velocity): f\_n(omega,k) = Z\_int(omega,k) \\\* v + Z\_ext(omega,k) \\\* v + sigma \\\* k^2 \\\* h + t · (grad\_s sigma) , with v = i omega h. Here Z\_int, Z\_ext are the bulk mechanical impedances seen at the interface (they add in parallel in the DtN sense). The sigma k^2 term is a self-adjoint boundary operator; grad\_s sigma is a source.
+
+
+**Note:** Star–mesh/Kron commutes with adding sigma \\\* Delta\_s: eliminating interior nodes first or last yields the same effective Lambda\_eff, now with an additive sigma \\\* Delta\_s block. Under conformal inversion (2D), Delta\_s and Lambda transform by the same boundary weight, so capillarity is dual-covariant.
+
+
+**I.3 Rapidity shift from sigma (budget view)** Let the reactive part of the boundary impedance be written (locally) in a mass–spring form X(omega,k) ≈ omega \\\* M\_eff(k) - K\_eff(k)/omega. Capillarity adds Delta K\_eff(k) = sigma k^2. Writing the boundary rapidity eta = (1/2) ln(PE/KE), a small capillary bias produces Delta eta(omega,k) ≈ (1/2) ln( 1 + Delta K\_eff(k) / K\_eff^(bulk)(omega,k) ) = (1/2) ln( 1 + (sigma k^2)/K\_eff^(bulk)(omega,k) ), valid in the quasi-harmonic regime where the reactance decomposition holds; near a resonance, interpret K\_eff^(bulk) as the reactive spring component. Thus sigma pushes the port budget toward PE. A boundary boost (Appendix E) then transports to any desired eta: eta -\> eta + alpha.
+
+
+**I.4 Boundary-only identification recipe (separating sigma and the two bulks)**
+
+
+1.  Measure the complex boundary response Y\_eff(omega,k) = G(omega,k) + i B(omega,k) for several k along the interface (plane-wave or modal fit).
+
+
+2.  **Reactive slope test.** In a displacement–force port, capillarity contributes -(sigma k^2)/omega to the reactance. Fit B(omega,k) vs k^2 at fixed omega (or dB/domega vs k^2) to extract sigma from the coefficient.
+
+
+3.  **Resistive separation.** Fit G(omega,k) vs k^2 to estimate viscous/surface-loss terms (often \\\~ nu k^2). Compare with two exterior conditions (swap the outer medium) to differentially isolate Z\_int vs Z\_ext.
+
+
+4.  **Frequency disentangling.** Use scaling: inertia \\\~ omega (or omega/|k| in potential flows), spring \\\~ 1/omega, surface tension \\\~ k^2/omega in reactance. This separates membrane sigma from bulk.
+
+
+5.  **Marangoni calibration.** Impose a controlled grad\_s T; measure tangential traction to get d(sigma)/dT from f\_t = grad\_s sigma = (d sigma / dT) \\\* grad\_s T.
+
+
+6.  **K–K consistency.** Check Kramers–Kronig between measured G and B. Residuals signal non-passive artifacts or model mismatch.
+
+
+**I.5 Quick formulas (reference)**
+
+
+Normal: Delta p = sigma \\\* kappa ≈ sigma \\\* Delta\_s h.
+
+
+Tangential: t · (T^+ - T^-) · n = grad\_s sigma.
+
+
+DtN update: Lambda\_eff -\> Lambda\_eff + sigma \\\* Delta\_s (static); dynamically, the added block contributes a reactive term \\\~ -(sigma k^2)/omega to the port reactance in the h / f\_n variables.
+
+
+Rapidity: eta = (1/2) ln(PE/KE) = - ln tan A; under interior \<-\> exterior inversion at the boundary, eta -\> -eta; under boosts, eta -\> eta + alpha.
+
+
+**Caveats.** Signs depend on curvature convention; Delta\_s formula is small-slope. Large-amplitude or strongly viscous regimes need higher-order geometry and full PR fitting, but the additivity and dual-covariance of the boundary operators remain.
+
+
+-----
+
+
+**Appendix J — Conserved Boundary Phase Current & Charges (previously Appendix O)**
+
+
+This appendix expands on the concept of the conserved boundary phase current and associated charges, as introduced in previous versions’ Appendix O.
+
+
+**J.1 Phase current:** A phase current $J = (1/2\\pi)(\\partial\_{k\_t}\\varphi, -\\partial\_\\omega \\varphi)$ is defined based on the phase potential $\\varphi(\\omega, k\_t) = \\arg r$.
+
+
+**J.2 Conservation:** Within passive, lossless operational windows, this phase current is divergence-free ($\\nabla \\cdot J = 0$). This conservation is a consequence of the commutation of mixed partial derivatives and reflects an underlying symmetry.
+
+
+**J.3 Charges:** Zeros, poles, and guided-mode arcs within the system carry integer charge. These charges are related to quantized winding numbers of the reflection coefficient in the complex frequency plane, providing topological invariants for the system.
+
+
+-----
+
+
+**Appendix K — Touchstones: Applications & Validation**
+
+
+This appendix provides further details on the "Touchstones" where the principles of TEP, PHP, and CME can be applied and validated.
+
+
+**K.1 BEC/Polaritons:** In the context of Bose-Einstein Condensates (BEC) and polaritons, particularly in their soliton regimes, the concepts of budget dynamics and the BCC metric can offer valuable insights into their behavior.
+
+
+**K.2 Metamaterials with Graded K/I:** Metamaterials with spatially graded stiffness (K) and inertia ($I\_{\\text{eff}}$) provide a physical platform to study phenomena predicted by the TEP and CME, such as budget redshift and pressure effects.
+
+
+**K.3 Thermal Plates:** Thermal plates, particularly those engineered with specific geometries or material compositions, can serve as a macroscopic system for demonstrating the Terminal Equivalence Principle (TEP). This is especially relevant when considering how complex internal thermal conduction networks (e.g., those with "triangular cross-couplings") can be reduced to simpler "boundary shunts" while preserving the overall boundary heat flow characteristics. This offers a clear analogy to the electrical network reductions central to TEP.
+
+
+-----
+
+
+**Appendix L — One-page spec: BCC membrane scattering (r(ω,k) with surface terms)**
+
+
+**Purpose.** This section provides a drop-in recipe to compute boundary reflection/phase/delay when the bulk obeys the Budget–Curvature (BCC) metric $d\\Sigma^2 = u c^2 dt^2 - u^{-1} d\\ell^2$. It optionally includes intrinsic membrane physics such as capillarity, bending, or surface admittance. This framework is suitable for analyzing electromagnetic, acoustic, or thermal analogues, leveraging the IFFT/CME dictionary.
+
+
+**L.1 Inputs & normalization**
+
+
+Invariant speed: $c = l\\\_P / t\\\_P = l\\\_P f\\\_P$ (use any convenient units; Planck shown for anchoring).
+
+
+Budget fraction: $u \\in (0,1)$ (local PE/(PE+KE)).
+
+
+Frequency & tangential wavenumber: $\\omega, k = |\\vec{k}|$. Define $\\rho := k / (u c \\omega)$.
+
+
+Outside (reference) side: budget $u\\\_out$. Inside: $u\\\_in$.
+
+
+Optional intrinsic surface operator: $\\Lambda\\\_surf(\\omega,k)$ (e.g., capillarity/bending/etc.).
+
+
+**L.2 Boundary operator (Dirichlet→Neumann) for the BCC metric**
+
+
+For a half-space bulk with BCC wave equation $u c^2 \\ddot{\\theta} - u^{-1} \\Delta\\theta = 0$, the natural boundary pair is $u\\*b = \\theta|*{x=0}$, $f\\*b = - u^{-1} \\partial\_n \\theta|*{x=0}$. The DtN map is
+
+
+$\\Lambda\\\_BCC(\\omega,k; u) = u^{-1} \\sqrt{u^2 c^2 \\omega^2 - k^2}$
+
+
+(branch: Re $\\Lambda\\\_BCC \\ge 0$).
+
+
+Passband ($\\rho \< 1$): $\\Lambda\\*BCC \\in \\mathbb{R}*+$ (power inflow possible).
+
+
+Stopband / unitary ($\\rho \> 1$): $\\Lambda\\\_BCC = i u^{-1} \\sqrt{k^2 - u^2 c^2 \\omega^2}$ (purely reactive / phase-only).
+
+
+**L.3 Intrinsic surface physics (additive, self-adjoint on the boundary)**
+
+
+Write the intrinsic surface operator as $\\Lambda\\\_surf(\\omega,k)$. This operator is additive and self-adjoint on the boundary. Examples include:
+
+
+  - **Capillarity:** $\\Lambda\\\_cap = \\sigma k^2$ (from Appendix I, linearized).
+  - **Bending rigidity:** $\\Lambda\\\_bend = D k^4$.
+  - **Surface admittance:** $\\Lambda\\\_Y = Y\\\_s(\\omega,k)$.
+
+
+The total boundary operator is the sum: $\\Lambda\\\_total = \\Lambda\\\_BCC + \\Lambda\\\_surf$.
+
+
+**L.4 Reflection coefficient (r)**
+
+
+The reflection coefficient $r$ is given by the standard formula for scattering at an interface:
+
+
+$r = \\frac{\\Lambda\\\_total - \\Lambda\\\_out}{\\Lambda\\\_total + \\Lambda\\\_out}$
+
+
+where $\\Lambda\\\_out = \\Lambda\\\_BCC(\\omega,k; u\\\_out)$ is the DtN operator for the outside bulk.
+
+
+Passband ($\\rho \< 1$): $|r| \\le 1$.
+
+
+Stopband / unitary ($\\rho \> 1$): $|r| = 1$ (phase-only reflection).
+
+
+**L.5 Phase ($\\varphi$) and delay ($\\tau\_W$)**
+
+
+The phase of the reflection coefficient is $\\varphi(\\omega,k) = \\arg r$. The Wigner delay $\\tau\_W$ and Goos–Hänchen shift $L\_{\\text{GH}}$ are given by the derivatives of the phase:
+
+
+$\\tau\_W = -\\partial\_\\omega \\varphi$
+
+
+$L\_{\\text{GH}} = \\partial\_k \\varphi$
+
+
+These quantities can be computed directly from the reflection coefficient formula.
+
+
+**L.6 Budget redshift & pressure (CME dictionary)**
+
+
+Using the Constitutive Momentum Equivalence (CME) dictionary (Appendix II), the budget redshift and pressure effects can be related to the gradients of $I\_{\\text{eff}}$ and $K$. The reflection coefficient and its derivatives provide boundary observables that can be used to infer these interior properties.
+
+
+**L.7 Outputs**
+
+
+The primary outputs of this recipe are the reflection coefficient $r(\\omega,k)$, its phase $\\varphi(\\omega,k)$, and the associated delays $\\tau\_W$ and $L\_{\\text{GH}}$. These quantities characterize the boundary scattering behavior of the BCC membrane with intrinsic surface physics.
+
+
+-----
+
+
+M. P-like & D-like Coherence Calculus (G-Parametrized)
+
+
+Purpose. This appendix introduces a representation-invariant calculus for combining fundamental measures anchored at a minimum (P-like, e.g., length) or a maximum (D-like, e.g., frequency). It connects this calculus to the Budget–Curvature (BCC) metric and the membrane Dirichlet-to-Neumann (DtN) operator.
+
+
+M.1 Protocol (numerator-only, coherence ratios)
+
+
+To combine composite observables (e.g., velocity, energy), express any composite observable $X$ as a pure product of fundamental measures (reciprocate any denominator factors to move them to the numerator).
+
+
+For each fundamental factor $q$ with an anchor $q_{\text{min}}$ (P-like, representing a minimum possible value) or $q_{\text{max}}$ (D-like, representing a maximum possible value), define a coherence ratio $R \ge 1$:
+P-like factors: $R = q / q_{\text{min}}$
+D-like factors: $R = q_{\text{max}} / q$
+Then, define the log-coherence (or rapidity) contribution for each factor as $\eta_q = \frac{1}{2} \ln R^2$. The total log-coherence for the composite observable $X$ is additive: $\eta_X = \sum_q \eta_q = \frac{1}{2} \ln X_{norm}^2$, where $X_{norm} = \prod_q R$ is the product of the coherence ratios.
+
+
+Reciprocal-anchor lemma: If a factor is reciprocated (e.g., $q \to 1/q$ to maintain the numerator-only rule), its anchor must also be reciprocated (e.g., $q_{\text{min}} \leftrightarrow (q_{\text{max}})^{-1}$). The log-coherence $\eta_q$ remains invariant under this transformation.
+
+
+M.2 One metric for P/D legs (BCC in G)
+
+
+The Budget–Curvature Correspondence (BCC) metric can be parametrized by $G$, where $G^2 = 1/u$ and $u = \text{PE}/(\text{PE}+\text{KE})$. The metric is $d\Sigma^2 = (c^2/G^2) dt^2 - G^2 d\ell^2$. The null/self-dual line (where kinetic and potential energy are balanced) is defined by $G^4 k^2 = c^2 \omega^2$.
+
+
+The half-space DtN operator (representing the membrane law) is $\Lambda_{\text{BCC}}(\omega,k;G) = \sqrt{c^2 \omega^2 - G^4 k^2}$ (using the principal branch $\text{Re } \Lambda \ge 0$).
+
+
+The boundary rapidity (for a bare half-space) is $\eta_{\text{bnd}}(\omega,k) = \frac{1}{2} \ln((G^2 k)^2/(c^2 \omega^2)) = \ln(G^2 k/(c \omega))$.
+
+
+Time ↔ Space Duality (metric involution): The transformation $(G, \omega, k) \to (G^{-1}, (G^2/c) k, (c/G^2) \omega)$ leads to a duality where $\Lambda \to i\Lambda$ and $\eta \to -\eta$, indicating a transition between oscillation and evanescence.
+
+
+M.3 Why c is “D-like” (bridge of P and D anchors)
+
+
+Using Planck anchors $l_P$ (P-like minimum length) and $f_P$ (D-like maximum frequency, $f_P = 1/t_P$), the ratio $v/c$ can be expressed as:
+
+
+$v/c = (l/t) / (l_P/t_P) = (l/l_P) (t_P/t) = (l/l_P) (f/f_P)$.
+
+
+Taking the logarithm: $\ln(v/c) = \ln(l/l_P) + \ln(f/f_P) = \eta_l + \eta_f$. This shows that the logarithm of velocity normalized by $c$ is a sum of a P-like length rapidity and a D-like frequency rapidity. The self-dual (orbit) condition, $\ln(v/c)=0$, occurs when these two rapidities balance. This concept generalizes to any composite $X$: the orbit condition corresponds to $\eta_X = 0$.
+
+
+M.4 Quick examples (numerator-only convention)
+
+
+Velocity: $v = l f$. $\ln(v/c) = \ln(l/l_P) + \ln(f/f_P)$.
+Acceleration: $a = l f^2$. Choosing an anchor $a_P = c f_P$, we get $\ln(a/a_P) = \ln(l/l_P) + 2 \ln(f/f_P)$.
+Energy (amplitude→intensity): $E \propto m (l f)^2$, where $m = w^2$ (a weighting factor, possibly mass or impedance). The normalized energy: $\ln(E/E_P) = \ln(m/m_P) + 2 \ln(l/l_P) + 2 \ln(f/f_P)$.
+Waves & “massless”: For a finite control volume $V$, the effective mass $m_{\text{eff}} = (\int u dV) / c^2$ can be treated as a standard composite within this calculus without paradox, provided the integration window is fixed.
+
+
+M.5 Orbit Lemma & Critical Signatures
+
+
+Orbit Lemma: For any composite observable $X$, $\eta_X = 0$ if and only if the geometric mean of its P-anchors equals that of its D-anchors in the chosen representation. In the BCC framework, the orbit corresponds to the null line $G^4 k^2 = c^2 \omega^2$, where scattering is unitary ($|r|=1$) and the Wigner delay encapsulates the stored energy.
+
+
+Criticality: Continuous transitions (e.g., from propagating to evanescent waves) are characterized by the transfer function $\chi = -\frac{1}{2} \ln r$ remaining continuous. However, its derivative with respect to a control parameter $\lambda$, $\partial_\lambda \chi$, exhibits non-analytic scaling (exponents determined by the effective impedance $Z_{\text{eff}}(\lambda)$). First-order transitions are marked by a jump in $\chi$.
+
+
+M.6 Measurement & ID (boundary-only)
+
+
+Given the effective admittance $Y_{\text{eff}}(i\omega,k) = G(\omega,k) + iB(\omega,k)$:
+Stored energy and dissipated power: Stored energy per radian $W_{\text{store}} = (\frac{1}{4}) \partial_\omega B |V|^2$. Dissipated power $P = (\frac{1}{2}) G |V|^2$.
+Boundary rapidity: A budget angle provides $\eta_{\text{port}} = \frac{1}{2} \ln \left( (\frac{1}{4} \partial_\omega B) / (\frac{1}{2} G) \right)$.
+Two-sided probe: Measure the system's response with two different external media to separate the intrinsic membrane operator $\Lambda_{\text{surf}}$ (e.g., $\sigma k^2$, $D k^4$) from the bulk DtN operator $\Lambda_{\text{BCC}}$.
+k-slopes: Derivatives of the imaginary part of $\chi$ with respect to powers of $k$ can identify surface moduli: $\partial_{k^2} \text{Im } \chi \propto \sigma$, $\partial_{k^4} \text{Im } \chi \propto D$ (as per Appendix I). The additivity of $\chi$ facilitates composition of layers.
+
+
+M.7 Notes
+
+
+Sign conventions: Choose the port such that static surface terms appear as $+ \sigma k^2$, $+D k^4$ in $\Lambda\_surf$. Dynamic reactances then consistently follow in the displacement-to-normal-force ($h \leftrightarrow f\_n$) variables as $-(\sigma k^2)/\omega$, $-(D k^4)/\omega$.
+
+
+Representation invariance: Changing which factor you reciprocate (e.g., $q \to 1/q$) leaves $\eta\_X$ (the total log-coherence) unchanged, as per the reciprocal-anchor lemma (Appendix P.1). The single metric (Appendix P.2) inherently encodes P-like and D-like quantities as its two legs, meaning that the time $\leftrightarrow$ space duality is a fundamental metric symmetry, not merely a rule-of-thumb.
+
+
+-----
+
+
+N. Boundary Connectors (Static, Extrinsic, Dynamic)
+
+
+Purpose. This section provides a coordinate-free framework for connecting any two bulk media that share a smooth boundary $\Sigma$. It introduces a static metric connector ($C_0$), an extrinsic curvature jump ($\Delta K$), and a dynamic (DtN) connector ($C_\Lambda(\omega,k)$). Each connector is basis-free, composes additively under stacking of layers, and reduces to the SU(1,1)/hyperbolic "boost" picture in scalar cases.
+
+
+N.1 Static Connector (0th-order: Induced Metrics)
+
+
+Let $g\_out$ and $g\_in$ be the induced metrics on the tangent space of the boundary ($\text{T}\Sigma$) derived from the "outside" and "inside" bulk media, respectively. Define the relative metric and its log connector as:
+
+
+$C_0 := \text{log}( g\_out^{-1/2} \cdot g\_in \cdot g\_out^{-1/2} ) \in \text{Sym}(\text{T}\Sigma)$.
+
+
+Properties:
+Congruence-invariant and basis-free: $C_0$ is independent of the choice of coordinate system on the boundary.
+Additive under stacking: If an intermediate medium with induced metric $g_m$ is inserted between the two bulks, then $C_0(\text{out}\to\text{in}) = C_0(\text{out}\to m) + C_0(m\to\text{in})$.
+Boundary scalars: Key scalar invariants derived from $C_0$ include $\text{tr } C_0$ (representing isotropic stretch) and $||C_0||^2 - (1/d)(\text{tr } C_0)^2$ (quantifying anisotropy), where $d$ is the dimension of the boundary. The area ratio $\sqrt{\text{det } g\_in / \text{det } g\_out} = \text{exp}(\frac{1}{2} \text{tr } C_0)$.
+BCC specialization (isotropic): For the Budget–Curvature Correspondence (BCC) metric $d\Sigma^2 = (c^2/G^2) dt^2 - G^2 d\ell^2$, the tangential metric is scalar, and $C_0 = \text{log}(G\_in^2 / G\_out^2) = -\text{log}(u\_in / u\_out)$.
+
+
+N.2 Extrinsic Connector (1st-order: Shape Jump)
+
+
+Let $K^+$ and $K^-$ be the second fundamental forms (or shape operators) of $\Sigma$ as embedded from each side of the boundary. The jump tensor, defined as:
+
+
+$\Delta K := K^+ - K^-$
+
+
+is an honest tensor on $\Sigma$. This tensor directly controls geodesic refraction and momentum transfer across the interface.
+
+
+Links:
+General Relativity: In the context of General Relativity, $\Delta K$ corresponds to the Israel junction data (representing surface stress–energy).
+TEP/BCC: In the Terminal Equivalence Principle (TEP) and Budget–Curvature Correspondence (BCC) frameworks, $\Delta K$ provides the geometric core behind intrinsic boundary operators like capillarity ($\sigma \Delta_s$) and bending ($D \Delta_s^2$) (as detailed in Appendix U).
+Measurement: Measuring the boundary's shape response (e.g., normal force $f_n = \sigma \Delta_s h + D \Delta_s^2 h + \ldots$) allows for the identification of $\Delta K$-encoded moduli ($\sigma, D, \ldots$).
+
+
+N.3 Dynamic Connector (Operator Level: DtN)
+
+
+Let $\Lambda\_out(\omega,k)$ and $\Lambda\_in(\omega,k)$ be the Dirichlet-to-Neumann (DtN) maps that the two bulk media present to the boundary $\Sigma$. Define the dynamic connector as:
+
+
+$C_\Lambda(\omega,k) := \text{log}( \Lambda\_out^{-1/2} \cdot \Lambda\_in \cdot \Lambda\_out^{-1/2} )$.
+
+
+Composition: Inserting a thin layer with DtN operator $\Lambda_m$ makes $C_\Lambda$ additive: $C_\Lambda(\text{out}\to\text{in}) = C_\Lambda(\text{out}\to m) + C_\Lambda(m\to\text{in})$.
+
+
+Scalar reduction (normal incidence): If the port is scalar/isotropic, the dynamic connector simplifies to:
+
+
+$C_\Lambda = \text{log}(\Lambda\_in / \Lambda\_out)$,
+
+
+and the reflection coefficient is $r = (\Lambda\_in - \Lambda\_out) / (\Lambda\_in + \Lambda\_out) = -\text{tanh}(\frac{1}{2} C_\Lambda)$. Equivalently, $\text{ln } r = -2 \text{ artanh}(\Lambda\_out / \Lambda\_in)$. If an intrinsic membrane term is present, one simply uses $\Lambda\_in \to \Lambda\_in + \Lambda\_surf$.
+
+
+BCC plug-in: For each side, the DtN operator is $\Lambda\_BCC(\omega,k; G) = \sqrt{c^2 \omega^2 - G^4 k^2}$ (from Appendix M). This formulation automatically encodes the transition between passband and stopband behavior, as well as the time $\leftrightarrow$ space duality swap.
+
+
+N.4 “Mass vs. Charge” (CME) as a Two-Metric Test
+
+
+Identify mass metric $M \equiv \varepsilon$ and charge metric $Q \equiv \mu^{-1}$ with $c^2 = Q/M$.
+
+
+Closed forms at normal incidence:
+Mass-only step ($\mu_1 = \mu_0$, i.e., only mass/permittivity changes):
+$r_{\text{mass}} = (\sqrt{\varepsilon_0} - \sqrt{\varepsilon_1})/(\sqrt{\varepsilon_0} + \sqrt{\varepsilon_1}) = \text{exp}\[ -2\cdot\text{artanh } \sqrt{\varepsilon_1/\varepsilon_0} \]$.
+Charge-only step ($\varepsilon_1 = \varepsilon_0$, i.e., only charge/permeability changes):
+$r_{\text{charge}} = (\sqrt{\mu_1} - \sqrt{\mu_0})/(\sqrt{\mu_1} + \sqrt{\mu_0}) = \text{exp}\[ -2\cdot\text{artanh } \sqrt{\mu_0/\mu_1} \]$.
+Angle / k sweep: Use $\rho = k/(u c \omega)$. A mass step (increase in $\varepsilon$) effectively lowers the wave speed $c$ within the medium, causing the propagation cone to shrink and leading to an earlier crossing of the $\rho = 1$ critical line. Conversely, a charge step (increase in $\mu^{-1}$) raises $c$, resulting in a later critical line crossing. Surface terms shift the reactive slope: $(\partial/\partial k^2) \text{Im } \chi \propto \sigma$ (as detailed in Appendix U).
+
+
+N.5 Parameter-space connection & invariants
+
+
+Let $p$ denote a boundary control parameter (e.g., $\omega, k$, temperature, composition). The scalar case defines a boundary connection:
+
+
+$A_p := \frac{1}{2} \partial_p \log \Lambda_{\text{eff}}$
+
+
+For the matrix case (multiport systems), the curvature/field strength is $F_{pq} := \partial_p A_q - \partial_q A_p$ (for matrices, $F = dA + A\wedge A$).
+
+
+Holonomies: Line integrals $\oint A\cdot dp$ over closed loops in parameter space are boundary invariants (related to phase/time-delay integrals and spectral shifts like Birman–Krein/Friedel). Nonzero $F$ signals critical structure (e.g., branching points, avoided crossings, topological features) even without any pre-declared scalar invariant.
+
+
+N.6 Boundary-only measurement checklist
+
+
+Normal-incidence: Measure $r(\omega)$ (reflection coefficient at normal incidence). Fit $\ln r = -2\cdot\text{artanh}(\Lambda_{\text{out}}/\Lambda_{\text{in}})$ to distinguish between mass-like (permittivity) and charge-like (permeability) steps at the interface.
+k-sweep: Extract the boundary action $\chi = -\frac{1}{2} \ln r$. Locate the self-dual line $G^4 k^2 = c^2 \omega^2$. Read the surface tension $\sigma$ and bending rigidity $D$ from the second and fourth derivatives of the imaginary part of $\chi$ with respect to $k$: $(\partial/\partial k^2) \text{Im } \chi \propto \sigma$ and $(\partial/\partial k^4) \text{Im } \chi \propto D$ (as per Appendix U).
+Side swap / known insert: Repeat measurements with an altered exterior medium or by inserting a thin, known layer. Use the additivity of the dynamic connector $C_\Lambda$ (or the boundary action $\chi$) to differentially isolate and solve for unknown bulk properties or intrinsic surface operators.
+Parameter holonomy: Map the connection $A_p = \frac{1}{2} \partial_p \log \Lambda$ and integrate it around loops in parameter space. The resulting holonomies are boundary invariants. Spikes or singularities in the curvature tensor $F$ flag critical manifolds or topological transitions in the system's parameter space.
+
+
+-----
+
+
+O. IFFT Boundary Law and Critical Scaling (Budget Form)
+
+
+Purpose. This appendix collects the fundamental boundary equalities, the budget Snell–Fermat law, universal near-critical scalings (Goos–Hänchen/Wigner), and a minimal inversion/diagnostics kit. It is presented in a plain-text math, drop-in format.
+
+
+O.1 Boundary equalities (evanescent band $v_p = \omega/k < c$)
+
+
+Decay constant: $\kappa = \sqrt{k^2 - (\omega/c)^2} = k \cdot \sqrt{1 - (v_p/c)^2}$. This represents the exponential decay rate of the evanescent wave normal to the interface.
+Budget fraction: $u = \text{PE}/(\text{PE}+\text{KE}) = \frac{1}{2} \cdot (1 + (\kappa/k)^2)$. Equivalently, $\kappa/k = \sqrt{2u - 1}$. This links the evanescent decay to the energy partition.
+Budget lapse: $G^2 = 1/u$. Then $\kappa/k = \sqrt{2/G^2 - 1}$ and $v_p/c = \sqrt{2 - 1/G^2}$. This parametrization connects the decay constant and phase velocity to the geometric lapse factor $G$.
+Half-space DtN in budget port: $\Lambda_{\text{BCC}}(\omega,k_t;u) = \sqrt{c^2 \omega^2 - (k_t/u)^2}$. The self-dual line, where propagation transitions to evanescence, is defined by $k_t = u c \omega$.
+
+
+O.2 Budget Snell–Fermat (planar interface)
+
+
+Define the budget angle: $s := \sin \theta_u = k_t / (u c \omega)$ (where $0 \le s < 1$ at or under critical conditions).
+
+
+Budget Snell's Law (tangential $k_t$ conserved): At an interface between two media with budgets $u_1$ and $u_2$, the product $u \cdot \sin \theta_u$ is conserved: $u_1 \cdot \sin \theta_{u,1} = u_2 \cdot \sin \theta_{u,2}$.
+
+
+Criticality: A critical transition occurs when $s \to 1^-$ on side $i$, meaning $k_t = u_i c \omega$. This signifies the transition from an oscillatory, propagating orbit to an evanescent, decaying state.
+
+
+Universal near-critical blow-up (Goos–Hänchen and Wigner): As $s \to 1^-$, the Goos–Hänchen shift $L_{\text{GH}} = -\partial_{k_t} \arg r$ and the Wigner delay $\tau_W = \partial_\omega \arg r$ both diverge universally as $(1 - s^2)^{-1/2}$. The prefactors for these divergences depend on the specific port characteristics and polarization, as well as any intrinsic surface operator $\Lambda_{\text{surf}}$, but the universal exponent and functional shape of the divergence are maintained.
+
+
+O.3 Inverse boundary tomography (Abel/Herglotz type)
+
+
+For a stratified medium where the budget $u = u(x)$ varies only normal to the interface (along $x$), the boundary action $\chi(p)$ across the evanescent region obeys the integral relation:
+
+
+$\chi(p) = \int_{x_t}^\infty \frac{\sqrt{u(x)^2 - p^2}}{u(x)} dx$,
+
+
+where $p := k_t/(c \omega)$ is the normalized tangential wavenumber, and $u(x_t) = p$ defines the turning point $x_t$ where the wave becomes purely evanescent.
+
+
+Differentiation yields an Abel kernel: Differentiating $\chi$ with respect to $p$ gives:
+
+
+$d\chi/dp = - \int_{x_t}^\infty \frac{p}{u(x) \sqrt{u(x)^2 - p^2}} dx$.
+
+
+Monotone $u(x)$ is uniquely recovered by standard Abel inversion. Practical recipe: measure $\arg r$ to get $\chi$, differentiate in $p$, and invert to get $u(x)$.
+
+
+O.4 Anisotropic budgets (budget birefringence)
+
+
+Let $U$ be a positive-definite budget tensor on the boundary. The self-dual curve (generalizing the scalar $k_t = u c \omega$ condition) is given by:
+
+
+$k_t^T U^{\text{-2}} k_t = c^2 \omega^2$.
+
+
+The principal DtN symbols split, leading to polarization-dependent delays that can be used to infer the eigenvalues of $U$. This phenomenon is analogous to birefringence in anisotropic media.
+
+
+O.5 Layer quantization (SU(1,1) Fabry–Pérot)
+
+
+For a slab of thickness $L$ with interior decay constant $\kappa$:
+
+
+The reflection coefficients from the left and right interfaces are $r_{\text{left}} = e^{\text{-2 } \chi_{\text{L}}}$ and $r_{\text{right}} = e^{\text{-2 } \chi_{\text{R}}}$.
+
+
+The bound-mode condition (for modes trapped within the slab) is $\chi_{\text{L}} + \chi_{\text{R}} + \kappa L = i \pi m$, where $m \in \mathbb{Z}$. This condition quantizes the modes.
+
+
+A Weyl-type count (analogous to boundary/Steklov spectrum) for the number of modes $N(\omega,k_t)$ is approximated by:
+
+
+$N(\omega,k_t) \approx (1/\pi) \int \kappa(x;\omega,k_t) dx$.
+
+
+O.6 Temporal boundary dual (time refraction)
+
+
+Consider a sudden jump in the budget $u$ in time at a fixed tangential wavenumber $k_t$. The frequency $\omega$ and budget $u$ are related by the temporal refraction condition:
+
+
+$\omega_+/u_+ = \omega_-/u_-$.
+
+
+Temporal criticality occurs when $u$ crosses the value $k_t/(c \omega)$, analogous to spatial criticality.
+
+
+O.7 Universal near-critical scalings (summary)
+
+
+Near the self-dual strip $s \to 1^-$, where $s := k_t/(u c \omega) = \sin \theta_u$:
+
+
+The decay constant $\kappa$ scales as $\kappa/k_t \approx \sqrt{1 - s^2}$.
+
+
+The penetration depth (evanescent length scale) scales as $1/\kappa \propto (1 - s^2)^{\text{-1/2}} / k_t$.
+
+
+Both the Goos–Hänchen shift $L_{\text{GH}}$ and the Wigner delay $\tau_W$ diverge universally as $(1 - s^2)^{\text{-1/2}}$.
+
+
+Loss or anisotropy can cut off these divergences by introducing an imaginary part to $\kappa$ or by mixing principal axes.
+
+
+O.8 Minimal measurement/ID checklist
+Angle scan at fixed $\omega$: Fit $\kappa/k_t$ vs $s$ to $\kappa/k_t = \sqrt{1 - s^2}$ to read $u$ and locate criticality.
+Phase/delay: Extract $\chi$ and its slopes; verify $L_{\text{GH}}, \tau_W \propto (1 - s^2)^{\text{-1/2}}$.
+Two-sided probe or thin known insert: Use additivity of $\chi$ (log-connector) to isolate $\Lambda\_surf$ vs bulk.
+Anisotropy: Rotate sample; map polarization-split delays $\to$ reconstruct $U$.
+Temporal jump: Modulate $u(t)$; test $\omega/u = \text{const}$ across the jump and observe conversion thresholds.
+
+
+-----
+
+
+P. Conserved boundary current, charges, and their consequences
+
+
+Goal. Make the $\omega$–$k_t$ phase of reflection a generator of a conserved boundary current; identify its “charges,” topological content, effects of loss/aniso, and give measurement/design recipes.
+
+
+P.1 Current & potential (one-port)
+
+
+Define phase potential: $\varphi(\omega,k_t) := \arg r(\omega,k_t)$ (continuous branch).
+
+
+Conserved current in parameter space: $J := (1/2\pi) ( \partial_{k_t}\varphi , -\partial_\omega \varphi )$.
+
+
+Continuity (lossless, off singular sets): $\partial_\omega J_\omega + \partial_{k_t} J_{k_t} = 0$ (mixed partials commute).
+
+
+Physical readouts: $J_1 \propto$ Goos–Hänchen shift ($-\partial_{k_t} \arg r$), $J_2 \propto$ Wigner delay ($\partial_\omega \arg r$).
+
+
+P.2 Charges (singular sets & quantization)
+
+
+Singular sets are zeros/poles of $r$ and guided-mode curves (branch points of $\Lambda$). Around a small loop $C$:
+
+
+$Q\[C\] := (1/2\pi)\oint_C ( \partial_{k_t}\varphi d k_t - \partial_\omega \varphi d\omega ) = \text{winding number } \in \mathbb{Z}$.
+
+
+Interpretation: spectral flow — net count of modes/poles crossing the domain (Levinson/Birman–Krein analogue at the boundary).
+
+
+P.3 Group/connection form (multiport)
+
+
+For a matrix $S(\omega,k_t)$ (unitary/passive), use $\Phi := \text{Im log det } S$ (Abelian phase) or the Maurer–Cartan connection $A := -i S^{-1} dS$.
+
+
+Current: $J = (1/2\pi)( \partial_{k_t}\Phi , -\partial_\omega \Phi ) = (1/2\pi) (\text{tr } A)^\perp$.
+
+
+Flatness off singularities: $\text{tr}(dA + A\wedge A) = 0 \Rightarrow \nabla \cdot J = 0$; charges are integer fluxes of $\text{tr } A$.
+
+
+P.4 Universal critical behavior
+
+
+With $s := k_t/(u c \omega) = \sin \theta_u$, near the self-dual strip $s\to 1^-$:
+
+
+$\kappa/k_t \approx \sqrt{1-s^2}$, $L_{\text{GH}} \propto (1-s^2)^{\text{-1/2}}$, $\tau_W \propto (1-s^2)^{\text{-1/2}}$.
+
+
+Prefactors depend on port/polarization and any $\Lambda\_surf$; the exponent and shape are universal.
+
+
+P.5 Effects of loss, leakage, anisotropy
+
+
+Loss ($\text{Im } \Lambda \succ 0$): continuity becomes $\partial_\omega J_\omega + \partial_{k_t} J_{k_t} = -\rho_{\text{loss}} \le 0$; charges smear to non-integer phase deficits. The phase current is no longer strictly conserved, as some "flow" is dissipated or leaked from the system.
+
+
+Anisotropy: replace $s^2$ by $k_t^T U^{\text{-2}} k_t/(c^2\omega^2)$; this results in a critical ellipse in $(k_t^x, k_t^y)$ space. The current flows along principal axes; charges are still quantized in the unitary (lossless) limit, but the critical behavior becomes directional.
+
+
+Temporal modulation: in $(\omega/u, k_t)$ variables, the current formalism remains the same; "time refraction" contributes sources/sinks when $u(t)$ crosses criticality, leading to frequency shifts and potential conversion between propagating and evanescent states.
+
+
+P.6 Measurement & mapping (boundary-only)
+
+
+Phase maps: Unwrap $\varphi(\omega,k_t)$ (the continuous phase of the reflection coefficient); compute $J$ by finite differences across the $(\omega,k_t)$ plane; locate charges by loop integrals on small rectangles enclosing singularities or mode branches.
+Delay/shift duality: Verify $\partial_\omega(-\partial_{k_t}\varphi) = \partial_{k_t}(\partial_\omega \varphi)$ (the Goos–Hänchen–Wigner Maxwell relation), which is a direct check for phase current conservation in lossless regions.
+Charge counting: Enclose each resonance/guided-mode arc with a rectangular path in $(\omega,k_t)$ space; the integral $Q = (1/2\pi)\oint J \cdot dl$ should yield an integer winding number, confirming the topological nature of the charges.
+Tomography cross-check: Invert $\chi(p)$ (as described in Appendix O) for $u(x)$ (the budget profile). Confirm that $J$ is divergence-free off the recovered turning-point curve, which separates propagating from evanescent regions.
+
+
+P.7 Design principles & bounds
+
+
+$\omega$–$k$ Bode–Fano: Integrate $-\ln|r|$ over a domain $\mathcal{E}$ in $(\omega,k_t)$ space; use the current $J$ to convert this to a boundary flux and bound it by the stored reactive energy (consistent with Kramers–Kronig and Herglotz representations). This provides fundamental limits on the bandwidth and efficiency of energy transfer.
+
+
+Mode budget: Design a system by targeting a specific $Q$-map (desired number and location of charges in $(\omega,k_t)$ space); synthesize $u(x)$ layers (or other bulk properties) such that the turning-point loci and SU(1,1) actions (Fabry–Pérot resonance conditions) place the charges accordingly.
+
+
+Critical control: Tune key parameters such as the local budget $u$, surface tension $\sigma$ (contributing a $k^2$ term), or bending rigidity $D$ (contributing a $k^4$ term) to set the prefactor of the universal blow-up (for $L_{\text{GH}}$ and $\tau_W$) while leaving the $(1-s^2)^{\text{-1/2}}$ shape intact. This allows for fine-tuning of enhanced boundary effects near criticality.
+
+
+P.8 Connections & extensions
+
+
+Noether viewpoint: The phase $\varphi$ can be seen as an action functional whose variations generate the physical quantities $L_{\text{GH}}$ and $\tau_W$. The current $J$ is then its canonical current in the $(\omega,k_t)$ parameter space; charges are topological indices of the scattering matrix $S$.
+
+
+Topological pumping: Adiabatic sweeping of a control parameter $\lambda$ around a closed loop in parameter space can drive quantized transport of the phase $\Phi$ (e.g., total phase accumulation). This leads to an integer change of the bound-mode count within the system (an analog to the integer quantum Hall effect in condensed matter physics).
+
+
+Duality: The time $\leftrightarrow$ space involution (as discussed in Appendix P.2) rotates the current $J$ by 90 degrees (swapping $L_{\text{GH}}$ and $\tau_W$), while preserving its conservation property. All formulae are covariant under the transformation $(u,\omega,k_t) \to (u^{\text{-1}}, k_t/(u c), u c \omega)$, highlighting a deep symmetry in the BCC framework.
+
+
+-----

@@ -1,0 +1,29 @@
+[0;31m  ***   Warning: new stack size = 268435456 (256.000 Mbytes).[0m
+== (A) Normalization control over Q: Z0 = 1/100, j0 = 1728 - 1/Z0 = 1628 ==
+  matched 422/425  (charpoly {1,5}-ambiguous: 3, clean mismatches: 0)
+== (A') WRONG normalization control: j0' = 1/Z0 + 1728 (deliberately wrong) ==
+  matched 31/90 (ambig 2, mismatch 57) -- expect heavy failure
+
+== (B) Certify j_+ = 10400 - 4640*sqrt5 and j_- = 10400 + 4640*sqrt5 over K ==
+  j_plusbranch(Z_+): matched 102/123 (ambig 20, clean mismatches 1)
+    first mismatches [p, f, ordE, ordQ_eff]: [[3, 2, 2, 5]]
+  j_minusbranch(Z_-): matched 102/123 (ambig 20, clean mismatches 1)
+    first mismatches [p, f, ordE, ordQ_eff]: [[3, 2, 2, 5]]
+  j_PERTURBED_control: matched 38/123 (ambig 10, clean mismatches 75)
+    first mismatches [p, f, ordE, ordQ_eff]: [[3, 2, 2, 5], [7, 2, 5, 3], [13, 2, 2, 5], [29, 1, 2, 3], [37, 2, 3, 1], [41, 1, 2, 3]]
+
+== (C) Conductor of E_j over K = Q(sqrt5)  [ellfromj model, then minimal twists probe] ==
+  branch 1: conductor ideal norm = 65699942400 = [2, 12; 3, 4; 5, 2; 89, 2]
+     conductor factorization (prime ideals over): 
+       over p=2 (f=2, e_ram=1), exponent 6
+       over p=3 (f=2, e_ram=1), exponent 2
+       over p=5 (f=1, e_ram=2), exponent 2
+       over p=89 (f=1, e_ram=1), exponent 2
+     twist-minimal norm found in probe: 65699942400 = [2, 12; 3, 4; 5, 2; 89, 2]  (twist by 1)
+  branch 2: conductor ideal norm = 65699942400 = [2, 12; 3, 4; 5, 2; 89, 2]
+     conductor factorization (prime ideals over): 
+       over p=2 (f=2, e_ram=1), exponent 6
+       over p=3 (f=2, e_ram=1), exponent 2
+       over p=5 (f=1, e_ram=2), exponent 2
+       over p=89 (f=1, e_ram=1), exponent 2
+     twist-minimal norm found in probe: 65699942400 = [2, 12; 3, 4; 5, 2; 89, 2]  (twist by 1)

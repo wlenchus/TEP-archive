@@ -1,0 +1,24 @@
+[0;31m  ***   Warning: new stack size = 536870912 (512.000 Mbytes).[0m
+== (B2) Certification with bad-model primes excluded ==
+  j_+ (Z_+ branch): matched 139/164 | scalar-vs-unipotent ambiguous (consistent) 25 | CLEAN MISMATCHES 0
+  j_- (Z_- branch): matched 139/164 | scalar-vs-unipotent ambiguous (consistent) 25 | CLEAN MISMATCHES 0
+  PERTURBED control: matched 51/162 | scalar-vs-unipotent ambiguous (consistent) 14 | CLEAN MISMATCHES 97
+    mismatches [p,f,ordE,ordQ_eff]: [[7, 2, 5, 3], [13, 2, 2, 5], [37, 2, 3, 1], [41, 1, 2, 3], [43, 2, 5, 3], [47, 2, 3, 5], [67, 2, 3, 5], [71, 1, 5, 3]]
+
+== (C2) Twist-minimal conductor probe (wider) ==
+  branch 1: twist-minimal conductor norm = 811110400 = [2, 12; 5, 2; 89, 2]  via twist d = -3
+     prime over p=2 (f=2, e=1): exponent 6
+     prime over p=5 (f=1, e=2): exponent 2
+     prime over p=89 (f=1, e=1): exponent 2
+     [note] j-invariant valuations: v(j) at primes over 2,5 and v(j-1728):
+       v_(2,1)(j) = 6 ; v(j-1728) = 6
+       v_(3,1)(j) = 0 ; v(j-1728) = 0
+       v_(5,1)(j) = 3 ; v(j-1728) = 0
+  branch 2: twist-minimal conductor norm = 811110400 = [2, 12; 5, 2; 89, 2]  via twist d = -3
+     prime over p=2 (f=2, e=1): exponent 6
+     prime over p=5 (f=1, e=2): exponent 2
+     prime over p=89 (f=1, e=1): exponent 2
+     [note] j-invariant valuations: v(j) at primes over 2,5 and v(j-1728):
+       v_(2,1)(j) = 6 ; v(j-1728) = 6
+       v_(3,1)(j) = 0 ; v(j-1728) = 0
+       v_(5,1)(j) = 3 ; v(j-1728) = 0

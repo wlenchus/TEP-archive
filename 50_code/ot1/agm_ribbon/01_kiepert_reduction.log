@@ -1,0 +1,35 @@
+== Deriving the transformed quintic P(y) = Res_x(B, N) / D(Z) ==
+D(Z) = prod(x_k^2-3Z) = -Z**4*(1728*Z - 1)
+degree in y: 5  leading coeff: 1
+
+C4 (y^4 coeff) = 0
+C3 (y^3 coeff) = 0
+C2 (y^2 coeff) = 5*Z*(72*Z*lam*mu**2 + Z*mu**3 + 8*lam**3 + lam**2*mu)/(1728*Z - 1)
+C1 (y^1 coeff) = 5*Z*(27*Z**2*mu**4 + 18*Z*lam**2*mu**2 + Z*lam*mu**3 - lam**4)/(1728*Z - 1)
+C0 (y^0 coeff) = Z*(45*Z**2*lam*mu**4 + Z**2*mu**5 - 10*Z*lam**3*mu**2 + lam**5)/(1728*Z - 1)
+
+== Solving the matching system over QQbar (groebner) ==
+  eq0: total degree 0
+  eq1: total degree 0
+  eq2: total degree 5
+  eq3: total degree 7
+  eq4: total degree 8
+
+Groebner basis (lex, lam > mu > Z):
+   -81062193763713024*Z**2 + 93832972599296*Z + 2004480*lam**3 + 250560*lam**2*mu + 10440*lam*mu**2 + 145*mu**3 - 27153924096
+   (1728*Z - 1)*(lam + 4)
+   (1728*Z - 1)*(129777664*Z + 145*mu - 95008)
+   (1728*Z - 1)*(32444416*Z**2 - 17344*Z - 1)
+
+Z-eliminant: (1728*Z - 1)*(32444416*Z**2 - 17344*Z - 1)
+Z roots (with multiplicity):
+   Z = 1/1728  mult 1  approx (0.0005787037037037037+0j)
+   Z = 271/1013888 - 145*sqrt(5)/1013888  mult 1  approx (-5.2500726645812466e-05+0j)
+   Z = 271/1013888 + 145*sqrt(5)/1013888  mult 1  approx (0.0005870765377807702+0j)
+
+== Full solutions (lam, mu, Z) ==
+Traceback (most recent call last):
+  File "/home/claude/agm_ribbon/01_kiepert_reduction.py", line 81, in <module>
+    lam_v = sp.simplify(sd[lam]); mu_v = sp.simplify(sd[mu]); Z_v = sp.simplify(sd[Z])
+                                                     ~~^^^^
+KeyError: mu

@@ -1,0 +1,6 @@
+[0;31m  ***   Warning: new stack size = 536870912 (512.000 Mbytes).[0m
+base (ellfromj) conductor norm: 65699942400 = [2, 12; 3, 4; 5, 2; 89, 2]
+best twist found: d = -3  conductor norm = 811110400 = [2, 12; 5, 2; 89, 2]
+   prime over p=2 (f=2, e=1): exponent 6
+   prime over p=5 (f=1, e=2): exponent 2
+   prime over p=89 (f=1, e=1): exponent 2

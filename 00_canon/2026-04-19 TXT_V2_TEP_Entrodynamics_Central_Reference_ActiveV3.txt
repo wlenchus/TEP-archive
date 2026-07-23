@@ -1,7 +1,11 @@
 ﻿TEP / Entrodynamics
 Central Reference Document
-Consolidated results, limits, and open questions
+Consolidated results, limits, and open questions [ActiveV3]
+
+
+
 Preamble
+
 This document consolidates the specific results, derivations, and open questions of the TEP / Entrodynamics research program into a single reference. It is written to replace earlier synthesis documents whose framing drifted toward promotional language that the underlying evidence does not support.
 The document is organized by epistemic tier: theorem-level results first, then structural identifications that survive careful examination, then suggestive patterns, then open questions and known failure modes. The intent is that a reader can see, at each level, what the framework has earned.
 Where claims originated in collaborative sessions with LLM assistants, those sessions' tendency to produce confidently-framed output that does not match the underlying mathematics is flagged explicitly. Several results once presented as established have since been narrowed, corrected, or retired; these are noted.
@@ -115,7 +119,7 @@ What's missing: The identification √p₃ = m_P/M and γ = l_P/r is a definitio
 Tier 4: Suggestive Patterns Worth Investigating
 Observations that hint at deeper structure but require substantially more evidence before being taken as established.
 4.1 Self-Dual Points as Critical Thresholds (Weak Form)
-Across the three established cases (Schwarzschild horizon, critical damping, Chicone–Mashhoon), the self-dual point x² = 1/2 of a physically motivated hyperbolic budget coincides with a qualitative physical transition. One of these (Chicone–Mashhoon) was identified as a prediction before literature verification.
+Across the three established cases (Schwarzschild horizon, the DHO damping threshold, Chicone–Mashhoon), the self-dual point x² = 1/2 of a physically motivated hyperbolic budget coincides with a qualitative physical transition. One of these (Chicone–Mashhoon) was identified as a prediction before literature verification.
 Claim strength: Suggestive, not established. Three cases with one genuine prediction is a starting pattern; a research program would need substantially more cases — particularly in condensed matter, fluid dynamics, or other domains distinct from the originating ones — before this rose to a general claim.
 Strong form not supported: A stronger version of the claim, that arbitrary composite Planck units produce physical thresholds at (1/√2) X_P, is not supported by current evidence. Attempts to construct test cases beyond physically motivated budgets hit accessibility barriers (Planck-scale extremes) or produce coordinate features that do not obviously correspond to physical transitions.
 4.2 Incommensurate Thermodynamics at Aubry–André Criticality
@@ -196,7 +200,7 @@ Tier 1: Theorem-Level Results
 * 1.7 Three-term budget from passivity: tep_session_record_derivation.txt (Feb 19, 2026) contains the A1–A3 → three-term-budget proof.
 Tier 2: Structural Identifications
 * 2.1 Schwarzschild horizon at x² = 1/2: The clean identification (with x = (M/r)^#/(m_P/l_P)) was worked out during the recent consolidation conversation. Earlier corpus material pointed at it less directly; O_R__2-09-26.txt has related derivations.
-* 2.2 Critical damping at ζ² = 1/2: DHO_Lorentz_Structure_Complete_Investigation.txt and O_R__2-09-26.txt (the DHO–TEP budget equivalence).
+* 2.2 Damping threshold at ζ² = 1/2: DHO_Lorentz_Structure_Complete_Investigation.txt and O_R__2-09-26.txt (the DHO–TEP budget equivalence).
 * 2.3 Chicone–Mashhoon critical speed c/√2: The prediction was made during the recent consolidation conversation and verified against the Chicone–Mashhoon (2004) literature via web search. No prior corpus document had flagged this identification.
 Tier 3: Structural Observations
 * 3.1 Dimensional threshold γ_c(d) = 1/(d−1): O_R__2-09-26.txt (specifically the corrected HBAR analysis).

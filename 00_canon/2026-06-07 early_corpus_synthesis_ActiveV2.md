@@ -1,5 +1,5 @@
 # Synthesis of the Early TEP / Entrodynamics Records
-### A lossless capture of the foundational corpus (≈ Aug 2025 – Feb 2026): forms, mechanics, strategies, and claims — held neutral as to conclusions, with independent verification status attached
+### A lossless capture of the foundational corpus (≈ Aug 2025 – Feb 2026): forms, mechanics, strategies, and claims — held neutral as to conclusions, with independent verification status attached [ActiveV2]
 
 **What this is.** A referee-style synthesis of the nine earliest records in the corpus, prepared to preserve their content, constructions, and lines of attack as completely as possible while *not* adopting their conclusions. Where a result is a checkable mathematical form, I reproduced it myself (sympy/numpy, this session) and report my own status; I did not inherit the documents' self-grading. Where a result is interpretive or physical, it is recorded as the document's own claim, with its later fate (durable / superseded / open) noted but not used as a premise. This is an archival substrate, not an endorsement.
 

@@ -32,7 +32,7 @@ Provenance eras: **QSF/UST precursor** (Q1 2025) → **GSR** (mid 2025) → **IF
 
 ### II. Maturation
 
-4. **[2-2-26 TEP Framework: Rigorous Assessment](40_foundations/base_theory/2-2-26%20TEP%20Framework_%20Rigorous%20Assessment.txt)** (2026-02-02) — Definitive Feb 2026 audit: Operationalist Pivot, Steel Frame, HBAR/Silver Ratio, Experimental Dictionary.
+4. **[2-2-26 TEP Framework: Rigorous Assessment](40_foundations/base_theory/2-2-26%20TEP%20Framework_%20Rigorous%20Assessment.txt)** (2026-02-02) — **historical specimen, read with care.** The most confident synthesis of the February era, and the document the V2 Central Reference exists to walk back (see the 6-20 delta: "the over-claiming pole"). On the spine because the Operationalist Pivot, Steel Frame, HBAR/Silver Ratio, and Experimental Dictionary narratives and the era's ambitions are best seen here in original strength — not because its claims survive. Its "Budget is a Theorem" framing, PANF scorecard, experimental dictionary, and §5.3 numerical matches should be checked against V2 Tiers 4–5 before citing.
 5. **[2026-04-19 TXT_V2_TEP_Entrodynamics_Central_Reference.txt](00_canon/2026-04-19%20TXT_V2_TEP_Entrodynamics_Central_Reference.txt)** (2026-04-19) — THE canonical tiered reference (V2, Apr 2026): Tier-1 theorems, Tier-5 retired claims, LLM failure modes, open questions.
 
 ### III. Publication-track results
@@ -50,7 +50,7 @@ Provenance eras: **QSF/UST precursor** (Q1 2025) → **GSR** (mid 2025) → **IF
 
 ### V. Verified corpus map
 
-13. **[2026-06-07 interior_spine_trace_ActiveV11.md](00_canon/2026-06-07%20interior_spine_trace_ActiveV11.md)** (2026-06-07) — Verified trace of the entire interior corpus — the closest existing thing to this catalog.
+13. **[2026-06-07 interior_spine_trace_ActiveV12.md](00_canon/2026-06-07%20interior_spine_trace_ActiveV12.md)** (2026-06-07) — Verified trace of the entire interior corpus — the closest existing thing to this catalog.
 14. **[2026-06-07 early_corpus_synthesis.md](00_canon/2026-06-07%20early_corpus_synthesis.md)** (2026-06-07) — Definitive survey of the precursor eras (QSF/GSR/IFFT); best entry point to the archive layer.
 15. **[2026-06-18 assessment_delta_record.md](00_canon/2026-06-18%20assessment_delta_record.md)** (2026-06-18) — Best single synthesis of what TEP is (the subtractive-framework meta-pattern; seven deltas).
 16. **[2026-06-20 delta_external_assessment_evolution.md](00_canon/2026-06-20%20delta_external_assessment_evolution.md)** (2026-06-20) — Definitive external-assessment state: validity firm, genericity open on three closable items.
@@ -68,6 +68,8 @@ Provenance eras: **QSF/UST precursor** (Q1 2025) → **GSR** (mid 2025) → **IF
 ## Conventions you'll see in the documents
 
 `ActiveVn` = current working version of a record · `ArchivalVn` = retained snapshot · `DeltaN` = incremental addendum · Tier 1–5 = the corpus's rigor ladder (Tier 1 verified theorem → Tier 5 retired claim) · `[V]` = claim with a reproducibility path (see the methods supplement in `10_papers/`).
+
+Files prefixed `TRANSCRIPT_` are session transcripts: verbatim exports of Will+model working sessions. Ingested third-party source material (video transcripts, paper texts, datasets pasted from elsewhere) uses the prefix `SOURCE_` instead, e.g. `2026-07-18 SOURCE_3B1B_Compression_is_Intelligence_Part_2.txt`. Rationale: filename-based sampling and future-instance corpus reads must be able to distinguish "what we said" from "what we read" without opening the file. Existing misfiled items (the three 3B1B copies) should be renamed, deduplicated to one copy, and — if a session discussing the video exists — that session's export filed beside it under `TRANSCRIPT_`.
 
 Two documents govern how to read everything else: the **consolidated errata & status revision record (2026-06-10)** in `00_canon/`, and the **review postmortem (2026-05-26)** in `30_assessments/external/` — the latter's rule, "trust derivations, distrust consolidation prose," applies to this README too.
 

@@ -1,11 +1,11 @@
 # Synthesis of the Early TEP / Entrodynamics Records
-### A lossless capture of the foundational corpus (≈ Nov 2025 – Feb 2026): forms, mechanics, strategies, and claims — held neutral as to conclusions, with independent verification status attached
+### A lossless capture of the foundational corpus (≈ Aug 2025 – Feb 2026): forms, mechanics, strategies, and claims — held neutral as to conclusions, with independent verification status attached
 
 **What this is.** A referee-style synthesis of the nine earliest records in the corpus, prepared to preserve their content, constructions, and lines of attack as completely as possible while *not* adopting their conclusions. Where a result is a checkable mathematical form, I reproduced it myself (sympy/numpy, this session) and report my own status; I did not inherit the documents' self-grading. Where a result is interpretive or physical, it is recorded as the document's own claim, with its later fate (durable / superseded / open) noted but not used as a premise. This is an archival substrate, not an endorsement.
 
 **Sources synthesized (with provenance as stated in the files).**
 1. `Information-Logic___foundational_heuristics.txt` — the operational seed (a Will↔"Kimi" exchange).
-2. `v0_5___…_Passive_Holography___Working_Notes_.txt` — the passive-systems foundation (v0.5; supersedes v0.3).
+2. `v0_5___…_Passive_Holography___Working_Notes_.txt` — the passive-systems foundation (v0.5; supersedes v0.3; Aug 2025).
 3. `Claude_heterostructures__1_.txt` — the bimetric / HBAR / `2−√2` origin (Will↔Claude; Drive-modified Jan 16–17 2026; optics-free).
 4. `Alpha-beta-HEOM_modelling_breakthrough_.txt` — rate-saturation `2−√2`, the α discriminator, the `r=tanh(2r)` fixed point (Will↔Claude; "HBAR PRIORITY" Dec 2025).
 5. `alpha_beta_fixed_point.md` — a clean predictions write-up of #4 (compiled Dec 28 2025).

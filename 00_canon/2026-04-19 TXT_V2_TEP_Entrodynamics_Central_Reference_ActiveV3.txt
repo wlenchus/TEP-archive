@@ -68,11 +68,11 @@ Using the coupling generator's natural budget for mass-per-length:
   X = (M/r)^# = √[(M/r)(m_P/l_P)],   X_max = m_P/l_P,   x = X/X_max
 the budget variable x² = GM/(rc²) equals 1/2 exactly at r = r_s (the Schwarzschild horizon). The factor of 2 in r_s = 2GM/c² emerges as a geometric consequence of the self-dual threshold, not as an external input.
 What this is: A clean algebraic identification of the horizon with the self-dual point of a physically motivated budget. 
-What this is not: A derivation of the Schwarzschild solution. The identification uses r_s as an input (through the definitions) and shows it can be recovered as a self-dual point. The framework does not yet produce the full metric u(r) = 1 − r_s/r.
-2.2 Critical Damping at ζ² = 1/2
+What this is not: A priority/novel derivation of the Schwarzschild solution. The identification uses foreknowledge of (r_s/r) and shows post-hoc that it (and its associated budget) can be recovered as the self-dual point of a motivated construct (Sharped Linear Mass Density). 
+2.2 Damping Threshold at ζ² = 1/2
 For a damped harmonic oscillator, the dimensionless damping ratio ζ has the hyperbolic structure:
   (ω_d/ω_n)² + ζ² = 1,   with ω_d/ω_n = √(1 − ζ²)
-The critical transition between underdamped oscillation and overdamped decay occurs at ζ = 1/√2, where ζ² = 1/2 is the self-dual point of the budget. This is a conditional extremum (ζ = 1 is critical damping for that specific system), not a Planck-derived one.
+The critical inflection of maximally flat frequency response (Butterworth condition) occurs at ζ = 1/√2, where ζ² = 1/2 is the self-dual point of the budget. This is a conditional extremum (ζ = 1 is critical damping for that specific system), not a Planck-derived one.
 Status: Clean identification. The hyperbolic structure is intrinsic to the DHO characteristic polynomial, not imposed by the framework; the framework's contribution is recognizing it as an instance of the same self-dual pattern.
 2.3 Chicone–Mashhoon Critical Speed c/√2
 Chicone and Mashhoon (2004, "Significance of c/√2 in relativistic physics," Classical and Quantum Gravity 21, L139) establish that in general relativity, particles moving faster than v = c/√2 relative to a reference observer experience tidal accelerations opposite in sign to Newtonian expectations. This threshold appears in a series of follow-up papers on tidal dynamics in Kerr spacetime, ultrarelativistic jet physics, and gravitoelectromagnetism.

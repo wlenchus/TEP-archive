@@ -1,0 +1,14 @@
+check sqrt5^2 = 5  (expect 5)
+A4 |words| = 12, reps = 5
+[0;31m[0;31m  ***   at top-level: ...[0;35m=s;);PU=1;for(c=1,5,PU=PU[0;35m*('U-ucs[c]));PU=PU;j
+[0;31m[0;31m  ***                                             ^---------------------
+  *** _*_: the PARI stack overflows !
+  current stack size: 8000000 (7.629 Mbytes)
+  [hint] set 'parisizemax' to a nonzero value in your GPRC
+[0m
+... skipping file '15_symbolic_certificates.gp'
+(C2) numerator(B(1/(u^2-2u+21), Z(j))) mod resolvent = 0   [0 = EXACT identity]
+(F1) resolvent at j_- over Q(sqrt5): factors of degree [5]
+(F1) resolvent at j_+ over Q(sqrt5): factors of degree [5]
+(CM) x^2-20800x+512000 among degree-2 polclass(D), -400<=D<=-3: NO MATCH => j_pm are NOT CM invariants (|D|<=400)
+     tau(-) = 1.57636...i ; sqrt(2.5) = 1.58113883008418966599944677221635926685977756966260841342875 (not equal, 3rd decimal)

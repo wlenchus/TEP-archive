@@ -1,0 +1,9 @@
+(a) X0(5) sextic at j_- over Q(sqrt5): degrees [6]
+(a) X0(5) sextic at j_+ over Q(sqrt5): degrees [6]
+(b) X(5) degree-60 fiber at j_- over Q(sqrt5): degrees [60]   [0.00200000000000000000000000000000000000000000000000000000000000s]
+(b) X(5) degree-60 fiber at j_+ over Q(sqrt5): degrees [60]   [0.00200000000000000000000000000000000000000000000000000000000000s]
+(c) phi+2 = (5+sqrt5)/2 ; sqrt(phi+2) = 1.90211303259030714423287866675876428681139726825150044489461 ; 2 sin(2pi/5) = 1.90211303259030714423287866675876428681139726825150044489461
+    [the projective icosahedral machine has constants in Q(zeta5);
+     the det-1 (binary 2.A5 = SL(2,5)) lift of V requires i*sqrt(phi+2),
+     which lies in Q(zeta20) = Q(i, zeta5) but NOT in Q(zeta5):
+     the i enters the tower exactly at the projective->binary lift]

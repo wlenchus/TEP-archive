@@ -1,0 +1,51 @@
+===== branch (+):  tau = (-0.4260970938845288087756697550083589668181 + 0.9046774378656511195161626332525307976085j) =====
+  j(tau) = (24.64458440097580866143417708687826755553 - 2.414914179487993979784624307157758699723e-99j)    |j(tau) - j_branch| = 9.8327e-98
+  -- the six 5-isogenous j-values --
+   j(5*tau    ) = (1503811386642.6646192351319946932179 + 1611217181770.6030444474985867190239j)
+        |Phi5(j', j0)|/scale = 1.838e-99   [dual check] |Phi5(j0, j')|/scale = 1.836e-99
+   j((tau+0)/5) = (1503811386642.6646192351319946932179 - 1611217181770.6030444474985867190239j)
+        |Phi5(j', j0)|/scale = 1.815e-99   [dual check] |Phi5(j0, j')|/scale = 1.801e-99
+   j((tau+1)/5) = (-56720465976.213809592422973374640478 - 1.2326442180942597982292341116314689e-89j)
+        |Phi5(j', j0)|/scale = 3.252e-99   [dual check] |Phi5(j0, j')|/scale = 3.259e-99
+   j((tau+2)/5) = (-3521.8878900837111185872110754053148 + 3580.9207983573075060272980201523252j)
+        |Phi5(j', j0)|/scale = 8.22e-100   [dual check] |Phi5(j0, j')|/scale = 8.266e-100
+   j((tau+3)/5) = (-3521.8878900837111185872110754053148 - 3580.9207983573075060272980201523252j)
+        |Phi5(j', j0)|/scale = 7.903e-100   [dual check] |Phi5(j0, j')|/scale = 7.931e-100
+   j((tau+4)/5) = (-20527.859985072503671508701739408712 + 1.0565898888163027271389090855401503e-96j)
+        |Phi5(j', j0)|/scale = 7.406e-100   [dual check] |Phi5(j0, j')|/scale = 7.453e-100
+  min pairwise distance of the six = 7161.8  (six-fold structure: all distinct)
+  -- Atkin-Lehner w5: tau_AL = -1/(5 tau) = (0.0852194187769057617551339510017 + 0.180935487573130223903232526651j) --
+   |j(tau_AL) - j(5 tau)|  = 2.533e-88
+   |j(5 tau_AL) - j(tau)|  = 2.0646e-99
+  fiber e1 vs -c5(j0): 1.5054e-86    fiber e6 vs c0(j0): 1.3303e-53
+
+===== branch (-):  tau = (0.0 + 1.576359743478327991143924352209240544585j) =====
+  j(tau) = (20775.35541559902419133856582291312173244 + 0.0j)    |j(tau) - j_branch| = 1.4045e-96
+  -- the six 5-isogenous j-values --
+   j(5*tau    ) = (3217211344958881925118.9345233450318 + 0.0j)
+        |Phi5(j', j0)|/scale = 2.227e-100   [dual check] |Phi5(j0, j')|/scale = 2.226e-100
+   j((tau+0)/5) = (452100936.28047907355692491725791918 + 0.0j)
+        |Phi5(j', j0)|/scale = 9.043e-101   [dual check] |Phi5(j0, j')|/scale = 8.644e-101
+   j((tau+1)/5) = (-1360832.0740829329191806522926050217 + 591673.58051122435739279176082856913j)
+        |Phi5(j', j0)|/scale = 1.273e-101   [dual check] |Phi5(j0, j')|/scale = 1.14e-101
+   j((tau+2)/5) = (-1344.2732500953327321366718781286225 - 518.8276943409210675022992029383077j)
+        |Phi5(j', j0)|/scale = 1.059e-101   [dual check] |Phi5(j0, j')|/scale = 8.866e-102
+   j((tau+3)/5) = (-1344.2732500953327321366718781286225 + 518.8276943409210675022992029383077j)
+        |Phi5(j', j0)|/scale = 1.946e-101   [dual check] |Phi5(j0, j')|/scale = 1.439e-101
+   j((tau+4)/5) = (-1360832.0740829329191806522926050217 - 591673.58051122435739279176082856913j)
+        |Phi5(j', j0)|/scale = 1.499e-101   [dual check] |Phi5(j0, j')|/scale = 1.268e-101
+  min pairwise distance of the six = 1037.7  (six-fold structure: all distinct)
+  -- Atkin-Lehner w5: tau_AL = -1/(5 tau) = (0.0 + 0.126874592444671641851701417986j) --
+   |j(tau_AL) - j(5 tau)|  = 6.747e-80
+   |j(5 tau_AL) - j(tau)|  = 2.3408e-97
+  fiber e1 vs -c5(j0): 8.0964e-79    fiber e6 vs c0(j0): 1.4051e-52
+
+== cross-branch: Galois conjugacy of the two fibers ==
+   (numeric check: the multiset of minimal-polynomial residues R12(j') for both branches)
+   branch(+) j(5*tau): |Phi5(j',j+)*Phi5(j',j-)| ~ 1.012e+59 (root of the Q-degree-12 object)
+   branch(+) j((tau+0)/5): |Phi5(j',j+)*Phi5(j',j-)| ~ 9.986e+58 (root of the Q-degree-12 object)
+   branch(-) j(5*tau): |Phi5(j',j+)*Phi5(j',j-)| ~ 3.294e+158 (root of the Q-degree-12 object)
+   branch(-) j((tau+0)/5): |Phi5(j',j+)*Phi5(j',j-)| ~ 1.696e+26 (root of the Q-degree-12 object)
+
+[all fiber values above are roots of the SAME irreducible degree-12 Q-polynomial R12;
+ by 11a: K12 = (resolvent-sextic field of x^5+20x+16) * Q(sqrt5) -- verified nfisincl]

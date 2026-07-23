@@ -1,0 +1,67 @@
+== identity battery at random non-special tau ==
+tau_rand1 = (0.13 + 1.21j):  r = (0.2156246478837776685 + 0.035461233371015616665j)
+    product=cfrac  residual = 1.786e-102
+    SHIFT          residual = 1.786e-102
+    D2.5           residual = 2.369e-101
+    ETA1           residual = 1.152e-100
+    ETA5           residual = 8.531e-98
+    RAM5           residual = 4.467e-104
+    D7.4           residual = 170.5
+    T5             residual = 1.601e-101
+    VMAP           residual = 2.166e-101
+tau_rand2 = (-0.37 + 0.89j):  r = (0.29325263027914215995 - 0.1461076282724899972j)
+    product=cfrac  residual = 3.993e-102
+    SHIFT          residual = 2.526e-102
+    D2.5           residual = 1.126e-100
+    ETA1           residual = 2.857e-101
+    ETA5           residual = 5.085e-98
+    RAM5           residual = 3.574e-103
+    D7.4           residual = 24.81
+    T5             residual = 4.249e-100
+    VMAP           residual = 1.473e-101
+tau_rand3 = (0.05 + 2.3j):  r = (0.055451808229194468816 + 0.0034887229541101035384j)
+    product=cfrac  residual = 8.934e-103
+    SHIFT          residual = 1.099e-102
+    D2.5           residual = 4.286e-101
+    ETA1           residual = 6.864e-100
+    ETA5           residual = 4.556e-95
+    RAM5           residual = 4.213e-107
+    D7.4           residual = 8.018e+4
+    T5             residual = 9.281e-101
+    VMAP           residual = 1.429e-101
+
+== values at the branch points ==
+--- branch (+) ---
+  r(tau)      = (0.277015612315313824280601952358400046603896831 - 0.16377117650089807439571174930959852613431249j)
+  |r(tau)|    = 0.32180529473412422050074872571
+  icosahedral certificate (D2.5 with exact j_branch), rel residual = 1.815e-99
+  r(5 tau)    = (-0.0030391509721897340423827262040918419 - 0.0015222282420487706213449745302431809j)
+  r(tau/5)    = (0.62223990550312923021358503231372723 - 0.002111590769199678472814534030738721j)
+  r((tau+1)/5) = (0.627843570170968127623721289243 - 3.60844956586347496313264214936e-102j)
+  r((tau+2)/5) = (0.890996917212961570715582369984 + 0.04359981187347387557858139853j)
+  r((tau+3)/5) = (0.873617611416529379381290406538 + 0.702443301102908288134808940044j)
+  r((tau+4)/5) = (0.254544511966366405979160397419 + 0.783407453957195177219620078803j)
+  r(-1/tau)   = (0.27701561231531382428060195235840005 + 0.16377117650089807439571174930959853j)   |VMAP residual| = 3.576e-101
+  t(tau) = (eta/eta5)^6 = (-269.0748509292086818205300297051978537415 + 131.7397815456310091709223736381412615158j)
+  X0(5)-sextic certificate: |(t^2+250t+3125)^3 - j t^5| rel = 3.801e-99
+    [=> t(tau) is a root of the EXACT Q(sqrt5)-sextic (T^2+250T+3125)^3 - j_pm T^5,
+        whose splitting field is the resolvent-sextic field * Q(sqrt5) (11a);
+        the eta-quotient value itself is a resolvent-sextic-field number]
+--- branch (-) ---
+  r(tau)      = (0.137936475681951207374401503860743557558581034 + 0.0j)
+  |r(tau)|    = 0.137936475681951207374401503861
+  icosahedral certificate (D2.5 with exact j_branch), rel residual = 1.312e-100
+  r(5 tau)    = (0.000049946387437817085040406005646074356 + 0.0j)
+  r(tau/5)    = (0.59265391640895774403950326491485988 + 0.0j)
+  r((tau+1)/5) = (0.63391220983984382303478315684 + 0.0796258263550151464756693668922j)
+  r((tau+2)/5) = (0.691212546906069899727898894294 + 0.304001666408100789304011798961j)
+  r((tau+3)/5) = (0.502719189521175833359437941965 + 0.563440515641580545496438106755j)
+  r((tau+4)/5) = (0.271618306802613041225904414297 + 0.578280604392395981589826704965j)
+  r(-1/tau)   = (0.44238448754864000936861849957079901 + 0.0j)   |VMAP residual| = 4.643e-101
+  t(tau) = (eta/eta5)^6 = (20015.4684935524842946801847911548373619 + 0.0j)
+  X0(5)-sextic certificate: |(t^2+250t+3125)^3 - j t^5| rel = 1.656e-101
+    [=> t(tau) is a root of the EXACT Q(sqrt5)-sextic (T^2+250T+3125)^3 - j_pm T^5,
+        whose splitting field is the resolvent-sextic field * Q(sqrt5) (11a);
+        the eta-quotient value itself is a resolvent-sextic-field number]
+
+[saved tower5_rr.py]

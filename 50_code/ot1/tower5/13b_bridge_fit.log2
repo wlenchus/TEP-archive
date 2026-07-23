@@ -1,0 +1,8 @@
+
+== branch (+): 120 pairing fits (nullspace of 5x6) ==
+
+== branch (-): 120 pairing fits (nullspace of 5x6) ==
+   wrote bridge_cands_p.txt (120 candidates)
+   wrote bridge_cands_m.txt (120 candidates)
+
+nullspace residuals max: 1.339e-100

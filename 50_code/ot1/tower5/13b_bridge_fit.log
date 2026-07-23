@@ -1,0 +1,18 @@
+== universality of the derived resolvent at random tau = (0.2718 + 1.0281j) ==
+   j(tau_rand) = (565.415982626583620955357066742 - 344.854405990752045828526955987j)
+   |u^5+30u^3+100u^2+105u+36+j| for the five coset values: ['9.106e-97', '1.401e-96', '3.408e-97', '1.147e-96', '5.126e-97']
+
+== branch (+): 120 pairing fits (nullspace of 5x6) ==
+Traceback (most recent call last):
+  File "/home/claude/tower5/13b_bridge_fit.py", line 110, in <module>
+    cp = fit_pairings(u_p, bri_p, "+")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/tower5/13b_bridge_fit.py", line 93, in fit_pairings
+    null = [Vh[5, k] for k in range(6)]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/tower5/13b_bridge_fit.py", line 93, in <listcomp>
+    null = [Vh[5, k] for k in range(6)]
+            ~~^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/mpmath/matrices/matrices.py", line 491, in __getitem__
+    raise IndexError('matrix index out of range')
+IndexError: matrix index out of range

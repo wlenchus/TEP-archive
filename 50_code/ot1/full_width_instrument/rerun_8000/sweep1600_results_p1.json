@@ -1,0 +1,58 @@
+{
+ "-4_0": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1440,
+  "secs": 0
+ },
+ "-4_1": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1440,
+  "secs": 0
+ },
+ "-8_0": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1680,
+  "secs": 0
+ },
+ "-8_1": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1680,
+  "secs": 0
+ },
+ "-20_0": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1824,
+  "secs": 0
+ },
+ "-20_1": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1824,
+  "secs": 0
+ },
+ "-40_0": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1872,
+  "secs": 0
+ },
+ "-40_1": {
+  "status": "REJECT",
+  "nT": 129,
+  "rank": 130,
+  "rows_kept": 1872,
+  "secs": 0
+ }
+}

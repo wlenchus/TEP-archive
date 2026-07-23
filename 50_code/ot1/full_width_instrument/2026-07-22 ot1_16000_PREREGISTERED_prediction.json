@@ -1,0 +1,368 @@
+{
+ "chi_-20": {
+  "a_p_table_p<=200": {
+   "3": {
+    "a_p": "+(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "7": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "11": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "13": {
+    "a_p": "-(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "17": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "19": {
+    "a_p": "+(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "29": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "31": {
+    "a_p": "-(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "41": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "43": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   },
+   "47": {
+    "a_p": "+(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "53": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "59": {
+    "a_p": "-(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "61": {
+    "a_p": "+(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "67": {
+    "a_p": "-(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "71": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "73": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "79": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   },
+   "97": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "101": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "103": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "107": {
+    "a_p": "-(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "109": {
+    "a_p": "-(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "113": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "131": {
+    "a_p": "+(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "137": {
+    "a_p": "+(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "139": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   },
+   "149": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "151": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "157": {
+    "a_p": "+(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "163": {
+    "a_p": "-(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "173": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "179": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "193": {
+    "a_p": "-(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "197": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   }
+  },
+  "embedding": 0,
+  "level_divides": 16000,
+  "nebentypus": "chi_-20",
+  "note": "canonical rep = twist-orbit member solution_0; full orbit = x quadratic chars cond|40; signs certified at p=1000003 and p=999983; freedom outside orbit: none (8=orbit exactly)"
+ },
+ "chi_-4": {
+  "a_p_table_p<=200": {
+   "3": {
+    "a_p": "-(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "7": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   },
+   "11": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "13": {
+    "a_p": "-(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "17": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "19": {
+    "a_p": "-(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "29": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   },
+   "31": {
+    "a_p": "-(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "41": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "43": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   },
+   "47": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "53": {
+    "a_p": "+(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "59": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "61": {
+    "a_p": "+(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "67": {
+    "a_p": "-(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "71": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "73": {
+    "a_p": "+(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "79": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "97": {
+    "a_p": "-(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "101": {
+    "a_p": "+1*1",
+    "class": "3",
+    "sign": 1
+   },
+   "103": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "107": {
+    "a_p": "-(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": -1
+   },
+   "109": {
+    "a_p": "+(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": 1
+   },
+   "113": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   },
+   "131": {
+    "a_p": "+(sqrt5-1)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "137": {
+    "a_p": "-(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "139": {
+    "a_p": "-1*i",
+    "class": "3",
+    "sign": -1
+   },
+   "149": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   },
+   "151": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "157": {
+    "a_p": "-(sqrt5-1)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "163": {
+    "a_p": "+(1+sqrt5)/2*i",
+    "class": "5",
+    "sign": 1
+   },
+   "173": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   },
+   "179": {
+    "a_p": "+1*i",
+    "class": "3",
+    "sign": 1
+   },
+   "193": {
+    "a_p": "-(1+sqrt5)/2*1",
+    "class": "5",
+    "sign": -1
+   },
+   "197": {
+    "a_p": "-1*1",
+    "class": "3",
+    "sign": -1
+   }
+  },
+  "embedding": 0,
+  "level_divides": 16000,
+  "nebentypus": "chi_-4",
+  "note": "canonical rep = twist-orbit member solution_0; full orbit = x quadratic chars cond|40; signs certified at p=1000003 and p=999983; freedom outside orbit: none (8=orbit exactly)"
+ }
+}

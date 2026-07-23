@@ -1,0 +1,1 @@
+default(nbthreads,1); default(parisizemax, 8000000000); print("dim S1(16000, chi_-4) new: ", mfdim([16000,1,-4],0)); print("dim S1(16000, chi_-20) new: ", mfdim([16000,1,-20],0)); print("dim S1(16000, chi_-4) full: ", mfdim([16000,1,-4],1)); print("dim S1(16000, chi_-20) full: ", mfdim([16000,1,-20],1));

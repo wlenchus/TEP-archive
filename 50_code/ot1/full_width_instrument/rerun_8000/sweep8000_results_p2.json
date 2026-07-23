@@ -1,0 +1,58 @@
+{
+ "-4_0": {
+  "status": "NON-REJECT(free=7)",
+  "nT": 604,
+  "rank": 597,
+  "rows_kept": 7200,
+  "secs": 10
+ },
+ "-4_1": {
+  "status": "NON-REJECT(free=7)",
+  "nT": 604,
+  "rank": 597,
+  "rows_kept": 7200,
+  "secs": 10
+ },
+ "-8_0": {
+  "status": "REJECT",
+  "nT": 604,
+  "rank": 605,
+  "rows_kept": 8400,
+  "secs": 10
+ },
+ "-8_1": {
+  "status": "REJECT",
+  "nT": 604,
+  "rank": 605,
+  "rows_kept": 8400,
+  "secs": 10
+ },
+ "-20_0": {
+  "status": "NON-REJECT(free=7)",
+  "nT": 604,
+  "rank": 597,
+  "rows_kept": 9120,
+  "secs": 10
+ },
+ "-20_1": {
+  "status": "NON-REJECT(free=7)",
+  "nT": 604,
+  "rank": 597,
+  "rows_kept": 9120,
+  "secs": 10
+ },
+ "-40_0": {
+  "status": "REJECT",
+  "nT": 604,
+  "rank": 605,
+  "rows_kept": 9360,
+  "secs": 10
+ },
+ "-40_1": {
+  "status": "REJECT",
+  "nT": 604,
+  "rank": 605,
+  "rows_kept": 9360,
+  "secs": 10
+ }
+}

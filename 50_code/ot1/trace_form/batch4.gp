@@ -1,0 +1,5 @@
+hilb_inf(a,b) = if(a<0 && b<0, -1, 1);
+profile(f) = {my(S, G, D, a, sg, disc, plist, bad=List(), einf=1); S = polsym(f, 8); G = matrix(5,5,i,j, S[i+j-1]); D = qfgaussred(G); a = vector(5,i, core(numerator(D[i,i])*denominator(D[i,i]))); sg = [sum(i=1,5,a[i]>0), sum(i=1,5,a[i]<0)]; disc = core(prod(i=1,5,a[i])); plist = Set(concat([2,3,5,7], concat(vector(5,i, factor(abs(a[i]))[,1]~)))); for(k=1,#plist, my(p=plist[k], e=1); for(i=1,4, for(j=i+1,5, e *= hilbert(a[i],a[j],p))); if(e==-1, listput(bad,p))); for(i=1,4, for(j=i+1,5, einf *= hilb_inf(a[i],a[j]))); [sg, disc, Vec(bad), einf];}
+seen = List(); n=0;
+for(P=-12,12, for(Q=-12,12, for(R=-12,12, for(Sc=1,12, my(f=x^5+P*x^3+Q*x^2+R*x+Sc, pd=poldisc(f)); if(pd!=0 && issquare(abs(pd)) && pd>0==0+1==1, ); if(pd!=0 && issquare(pd), if(polsturm(f)==1 && polisirreducible(f) && polgalois(f)[1]==60, my(nd=nfdisc(f), ps=factor(abs(nd))[,1]~); if(!setsearch(Set(seen), Str(ps)), listput(seen, Str(ps)); n++; my(pr=profile(f)); write("odd_results.txt", "ODD ", f, " fielddisc_supp=", ps, " 2ram=", if(nd%2==0,"YES","NO"), " -> ", pr); if(n>=7, break(4)))))))));
+write("odd_results.txt", "distinct odd supports: ", n, "  DONE");

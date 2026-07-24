@@ -1,0 +1,19 @@
+E1 diag (square-free parts): [5, 15, -5, -15, 1]
+E1 signature: [3, 2]
+E1 disc class (ss-free): 1
+E1 Hasse eps_2 = -1
+E1 Hasse eps_3 = 1
+E1 Hasse eps_5 = 1
+E1 Hasse eps_inf = -1
+E1 product formula (should be +1): 1
+---
+E2(Buhler) diag (square-free parts): [5, -5, 1, 2, -2]
+E2(Buhler) signature: [3, 2]
+E2(Buhler) disc class (ss-free): 1
+E2(Buhler) Hasse eps_2 = -1
+E2(Buhler) Hasse eps_5 = 1
+E2(Buhler) Hasse eps_inf = -1
+E2(Buhler) product formula (should be +1): 1
+---
+(-1,-1) class: eps_2 = -1, eps_5 = 1, eps_inf = -1
+(captured from the 2026-07-24 in-session run; reproduces via: gp -q tf.gp, ~2 min)

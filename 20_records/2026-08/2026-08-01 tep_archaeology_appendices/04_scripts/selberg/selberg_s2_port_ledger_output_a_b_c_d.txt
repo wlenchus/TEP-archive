@@ -1,0 +1,96 @@
+mpmath version: 1.3.0 | FAST = False | sections = ['a', 'b', 'c', 'd']
+
+================ P-S2a: seam unitarity =================
+single phi_xi eval at t=60, dps=30: 0.018 s
+points: 200 on t in [0.05, 60], dps = 30
+max | |phi_xi(1/2+it)| - 1 |  = 3.9443e-31  attained at t = 46.443467
+prediction: <= 1e-20  -> PASS
+cross-check phi_cl_direct (Gamma/zeta form) vs phi_xi*s/(s-1): max rel diff = 2.465e-31
+[t = 0.9 s]
+
+================ P-S2b: passivity map ==================
+map computed at dps = 20 (anomalies rechecked at dps = 40); grid 49 x 61
+grid time: 5.0 s
+--- phi_xi (entire-xi ratio, the charge's definition) ---
+max |phi_xi| over grid       = 0.999076598832 at (sigma,t) = (0.51, 0.0)
+max |phi_xi| off axis (t>0)  = 0.99907212788 at (0.51, 0.5)
+grid points with |phi_xi| > 1: 0  (prediction |phi|<=1: HOLDS EVERYWHERE)
+--- phi_cl (Lambda ratio = actual constant-term coefficient) ---
+grid points with |phi_cl| > 1: 294 of 2989
+gain points: sigma in [0.51, 0.99], t up to 2.5
+gain rows (t values): [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
+largest |phi_cl| on grid = 94.62500368 at (0.99, 0.0)
+no gain points with t >= 5: gain confined to the low-t lens over the real segment
+--- real segment s = sigma in (0.5, 1), step 0.002 ---
+phi_xi: max on segment = 0.999907621431891 at sigma = 0.501 | all < 1: True (sup -> 1 as sigma -> 1/2+)
+phi_cl: min |phi_cl| on segment = 1.00391526721 at sigma = 0.501 | |phi_cl| > 1 on ALL of (0.5,1): True
+phi_cl gain onset: |phi_cl(0.501)| - 1 = 0.0039152672   (slope prediction (2log4pi-2gamma)*delta = 0.0039076172 )
+samples: |phi_cl(0.75)| = 2.931533995  |phi_cl(0.99)| = 94.62500368  |phi_cl(0.999)| = 954.0624432
+sign on segment: phi_cl(0.75) = -2.931533995 (negative: pi phase)
+gain-lens ceiling at sigma = 0.51 :  |phi_cl| = 1 at t = 2.943331962
+gain-lens ceiling at sigma = 0.75 :  |phi_cl| = 1 at t = 2.936463568
+gain-lens ceiling at sigma = 0.99 :  |phi_cl| = 1 at t = 2.916729242
+port null at s* = (1+rho_1)/2 = (0.75 + 7.06736257086735j)
+  |phi_cl(s*)| = 6.271e-26   |phi_xi(s*)| = 6.24e-26 (zeros of zeta(2s-1) are total-absorption points of the port)
+[t = 6.4 s]
+
+================ P-S2c: Weyl budget =====================
+winding integral at dps = 20; phase-unwrap cross-check at dps = 15 (disclosed)
+functional-equation acceleration validated: max rel dev vs direct = 9.208e-20
+quadrature time: 8.9 s (40 panels to T = 20)
+M_cl(15) = -(1/4pi) int_{-15}^{15} (phi_cl'/phi_cl) dt = 2.92067358179572
+M_xi(15) = M_cl(15) + arctan(30)/pi              = 3.41006717939018   [Delta = arctan(2T)/pi = 0.4893935976 -> 1/2 as T -> oo]
+unwrap time: 2.5 s (step 0.01, dps 15)
+M_cl(15) via phase unwrap = 2.9206735818 | quad - unwrap = 1.847e-15
+M_cl(20) via quad = 5.75132410327 | via unwrap = 5.75132410327
+Re (phi_cl'/phi_cl)(1/2+it) changes sign at t* = 2.9433429 (passivity-gain boundary touches the seam at this height)
+N_cusp(15) = 4  from R = 9.53369526 (odd), 12.1730083 (odd), 13.7797513 (even), 14.3585095 (odd)
+   [source: LMFDB level-1 Maass forms, labels 1.1-1.4; consistent with Hejhal/Steil/BSV certified values; all multiplicity one]
+--- headline balance at T = 15 ---
+N_cusp(15) + M_cl(15) = 6.9206735818
+leading Weyl term T^2/12 = 18.75
+residual (sum - T^2/12) = -11.829326
+with the charge's phi_xi instead: N + M_xi = 7.41006717939  residual = -11.339933
+--- refined-law comparison over T in [4, 20] (Mueller Thm 4.1 shape) ---
+Fit A: N+M-T^2/12 = a T log T + b T + c :
+   a = -0.273791  (Mueller predicts -1/pi = -0.318310; ratio 0.8601)
+   b = -0.051093, c = -0.001602, fit RMS = 0.3055
+Fit B (a := -1/pi fixed): b = 0.101690, c = -0.463140, RMS = 0.3083
+   (RMS is the O(1) eigenvalue-staircase fluctuation; hyperbolic/elliptic terms not modeled)
+included: leading T^2/12; sub-leading -(1/pi)T log T (Mueller); empirical T-linear + const
+NOT included: oscillatory hyperbolic remainder, explicit elliptic constants
+--- table: T | N | M_cl | N+M | T^2/12 | (N+M)-T^2/12 ---
+   5.0 |  0 | -0.37436833 | -0.37436833 | 2.0833333 | -2.4577
+  10.0 |  1 | 0.76009014 | 1.7600901 | 8.3333333 | -6.57324
+  12.0 |  1 | 1.7243617 | 2.7243617 | 12.0 | -9.27564
+  14.0 |  3 | 2.6424132 | 5.6424132 | 16.333333 | -10.6909
+  15.0 |  4 | 2.9206736 | 6.9206736 | 18.75 | -11.8293
+  16.0 |  4 | 3.686735 | 7.686735 | 21.333333 | -13.6466
+  18.0 |  7 | 4.6784967 | 11.678497 | 27.0 | -15.3215
+  20.0 | 10 | 5.7513241 | 15.751324 | 33.333333 | -17.582
+[t = 18.1 s]
+
+================ P-S2d: seam jet ========================
+xi(0) limits:  xi(+1e-25) - 1/2 = -1.155e-27  xi(-1e-25) - 1/2 = 1.155e-27
+xi(1) limits:  xi(1+1e-25) - 1/2 = 1.155e-27  xi(1-1e-25) - 1/2 = -1.155e-27
+phi_xi(1/2) = xi(0)/xi(1) = 1 exactly (both equal 1/2 by xi(s)=xi(1-s));
+   numerically: |phi_xi(1/2 + 1e-20) - 1| = 9.238e-22
+   NOTE: the CLASSICAL coefficient phi_cl(1/2) = -1 (Lam-poles flip the sign);
+   numerically: phi_cl(1/2 + 1e-20) + 1 = -3.908e-20
+xi'(0)/xi(0) numeric = -0.023095708966121033814
+closed form -(gamma/2 + 1 - log(4pi)/2) = -0.023095708966121033814 | dev = 7.087e-32
+functional-equation check xi'(1)/xi(1) = -xi'(0)/xi(0): dev = 0.0
+c1 = d/d(delta) phi_xi(1/2+delta) at 0:
+   closed form  2 log(4 pi) - 2 gamma - 4 = -0.09238283586448413525724
+   via 2(xi'/xi(0) - xi'/xi(1))          = -0.09238283586448413525724 | dev = 2.835e-31
+   via Richardson finite differences      = -0.09238283586448413525724 | dev = 5.557e-25
+   c1 to 15 digits: -0.0923828358644841
+   (= 4 xi'(0)/xi(0); reflection dips BELOW 1 into the physical side: passive seam)
+classical jet: phi_cl(1/2+delta) = -(1 + (2log4pi - 2gamma) delta + O(delta^2))
+   slope 2log(4pi) - 2gamma = 3.907617164135515864743
+   phi_cl'(1/2) numeric = -3.90761716415079  vs -(2log4pi-2gamma) = -3.90761716413552
+   |phi_cl| GROWS off the seam on the real ray: gain onset at the seam itself
+[t = 18.1 s]
+
+TOTAL TIME: 18.1 s
+JSON_SUMMARY {"S2a": {"maxdev": "3.9443045e-31", "t_at": "46.443467", "npts": 200, "dps": 30, "crosscheck": "2.465e-31", "passed": true}, "S2b": {"grid_max_xi": "0.999076598832", "n_gain_xi": 0, "n_gain_cl": 294, "gain_tmax": "2.5", "seg_max_xi": "0.999907621432", "onset_all": true}, "S2c": {"M15": "2.92067358179572", "M15_xi": "3.41006717939018", "quad_minus_unwrap": "1.847e-15", "N15": 4, "sum15": "6.9206735818", "lead": "18.75", "residual15": "-11.829326", "fitA": {"a": -0.2737913684055408, "b": -0.051093418451663264, "c": -0.0016015761813938064, "rms": 0.3055201185163383}, "fitB": {"a": -0.3183098861837907, "b": 0.10168955680602078, "c": -0.4631400506074007, "rms": 0.3082507146160577}}, "S2d": {"c1": "-0.092382835864484135", "c1_richardson": "-0.092382835864484135", "xi_ratio0": "-0.023095708966121034", "c1_classical_slope": "3.9076171641355159"}}

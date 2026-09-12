@@ -1,0 +1,63 @@
+mpmath version: 1.3.0 | FAST = True | sections = ['a', 'b', 'c', 'd']
+
+================ P-S2a: seam unitarity =================
+single phi_xi eval at t=60, dps=30: 0.018 s
+points: 12 on t in [0.05, 60], dps = 30
+max | |phi_xi(1/2+it)| - 1 |  = 2.95823e-31  attained at t = 16.4
+prediction: <= 1e-20  -> PASS
+cross-check phi_cl_direct (Gamma/zeta form) vs phi_xi*s/(s-1): max rel diff = 3.01e-31
+[t = 0.2 s]
+
+================ P-S2b: passivity map ==================
+map computed at dps = 20 (anomalies rechecked at dps = 40); grid 49 x 61
+grid time: 0.1 s
+--- phi_xi (entire-xi ratio, the charge's definition) ---
+max |phi_xi| over grid       = 0.999076598832 at (sigma,t) = (0.51, 0.0)
+max |phi_xi| off axis (t>0)  = 0.998800724923 at (0.51, 3.33333)
+grid points with |phi_xi| > 1: 0  (prediction |phi|<=1: HOLDS EVERYWHERE)
+--- phi_cl (Lambda ratio = actual constant-term coefficient) ---
+grid points with |phi_cl| > 1: 8 of 80
+gain points: sigma in [0.51, 0.99], t up to 0.0
+gain rows (t values): [0.0]
+largest |phi_cl| on grid = 94.62500368 at (0.99, 0.0)
+no gain points with t >= 5: gain confined to the low-t lens over the real segment
+--- real segment s = sigma in (0.5, 1), step 0.002 ---
+phi_xi: max on segment = 0.999907621431891 at sigma = 0.501 | all < 1: True (sup -> 1 as sigma -> 1/2+)
+phi_cl: min |phi_cl| on segment = 1.00391526721 at sigma = 0.501 | |phi_cl| > 1 on ALL of (0.5,1): True
+phi_cl gain onset: |phi_cl(0.501)| - 1 = 0.0039152672   (slope prediction (2log4pi-2gamma)*delta = 0.0039076172 )
+samples: |phi_cl(0.75)| = 2.931533995  |phi_cl(0.99)| = 94.62500368  |phi_cl(0.999)| = 954.0624432
+sign on segment: phi_cl(0.75) = -2.931533995 (negative: pi phase)
+port null at s* = (1+rho_1)/2 = (0.75 + 7.06736257086735j)
+  |phi_cl(s*)| = 6.271e-26   |phi_xi(s*)| = 6.24e-26 (zeros of zeta(2s-1) are total-absorption points of the port)
+[t = 0.3 s]
+
+================ P-S2c: Weyl budget =====================
+winding integral at dps = 20; phase-unwrap cross-check at dps = 15 (disclosed)
+functional-equation acceleration validated: max rel dev vs direct = 9.208e-20
+quadrature time: 0.8 s (6 panels to T = 3)
+[t = 1.2 s]
+
+================ P-S2d: seam jet ========================
+xi(0) limits:  xi(+1e-25) - 1/2 = -1.155e-27  xi(-1e-25) - 1/2 = 1.155e-27
+xi(1) limits:  xi(1+1e-25) - 1/2 = 1.155e-27  xi(1-1e-25) - 1/2 = -1.155e-27
+phi_xi(1/2) = xi(0)/xi(1) = 1 exactly (both equal 1/2 by xi(s)=xi(1-s));
+   numerically: |phi_xi(1/2 + 1e-20) - 1| = 9.238e-22
+   NOTE: the CLASSICAL coefficient phi_cl(1/2) = -1 (Lam-poles flip the sign);
+   numerically: phi_cl(1/2 + 1e-20) + 1 = -3.908e-20
+xi'(0)/xi(0) numeric = -0.023095708966121033814
+closed form -(gamma/2 + 1 - log(4pi)/2) = -0.023095708966121033814 | dev = 7.087e-32
+functional-equation check xi'(1)/xi(1) = -xi'(0)/xi(0): dev = 0.0
+c1 = d/d(delta) phi_xi(1/2+delta) at 0:
+   closed form  2 log(4 pi) - 2 gamma - 4 = -0.09238283586448413525724
+   via 2(xi'/xi(0) - xi'/xi(1))          = -0.09238283586448413525724 | dev = 2.835e-31
+   via Richardson finite differences      = -0.09238283586448413525724 | dev = 5.557e-25
+   c1 to 15 digits: -0.0923828358644841
+   (= 4 xi'(0)/xi(0); reflection dips BELOW 1 into the physical side: passive seam)
+classical jet: phi_cl(1/2+delta) = -(1 + (2log4pi - 2gamma) delta + O(delta^2))
+   slope 2log(4pi) - 2gamma = 3.907617164135515864743
+   phi_cl'(1/2) numeric = -3.90761716415079  vs -(2log4pi-2gamma) = -3.90761716413552
+   |phi_cl| GROWS off the seam on the real ray: gain onset at the seam itself
+[t = 1.2 s]
+
+TOTAL TIME: 1.2 s
+JSON_SUMMARY {"S2a": {"maxdev": "2.9582284e-31", "t_at": "16.4", "npts": 12, "dps": 30, "crosscheck": "3.01e-31", "passed": true}, "S2b": {"grid_max_xi": "0.999076598832", "n_gain_xi": 0, "n_gain_cl": 8, "gain_tmax": "0.0", "seg_max_xi": "0.999907621432", "onset_all": true}, "S2d": {"c1": "-0.092382835864484135", "c1_richardson": "-0.092382835864484135", "xi_ratio0": "-0.023095708966121034", "c1_classical_slope": "3.9076171641355159"}}

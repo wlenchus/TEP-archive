@@ -1,0 +1,11 @@
+# PROVENANCE MANIFEST v7 addendum — dyadic-closure session 2026-08-09
+# (extends v6/v6e; sha256 of every artifact new or modified this session)
+# Full archive zip (records + scripts + outputs + upgraded datasets):
+#   TEP_dyadic_closure_20260809.zip  sha256 3a9cd2929c57bff1fdb14da5b4bed2dfb8f4b6bb820501e4776a45d7b3688f7b
+#   (delivered in-conversation 2026-08-09; datasets also in the claude.ai project under cleanroom/)
+
+eed644ae05141ae9183181eaee57ee652431992643762ba75ab20f05fd48f370  PREREG_special_primes_and_dyadic_20260809.md
+4790a954cf04627682fd85ae222f27801c5d194e913ebb1a2a4d622fb3fad94a  RESULT_algebraic_closure_1951_20260809.md
+d7cf90b14bcceaf377a264b8fb3f09b3310a7dd993ba5a75fdd37a743f18c99e  reply_to_reviewer_dyadic_closure_20260809.md
+3b777a51c5f5266104c65f0e826d316f6b34c0abd939abd25dea4c812b1af705  gp2/maxsigns2.gp
+caf0e21ab78e4cf9e2ffe6f2ad9d9b012768b15dc5bf67ca7cd9dac5803fd67b  gp2/maxsigns3.gp

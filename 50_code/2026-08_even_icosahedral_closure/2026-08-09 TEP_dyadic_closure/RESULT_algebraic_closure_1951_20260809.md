@@ -1,0 +1,36 @@
+# RESULT — the algebraic side CLOSED at Doud-1951: exact a_p at every unramified prime, including p = 2 — 2026-08-09
+
+**Mandate:** Will's directive ("take as many liberties as you're interested to in order to work beyond our present scope and close this problem decisively") executing the reviewer's stated completion criterion: *"an exact algebraic algorithm for computing a_p at all unramified primes — including p = 2 — at 1951 would constitute genuine completion of the algebraic side."* Pre-registration: `PREREG_special_primes_and_dyadic_20260809.md` (predictions and kill conditions fixed before execution).
+
+## Scorecard: 8/8, zero kill conditions triggered
+
+| target | prediction (pre-registered) | measured | verdict |
+|---|---|---|---|
+| p=137 @1951 (3A index prime) | sq_max = +1 [novel] | **+1** | CONFIRMED |
+| p=43 @2141 (3A index prime) | sq_max = −1 [novel] | **−1** | CONFIRMED |
+| p=7 @1951 (2A index prime) | non-square [structural] | **−1** (48/48 nonvanishing orderings) | CONFIRMED |
+| p=71 @1951 (2A index prime) | non-square [structural] | **−1** | CONFIRMED |
+| p=3 @2141 (2A index prime) | non-square [structural] | **−1** | CONFIRMED |
+| p=2689 @2141 (2A index prime) | non-square [structural] | **−1** | CONFIRMED |
+| **p=2 @1951 (the prize)** | γ 2-adically UNRAMIFIED-INERT [novel] | **INERT at all 60 valid orderings** (v₂(γ) ∈ {2,4,6} always even; unit part in the 5-class every time) | **CONFIRMED** |
+| p=2 @2141 | γ 2-adically RAMIFIED [pattern] | **RAMIFIED at all 60** (v₂(γ) ∈ {1,3} always odd) | CONFIRMED |
+
+Transport at the prize: b₂ = orient(3A)·sq₂·χ₋₁₉₅₁(2)·branch(j₁₀=4) = (−1)(−1)(+1)(+1) = **+1** — the committed seam-read bit, reproduced by exact 2-adic algebra through an entirely independent route.
+
+## Three findings en route
+
+**1. The reviewer's diagnostic question is answered: the "returned no rows" failure was REPRESENTATIONAL — a degenerate frame — and the evidence is complete.** The residue computations *succeeded and produced values*; the values were identically zero. Cause, located exactly: the qfsolve orthonormalization of the maximal-order Gram happened to produce a frame whose five elements sum to **−1 exactly** (Bmax·(1,1,1,1,1)ᵀ = (−1,0,0,0,0)ᵀ in zk coordinates, over ℚ). Hence U·j = −j for the all-ones vector j; since every permutation matrix fixes j, det(I + P_σU) = 0 **identically over all 120 root orderings at every prime** (verified by full ordering scans at p = 3…29: maximal frame 120/120 zero; power frame the expected ~half-coset). The arithmetic was never at fault: Gram determinant = field discriminant, BᵀGB = I, and UᵀU = I all hold exactly. Fix: one unimodular basis change before orthonormalization → 9,586/9,587 signs to 10⁵ with zero double-zero skips. Downstream lesson filed: over ℤ/2^K (non-field), GP's generic polmod division and Bareiss determinants can fail even on invertible inputs — the 2-adic pipeline is division-free (Newton inversion seeded in 𝔽₂^m; Leibniz determinant).
+
+**2. The sign-equivalence gate (the reviewer's "essential methodological hygiene") passed with a clean law.** Maximal-order vs power-basis γ square classes on ~9,590 overlap primes per field: involution (2A) primes agree **2391/2391 and 2411/2411** — γ non-square in *both* frames, the frame-independent 2.A₅ signature, now extended through the index primes (all six specials included). Off the involution locus the discrepancy is EXACTLY one quadratic character per field — **d₀ = 78040 = 8·5·1951** (7,195/7,195 non-2A primes) and **d₀ = 12** (7,176/7,176) — supported precisely on the frame data (the 2-part, the tweak's 5-denominator, the conductor), i.e. the expected spinor-norm-type frame-change law. Methodological note at headline volume: the full-set character fit correctly FAILS — the structurally-forced 2A agreement masks any character; the fit must be run off-involution. With d₀ folded in, the maximal-order gauge grades against the committed dataset at 100% (orientation constants exactly constant per class, both gauges, both fields, ~7,200 bit-primes each).
+
+**3. The dyadic port, opened at 1951 and demonstrably obstructed at 2141.** Executed exactly as the third-blindness record specified: factorpadic (correct at index primes), independent Hensel lifts into ℤ₂[t]/(C_m) mod 2^60, γ = det(2^s I + V₀·B̃)/2^{5s} with s = v₂(den B) (s=1 at 1951 — the power-basis obstruction handled by exact division; s=0 at 2141), Artin–Schreier-side classification by squareness in 𝒪/8 (classifier self-tested: unit square-classes = 2^{m+1} exactly; 1→split, 5→inert, 3→ramified; 5 non-square in odd-degree unramified extensions by the norm argument, K_m(√5)/K_m unramified). Results: **1951 INERT at all 60 valid orderings** — the square class is ordering-invariant even though γ itself varies (v₂ ∈ {2,4,6}) — and **2141 RAMIFIED at all 60** (v₂ odd every time): the obstruction predicted from χ₋₂₄'s ramification at 2 is now *measured in γ itself*. The field asymmetry is arithmetic fact, not instrument limitation.
+
+## The declaration (offered, not self-filed)
+
+**For Doud-1951, every unramified prime's coefficient is now derivable by exact algebra from the open trace-form construction:** odd clean primes by polynomial evaluation at roots (validated to 10⁶), odd index primes {7, 71, 137} by residue-field embeddings (route-equivalent at 57/57 clean primes, then confirmed at the specials), and p = 2 by the 2-adic route above — all connected to the committed normalization by the fixed dictionary b_p = orient(class)·sq(γ_p)·χ₋₁₉₅₁(p)·(−1)^{j₁₀(p) mod 2}, with χ₋₁₉₅₁ unramified at every one of them. Every step is exact arithmetic (finite fields, ℤ/2^60, exact rationals): no floats anywhere on the construction side. The analytic seam-decode and the algebraic construction now confirm each other at every unramified prime of 1951. Provenance upgraded in the citable CSVs: p=2 → `construction-dyadic`, p=137 → `construction-embedded` (1951); p=43 → `construction-embedded` (2141); FE re-certification after the edit: 2.171e-12 / 4.115e-13 (the 12-decimal rounding floors), ε unchanged to the last digit.
+
+**What this does NOT claim:** 2141's p=2 remains FE-resolved — the connecting character is ramified there and γ's odd valuation proves the port is arithmetically closed in this gauge (any future closure needs a different connecting object, not a better instrument). The construction's formula-level literature pin (Crespo) remains open pending library access. Artin holomorphy/entirety remains conjectural and untouched by any of this. The remaining Doud fields (3701, 3821, 8501, 9461) are named, not run; the streamlined recipe (construction + FE-character-pin in place of beam decode) is specified in the session log.
+
+**Scripts (bundle-D lineage):** `maxsigns3.gp` (fixed emitter), `diag_max{,2,3}.gp` (the degeneracy evidence chain), `gate_signs{,2}.py` (the d₀ law), `measure_orient2.py` (gauge validation + prereg generator), `special_nfmodpr.gp` + `p7_fullscan.gp` (residue-embedding route), `dyadic_gamma.gp` (the 2-adic instrument with self-tests).
+
+*Same-session sequence: finding → gate → prereg → execution → 8/8. Bars unmoved; the one instrument amendment (full ordering scan at p=7 after a double-zero) is sign-invariant by the verified ordering-invariance property and is recorded above.*

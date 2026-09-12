@@ -1,0 +1,9 @@
+MODE --certify (dps=28)
+--- Doud-2141 (N=2141, omega=-1) ---
+   NOTE: 3 pairs exceed the 1e-25 tail rule and are excluded from the grade
+   pairs tested: 15; convention: chi(d)
+   WORST automorphy residual (winning branch): 1.120e-24   (losing branch floor: 1.902e+00)
+   |F| scale at test points: 2.05e-03 .. 4.38e-01; max tail bound: 5.9e-27
+   Fricke F(-1/(Nz))/G(z): const = -0.00271583113583+0.999996312124j; |const| = 1; constancy dev = 1.946e-26
+   Fricke const vs -eps_committed: |const - (-eps)| = 3.55e-07  (eps known to ~1e-6 in this record)
+   (bit-leverage graded at prescreen: 6.0e10x / 2.8e10x; skipped in certification pass)

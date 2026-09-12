@@ -1,0 +1,7 @@
+# MAASS-LIVE manifest addendum (v7b) — 2026-08-09
+1c4e231afc0f4fab59fc38f0bd35cd8ee61d2467825cf4b835d4413f2074691e  /home/claude/pkg3/MAASS_LIVE_20260809/MANIFEST_v7b.txt
+845b73f9a0806790c6890adeb68a805f9653f50b0cbd5219b97b504c7bae9478  /home/claude/pkg3/MAASS_LIVE_20260809/PREREG_maass_live_20260809.md
+460db1eb78847c9eccd7d401727b4fa983ddad155337cb13fa3828da8fd6eb90  /home/claude/pkg3/MAASS_LIVE_20260809/RESULT_maass_live_20260809.md
+27395ef21b8c225cf29e1485cb1292d9fbcd163b3bcd9acfcc50d567c7fb9c1c  /home/claude/pkg3/MAASS_LIVE_20260809/certify_2141.txt
+a61822bd9d2e9ef5f3294b73eeac11c7e38e4bd205ee0559122899de966e3519  /home/claude/pkg3/MAASS_LIVE_20260809/certify_log.txt
+da0989467785e3153f1f86ac928abba2d970f5c2514d4fccd402585b9f3f86b6  /home/claude/pkg3/MAASS_LIVE_20260809/maass_live.py

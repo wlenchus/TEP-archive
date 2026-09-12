@@ -6,9 +6,10 @@ Read the errata record alongside anything older than 2026-06-10 — it revises t
 
 **Added 2026-09-12.** The errata line is extended: `2026-07-21 ledger_patches_proposed_ActiveV2.md` (the live
 edition by title; byte-identical to the ActiveV1 file beside it — the retitle carried no text change; the in-file header still reads ActiveV1 — stamp C16), `2026-07-25 correctness_patch_bundle_ActiveV1.md`
-(P-A…P-G; appendix = **Foundations Status block v2**, the canonical foundations statement; v1 retained as
-ArchivalV1), and `2026-09-12 errata_and_status_index_2026-07-25_to_2026-09-12.md` (37 indexed corrections through
-the council era). The OT1 resolution's live edition `2026-07-22 ot1_delta_EXHIBITION_GRADED_conductor_4000_ActiveV5.md`
+(P-A…P-G; appendix = **Foundations Status block v2**, the foundations statement the July review layer and the
+08-05 architecture adopt as canonical — offered; the bundle's own closing line gates each patch on countersign; v1 retained as
+ArchivalV1), and `2026-09-12 errata_and_status_index_2026-07-25_to_2026-09-12.md` (38 indexed corrections through
+the council era, the last against the index's own first version). The OT1 resolution's live edition `2026-07-22 ot1_delta_EXHIBITION_GRADED_conductor_4000_ActiveV5.md`
 joins ActiveV3 (read the 07-04/05 OT1 ledgers only through it). The repository's own architecture records are
 here: `2026-08-05 TEP_Repository_Arch_ActiveV2.md`, `2026-08-05 spine_V3…`, `2026-08-09 spine_V4_canon_first_mode_priced_DraftV1.md`
 (the reading order the root README follows), `2026-08-09 assessor_review_arch_spine_readmes.md`, the superseded

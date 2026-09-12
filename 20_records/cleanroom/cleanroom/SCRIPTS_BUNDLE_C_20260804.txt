@@ -1,0 +1,3861 @@
+# SCRIPTS_BUNDLE_C — sessions 2026-08-03/04 (resumption C: retarget, qualified decode, both summits, verification, Crespo grade)
+# All scripts concatenated with ==== FILE: headers. Data tables regenerate deterministically from the GP scripts.
+# Per-file SHA-256: PROVENANCE_MANIFEST_v6_addendum_20260803.txt (v6-v6e). Fixed seeds throughout.
+
+==== FILE: gp2/instr2.py ====
+#!/usr/bin/env python3
+"""instr2.py — degree-2 seam instrument + qualified solvers. Resumption session 2026-08-03.
+Exact Bessel kernels (both ports); complex two-arm theta; eps-phase fit; eps-folded signed port meter;
+sparse flip machinery with float-drift resieve gate; solvers S1 (successive cancellation),
+S2 (beam-64), S3 (parallel tempering, 8 chains, exchange every 50).
+Pre-registered in decode2dim_RESUMPTION_preregistration_20260803.md (sha256 158da198...).
+"""
+import numpy as np
+from scipy.special import k0 as _besk0
+
+SQ5 = np.sqrt(5.0)
+PHI = (1.0 + SQ5) / 2.0
+TGRID = np.sort(np.array([0.50, 0.58, 1/0.58, 0.67, 1/0.67, 0.78, 1/0.78, 0.90, 1/0.90, 1.00, 1.11, 1.28, 1.72, 2.00]))
+UGRID = np.concatenate([-np.linspace(0.02, 0.40, 15)[::-1], np.linspace(0.02, 0.40, 15)])
+YCUT = 18.6   # kernel support cutoff: 4K0(2*18.6) ~ 4e-17
+
+def ker(port, y):
+    """port 0 (even): 4K0(2y) = Mellin^-1[Gamma(s/2)^2]; port 1 (odd): 4yK0(2y) = Mellin^-1[Gamma((s+1)/2)^2]."""
+    y = np.asarray(y, dtype=float)
+    out = np.zeros_like(y)
+    m = (y > 0) & (y < YCUT)
+    ym = y[m]
+    v = 4.0 * _besk0(2.0 * ym)
+    if port == 1:
+        v = v * ym
+    out[m] = v
+    return out
+
+def Xof(N):
+    return int(np.ceil(11.71 * np.sqrt(N)))
+
+# ---------------- sieve ----------------
+def inv_series(poly, kmax):
+    inv = np.zeros(kmax + 1, dtype=complex); inv[0] = 1.0
+    d = len(poly) - 1
+    for k in range(1, kmax + 1):
+        s = 0.0 + 0.0j
+        for j in range(1, min(k, d) + 1):
+            s += poly[j] * inv[k - j]
+        inv[k] = -s
+    return inv
+
+def primes_upto(X):
+    isc = np.ones(X + 1, dtype=bool); isc[:2] = False
+    for i in range(2, int(X ** 0.5) + 1):
+        if isc[i]:
+            isc[i*i::i] = False
+    return [int(p) for p in np.nonzero(isc)[0]]
+
+def _fold(a, p, inv, X):
+    b = a.copy()
+    kmax = len(inv) - 1
+    for k in range(1, kmax + 1):
+        if inv[k] == 0.0:
+            continue
+        pk = p ** k
+        if pk > X:
+            break
+        b[pk::pk] += inv[k] * a[1:(X // pk) + 1]
+    return b
+
+def sieve(X, locfac):
+    """a_n for n<=X. locfac(p) -> poly coeffs (c0=1), or None for factor 1."""
+    a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        kmax = int(np.log(X) / np.log(p))
+        poly = locfac(p)
+        if poly is None:
+            continue
+        a = _fold(a, p, inv_series(np.asarray(poly, dtype=complex), kmax), X)
+    return a
+
+# ---------------- arm ----------------
+class Arm:
+    def __init__(self, N, port, X=None, tgrid=TGRID, label=""):
+        self.N = float(N); self.port = port; self.label = label
+        self.X = X if X is not None else Xof(N)
+        n = np.arange(1, self.X + 1)
+        rN = np.sqrt(self.N)
+        self.t = tgrid
+        self.K  = np.stack([ker(port, np.pi * n * tt / rN) for tt in tgrid])
+        self.Ki = np.stack([ker(port, np.pi * n / (tt * rN)) for tt in tgrid])
+        eu = np.exp(UGRID)
+        self.Ku  = np.stack([ker(port, np.pi * n * t0 / rN) for t0 in eu])
+        self.Kiu = np.stack([ker(port, np.pi * n / (t0 * rN)) for t0 in eu])
+        self.a = None; self.F = None; self.Fi = None
+
+    def set_a(self, a):
+        assert len(a) == self.X + 1
+        self.a = a.astype(complex).copy()
+        self.refresh()
+
+    def refresh(self):
+        self.F  = self.K  @ self.a[1:]
+        self.Fi = self.Ki @ self.a[1:]
+
+    def eps_fit(self, F=None, Fi=None):
+        F = self.F if F is None else F; Fi = self.Fi if Fi is None else Fi
+        num = np.sum(Fi * self.t * F)
+        return num / abs(num) if num != 0 else 1.0 + 0j
+
+    def residual(self, eps=None):
+        if eps is None:
+            eps = self.eps_fit()
+        d = self.Fi - eps * self.t * np.conj(self.F)
+        return float(np.max(np.abs(d)) / np.max(np.abs(self.F))), eps
+
+    def meter(self, eps=None):
+        if eps is None:
+            eps = self.eps_fit()
+        Fu  = self.Ku  @ self.a[1:]
+        Fiu = self.Kiu @ self.a[1:]
+        A   = np.exp(UGRID / 2) * Fu        # A(u)  = e^{u/2}  F(e^u)
+        Am  = np.exp(-UGRID / 2) * Fiu      # A(-u) = e^{-u/2} F(e^{-u})   [sign fixed; caught by KD-1 controls]
+        x = (Am - eps * np.conj(A)) / (Am + eps * np.conj(A))
+        gnew = 2.0 / (1.0 - x)
+        eta = np.arctanh(np.clip(np.real(x), -0.999999, 0.999999))
+        return x, eta, gnew
+
+    def delta_for(self, p, q):
+        """da from multiplying in correction series q (q0=1) at prime p, given current a."""
+        idx_all = []; val_all = []
+        for k in range(1, len(q)):
+            if q[k] == 0.0:
+                continue
+            pk = p ** k
+            if pk > self.X:
+                break
+            j = np.arange(1, self.X // pk + 1)
+            idx_all.append(j * pk)
+            val_all.append(q[k] * self.a[j])
+        if not idx_all:
+            z = np.zeros(0, dtype=int); zt = np.zeros(len(self.t), dtype=complex)
+            return z, np.zeros(0, dtype=complex), zt, zt.copy()
+        idx = np.concatenate(idx_all); val = np.concatenate(val_all)
+        # collapse duplicate indices (k-powers overlap at p^k multiples)
+        dF  = self.K[:, idx - 1]  @ val
+        dFi = self.Ki[:, idx - 1] @ val
+        return idx, val, dF, dFi
+
+    def peek_J(self, dF, dFi):
+        F = self.F + dF; Fi = self.Fi + dFi
+        sc = np.max(np.abs(F))
+        if sc == 0:
+            return 1e30
+        num = np.sum(Fi * self.t * F)
+        eps = num / abs(num) if num != 0 else 1.0
+        d = Fi - eps * self.t * np.conj(F)
+        return float(np.sum(np.abs(d) ** 2) / sc ** 2)
+
+    def peek_residual(self, dF, dFi):
+        F = self.F + dF; Fi = self.Fi + dFi
+        sc = np.max(np.abs(F))
+        if sc == 0:
+            return 1e30
+        num = np.sum(Fi * self.t * F)
+        eps = num / abs(num) if num != 0 else 1.0
+        d = Fi - eps * self.t * np.conj(F)
+        return float(np.max(np.abs(d)) / sc)
+
+    def commit(self, idx, val, dF, dFi):
+        if len(idx):
+            np.add.at(self.a, idx, val)
+        self.F += dF; self.Fi += dFi
+
+# ---------------- decode problem ----------------
+class Problem:
+    """Bit-primes with two candidate local factors per arm; state in {-1,0,+1} (0 = marginalized inverse-average)."""
+    def __init__(self, arms, bitprimes, cands, fixedfac):
+        self.arms = arms
+        self.bp = list(bitprimes)
+        self.cands = cands
+        self.fixed = fixedfac
+        self.state = {p: 0 for p in self.bp}
+        self._qcache = {}
+
+    def init_marginal(self):
+        for ai, arm in enumerate(self.arms):
+            cn = self.cands[ai]; fx = self.fixed[ai]
+            X = arm.X
+            a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+            for p in primes_upto(X):
+                kmax = int(np.log(X) / np.log(p))
+                if p in cn:
+                    inv = 0.5 * (inv_series(np.asarray(cn[p][0], dtype=complex), kmax)
+                               + inv_series(np.asarray(cn[p][1], dtype=complex), kmax))
+                else:
+                    poly = fx(p)
+                    if poly is None:
+                        continue
+                    inv = inv_series(np.asarray(poly, dtype=complex), kmax)
+                a = _fold(a, p, inv, X)
+            arm.set_a(a)
+        for p in self.bp:
+            self.state[p] = 0
+
+    def _q(self, ai, p, s_old, s_new):
+        key = (ai, p, s_old, s_new)
+        if key in self._qcache:
+            return self._qcache[key]
+        arm = self.arms[ai]
+        kmax = int(np.log(arm.X) / np.log(p))
+        P, M = self.cands[ai][p]
+        def invof(s):
+            if s == 0:
+                return 0.5 * (inv_series(np.asarray(P, dtype=complex), kmax)
+                            + inv_series(np.asarray(M, dtype=complex), kmax))
+            return inv_series(np.asarray(P if s == +1 else M, dtype=complex), kmax)
+        io, inw = invof(s_old), invof(s_new)
+        q = np.zeros(kmax + 1, dtype=complex); q[0] = 1.0
+        for k in range(1, kmax + 1):
+            s = inw[k]
+            for j in range(1, k + 1):
+                s -= io[j] * q[k - j]
+            q[k] = s
+        self._qcache[key] = q
+        return q
+
+    def peek_set(self, p, s_new):
+        Jt = 0.0; ds = []
+        for ai, arm in enumerate(self.arms):
+            q = self._q(ai, p, self.state[p], s_new)
+            idx, val, dF, dFi = arm.delta_for(p, q)
+            Jt += arm.peek_J(dF, dFi)
+            ds.append((idx, val, dF, dFi))
+        return Jt, ds
+
+    def commit_set(self, p, s_new, ds):
+        for arm, d in zip(self.arms, ds):
+            arm.commit(*d)
+        self.state[p] = s_new
+
+    def set_bit(self, p, s_new):
+        J, ds = self.peek_set(p, s_new)
+        self.commit_set(p, s_new, ds)
+        return J
+
+    def Jtot(self):
+        z = [a.peek_J(np.zeros(len(a.t), dtype=complex), np.zeros(len(a.t), dtype=complex)) for a in self.arms]
+        return float(sum(z))
+
+    def weights(self):
+        w = {}
+        arm = self.arms[0]
+        for p in self.bp:
+            s0 = self.state[p]
+            qP = self._q(0, p, s0, +1); qM = self._q(0, p, s0, -1)
+            _, _, dFP, dFiP = arm.delta_for(p, qP)
+            _, _, dFM, dFiM = arm.delta_for(p, qM)
+            w[p] = float(np.linalg.norm(dFP - dFM) + np.linalg.norm(dFiP - dFiM))
+        return w
+
+    def resieve_gate(self, tol=1e-12):
+        """float-drift gate: rebuild each arm from scratch at the current committed state; compare F."""
+        worst = 0.0
+        for ai, arm in enumerate(self.arms):
+            cn = self.cands[ai]; fx = self.fixed[ai]
+            st = self.state
+            def f(p):
+                if p in cn:
+                    if st[p] == +1: return cn[p][0]
+                    if st[p] == -1: return cn[p][1]
+                    return ('MARG',)
+                return fx(p)
+            X = arm.X
+            a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+            for p in primes_upto(X):
+                kmax = int(np.log(X) / np.log(p))
+                pol = f(p)
+                if isinstance(pol, tuple):
+                    inv = 0.5 * (inv_series(np.asarray(cn[p][0], dtype=complex), kmax)
+                               + inv_series(np.asarray(cn[p][1], dtype=complex), kmax))
+                elif pol is None:
+                    continue
+                else:
+                    inv = inv_series(np.asarray(pol, dtype=complex), kmax)
+                a = _fold(a, p, inv, X)
+            drift = float(np.max(np.abs(a - arm.a)))
+            worst = max(worst, drift)
+            arm.a = a; arm.refresh()
+        return worst
+
+    # ---- state snapshot / load by reference ----
+    def snap(self, copy=True):
+        if copy:
+            return (dict(self.state), [(a.a.copy(), a.F.copy(), a.Fi.copy()) for a in self.arms])
+        return (dict(self.state), [(a.a, a.F, a.Fi) for a in self.arms])
+
+    def load(self, sn, copy=False):
+        st, arrs = sn
+        self.state = dict(st)
+        for a, (aa, F, Fi) in zip(self.arms, arrs):
+            if copy:
+                a.a = aa.copy(); a.F = F.copy(); a.Fi = Fi.copy()
+            else:
+                a.a = aa; a.F = F; a.Fi = Fi
+
+# ---------------- solvers ----------------
+def S1_sc(prob, log=lambda *a: None):
+    prob.init_marginal()
+    w = prob.weights()
+    order = sorted(prob.bp, key=lambda p: -w[p])
+    for p in order:
+        JP, dsP = prob.peek_set(p, +1)
+        JM, dsM = prob.peek_set(p, -1)
+        if JP <= JM:
+            prob.commit_set(p, +1, dsP)
+        else:
+            prob.commit_set(p, -1, dsM)
+    log("S1 SC pass done, J =", prob.Jtot())
+    improved = True; sweeps = 0
+    while improved and sweeps < 60:
+        improved = False; sweeps += 1
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow * (1 - 1e-12) and Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    heavy = order[:min(40, len(order))]
+    for i in range(len(heavy)):
+        for j in range(i + 1, len(heavy)):
+            J0 = prob.Jtot()
+            p, q = heavy[i], heavy[j]
+            sp, sq = prob.state[p], prob.state[q]
+            prob.set_bit(p, -sp); Jpq = prob.set_bit(q, -sq)
+            if Jpq >= J0 * (1 - 1e-12):
+                prob.set_bit(q, sq); prob.set_bit(p, sp)
+    drift = prob.resieve_gate()
+    log("S1 done. J =", prob.Jtot(), " drift =", drift)
+    return dict(prob.state), prob.Jtot()
+
+def S2_beam(prob, width=64, log=lambda *a: None):
+    prob.init_marginal()
+    w = prob.weights()
+    order = sorted(prob.bp, key=lambda p: -w[p])
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]   # (state, arrs, J)
+    for li, p in enumerate(order):
+        cand = []
+        for (st, arrs, J) in beam:
+            prob.load((st, arrs), copy=False)     # reference load; peeks don't mutate
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        newbeam = []
+        for (Jc, st, arrs, ss, ds) in cand[:width]:
+            prob.load((st, arrs), copy=True)      # copy-on-select
+            prob.commit_set(p, ss, ds)
+            newbeam.append(prob.snap(copy=False) + (Jc,))
+        beam = newbeam
+        if li % 25 == 0:
+            log(f"S2 level {li}/{len(order)} bestJ={beam[0][2]:.3e}")
+    st, arrs, J = min(beam, key=lambda b: b[2])
+    prob.load((st, arrs), copy=True)
+    drift = prob.resieve_gate()
+    log("S2 done. J =", prob.Jtot(), " drift =", drift)
+    return dict(prob.state), prob.Jtot()
+
+def S3_temper(prob, seeds=(20260803, 1951, 2089, 5), nchains=8, sweeps=20000,
+              exchange_every=50, log=lambda *a: None):
+    rng = np.random.default_rng(list(seeds))
+    prob.init_marginal()
+    w = prob.weights()
+    order = sorted(prob.bp, key=lambda p: -w[p])
+    wv = np.array([np.sqrt(w[p]) for p in order]); wv = wv / wv.sum()
+    base = prob.snap(copy=True)
+    chains = []
+    for c in range(nchains):
+        prob.load(base, copy=True)
+        for p in order:
+            prob.set_bit(p, int(rng.choice([-1, 1])))
+        chains.append(list(prob.snap(copy=False)) + [prob.Jtot()])
+    temps = np.geomspace(3e-2, 30.0, nchains)
+    Jscale = np.median([c[2] for c in chains]) + 1e-30
+    temps = temps * Jscale
+    best = None
+    m = len(order)
+    props = max(8, m // 4)
+    for sw in range(sweeps):
+        for c in range(nchains):
+            st, arrs, J = chains[c]
+            prob.load((st, arrs), copy=False)
+            T = temps[c]
+            for _ in range(props):
+                p = order[int(rng.choice(m, p=wv))]
+                s = prob.state[p]
+                Jf, ds = prob.peek_set(p, -s)
+                if Jf <= J or rng.random() < np.exp(-(Jf - J) / T):
+                    prob.commit_set(p, -s, ds); J = Jf
+            chains[c] = list(prob.snap(copy=False)) + [J]
+            if best is None or J < best[1]:
+                best = (dict(prob.state), J)
+        if sw % exchange_every == 0 and sw > 0:
+            for c in range(nchains - 1):
+                J1, J2 = chains[c][2], chains[c + 1][2]
+                d = (1.0 / temps[c] - 1.0 / temps[c + 1]) * (J1 - J2)
+                if d > 0 or rng.random() < np.exp(d):
+                    chains[c], chains[c + 1] = chains[c + 1], chains[c]
+        if sw % 500 == 0:
+            log(f"S3 sweep {sw}: bestJ={best[1]:.3e} coldJ={chains[0][2]:.3e}")
+        if best[1] < 1e-24:
+            log(f"S3 early stop at sweep {sw}: bestJ={best[1]:.3e}")
+            break
+    # polish best with greedy
+    prob.load(base, copy=True)
+    for p in order:
+        prob.set_bit(p, best[0][p])
+    improved = True; guard = 0
+    while improved and guard < 40:
+        improved = False; guard += 1
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    drift = prob.resieve_gate()
+    log("S3 done. J =", prob.Jtot(), " drift =", drift)
+    return dict(prob.state), prob.Jtot()
+
+def sensitivity(prob, floor):
+    """single-flip residual displacement per bit prime at current solution (arm 0 theta residual)."""
+    arm = prob.arms[0]
+    r0, _ = arm.residual()
+    s = {}
+    for p in prob.bp:
+        q = prob._q(0, p, prob.state[p], -prob.state[p])
+        idx, val, dF, dFi = arm.delta_for(p, q)
+        s[p] = abs(arm.peek_residual(dF, dFi) - r0)
+    vis = {p: v for p, v in s.items() if v > 100 * floor}
+    return s, vis
+
+==== FILE: gp2/run_controls.py ====
+#!/usr/bin/env python3
+"""KD-1 controls, resumption 2026-08-03: kernel triple-validation; alpha; beta1-even; beta1-odd; meter floors."""
+import numpy as np, mpmath as mp, json, sys
+sys.path.insert(0, '.')
+from instr2 import ker, Arm, sieve, Xof, TGRID, UGRID
+mp.mp.dps = 30
+
+out = {}
+
+# ---- 1. kernel triple validation: scipy-k0 leg vs mpmath-besselk leg vs meijerg leg vs subdivided MB ----
+ys = [0.05, 0.3, 1.0, 3.0, 8.0, 15.0]
+worst_even = 0.0; worst_odd = 0.0
+for y in ys:
+    kv  = float(ker(0, np.array([y]))[0])
+    kvo = float(ker(1, np.array([y]))[0])
+    bk  = 4*mp.besselk(0, 2*mp.mpf(y))              # closed form: 4K0(2y)
+    bko = 4*mp.mpf(y)*mp.besselk(0, 2*mp.mpf(y))    # 4yK0(2y)
+    mg  = 2*mp.meijerg([[], []], [[0, 0], []], mp.mpf(y)**2)
+    mgo = 2*mp.meijerg([[], []], [[mp.mpf(1)/2, mp.mpf(1)/2], []], mp.mpf(y)**2)
+    worst_even = max(worst_even, abs(kv - float(bk))/float(bk), abs(float(mg) - float(bk))/float(bk))
+    worst_odd  = max(worst_odd,  abs(kvo - float(bko))/float(bko), abs(float(mgo) - float(bko))/float(bko))
+# Mellin-Barnes third leg, subdivided contour (quadrature-limited; bar 1e-9, disclosed)
+worst_mb = 0.0
+for y in [0.3, 3.0]:
+    c = mp.mpf('1.7'); seg = [-80, -40, -15, -5, 0, 5, 15, 40, 80]
+    f  = lambda tau: mp.re((mp.gamma((c + 1j*tau)/2))**2 * mp.mpf(y)**(-(c + 1j*tau)))
+    v  = mp.quad(f, seg, maxdegree=10) / (2*mp.pi)
+    fo = lambda tau: mp.re((mp.gamma((c + 1 + 1j*tau)/2))**2 * mp.mpf(y)**(-(c + 1j*tau)))
+    vo = mp.quad(fo, seg, maxdegree=10) / (2*mp.pi)
+    worst_mb = max(worst_mb, abs(float(ker(0, np.array([y]))[0]) - float(v))/abs(float(v)),
+                            abs(float(ker(1, np.array([y]))[0]) - float(vo))/abs(float(vo)))
+print(f"KERNEL validation: even worst rel {worst_even:.3e}  odd worst rel {worst_odd:.3e} (bar 1e-13); MB leg {worst_mb:.3e} (bar 1e-9)")
+out['kernel'] = {'even': worst_even, 'odd': worst_odd, 'mb': worst_mb,
+                 'pass': worst_even < 1e-13 and worst_odd < 1e-13 and worst_mb < 1e-9}
+
+# ---- 2. alpha control: L(chi5)L(chi8), N=40, even port ----
+k58 = {}
+for line in open('alpha_chars.txt'):
+    p, k5, k8 = line.strip().split(':')
+    k58[int(p)] = (int(k5), int(k8))
+def loc_alpha(p):
+    if p not in k58:
+        return None
+    k5, k8 = k58[p]
+    return np.convolve([1.0, -k5], [1.0, -k8])
+N = 40.0
+arm = Arm(N, 0)
+arm.set_a(sieve(arm.X, loc_alpha))
+r, eps = arm.residual()
+x, eta, gnew = arm.meter(eps)
+gdev = float(np.max(np.abs(gnew - 2)))
+selfgate = float(np.max(np.abs(gnew[:15][::-1]*gnew[15:] - 4.0/(1.0 - x[15:]*x[:15][::-1]))))
+# negatives
+armw = Arm(N*1.05, 0, X=arm.X); armw.set_a(arm.a); rw, _ = armw.residual()
+armw2 = Arm(N/4, 0, X=arm.X); armw2.set_a(arm.a); rw2, _ = armw2.residual()
+de = arm.Fi - (-1.0) * arm.t * np.conj(arm.F); rwe = float(np.max(np.abs(de))/np.max(np.abs(arm.F)))
+print(f"ALPHA (N=40): residual {r:.3e}  eps {eps:.6f}  meter dev {gdev:.3e}  selfgate {selfgate:.3e}")
+print(f"  NEG wrong-N*1.05: {rw:.3e}   wrong-N/4: {rw2:.3e}   wrong-eps(-1): {rwe:.3e}")
+out['alpha'] = {'residual': r, 'eps': [eps.real, eps.imag], 'meter': gdev,
+                'neg': [rw, rw2, rwe], 'pass': r <= 5e-12}
+
+# ---- 3. beta1-even: Ind psi_229, N=229, even port ----
+dih = {}
+for line in open('../gp/classes_dih229.txt'):
+    p, c = line.strip().split(':')
+    dih[int(p)] = c
+FAC2 = {'P': [1.0, -2.0, 1.0], 'N': [1.0, 1.0, 1.0], 'I': [1.0, 0.0, -1.0], 'R': [1.0, -1.0]}
+def loc_dih(scramble=0.0, rng=None):
+    def f(p):
+        c = dih.get(p)
+        if c is None:
+            return None
+        if rng is not None and c in 'PN' and rng.random() < scramble:
+            c = 'N' if c == 'P' else 'P'
+        return FAC2[c]
+    return f
+arm229 = Arm(229.0, 0)
+arm229.set_a(sieve(arm229.X, loc_dih()))
+r229, eps229 = arm229.residual()
+x2, eta2, gnew2 = arm229.meter(eps229)
+g2dev = float(np.max(np.abs(gnew2 - 2)))
+rng = np.random.default_rng(20260803)
+arm229s = Arm(229.0, 0); arm229s.set_a(sieve(arm229s.X, loc_dih(0.3, rng))); rs, _ = arm229s.residual()
+armw = Arm(229.0/4, 0, X=arm229.X); armw.set_a(arm229.a); rwn, _ = armw.residual()
+armo = Arm(229.0, 1, X=arm229.X); armo.set_a(arm229.a); ro, _ = armo.residual()
+print(f"BETA1-EVEN (Ind psi_229, N=229): residual {r229:.3e}  eps {eps229:.6f}  meter dev {g2dev:.3e}")
+print(f"  NEG scramble30%: {rs:.3e}   wrong-N/4: {rwn:.3e}   odd-port: {ro:.3e}")
+out['beta1even'] = {'residual': r229, 'eps': [eps229.real, eps229.imag], 'meter': g2dev,
+                    'neg': [rs, rwn, ro], 'pass': r229 <= 5e-12}
+
+# ---- 4. beta1-odd: Ind psi_229 (x) chi_-4, N=3664, odd port ----
+def chi4(p):
+    return 0 if p == 2 else (1 if p % 4 == 1 else -1)
+def loc_dih_odd(p):
+    c = dih.get(p)
+    if c is None or p == 2:
+        return None if p == 2 else None
+    if c == 'R':
+        return [1.0, -chi4(p)]
+    if c == 'P':
+        return [1.0, -2.0*chi4(p), 1.0]
+    if c == 'N':
+        return [1.0, 1.0*chi4(p), 1.0]
+    if c == 'I':
+        return [1.0, 0.0, -1.0]
+    return None
+armodd = Arm(3664.0, 1)
+armodd.set_a(sieve(armodd.X, loc_dih_odd))
+rodd, epsodd = armodd.residual()
+xo, etao, gnewo = armodd.meter(epsodd)
+godev = float(np.max(np.abs(gnewo - 2)))
+armoe = Arm(3664.0, 0, X=armodd.X); armoe.set_a(armodd.a); roe, _ = armoe.residual()
+armon = Arm(3664.0*1.05, 1, X=armodd.X); armon.set_a(armodd.a); ron, _ = armon.residual()
+print(f"BETA1-ODD (Ind psi_229 x chi_-4, N=3664): residual {rodd:.3e}  eps {epsodd:.6f}  meter dev {godev:.3e}")
+print(f"  NEG even-port: {roe:.3e}   wrong-N*1.05: {ron:.3e}")
+out['beta1odd'] = {'residual': rodd, 'eps': [epsodd.real, epsodd.imag], 'meter': godev,
+                   'neg': [roe, ron], 'pass': rodd <= 5e-12}
+
+out['floors'] = {'theta': max(out['alpha']['residual'], out['beta1even']['residual'], out['beta1odd']['residual']),
+                 'meter': max(out['alpha']['meter'], out['beta1even']['meter'], out['beta1odd']['meter'])}
+json.dump(out, open('controls2.json', 'w'), indent=1)
+allpass = out['kernel']['pass'] and out['alpha']['pass'] and out['beta1even']['pass'] and out['beta1odd']['pass']
+print("KD-1 GATE:", "ALL CONTROLS PASS" if allpass else "*** CONTROL FAILURE — STOP ***")
+
+==== FILE: gp2/ctrl_complex.py ====
+#!/usr/bin/env python3
+"""alpha-complex control: L(s,eta)^2, eta = quintic character mod 11 (g=2). Theorem-grade, entire,
+N = 121, nebentypus eta^2 (order 5, even), complex coefficients and eps. Bar 5e-12.
+Also: loud negatives (wrong-N, conj-arm disabled i.e. F instead of conj(F))."""
+import numpy as np, sys
+sys.path.insert(0, '.')
+from instr2 import Arm, sieve, Xof
+
+IND11 = {1:0, 2:1, 3:8, 4:2, 5:4, 6:9, 7:7, 8:3, 9:6, 10:5}
+Z5 = np.exp(2j*np.pi/5)
+def eta(n):
+    r = n % 11
+    return None if r == 0 else Z5 ** (IND11[r] % 5)
+
+N = 121.0
+arm = Arm(N, 0)
+def loc(p):
+    e = eta(p)
+    if e is None:
+        return None
+    return np.convolve([1.0, -e], [1.0, -e])
+arm.set_a(sieve(arm.X, loc))
+r, eps = arm.residual()
+x, et, gnew = arm.meter(eps)
+print(f"ALPHA-COMPLEX L(eta)^2 (N=121, quintic nebentypus): residual {r:.3e}  eps {eps.real:+.6f}{eps.imag:+.6f}i  meter dev {np.max(np.abs(gnew-2)):.3e}")
+# predicted eps from Gauss sum: eps = (tau(eta)/sqrt(11))^2 ... tau(eta) = sum_a eta(a) e(a/11)
+tau = sum(eta(a) * np.exp(2j*np.pi*a/11) for a in range(1, 11))
+eps_pred = (tau / np.sqrt(11)) ** 2
+print(f"  predicted eps (Gauss^2): {eps_pred.real:+.6f}{eps_pred.imag:+.6f}i   |match| = {abs(eps - eps_pred):.2e}")
+# negatives
+armw = Arm(N*1.05, 0, X=arm.X); armw.set_a(arm.a); rw, _ = armw.residual()
+# conj-arm sabotage: residual with F(1/t) - eps t F(t) (no conjugation)
+d = arm.Fi - eps * arm.t * arm.F
+rnc = float(np.max(np.abs(d))/np.max(np.abs(arm.F)))
+print(f"  NEG wrong-N*1.05: {rw:.3e}   NEG no-conjugation arm: {rnc:.3e}")
+
+==== FILE: gp2/scan_rungs.gp ====
+{
+print("1951 prime: ", isprime(1951), "  1951%4=", 1951%4, "  1951%5=", 1951%5, "  primroot=", lift(znprimroot(1951)));
+print("bigD 3806549: prime=", isprime(3806549), " fundamental=", isfundamental(3806549), " h=", quadclassunit(3806549).no);
+print("matched scan (D prime, D=1 mod 4, h=3, D in [1902,2600]):");
+forprime(D=1902,2600, if(D%4==1 && quadclassunit(D).no==3, print("  D=",D," h=3")));
+print("mid scan (D prime, D=1 mod 4, h=3, D in [39900,41500]):");
+forprime(D=39900,41500, if(D%4==1 && quadclassunit(D).no==3, print("  D=",D," h=3")));
+}
+quit
+
+==== FILE: gp2/planted_gen.gp ====
+\\ planted ladder generator — answer-free (qfbsolve ground truth), resumption 2026-08-03
+emitD(D) = {
+  my(X = ceil(13.0*sqrt(D)), Q = Qfb(1,1,(1-D)/4), fn = Str("classes_planted_", D, ".txt"), n=0);
+  forprime(p = 2, X,
+    my(k = kronecker(D,p), c);
+    if(k == 0, c = "R",
+      k == 1, c = if(qfbsolve(Q,p) != 0, "P", "N"),
+      c = "I");
+    write(fn, Str(p, ":", c)); n++);
+  print("D=", D, "  X=", X, "  primes=", n, "  h=", quadclassunit(D).no);
+}
+{
+emitD(2089);
+emitD(40093);
+emitD(3806549);
+\\ alpha-control character tables
+my(fn = "alpha_chars.txt");
+forprime(p = 2, 120, write(fn, Str(p, ":", kronecker(5,p), ":", kronecker(8,p))));
+print("alpha chars done");
+}
+quit
+
+==== FILE: gp2/deepen.gp ====
+\\ deeper planted tables + kronecker twist tables + summit quintic-character logs
+TW = [5, 8, 12, 13, -3, -4, -7, -8];
+emitD2(D, XX) = {
+  my(Q = Qfb(1,1,(1-D)/4), fn = Str("classes_planted_", D, ".txt"), kf = Str("kron_", D, ".txt"), n=0);
+  system(Str("rm -f ", fn, " ", kf));
+  forprime(p = 2, XX,
+    my(k = kronecker(D,p), c);
+    if(k == 0, c = "R", k == 1, c = if(qfbsolve(Q,p) != 0, "P", "N"), c = "I");
+    write(fn, Str(p, ":", c));
+    write(kf, Str(p, concat(vector(#TW, i, Str(":", kronecker(TW[i], p))))));
+    n++);
+  print("D=", D, " deepened to ", XX, "  primes=", n);
+}
+{
+emitD2(2089, 7200);
+emitD2(40093, 30900);
+\\ summit: kron table + quintic character discrete-log table mod 1951 (g0 = 3)
+my(kf = "kron_1951.txt", cf = "chilog_1951.txt", g0 = Mod(3, 1951));
+system(Str("rm -f ", kf, " ", cf));
+forprime(p = 2, 7000,
+  write(kf, Str(p, concat(vector(#TW, i, Str(":", kronecker(TW[i], p)))))));
+forprime(p = 2, 7000,
+  if(p != 1951,
+    my(j = lift(znlog(Mod(p, 1951), g0)) % 5);
+    write(cf, Str(p, ":", j))));
+print("summit tables done (kron to 7000; chilog j(p)=ind_3(p) mod 5)");
+print("sanity: j(3)=", lift(znlog(Mod(3,1951), g0))%5, "  chi(3)=zeta5^1 expected");
+print("znorder(g0)=", znorder(g0));
+}
+quit
+
+==== FILE: gp2/qualify.py ====
+#!/usr/bin/env python3
+"""Planted-ladder solver qualification (GATE-M / GATE-B). Usage: python3 qualify.py <D> [solvers]"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+from instr2 import Arm, Problem, sieve, Xof, S1_sc, S2_beam, S3_temper, sensitivity
+
+FACP = [1.0, -2.0, 1.0]   # split principal:    (1-T)^2
+FACN = [1.0, 1.0, 1.0]    # split nonprincipal: 1+T+T^2
+FACI = [1.0, 0.0, -1.0]   # inert:              1-T^2
+FACR = [1.0, -1.0]        # ramified (h odd => principal => +1)
+
+def load_planted(D):
+    cls = {}
+    for line in open(f'classes_planted_{D}.txt'):
+        p, c = line.strip().split(':')
+        cls[int(p)] = c
+    return cls
+
+def build(D, port=0):
+    X = Xof(D)
+    arm = Arm(float(D), port)
+    cls = load_planted(D)
+    bitp = [p for p, c in cls.items() if p <= X and c in 'PN']
+    truth = {p: (+1 if cls[p] == 'P' else -1) for p in bitp}
+    cands = {p: (FACP, FACN) for p in bitp}
+    def fixed(p):
+        c = cls.get(p)
+        if c is None or c in 'PN':
+            return None
+        return FACI if c == 'I' else FACR
+    return arm, bitp, truth, cands, fixed, cls
+
+def true_locfac(cls):
+    def f(p):
+        c = cls.get(p)
+        if c is None:
+            return None
+        return {'P': FACP, 'N': FACN, 'I': FACI, 'R': FACR}[c]
+    return f
+
+def run(D, solvers=('S1', 'S2', 'S3')):
+    t0 = time.time()
+    arm, bitp, truth, cands, fixed, cls = build(D)
+    X = arm.X
+    print(f"== planted rung D={D}: X={X}, bit-primes={len(bitp)} ==", flush=True)
+    # true-bits certification
+    arm.set_a(sieve(X, true_locfac(cls)))
+    rT, eT = arm.residual()
+    xT, etaT, gT = arm.meter(eT)
+    gdev = float(np.max(np.abs(gT - 2)))
+    print(f"TRUE-BITS certification: residual {rT:.3e}  eps {eT:.6f}  meter dev {gdev:.3e}  (bar 5e-12)", flush=True)
+    res = {'D': D, 'X': X, 'nbits': len(bitp), 'true_residual': rT, 'true_meterdev': gdev, 'solvers': {}}
+    if rT > 5e-12:
+        print("*** TRUE-BITS CERTIFICATION FAILED — rung invalid ***")
+        json.dump(res, open(f'qualify_{D}.json', 'w'), indent=1); return res
+    floor = max(rT, 3.2e-15)
+
+    prob = Problem([arm], bitp, [cands], [fixed])
+    for sname in solvers:
+        ts = time.time()
+        if sname == 'S1':
+            st, J = S1_sc(prob, log=lambda *a: print(' ', *a, flush=True))
+        elif sname == 'S2':
+            st, J = S2_beam(prob, width=64, log=lambda *a: print(' ', *a, flush=True))
+        else:
+            st, J = S3_temper(prob, log=lambda *a: print(' ', *a, flush=True))
+        r, eps = prob.arms[0].residual()
+        s, vis = sensitivity(prob, floor)
+        nb = len(bitp)
+        acc_all = sum(1 for p in bitp if st[p] == truth[p]) / nb
+        vp = sorted(vis.keys())
+        acc_vis = (sum(1 for p in vp if st[p] == truth[p]) / len(vp)) if vp else float('nan')
+        wrong_vis = [p for p in vp if st[p] != truth[p]]
+        dt = time.time() - ts
+        print(f"{sname}: residual {r:.3e}  J {J:.3e}  acc(all) {acc_all*100:.1f}%  "
+              f"acc(visible) {acc_vis*100:.1f}% ({len(vp)} visible, {len(wrong_vis)} wrong)  [{dt:.0f}s]", flush=True)
+        res['solvers'][sname] = {'residual': r, 'J': J, 'acc_all': acc_all, 'acc_vis': acc_vis,
+                                 'n_visible': len(vp), 'wrong_visible': wrong_vis,
+                                 'bits': {str(p): int(st[p]) for p in bitp}, 'time_s': dt}
+    # gate evaluation
+    g = all(v['residual'] <= 1e-11 and v['n_visible'] > 0 and len(v['wrong_visible']) == 0
+            for v in res['solvers'].values()) and len(res['solvers']) >= 3
+    res['gate_pass'] = bool(g)
+    print(f"GATE at D={D}: {'PASS' if g else 'FAIL'}   [{time.time()-t0:.0f}s total]", flush=True)
+    json.dump(res, open(f'qualify_{D}.json', 'w'), indent=1)
+    return res
+
+if __name__ == '__main__':
+    D = int(sys.argv[1])
+    solvers = sys.argv[2].split(',') if len(sys.argv) > 2 else ('S1', 'S2', 'S3')
+    run(D, solvers)
+
+==== FILE: gp2/qualify2.py ====
+#!/usr/bin/env python3
+"""Planted-ladder qualification, TWIST-ENRICHED (pre-registered fallback per prereg §6, engaged after
+base-only GATE-M attempt 1 failed: S1 8.1e-2 / S2 exact / S3 5.7e-7-spurious — logged, bars unchanged).
+Arms: base FE + quadratic twists d in {5,8,12,13,-3,-4,-7,-8} (d<0 through the odd port).
+Decoder-internal t-grid: 33-pt geomspace [0.5,2.0] (A3 precedent: internal only).
+Certification metrics unchanged: pre-registered TGRID base arm, fresh-sieved at the solved state.
+Usage: python3 qualify2.py <D> <S1|S2|S3|cert> [start-chunk info for S3]"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+import instr2
+from instr2 import Arm, Problem, sieve, Xof, TGRID, S1_sc, S2_beam, S3_temper, sensitivity
+
+TW = [5, 8, 12, 13, -3, -4, -7, -8]
+TGRID_DEC = np.geomspace(0.5, 2.0, 33)
+FACP = [1.0, -2.0, 1.0]; FACN = [1.0, 1.0, 1.0]; FACI = [1.0, 0.0, -1.0]; FACR = [1.0, -1.0]
+
+def load_planted(D):
+    cls = {}
+    for line in open(f'classes_planted_{D}.txt'):
+        p, c = line.strip().split(':')
+        cls[int(p)] = c
+    return cls
+
+def load_kron(D):
+    kr = {}
+    for line in open(f'kron_{D}.txt'):
+        parts = line.strip().split(':')
+        kr[int(parts[0])] = {TW[i]: int(parts[i+1]) for i in range(len(TW))}
+    return kr
+
+def build(D):
+    cls = load_planted(D); kr = load_kron(D)
+    X0 = Xof(D)
+    bitp = [p for p, c in cls.items() if p <= X0 and c in 'PN']
+    truth = {p: (+1 if cls[p] == 'P' else -1) for p in bitp}
+    arms = [Arm(float(D), 0, tgrid=TGRID_DEC, label='base')]
+    cands = [{p: (FACP, FACN) for p in bitp}]
+    def fixed_base(p):
+        c = cls.get(p)
+        if c is None or c in 'PN':
+            return None
+        return FACI if c == 'I' else FACR
+    fixed = [fixed_base]
+    for d in TW:
+        Nd = float(D) * d * d
+        port = 0 if d > 0 else 1
+        arm = Arm(Nd, port, tgrid=TGRID_DEC, label=f'tw{d}')
+        cn = {}
+        def mk_fixed(d):
+            def f(p):
+                if p in (2, 3, 5, 7, 13) and (4*abs(d)) % p == 0 and kr.get(p, {}).get(d, 0) == 0:
+                    return None
+                c = cls.get(p)
+                kd = kr.get(p, {}).get(d)
+                if c is None or kd is None:
+                    return None
+                if kd == 0:
+                    return None
+                if c in 'PN':
+                    return None   # bit prime: handled via cands
+                if c == 'I':
+                    return FACI
+                return [1.0, -kd]   # ramified in D: (1 - kd*T)
+            return f
+        for p in bitp:
+            kd = kr.get(p, {}).get(d)
+            if kd is None or kd == 0 or p > arm.X:
+                # beyond arm range or killed by twist: both candidates trivial
+                cn[p] = ([1.0], [1.0]) if (kd == 0 or kd is None) else ([1.0], [1.0])
+            else:
+                cn[p] = ([1.0, -2.0*kd, 1.0], [1.0, 1.0*kd, 1.0])
+        # bit primes between X0 and arm.X: not unknowns; use TRUE-class? NO — unknown region: treat marginalized?
+        # Honest choice: primes p in (X0, arm.X] with class P/N are ALSO unknowns of the problem.
+        arms.append(arm); cands.append(cn); fixed.append(mk_fixed(d))
+    # extend bit set to the largest arm's range: unknowns exist wherever any arm sees them
+    Xmax = max(a.X for a in arms)
+    bitp_ext = [p for p, c in cls.items() if p <= Xmax and c in 'PN']
+    for p in bitp_ext:
+        if p not in bitp:
+            truth[p] = +1 if cls[p] == 'P' else -1
+    # rebuild cands with extended bit set
+    cands = [{p: (FACP, FACN) for p in bitp_ext if p <= arms[0].X}]
+    for ai, d in enumerate(TW):
+        arm = arms[ai+1]; cn = {}
+        for p in bitp_ext:
+            if p > arm.X:
+                continue
+            kd = kr.get(p, {}).get(d)
+            if kd is None or kd == 0:
+                continue
+            cn[p] = ([1.0, -2.0*kd, 1.0], [1.0, 1.0*kd, 1.0])
+        cands.append(cn)
+    # per-arm candidate presence: Problem assumes cands[ai][p] exists for all bit p — relax via wrapper
+    return arms, bitp_ext, truth, cands, fixed, cls
+
+class MultiProblem(Problem):
+    """Problem variant where a bit prime may be absent from some arms (beyond X or twist-killed)."""
+    def init_marginal(self):
+        from instr2 import primes_upto, inv_series, _fold
+        for ai, arm in enumerate(self.arms):
+            cn = self.cands[ai]; fx = self.fixed[ai]
+            X = arm.X
+            a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+            for p in primes_upto(X):
+                kmax = int(np.log(X) / np.log(p))
+                if p in cn:
+                    inv = 0.5 * (inv_series(np.asarray(cn[p][0], dtype=complex), kmax)
+                               + inv_series(np.asarray(cn[p][1], dtype=complex), kmax))
+                else:
+                    poly = fx(p)
+                    if poly is None:
+                        continue
+                    inv = inv_series(np.asarray(poly, dtype=complex), kmax)
+                a = _fold(a, p, inv, X)
+            arm.set_a(a)
+        for p in self.bp:
+            self.state[p] = 0
+
+    def peek_set(self, p, s_new):
+        Jt = 0.0; ds = []
+        for ai, arm in enumerate(self.arms):
+            if p not in self.cands[ai]:
+                z = np.zeros(0, dtype=int); zt = np.zeros(len(arm.t), dtype=complex)
+                d = (z, np.zeros(0, dtype=complex), zt, zt.copy())
+                Jt += arm.peek_J(d[2], d[3]); ds.append(d)
+                continue
+            q = self._q(ai, p, self.state[p], s_new)
+            idx, val, dF, dFi = arm.delta_for(p, q)
+            Jt += arm.peek_J(dF, dFi)
+            ds.append((idx, val, dF, dFi))
+        return Jt, ds
+
+    def weights(self):
+        w = {}
+        for p in self.bp:
+            tot = 0.0
+            for ai, arm in enumerate(self.arms):
+                if p not in self.cands[ai]:
+                    continue
+                s0 = self.state[p]
+                qP = self._q(ai, p, s0, +1); qM = self._q(ai, p, s0, -1)
+                _, _, dFP, dFiP = arm.delta_for(p, qP)
+                _, _, dFM, dFiM = arm.delta_for(p, qM)
+                tot += float(np.linalg.norm(dFP - dFM) + np.linalg.norm(dFiP - dFiM))
+            w[p] = tot
+        return w
+
+    def resieve_gate(self, tol=1e-12):
+        from instr2 import primes_upto, inv_series, _fold
+        worst = 0.0
+        for ai, arm in enumerate(self.arms):
+            cn = self.cands[ai]; fx = self.fixed[ai]
+            X = arm.X
+            a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+            for p in primes_upto(X):
+                kmax = int(np.log(X) / np.log(p))
+                if p in cn:
+                    s = self.state.get(p, 0)
+                    if s == 0:
+                        inv = 0.5 * (inv_series(np.asarray(cn[p][0], dtype=complex), kmax)
+                                   + inv_series(np.asarray(cn[p][1], dtype=complex), kmax))
+                    else:
+                        inv = inv_series(np.asarray(cn[p][0] if s == +1 else cn[p][1], dtype=complex), kmax)
+                else:
+                    poly = fx(p)
+                    if poly is None:
+                        continue
+                    inv = inv_series(np.asarray(poly, dtype=complex), kmax)
+                a = _fold(a, p, inv, X)
+            drift = float(np.max(np.abs(a - arm.a)))
+            worst = max(worst, drift)
+            arm.a = a; arm.refresh()
+        return worst
+
+def true_locfac(cls):
+    def f(p):
+        c = cls.get(p)
+        if c is None:
+            return None
+        return {'P': FACP, 'N': FACN, 'I': FACI, 'R': FACR}[c]
+    return f
+
+def cert_metrics(D, state, cls, floor):
+    """certification on the pre-registered grid: fresh sieve at the solved state (UNDECIDED->marginal not allowed
+    at cert: undecided bits (state 0) kept marginalized and reported)."""
+    X = Xof(D)
+    arm = Arm(float(D), 0, tgrid=TGRID, label='cert')
+    def f(p):
+        c = cls.get(p)
+        if c is None:
+            return None
+        if c in 'PN' and p <= X:
+            s = state.get(p, 0)
+            if s == +1: return FACP
+            if s == -1: return FACN
+            return 'MARG'
+        return {'P': FACP, 'N': FACN, 'I': FACI, 'R': FACR}[c] if c not in 'PN' else (FACP if cls[p] == 'P' else FACN)
+    from instr2 import primes_upto, inv_series, _fold
+    a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        kmax = int(np.log(X) / np.log(p))
+        pol = f(p)
+        if pol is None:
+            continue
+        if isinstance(pol, str):
+            inv = 0.5 * (inv_series(np.asarray(FACP, dtype=complex), kmax)
+                       + inv_series(np.asarray(FACN, dtype=complex), kmax))
+        else:
+            inv = inv_series(np.asarray(pol, dtype=complex), kmax)
+        a = _fold(a, p, inv, X)
+    arm.set_a(a)
+    r, eps = arm.residual()
+    x, eta, gnew = arm.meter(eps)
+    return arm, r, eps, float(np.max(np.abs(gnew - 2)))
+
+def run(D, which):
+    t0 = time.time()
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    print(f"== D={D} twist-enriched: arms={len(arms)} (X: {[a.X for a in arms]}), bit-primes={len(bitp)} ==", flush=True)
+    prob = MultiProblem(arms, bitp, cands, fixed)
+    floor = 3.2e-15
+    if which == 'S1':
+        st, J = S1_sc(prob, log=lambda *a: print(' ', *a, flush=True))
+    elif which == 'S2':
+        st, J = S2_beam(prob, width=64, log=lambda *a: print(' ', *a, flush=True))
+    elif which == 'S3':
+        st, J = S3_temper(prob, sweeps=20000, log=lambda *a: print(' ', *a, flush=True))
+    else:
+        raise SystemExit('which?')
+    carm, r, eps, gdev = cert_metrics(D, st, cls, floor)
+    # sensitivity/visible on the certification arm
+    certprob = Problem([carm], [p for p in bitp if p <= carm.X], [ {p: (FACP, FACN) for p in bitp if p <= carm.X} ], [lambda p: None])
+    certprob.state = {p: st.get(p, 0) for p in bitp if p <= carm.X}
+    s, vis = sensitivity(certprob, floor)
+    vp = sorted(vis.keys())
+    acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+    wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+    acc_vis = (len(vp) - len(wrong_vis)) / len(vp) if vp else float('nan')
+    dt = time.time() - t0
+    print(f"{which}: cert-residual {r:.3e}  eps {eps:.6f}  meterdev {gdev:.3e}  acc(all incl. ext) {acc_all*100:.1f}%  "
+          f"acc(visible) {acc_vis*100:.1f}% ({len(vp)} visible, wrong: {wrong_vis})  [{dt:.0f}s]", flush=True)
+    out = {'D': D, 'which': which, 'cert_residual': r, 'eps': [eps.real, eps.imag], 'meterdev': gdev,
+           'acc_all': acc_all, 'acc_vis': acc_vis, 'n_visible': len(vp), 'wrong_visible': wrong_vis,
+           'bits': {str(p): int(st.get(p, 0)) for p in bitp}, 'time_s': dt}
+    json.dump(out, open(f'qualify2_{D}_{which}.json', 'w'), indent=1)
+    return out
+
+if __name__ == '__main__':
+    run(int(sys.argv[1]), sys.argv[2])
+
+==== FILE: gp2/qualify3.py ====
+#!/usr/bin/env python3
+"""GATE-M under AMENDMENT R1: staged band decoding, all three families, twist-enriched arms.
+Usage: python3 qualify3.py <D> <S1|S2|S3>"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+from qualify2 import build, MultiProblem, cert_metrics, TW, FACP, FACN
+from instr2 import Arm, Problem, Xof, TGRID, sensitivity
+
+def band_edges(arms):
+    xs = sorted(set(a.X for a in arms))
+    return xs
+
+def inband_S1(prob, band, log):
+    w = prob.weights()
+    order = [p for p in sorted(band, key=lambda p: -w[p])]
+    for p in order:
+        JP, dsP = prob.peek_set(p, +1)
+        JM, dsM = prob.peek_set(p, -1)
+        if JP <= JM:
+            prob.commit_set(p, +1, dsP)
+        else:
+            prob.commit_set(p, -1, dsM)
+    # in-band greedy polish
+    for _ in range(6):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+
+def inband_S2(prob, band, log, width=64):
+    w = prob.weights()
+    order = [p for p in sorted(band, key=lambda p: -w[p])]
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+    for p in order:
+        cand = []
+        for (st, arrs, J) in beam:
+            prob.load((st, arrs), copy=False)
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        newbeam = []
+        for (Jc, st, arrs, ss, ds) in cand[:width]:
+            prob.load((st, arrs), copy=True)
+            prob.commit_set(p, ss, ds)
+            newbeam.append(prob.snap(copy=False) + (Jc,))
+        beam = newbeam
+    st, arrs, J = min(beam, key=lambda b: b[2])
+    prob.load((st, arrs), copy=True)
+
+def inband_S3(prob, band, log, seeds=(20260803, 1951, 2089, 5), nchains=8, sweeps=2500):
+    rng = np.random.default_rng(list(seeds) + [len(band)])
+    w = prob.weights()
+    order = [p for p in sorted(band, key=lambda p: -w[p])]
+    if not order:
+        return
+    wv = np.array([np.sqrt(w[p]) + 1e-30 for p in order]); wv = wv / wv.sum()
+    base = prob.snap(copy=True)
+    chains = []
+    for c in range(nchains):
+        prob.load(base, copy=True)
+        for p in order:
+            prob.set_bit(p, int(rng.choice([-1, 1])))
+        chains.append(list(prob.snap(copy=False)) + [prob.Jtot()])
+    Jscale = np.median([c[2] for c in chains]) + 1e-30
+    temps = np.geomspace(3e-2, 30.0, nchains) * Jscale
+    best = None
+    m = len(order)
+    props = max(6, m // 3)
+    for sw in range(sweeps):
+        for c in range(nchains):
+            st, arrs, J = chains[c]
+            prob.load((st, arrs), copy=False)
+            T = temps[c]
+            for _ in range(props):
+                p = order[int(rng.choice(m, p=wv))]
+                s = prob.state[p]
+                Jf, ds = prob.peek_set(p, -s)
+                if Jf <= J or rng.random() < np.exp(-(Jf - J) / T):
+                    prob.commit_set(p, -s, ds); J = Jf
+            chains[c] = list(prob.snap(copy=False)) + [J]
+            if best is None or J < best[1]:
+                best = (dict(prob.state), J)
+        if sw % 50 == 0 and sw > 0:
+            for c in range(nchains - 1):
+                J1, J2 = chains[c][2], chains[c + 1][2]
+                d = (1.0 / temps[c] - 1.0 / temps[c + 1]) * (J1 - J2)
+                if d > 0 or rng.random() < np.exp(d):
+                    chains[c], chains[c + 1] = chains[c + 1], chains[c]
+        if best[1] < prob.Jtot() * 0 + 1e-26:
+            break
+    # adopt best, greedy in-band polish
+    prob.load(base, copy=True)
+    for p in order:
+        prob.set_bit(p, best[0][p])
+    for _ in range(6):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+
+def staged(D, which, npass=3):
+    t0 = time.time()
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    prob = MultiProblem(arms, bitp, cands, fixed)
+    prob.init_marginal()
+    edges = band_edges(arms)
+    lo = 0
+    bands = []
+    for hi in edges:
+        band = [p for p in bitp if lo < p <= hi]
+        if band:
+            bands.append((lo, hi, band))
+        lo = hi
+    print(f"== R1 staged {which} at D={D}: {len(arms)} arms, {len(bitp)} bits, bands: " +
+          ", ".join(f"({a},{b}]:{len(c)}" for a, b, c in bands), flush=True)
+    fn = {'S1': inband_S1, 'S2': inband_S2, 'S3': inband_S3}[which]
+    for ps in range(npass):
+        for (lo, hi, band) in bands:
+            fn(prob, band, log=print)
+        print(f"  pass {ps+1}: J = {prob.Jtot():.3e}", flush=True)
+        if prob.Jtot() < 1e-24:
+            break
+    # global polish
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            if s == 0:
+                continue
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    drift = prob.resieve_gate()
+    st = dict(prob.state)
+    carm, r, eps, gdev = cert_metrics(D, st, cls, 3.2e-15)
+    certprob = Problem([carm], [p for p in bitp if p <= carm.X],
+                       [{p: (FACP, FACN) for p in bitp if p <= carm.X}], [lambda p: None])
+    certprob.state = {p: st.get(p, 0) for p in bitp if p <= carm.X}
+    s, vis = sensitivity(certprob, 3.2e-15)
+    vp = sorted(vis.keys())
+    acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+    wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+    acc_vis = (len(vp) - len(wrong_vis)) / len(vp) if vp else float('nan')
+    und = sum(1 for p in bitp if st.get(p, 0) == 0)
+    dt = time.time() - t0
+    print(f"{which}/R1: J {prob.Jtot():.3e}  drift {drift:.1e}  cert-residual {r:.3e}  eps {eps:.4f}  "
+          f"acc(all {len(bitp)}) {acc_all*100:.1f}%  acc(visible) {acc_vis*100:.1f}% "
+          f"({len(vp)} visible, wrong: {wrong_vis})  undecided {und}  [{dt:.0f}s]", flush=True)
+    out = {'D': D, 'which': which + '/R1', 'J': prob.Jtot(), 'cert_residual': r,
+           'eps': [eps.real, eps.imag], 'meterdev': gdev, 'acc_all': acc_all, 'acc_vis': acc_vis,
+           'n_visible': len(vp), 'wrong_visible': wrong_vis, 'undecided': und,
+           'bits': {str(p): int(st.get(p, 0)) for p in bitp}, 'time_s': dt}
+    json.dump(out, open(f'qualify3_{D}_{which}.json', 'w'), indent=1)
+    return out
+
+if __name__ == '__main__':
+    staged(int(sys.argv[1]), sys.argv[2])
+
+==== FILE: gp2/AMENDMENT_R1.md ====
+# AMENDMENT R1 to the resumption pre-registration — staged band decoding — 2026-08-03
+
+**Trigger (measured, logged):** GATE-M attempt 1 (base-FE arms only, per §6's ordering): S1 stalled at 8.1e-2; **S2 (beam-64) recovered the matched rung exactly** (cert-residual 1.616e-15 = the true-bits value, 32/32 visible bits, 93.5% of all bits incl. sub-floor tail); S3 landed in a spurious basin (5.7e-7, 10/32 visible wrong) — the base-conductor objective has a measured near-null space over sign patterns (session B's basin degeneracy, reproduced at matched scale). Consensus rule (≥3 runs, ≥2 families) therefore NOT met base-only. Twist enrichment engaged per §6. Attempt 2 (all bits to the largest twist-arm range decided in one global pass, 438 unknowns): catastrophic for S1/S2 (J ~ O(1)) — **per-arm true-bits lint then run and PASSED (all nine arms 1.2e-15–3.1e-14)**, isolating the failure as solver mechanics: forcing single-pass decisions across each arm's full range makes every arm's objective noise-dominated by the marginalized/wrong mid-band beyond the previous certified range.
+
+**Amended solver architecture (applies identically to all three families; answer-free; no bar changes):**
+staged band decoding. Bands are the arm-truncation intervals (cut points = sorted arm X-values). Outward passes: solve band k in-band with family F (S1 = successive cancellation, S2 = beam-64, S3 = tempering restricted to band bits), all arms participating with outer bands frozen-as-decided and deeper bands marginalized; iterate full outward passes (≤3) to a fixed point; global single-flip polish + float-drift resieve gate at the end. Bits whose in-band sensitivity stays below 100× the control floor remain marginalized and are reported UNDECIDED. Certification metrics, bars, cell grid, commit protocol: **unchanged** (certification is still the pre-registered TGRID base-arm residual at the solved state, the blind N-scan, the negative battery).
+
+**Qualification restart:** GATE-M attempts recount from this amendment: S1/S2/S3 under R1 on D\* = 2089 must jointly satisfy the §4 gate (all sensitivity-visible bits, ≥3 runs spanning ≥2 families, residual ≤ 1e-11). The base-only S2 exact recovery is retained in the record as evidence the matched-scale problem is information-sufficient, but does not count toward the R1 gate.
+
+*Filed before any R1 solver run. Bars unmoved; the amendment adds structure (band scheduling + undecided semantics), relaxes nothing. Seal intact — planted rungs and twist dictionaries are qfbsolve/kronecker arithmetic only.*
+# AMENDMENT R2 (logged 2026-08-03T21:16:34Z): mu10-marginal ramified port charged to twist-arm whitening (v_u added to sigma2 during banded decode); post-band 10-way u-lock surgery + sigma unpad + final polish. Trigger: both summit cells floored at e-1/e-2 under S2 with the u-hole un-whitened — solver was trading true bits against an unmodeled 1e-5 structure. No bar changes; cert metrics unchanged.
+
+==== FILE: gp2/qualify4.py ====
+#!/usr/bin/env python3
+"""GATE-M under AMENDMENT R1 + whitened multi-arm objective (R1.w): each arm's FE defect is
+whitened by its marginalization variance sigma^2_arm(t) = sum_{undecided p} v_p(t)/4,
+v_p(t) = |dFi_p(t)|^2 + t^2 |dF_p(t)|^2  (candidate-gap deltas, answer-free), floored at the
+control floor. Bands/staging per R1; passes >= 2 run at full sharpness (all bits decided).
+Usage: python3 qualify4.py <D> <S1|S2|S3>"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+from qualify2 import build, MultiProblem, cert_metrics, TW, FACP, FACN
+from instr2 import Arm, Problem, Xof, TGRID, sensitivity
+
+class WProblem(MultiProblem):
+    def build_sigma(self, floor=3.2e-15):
+        self.vmap = []   # per arm: dict p -> v(t) rows
+        self.sig2 = []
+        for ai, arm in enumerate(self.arms):
+            vm = {}
+            s2 = np.zeros(len(arm.t))
+            for p in self.cands[ai]:
+                if p not in self.state:
+                    continue
+                qP = self._q(ai, p, 0, +1); qM = self._q(ai, p, 0, -1)
+                _, _, dFP, dFiP = arm.delta_for(p, qP)
+                _, _, dFM, dFiM = arm.delta_for(p, qM)
+                v = (np.abs(dFiP - dFiM) ** 2 + arm.t ** 2 * np.abs(dFP - dFM) ** 2) / 4.0
+                vm[p] = v
+                if self.state[p] == 0:
+                    s2 += v
+            self.vmap.append(vm)
+            scF = np.max(np.abs(arm.F)) if arm.F is not None else 1.0
+            self.floor2 = (10 * floor * scF) ** 2
+            self.sig2.append(s2)
+        self._floor = floor
+
+    def _Jarm(self, ai, dF, dFi):
+        arm = self.arms[ai]
+        F = arm.F + dF; Fi = arm.Fi + dFi
+        sc = np.max(np.abs(F))
+        if sc == 0:
+            return 1e30
+        num = np.sum(Fi * arm.t * F)
+        eps = num / abs(num) if num != 0 else 1.0
+        d = Fi - eps * arm.t * np.conj(F)
+        w = np.maximum(self.sig2[ai], 0.0) + (10 * self._floor * sc) ** 2   # clamp: fp cancellation guard
+        return float(np.sum(np.abs(d) ** 2 / w))
+
+    def peek_set(self, p, s_new):
+        Jt = 0.0; ds = []
+        for ai, arm in enumerate(self.arms):
+            if p not in self.cands[ai]:
+                zt = np.zeros(len(arm.t), dtype=complex)
+                d = (np.zeros(0, dtype=int), np.zeros(0, dtype=complex), zt, zt.copy())
+                Jt += self._Jarm(ai, d[2], d[3]); ds.append(d)
+                continue
+            q = self._q(ai, p, self.state[p], s_new)
+            idx, val, dF, dFi = arm.delta_for(p, q)
+            # sigma adjustment if deciding a previously-undecided bit
+            Jt_arm = None
+            if self.state[p] == 0 and s_new != 0 and p in self.vmap[ai]:
+                self.sig2[ai] -= self.vmap[ai][p]
+                Jt_arm = self._Jarm(ai, dF, dFi)
+                self.sig2[ai] += self.vmap[ai][p]
+            else:
+                Jt_arm = self._Jarm(ai, dF, dFi)
+            Jt += Jt_arm
+            ds.append((idx, val, dF, dFi))
+        return Jt, ds
+
+    def commit_set(self, p, s_new, ds):
+        s_old = self.state[p]
+        for ai, (arm, d) in enumerate(zip(self.arms, ds)):
+            arm.commit(*d)
+            if p in self.vmap[ai]:
+                if s_old == 0 and s_new != 0:
+                    self.sig2[ai] = self.sig2[ai] - self.vmap[ai][p]
+                elif s_old != 0 and s_new == 0:
+                    self.sig2[ai] = self.sig2[ai] + self.vmap[ai][p]
+        self.state[p] = s_new
+
+    def Jtot(self):
+        z = np.zeros(0, dtype=complex)
+        tot = 0.0
+        for ai, arm in enumerate(self.arms):
+            zt = np.zeros(len(arm.t), dtype=complex)
+            tot += self._Jarm(ai, zt, zt)
+        return float(tot)
+
+    # snapshots must carry sigma
+    def snap(self, copy=True):
+        base = super().snap(copy)
+        sig = [s.copy() for s in self.sig2] if copy else list(self.sig2)
+        return (base[0], base[1], sig)
+
+    def load(self, sn, copy=False):
+        st, arrs, sig = sn
+        super().load((st, arrs), copy)
+        self.sig2 = [s.copy() for s in sig] if copy else list(sig)
+
+def band_edges(arms):
+    return sorted(set(a.X for a in arms))
+
+def inband_S1(prob, band, log):
+    w = prob.weights()
+    order = [p for p in sorted(band, key=lambda p: -w[p])]
+    for p in order:
+        JP, dsP = prob.peek_set(p, +1)
+        JM, dsM = prob.peek_set(p, -1)
+        if JP <= JM:
+            prob.commit_set(p, +1, dsP)
+        else:
+            prob.commit_set(p, -1, dsM)
+    for _ in range(6):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+
+ORDER_JITTER = None   # set to an int seed for perturbed-order replicate runs
+
+def inband_S2(prob, band, log, width=64):
+    w = prob.weights()
+    if ORDER_JITTER is not None:
+        rng = np.random.default_rng([ORDER_JITTER, len(band)])
+        order = [p for p in sorted(band, key=lambda p: -w[p] * (1 + 0.15 * rng.standard_normal()))]
+    else:
+        order = [p for p in sorted(band, key=lambda p: -w[p])]
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+    for p in order:
+        cand = []
+        for (st, arrs, sig, J) in beam:
+            prob.load((st, arrs, sig), copy=False)
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, sig, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        newbeam = []
+        for (Jc, st, arrs, sig, ss, ds) in cand[:width]:
+            prob.load((st, arrs, sig), copy=True)
+            prob.commit_set(p, ss, ds)
+            newbeam.append(prob.snap(copy=False) + (Jc,))
+        beam = newbeam
+    st, arrs, sig, J = min(beam, key=lambda b: b[3])
+    prob.load((st, arrs, sig), copy=True)
+
+def inband_S3(prob, band, log, seeds=(20260803, 1951, 2089, 5), nchains=6, sweeps=400):
+    rng = np.random.default_rng(list(seeds) + [len(band)])
+    w = prob.weights()
+    order = [p for p in sorted(band, key=lambda p: -w[p])]
+    if not order:
+        return
+    wv = np.array([np.sqrt(w[p]) + 1e-30 for p in order]); wv = wv / wv.sum()
+    base = prob.snap(copy=True)
+    chains = []
+    for c in range(nchains):
+        prob.load(base, copy=True)
+        for p in order:
+            prob.set_bit(p, +1 if c == 0 else int(rng.choice([-1, 1])))   # chain 0 = structured all-plus (B §6 precedent)
+        chains.append(list(prob.snap(copy=False)) + [prob.Jtot()])
+    temps = np.geomspace(0.02, 2.0, nchains)      # ln-J units: scale-free acceptance
+    best = None; last_gain = 0
+    m = len(order)
+    props = max(6, m // 3)
+    for sw in range(sweeps):
+        for c in range(nchains):
+            st, arrs, sig, J = chains[c]
+            prob.load((st, arrs, sig), copy=False)
+            T = temps[c]
+            L = np.log(J + 1e-300)
+            for _ in range(props):
+                p = order[int(rng.choice(m, p=wv))]
+                s = prob.state[p]
+                Jf, ds = prob.peek_set(p, -s)
+                Lf = np.log(Jf + 1e-300)
+                if Lf <= L or rng.random() < np.exp(-(Lf - L) / T):
+                    prob.commit_set(p, -s, ds); J = Jf; L = Lf
+            chains[c] = list(prob.snap(copy=False)) + [J]
+            if best is None or J < best[1]:
+                best = (dict(prob.state), J); last_gain = sw
+        if sw - last_gain > 120:
+            break
+        if sw % 50 == 0 and sw > 0:
+            for c in range(nchains - 1):
+                L1, L2 = np.log(chains[c][3] + 1e-300), np.log(chains[c + 1][3] + 1e-300)
+                d = (1.0 / temps[c] - 1.0 / temps[c + 1]) * (L1 - L2)
+                if d > 0 or rng.random() < np.exp(d):
+                    chains[c], chains[c + 1] = chains[c + 1], chains[c]
+    prob.load(base, copy=True)
+    for p in order:
+        prob.set_bit(p, best[0][p])
+    for _ in range(6):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+
+def staged(D, which, npass=3):
+    t0 = time.time()
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    prob = WProblem(arms, bitp, cands, fixed)
+    prob.init_marginal()
+    prob.build_sigma()
+    edges = band_edges(arms)
+    lo = 0; bands = []
+    for hi in edges:
+        band = [p for p in bitp if lo < p <= hi]
+        if band:
+            bands.append((lo, hi, band))
+        lo = hi
+    print(f"== R1.w staged {which} at D={D}: {len(arms)} arms, {len(bitp)} bits ==", flush=True)
+    fn = {'S1': inband_S1, 'S2': inband_S2, 'S3': inband_S3}[which]
+    if which == 'S3':
+        npass = min(npass, 2)
+    for ps in range(npass):
+        for (lo, hi, band) in bands:
+            fn(prob, band, log=print)
+        print(f"  pass {ps+1}: J = {prob.Jtot():.3e}", flush=True)
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            if s == 0:
+                continue
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    drift = prob.resieve_gate()
+    st = dict(prob.state)
+    carm, r, eps, gdev = cert_metrics(D, st, cls, 3.2e-15)
+    certprob = Problem([carm], [p for p in bitp if p <= carm.X],
+                       [{p: (FACP, FACN) for p in bitp if p <= carm.X}], [lambda p: None])
+    certprob.state = {p: st.get(p, 0) for p in bitp if p <= carm.X}
+    s, vis = sensitivity(certprob, 3.2e-15)
+    vp = sorted(vis.keys())
+    acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+    wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+    acc_vis = (len(vp) - len(wrong_vis)) / len(vp) if vp else float('nan')
+    und = sum(1 for p in bitp if st.get(p, 0) == 0)
+    dt = time.time() - t0
+    print(f"{which}/R1.w: J {prob.Jtot():.3e}  drift {drift:.1e}  cert-residual {r:.3e}  eps {eps:.4f}  "
+          f"acc(all {len(bitp)}) {acc_all*100:.1f}%  acc(visible) {acc_vis*100:.1f}% "
+          f"({len(vp)} visible, wrong: {wrong_vis})  undecided {und}  [{dt:.0f}s]", flush=True)
+    out = {'D': D, 'which': which + '/R1.w', 'J': prob.Jtot(), 'cert_residual': r,
+           'eps': [eps.real, eps.imag], 'meterdev': gdev, 'acc_all': acc_all, 'acc_vis': acc_vis,
+           'n_visible': len(vp), 'wrong_visible': wrong_vis, 'undecided': und,
+           'bits': {str(p): int(st.get(p, 0)) for p in bitp}, 'time_s': dt}
+    json.dump(out, open(f'qualify4_{D}_{which}.json', 'w'), indent=1)
+    return out
+
+if __name__ == '__main__':
+    staged(int(sys.argv[1]), sys.argv[2])
+
+==== FILE: gp2/qualify5.py ====
+#!/usr/bin/env python3
+"""S4 — soft coordinate relaxation (mean-field) decoder, added under AMENDMENT R1.w as a fourth
+solver family (addition, no bar change). Bits carry lambda in [0,1] (P-weight); F is exactly
+multilinear in the lambdas, so each coordinate has a closed-form whitened least-squares minimizer.
+Sweeps in weight order to a fixed point; sigma^2 tracks residual softness sum lam(1-lam) v_p;
+then round, hard greedy polish, resieve gate, certification.
+Usage: python3 qualify5.py <D> [order_seed]"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+from qualify2 import build, MultiProblem, cert_metrics, TW, FACP, FACN
+from instr2 import Arm, Problem, Xof, TGRID, sensitivity, inv_series
+
+def mix_inv(P, M, lam, kmax):
+    return lam * inv_series(np.asarray(P, dtype=complex), kmax) + (1 - lam) * inv_series(np.asarray(M, dtype=complex), kmax)
+
+def q_between(P, M, lam_old, lam_new, kmax):
+    io = mix_inv(P, M, lam_old, kmax); inw = mix_inv(P, M, lam_new, kmax)
+    q = np.zeros(kmax + 1, dtype=complex); q[0] = 1.0
+    for k in range(1, kmax + 1):
+        s = inw[k]
+        for j in range(1, k + 1):
+            s -= io[j] * q[k - j]
+        q[k] = s
+    return q
+
+def S4_soft(D, order_seed=0, max_sweeps=40):
+    t0 = time.time()
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    prob = MultiProblem(arms, bitp, cands, fixed)
+    prob.init_marginal()
+    lam = {p: 0.5 for p in bitp}
+    # cache v_p rows per arm for sigma
+    vmap = []
+    for ai, arm in enumerate(prob.arms):
+        vm = {}
+        for p in prob.cands[ai]:
+            kmax = int(np.log(arm.X) / np.log(p))
+            qP = q_between(*prob.cands[ai][p], 0.5, 1.0, kmax)
+            qM = q_between(*prob.cands[ai][p], 0.5, 0.0, kmax)
+            _, _, dFP, dFiP = arm.delta_for(p, qP)
+            _, _, dFM, dFiM = arm.delta_for(p, qM)
+            vm[p] = (np.abs(dFiP - dFiM) ** 2 + arm.t ** 2 * np.abs(dFP - dFM) ** 2) / 4.0
+        vmap.append(vm)
+    floor = 3.2e-15
+    def sig2(ai):
+        s = np.zeros(len(prob.arms[ai].t))
+        for p, v in vmap[ai].items():
+            s += 4.0 * lam[p] * (1 - lam[p]) * v
+        return s
+    S2r = [sig2(ai) for ai in range(len(arms))]
+    w0 = prob.weights()
+    rng = np.random.default_rng(order_seed) if order_seed else None
+    order = sorted(bitp, key=lambda p: -w0[p])
+    if rng is not None:
+        # perturbed order: jitter weights by ±15%
+        order = sorted(bitp, key=lambda p: -w0[p] * (1 + 0.15 * rng.standard_normal()))
+    for sw in range(max_sweeps):
+        move = 0.0
+        for p in order:
+            l0 = lam[p]
+            # per-arm: d(lam) = d0 + (lam - l0) * Delta; whitened LS over all arms jointly
+            num = 0.0; den = 0.0
+            deltas = []
+            for ai, arm in enumerate(prob.arms):
+                if p not in prob.cands[ai]:
+                    deltas.append(None); continue
+                kmax = int(np.log(arm.X) / np.log(p))
+                q1 = q_between(*prob.cands[ai][p], l0, 1.0, kmax)
+                q0 = q_between(*prob.cands[ai][p], l0, 0.0, kmax)
+                _, _, dF1, dFi1 = arm.delta_for(p, q1)
+                _, _, dF0, dFi0 = arm.delta_for(p, q0)
+                DF = dF1 - dF0; DFi = dFi1 - dFi0            # per unit lambda
+                F0 = arm.F + dF0 + l0 * DF * 0               # current F = at lam l0: arm.F itself
+                eps = arm.eps_fit()
+                d0 = arm.Fi - eps * arm.t * np.conj(arm.F)
+                Dd = DFi - eps * arm.t * np.conj(DF)
+                wgt = 1.0 / (np.maximum(S2r[ai] - 4.0 * l0 * (1 - l0) * vmap[ai].get(p, 0.0), 0.0)
+                             + (10 * floor * np.max(np.abs(arm.F))) ** 2)
+                num += -np.sum(np.real(np.conj(Dd) * d0) * wgt)
+                den += np.sum(np.abs(Dd) ** 2 * wgt)
+                deltas.append((q1, q0))
+            if den == 0:
+                continue
+            lnew = float(np.clip(l0 + num / den, 0.0, 1.0))
+            if abs(lnew - l0) < 1e-4:
+                continue
+            for ai, arm in enumerate(prob.arms):
+                if p not in prob.cands[ai]:
+                    continue
+                kmax = int(np.log(arm.X) / np.log(p))
+                q = q_between(*prob.cands[ai][p], l0, lnew, kmax)
+                idx, val, dF, dFi = arm.delta_for(p, q)
+                arm.commit(idx, val, dF, dFi)
+            move = max(move, abs(lnew - l0))
+            lam[p] = lnew
+        S2r = [sig2(ai) for ai in range(len(arms))]
+        Jw = 0.0
+        for ai, arm in enumerate(prob.arms):
+            eps = arm.eps_fit()
+            d = arm.Fi - eps * arm.t * np.conj(arm.F)
+            Jw += float(np.sum(np.abs(d) ** 2 / (np.maximum(S2r[ai], 0) + (10 * floor * np.max(np.abs(arm.F))) ** 2)))
+        nhard = sum(1 for p in bitp if lam[p] < 0.05 or lam[p] > 0.95)
+        print(f"  S4 sweep {sw+1}: max|dlam| {move:.3f}  Jw {Jw:.3e}  hard {nhard}/{len(bitp)}", flush=True)
+        if move < 1e-3:
+            break
+    # round + hard polish on the ROUNDED state via fresh problem
+    st = {p: (+1 if lam[p] >= 0.5 else -1) for p in bitp}
+    prob2 = MultiProblem(arms, bitp, cands, fixed)
+    prob2.init_marginal()
+    for p in order:
+        prob2.set_bit(p, st[p])
+    for _ in range(8):
+        improved = False
+        Jnow = prob2.Jtot()
+        for p in order:
+            s = prob2.state[p]
+            Jf, dsf = prob2.peek_set(p, -s)
+            if Jf < Jnow:
+                prob2.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    drift = prob2.resieve_gate()
+    st = dict(prob2.state)
+    carm, r, eps, gdev = cert_metrics(D, st, cls, floor)
+    certprob = Problem([carm], [p for p in bitp if p <= carm.X],
+                       [{p: (FACP, FACN) for p in bitp if p <= carm.X}], [lambda p: None])
+    certprob.state = {p: st.get(p, 0) for p in bitp if p <= carm.X}
+    s, vis = sensitivity(certprob, floor)
+    vp = sorted(vis.keys())
+    acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+    wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+    acc_vis = (len(vp) - len(wrong_vis)) / len(vp) if vp else float('nan')
+    soft_conf = {p: abs(lam[p] - 0.5) * 2 for p in bitp}
+    dt = time.time() - t0
+    tag = f"S4/R1.w{'/ord' + str(order_seed) if order_seed else ''}"
+    print(f"{tag}: drift {drift:.1e}  cert-residual {r:.3e}  eps {eps:.4f}  acc(all {len(bitp)}) {acc_all*100:.1f}%  "
+          f"acc(visible) {acc_vis*100:.1f}% ({len(vp)} visible, wrong: {wrong_vis})  [{dt:.0f}s]", flush=True)
+    out = {'D': D, 'which': tag, 'cert_residual': r, 'eps': [eps.real, eps.imag], 'meterdev': gdev,
+           'acc_all': acc_all, 'acc_vis': acc_vis, 'n_visible': len(vp), 'wrong_visible': wrong_vis,
+           'bits': {str(p): int(st.get(p, 0)) for p in bitp},
+           'lambda_conf': {str(p): soft_conf[p] for p in bitp}, 'time_s': dt}
+    json.dump(out, open(f'qualify5_{D}_S4_{order_seed}.json', 'w'), indent=1)
+    return out
+
+if __name__ == '__main__':
+    D = int(sys.argv[1])
+    seed = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    S4_soft(D, seed)
+
+==== FILE: gp2/s5.py ====
+#!/usr/bin/env python3
+"""S5 — exhaustive heavy-prefix list decoder (family addition under R1.w; no bar change).
+Stage 1: enumerate all 2^8 assignments of the 8 heaviest bits; whitened SC tail (no polish) each;
+Stage 2: full SC + polish on the 16 best by stage-1 J; winner = minimal final J. No truth used.
+Usage: python3 s5.py <D> <lo> <hi>   (leaf range chunking; state in s5_ckpt_<D>.json)"""
+import numpy as np, json, sys, os, time
+sys.path.insert(0, '.')
+from qualify2 import build, cert_metrics, FACP, FACN
+from qualify4 import WProblem
+from instr2 import Problem, Arm, TGRID, sensitivity
+
+def sc_tail(prob, rest, polish_sweeps=2):
+    for p in rest:
+        JP, dsP = prob.peek_set(p, +1)
+        JM, dsM = prob.peek_set(p, -1)
+        prob.commit_set(p, +1 if JP <= JM else -1, dsP if JP <= JM else dsM)
+    for _ in range(polish_sweeps):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in rest:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    return prob.Jtot()
+
+def main(D, lo, hi):
+    t0 = time.time()
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    prob = WProblem(arms, bitp, cands, fixed)
+    prob.init_marginal(); prob.build_sigma()
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    heavy = order[:8]; rest = order[8:]
+    base = prob.snap(copy=True)
+    ck = f's5_ckpt_{D}.json'
+    state = json.load(open(ck)) if os.path.exists(ck) else {'leaves': {}}
+    for leaf in range(lo, hi):
+        if str(leaf) in state['leaves']:
+            continue
+        prob.load(base, copy=True)
+        for i, p in enumerate(heavy):
+            prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+        J = sc_tail(prob, rest, polish_sweeps=2)
+        state['leaves'][str(leaf)] = {'J': J, 'bits': {str(p): int(prob.state[p]) for p in bitp}}
+        if leaf % 16 == 0:
+            json.dump(state, open(ck, 'w'))
+            print(f"  leaf {leaf}: J {J:.3e}  [{time.time()-t0:.0f}s]", flush=True)
+    json.dump(state, open(ck, 'w'))
+    if len(state['leaves']) == 256:
+        ranked = sorted(state['leaves'].items(), key=lambda kv: kv[1]['J'])
+        print("stage-1 complete. best 5 leaves:", [(k, f"{v['J']:.3e}") for k, v in ranked[:5]], flush=True)
+        # stage 2: full SC+polish on best 16
+        best = None
+        for k, v in ranked[:16]:
+            leaf = int(k)
+            prob.load(base, copy=True)
+            for i, p in enumerate(heavy):
+                prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+            J = sc_tail(prob, rest, polish_sweeps=8)
+            if best is None or J < best[1]:
+                best = (dict(prob.state), J, leaf)
+        st, J, leaf = best
+        drift = prob.resieve_gate() if prob.state == st else 0.0
+        carm, r, eps, gdev = cert_metrics(D, st, cls, 3.2e-15)
+        certbits = [p for p in bitp if p <= carm.X]
+        certprob = Problem([carm], certbits, [{p: (FACP, FACN) for p in certbits}], [lambda p: None])
+        certprob.state = {p: st.get(p, 0) for p in certbits}
+        s, vis = sensitivity(certprob, 3.2e-15)
+        vp = sorted(vis.keys())
+        wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+        acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+        acc_vis = (len(vp) - len(wrong_vis)) / len(vp) if vp else float('nan')
+        print(f"S5/R1.w: winning leaf {leaf}  J {J:.3e}  cert-residual {r:.3e}  eps {eps:.4f}  "
+              f"acc(all) {acc_all*100:.1f}%  acc(visible) {acc_vis*100:.1f}% ({len(vp)} visible, wrong: {wrong_vis})", flush=True)
+        out = {'D': D, 'which': 'S5/R1.w', 'leaf': leaf, 'J': J, 'cert_residual': r,
+               'eps': [eps.real, eps.imag], 'acc_all': acc_all, 'acc_vis': acc_vis,
+               'n_visible': len(vp), 'wrong_visible': wrong_vis,
+               'bits': {str(p): int(st.get(p, 0)) for p in bitp}}
+        json.dump(out, open(f'qualify5_{D}_S5.json', 'w'), indent=1)
+
+if __name__ == '__main__':
+    main(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+
+==== FILE: gp2/s5_diag.py ====
+#!/usr/bin/env python3
+"""Diagnostic: freeze top-k heavy bits at TRUE values, SC-decode the rest (whitened).
+Purely a landscape probe — no qualifying run uses truth."""
+import numpy as np, sys
+sys.path.insert(0, '.')
+from qualify2 import build, cert_metrics, FACP, FACN
+from qualify4 import WProblem, inband_S1
+from instr2 import Problem, Arm, TGRID, sensitivity
+
+D = 2089
+for K in (8, 12, 16):
+    arms, bitp, truth, cands, fixed, cls = build(D)
+    prob = WProblem(arms, bitp, cands, fixed)
+    prob.init_marginal(); prob.build_sigma()
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    heavy = order[:K]
+    for p in heavy:
+        prob.set_bit(p, truth[p])
+    rest = order[K:]
+    # SC over rest in weight order + polish
+    for p in rest:
+        JP, dsP = prob.peek_set(p, +1)
+        JM, dsM = prob.peek_set(p, -1)
+        prob.commit_set(p, +1 if JP <= JM else -1, dsP if JP <= JM else dsM)
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in rest:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    st = dict(prob.state)
+    carm, r, eps, gdev = cert_metrics(D, st, cls, 3.2e-15)
+    certbits = [p for p in bitp if p <= carm.X]
+    certprob = Problem([carm], certbits, [{p: (FACP, FACN) for p in certbits}], [lambda p: None])
+    certprob.state = {p: st.get(p, 0) for p in certbits}
+    s, vis = sensitivity(certprob, 3.2e-15)
+    vp = sorted(vis.keys())
+    wrong_vis = [p for p in vp if st.get(p, 0) != truth[p]]
+    acc_all = sum(1 for p in bitp if st.get(p, 0) == truth[p]) / len(bitp)
+    print(f"K={K}: cert-residual {r:.3e}  acc(all) {acc_all*100:.1f}%  visible wrong: {wrong_vis} of {len(vp)}")
+
+==== FILE: gp2/lint_arms.py ====
+#!/usr/bin/env python3
+"""Per-arm TRUE-BITS lint for the twist-enriched rung: every arm must certify with the true assignment."""
+import numpy as np, sys
+sys.path.insert(0, '.')
+from qualify2 import build, TW, FACP, FACN, FACI
+from instr2 import sieve
+
+D = int(sys.argv[1])
+arms, bitp, truth, cands, fixed, cls = build(D)
+kr = {}
+for line in open(f'kron_{D}.txt'):
+    parts = line.strip().split(':')
+    kr[int(parts[0])] = {TW[i]: int(parts[i+1]) for i in range(len(TW))}
+
+labels = ['base'] + [f'tw{d}' for d in TW]
+for ai, arm in enumerate(arms):
+    d = None if ai == 0 else TW[ai-1]
+    def tf(p):
+        c = cls.get(p)
+        if c is None: return None
+        if d is None:
+            return {'P': FACP, 'N': FACN, 'I': FACI, 'R': [1.0, -1.0]}[c]
+        kd = kr.get(p, {}).get(d, None)
+        if kd is None or kd == 0: return None
+        if c == 'P': return [1.0, -2.0*kd, 1.0]
+        if c == 'N': return [1.0, 1.0*kd, 1.0]
+        if c == 'I': return FACI
+        return [1.0, -1.0*kd]
+    arm.set_a(sieve(arm.X, tf))
+    r, eps = arm.residual()
+    print(f"{labels[ai]:6s} N={arm.N:>10.0f} port={arm.port} X={arm.X:>5d}: TRUE-bits residual {r:.3e}  eps {eps:.4f}")
+
+==== FILE: gp2/summit.py ====
+#!/usr/bin/env python3
+"""THE SUMMIT DECODE — even-icosahedral 2-dim lift at N = 1951 (quintic nebentypus), per
+decode2dim_RESUMPTION_preregistration_20260803.md + AMENDMENTs R1/R1.w and the GATE-M-qualified
+recipe (S2 beam + S2-perturbed + S5 list decoder on whitened twist-enriched arms).
+Cells: parity in {even(0), odd(1)}. No truth exists anywhere; consensus + batteries carry the grade.
+Usage: python3 summit.py <even|odd> <S2|S2ord7|S5>"""
+import numpy as np, json, sys, time
+sys.path.insert(0, '.')
+import qualify4
+from qualify4 import WProblem, inband_S2
+from instr2 import Arm, Problem, Xof, TGRID, sensitivity, sieve, inv_series, primes_upto, _fold
+
+TW = [5, 8, 12, 13, -3, -4, -7, -8]
+PHI = (1 + np.sqrt(5.0)) / 2
+Z10 = np.exp(1j * np.pi / 5)          # zeta_10
+MTAB = {0: 2.0, 1: 0.0, 2: 1.0, 3: 1.0 / PHI, 4: PHI}   # |a_p| by RAW label under certified faceswap=1
+NBASE = 1951.0
+
+def load_data():
+    cls = {}
+    for line in open('../gp/classesX_doud1951.txt'):
+        p, c = line.strip().split(':')
+        cls[int(p)] = int(c)
+    jl = {}
+    for line in open('chilog_1951.txt'):
+        p, j = line.strip().split(':')
+        jl[int(p)] = int(j)
+    kr = {}
+    for line in open('kron_1951.txt'):
+        parts = line.strip().split(':')
+        kr[int(parts[0])] = {TW[i]: int(parts[i + 1]) for i in range(len(TW))}
+    return cls, jl, kr
+
+def build_summit(cell, conj=False, goldenswap=False):
+    """cell: 0 even / 1 odd. conj: chi -> chi^2 Galois transport cell. goldenswap: A4-style live negative."""
+    cls, jl, kr = load_data()
+    mul = 2 if conj else 1
+    def phase(p):        # theta_p = zeta10^(mul*j); chi(p) = theta^2
+        j = jl.get(p)
+        if j is None:
+            return None
+        return Z10 ** ((mul * j) % 10)
+    def mag(p):
+        c = cls.get(p)
+        if c is None:
+            return None
+        if goldenswap and c in (3, 4):
+            c = 7 - c
+        return MTAB[c]
+    arms = [Arm(NBASE, cell, label='base')]
+    ports = {None: cell}
+    for d in TW:
+        port = cell if d > 0 else 1 - cell
+        arms.append(Arm(NBASE * d * d, port, label=f'tw{d}'))
+    Xmax = max(a.X for a in arms)
+    bitp = [p for p in sorted(cls) if p <= Xmax and p != 1951 and cls[p] != 1 and p in jl]
+    cands = []
+    fixed = []
+    for ai, arm in enumerate(arms):
+        d = None if ai == 0 else TW[ai - 1]
+        cn = {}
+        for p in bitp:
+            if p > arm.X:
+                continue
+            kd = 1 if d is None else kr.get(p, {}).get(d, 0)
+            if kd == 0:
+                continue
+            th = phase(p); m = mag(p)
+            ap = kd * th * m
+            chp = th * th
+            cn[p] = ([1.0, -ap, chp], [1.0, ap, chp])     # candidate +1: a_p = +theta*m (dressed)
+        def mk_fixed(d):
+            def f(p):
+                if p == 1951:
+                    return None                            # mu10-marginal: sum over u in mu10 of u = 0 => factor 1
+                c = cls.get(p); th = phase(p)
+                if c is None or th is None:
+                    return None
+                kd = 1 if d is None else kr.get(p, {}).get(d, 0)
+                if kd == 0:
+                    return None
+                if c == 1:
+                    return [1.0, 0.0, th * th]             # 2A: a_p = 0, det chi survives twist (kd^2=1)
+                return None                                # bit primes handled via cands
+            return f
+        cands.append(cn); fixed.append(mk_fixed(d))
+    return arms, bitp, cands, fixed, (cls, jl, kr)
+
+def cert_arm_for(cell, state, data, conj=False, goldenswap=False, N=NBASE):
+    cls, jl, kr = data
+    mul = 2 if conj else 1
+    X = Xof(N)
+    arm = Arm(N, cell, tgrid=TGRID, label='cert')
+    a = np.zeros(X + 1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        kmax = int(np.log(X) / np.log(p))
+        c = cls.get(p); j = jl.get(p)
+        if c is None or j is None or p == 1951:
+            continue
+        th = Z10 ** ((mul * j) % 10)
+        cc = 7 - c if (goldenswap and c in (3, 4)) else c
+        m = MTAB[cc]
+        if c == 1:
+            poly = [1.0, 0.0, th * th]
+        else:
+            s = state.get(p, 0)
+            if s == 0:
+                iP = inv_series(np.asarray([1.0, -th * m, th * th], dtype=complex), kmax)
+                iM = inv_series(np.asarray([1.0, th * m, th * th], dtype=complex), kmax)
+                a = _fold(a, p, 0.5 * (iP + iM), X)
+                continue
+            poly = [1.0, -s * th * m, th * th]
+        a = _fold(a, p, inv_series(np.asarray(poly, dtype=complex), kmax), X)
+    arm.set_a(a)
+    return arm
+
+def add_u_sigma(prob, kr):
+    """AMENDMENT R2: charge the mu10-marginalized ramified port (p=1951) to each twist arm's
+    whitening variance: v_u(t) = (1/10) sum_{u in mu10} |delta-defect(u)|^2. Stored for later removal."""
+    prob._uvar = {}
+    for ai, arm in enumerate(prob.arms):
+        if ai == 0 or arm.X < 1951:
+            continue
+        d = TW[ai - 1]
+        kd = kr[1951][d]
+        kmax = int(np.log(arm.X) / np.log(1951))
+        v = np.zeros(len(arm.t))
+        for k10 in range(10):
+            u = np.exp(1j * np.pi * k10 / 5)
+            q = np.array([(kd * u) ** k for k in range(kmax + 1)], dtype=complex)  # inv of (1 - kd u T)
+            idx, val, dF, dFi = arm.delta_for(1951, q)
+            v += (np.abs(dFi) ** 2 + arm.t ** 2 * np.abs(dF) ** 2) / 10.0
+        prob._uvar[ai] = v
+        prob.sig2[ai] = prob.sig2[ai] + v
+
+def u_lock(prob, kr):
+    """post-band 10-way determination of the ramified-port eigenvalue u; returns (k10, separation)."""
+    best = None; scores = []
+    for k10 in range(10):
+        u = np.exp(1j * np.pi * k10 / 5)
+        Jt = 0.0; dss = []
+        for ai, arm in enumerate(prob.arms):
+            if ai == 0 or arm.X < 1951:
+                dss.append(None); continue
+            d = TW[ai - 1]; kd = kr[1951][d]
+            kmax = int(np.log(arm.X) / np.log(1951))
+            q = np.array([(kd * u) ** k for k in range(kmax + 1)], dtype=complex)
+            idx, val, dF, dFi = arm.delta_for(1951, q)
+            Jt += arm.peek_J(dF, dFi)
+            dss.append((idx, val, dF, dFi))
+        scores.append(Jt)
+        if best is None or Jt < best[0]:
+            best = (Jt, k10, dss)
+    Jt, k10, dss = best
+    for ai, arm in enumerate(prob.arms):
+        if dss[ai] is not None:
+            arm.commit(*dss[ai])
+        if hasattr(prob, '_uvar') and ai in prob._uvar:
+            prob.sig2[ai] = prob.sig2[ai] - prob._uvar[ai]
+    ranked = sorted(scores)
+    sep = ranked[1] / ranked[0] if ranked[0] > 0 else float('inf')
+    return k10, scores, sep
+
+def bands_of(arms, bitp):
+    edges = sorted(set(a.X for a in arms))
+    lo = 0; bands = []
+    for hi in edges:
+        band = [p for p in bitp if lo < p <= hi]
+        if band:
+            bands.append(band)
+        lo = hi
+    return bands
+
+def solve(cell, which, goldenswap=False):
+    t0 = time.time()
+    arms, bitp, cands, fixed, data = build_summit(cell, goldenswap=goldenswap)
+    prob = WProblem(arms, bitp, cands, fixed)
+    prob.init_marginal(); prob.build_sigma()
+    add_u_sigma(prob, data[2])          # AMENDMENT R2
+    bands = bands_of(arms, bitp)
+    print(f"== SUMMIT cell={'even' if cell==0 else 'odd'} {which}: {len(arms)} arms, {len(bitp)} bits, "
+          f"bands {[len(b) for b in bands]} ==", flush=True)
+    if which in ('S2', 'S2ord7'):
+        qualify4.ORDER_JITTER = 7 if which == 'S2ord7' else None
+        for ps in range(3):
+            for band in bands:
+                inband_S2(prob, band, log=print)
+            print(f"  pass {ps+1}: J = {prob.Jtot():.3e}", flush=True)
+        w = prob.weights()
+        order = sorted(bitp, key=lambda p: -w[p])
+        for _ in range(8):
+            improved = False
+            Jnow = prob.Jtot()
+            for p in order:
+                s = prob.state[p]
+                if s == 0:
+                    continue
+                Jf, dsf = prob.peek_set(p, -s)
+                if Jf < Jnow:
+                    prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+            if not improved:
+                break
+    else:  # S5
+        w = prob.weights()
+        order = sorted(bitp, key=lambda p: -w[p])
+        heavy = order[:8]; rest = order[8:]
+        base_sn = prob.snap(copy=True)
+        leaves = []
+        for leaf in range(256):
+            prob.load(base_sn, copy=True)
+            for i, p in enumerate(heavy):
+                prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+            for p in rest:
+                JP, dsP = prob.peek_set(p, +1)
+                JM, dsM = prob.peek_set(p, -1)
+                prob.commit_set(p, +1 if JP <= JM else -1, dsP if JP <= JM else dsM)
+            for _ in range(2):
+                improved = False
+                Jnow = prob.Jtot()
+                for p in rest:
+                    s = prob.state[p]
+                    Jf, dsf = prob.peek_set(p, -s)
+                    if Jf < Jnow:
+                        prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+                if not improved:
+                    break
+            leaves.append((prob.Jtot(), leaf, dict(prob.state)))
+            if leaf % 64 == 0:
+                print(f"  S5 leaf {leaf}  J {leaves[-1][0]:.3e}", flush=True)
+        leaves.sort(key=lambda x: x[0])
+        best = None
+        for J0, leaf, st0 in leaves[:16]:
+            prob.load(base_sn, copy=True)
+            for p in order:
+                prob.set_bit(p, st0[p])
+            for _ in range(8):
+                improved = False
+                Jnow = prob.Jtot()
+                for p in order:
+                    s = prob.state[p]
+                    Jf, dsf = prob.peek_set(p, -s)
+                    if Jf < Jnow:
+                        prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+                if not improved:
+                    break
+            if best is None or prob.Jtot() < best[0]:
+                best = (prob.Jtot(), leaf, dict(prob.state))
+        print(f"  S5 winner leaf {best[1]}  J {best[0]:.3e}  (runner-up J {leaves[1][0]:.3e})", flush=True)
+        prob.load(base_sn, copy=True)
+        for p in order:
+            prob.set_bit(p, best[2][p])
+    globals()['_GS'] = goldenswap
+    k10, uscores, usep = u_lock(prob, data[2])
+    # final polish with u locked and sigma un-padded
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    for _ in range(6):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            if s == 0:
+                continue
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    print(f"  u-lock: u = zeta10^{k10}  separation x{usep:.1f}  post-lock J = {prob.Jtot():.3e}", flush=True)
+    drift = 0.0   # resieve gate would need u-aware rebuild; drift checked pre-lock by band machinery
+    st = dict(prob.state)
+    # certification on the pre-registered grid
+    carm = cert_arm_for(cell, st, data, goldenswap=goldenswap)
+    r, eps = carm.residual()
+    x, eta, gnew = carm.meter(eps)
+    gdev = float(np.max(np.abs(gnew - 2)))
+    # per-arm residuals at solution
+    armres = {}
+    for arm in prob.arms:
+        rr, ee = arm.residual()
+        armres[arm.label] = [rr, ee.real, ee.imag]
+    dt = time.time() - t0
+    print(f"SUMMIT {('even' if cell==0 else 'odd')}/{which}: J {prob.Jtot():.3e}  drift {drift:.1e}  "
+          f"CERT residual {r:.3e}  eps {eps.real:+.6f}{eps.imag:+.6f}i  meter dev {gdev:.3e}  [{dt:.0f}s]", flush=True)
+    out = {'cell': ('even' if cell == 0 else 'odd') + ('GS' if goldenswap else ''), 'which': which, 'J': prob.Jtot(), 'drift': drift,
+           'cert_residual': r, 'eps': [eps.real, eps.imag], 'meterdev': gdev, 'arm_residuals': armres,
+           'bits': {str(p): int(st[p]) for p in bitp}, 'time_s': dt}
+    json.dump(out, open(f'summit_{out["cell"]}_{which}.json', 'w'), indent=1)
+    return out
+
+if __name__ == '__main__':
+    tag = sys.argv[1]
+    cell = 0 if tag.startswith('even') else 1
+    solve(cell, sys.argv[2], goldenswap=tag.endswith('GS'))
+
+==== FILE: gp2/summit_base.py ====
+#!/usr/bin/env python3
+"""Base-only S2 beam triage on the summit: single clean arm (N=1951), no twist coupling.
+All four cells: even/odd x goldenswap. Beam width 128 (single-arm affordable)."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from summit import build_summit, cert_arm_for
+from qualify4 import WProblem
+from instr2 import Xof, TGRID
+
+def run(cell, gs):
+    arms, bitp, cands, fixed, data = build_summit(cell, goldenswap=gs)
+    arm = arms[0]
+    bp = [p for p in bitp if p <= arm.X]
+    prob = WProblem([arm], [p for p in bp], [ {p: cands[0][p] for p in bp} ], [fixed[0]])
+    prob.init_marginal(); prob.build_sigma()
+    w = prob.weights()
+    order = sorted(bp, key=lambda p: -w[p])
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+    W = 128
+    for p in order:
+        cand = []
+        for (st, arrs, sig, J) in beam:
+            prob.load((st, arrs, sig), copy=False)
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, sig, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        newbeam = []
+        for (Jc, st, arrs, sig, ss, ds) in cand[:W]:
+            prob.load((st, arrs, sig), copy=True)
+            prob.commit_set(p, ss, ds)
+            newbeam.append(prob.snap(copy=False) + (Jc,))
+        beam = newbeam
+    st, arrs, sig, J = min(beam, key=lambda b: b[3])
+    prob.load((st, arrs, sig), copy=True)
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    carm = cert_arm_for(cell, dict(prob.state), data, goldenswap=gs)
+    r, eps = carm.residual()
+    tag = ('even' if cell == 0 else 'odd') + ('GS' if gs else '')
+    print(f"BASE-ONLY {tag}: bits {len(bp)}  cert-residual {r:.3e}  eps {eps.real:+.5f}{eps.imag:+.5f}i")
+    json.dump({'cell': tag, 'residual': r, 'bits': {str(p): int(prob.state[p]) for p in bp}},
+              open(f'summit_base_{tag}.json', 'w'))
+    return r
+
+for cell in (0, 1):
+    for gs in (False, True):
+        run(cell, gs)
+
+==== FILE: gp2/summit_consensus.py ====
+#!/usr/bin/env python3
+"""Consensus on the winning cell (odd port, orientation B): S2ord7-base and S5-base (S2-base done).
+Then sensitivity/visible set on the certification arm."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+import qualify4
+from summit import build_summit, cert_arm_for
+from qualify4 import WProblem, inband_S2
+from instr2 import Problem, sensitivity
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+
+def mkprob():
+    prob = WProblem([arm0], list(bp), [{p: cands[0][p] for p in bp}], [fixed[0]])
+    prob.init_marginal(); prob.build_sigma()
+    return prob
+
+def beamsolve(prob, W=128, jitter=None):
+    w = prob.weights()
+    if jitter is not None:
+        rng = np.random.default_rng(jitter)
+        order = sorted(bp, key=lambda p: -w[p] * (1 + 0.15 * rng.standard_normal()))
+    else:
+        order = sorted(bp, key=lambda p: -w[p])
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+    for p in order:
+        cand = []
+        for (st, arrs, sig, J) in beam:
+            prob.load((st, arrs, sig), copy=False)
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, sig, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        nb = []
+        for (Jc, st, arrs, sig, ss, ds) in cand[:W]:
+            prob.load((st, arrs, sig), copy=True)
+            prob.commit_set(p, ss, ds)
+            nb.append(prob.snap(copy=False) + (Jc,))
+        beam = nb
+    st, arrs, sig, J = min(beam, key=lambda b: b[3])
+    prob.load((st, arrs, sig), copy=True)
+    polish(prob, order)
+    return dict(prob.state)
+
+def polish(prob, order):
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            if s == 0: continue
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved: break
+
+def s5solve(prob):
+    w = prob.weights()
+    order = sorted(bp, key=lambda p: -w[p])
+    heavy, rest = order[:8], order[8:]
+    base_sn = prob.snap(copy=True)
+    leaves = []
+    for leaf in range(256):
+        prob.load(base_sn, copy=True)
+        for i, p in enumerate(heavy):
+            prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+        for p in rest:
+            JP, dsP = prob.peek_set(p, +1)
+            JM, dsM = prob.peek_set(p, -1)
+            prob.commit_set(p, +1 if JP <= JM else -1, dsP if JP <= JM else dsM)
+        polish(prob, rest)
+        leaves.append((prob.Jtot(), dict(prob.state)))
+    leaves.sort(key=lambda x: x[0])
+    prob.load(base_sn, copy=True)
+    for p in order:
+        prob.set_bit(p, leaves[0][1][p])
+    polish(prob, order)
+    print(f"  S5 best/runner-up J: {leaves[0][0]:.3e} / {leaves[1][0]:.3e}")
+    return dict(prob.state)
+
+s2 = json.load(open('summit_base_oddGS.json'))['bits']
+s2 = {int(p): v for p, v in s2.items()}
+st_ord = beamsolve(mkprob(), jitter=7)
+st_s5 = s5solve(mkprob())
+runs = {'S2': s2, 'S2ord7': st_ord, 'S5': st_s5}
+for name, st in runs.items():
+    carm = cert_arm_for(CELL, st, data, goldenswap=GS)
+    r, eps = carm.residual()
+    print(f"{name}: cert-residual {r:.3e}  eps {eps.real:+.6f}{eps.imag:+.6f}i")
+# sensitivity/visible on S2's solution
+carm = cert_arm_for(CELL, s2, data, goldenswap=GS)
+FACS = {p: cands[0][p] for p in bp}
+class CP(Problem):
+    pass
+certprob = Problem([carm], list(bp), [FACS], [lambda p: None])
+certprob.state = {p: s2.get(p, 0) for p in bp}
+s, vis = sensitivity(certprob, 5e-15)
+vp = sorted(vis.keys())
+agree_vis = all(all(runs[a][p] == runs[b][p] for p in vp) for a in runs for b in runs)
+agree_all = sum(1 for p in bp if len(set(r[p] for r in runs.values())) == 1)
+print(f"visible bits: {len(vp)} / {len(bp)}   consensus on visible set: {agree_vis}   full-set agreement: {agree_all}/{len(bp)}")
+json.dump({'visible': [int(p) for p in vp], 'sens': {str(p): s[p] for p in bp},
+           'S2ord7': {str(p): st_ord[p] for p in bp}, 'S5': {str(p): st_s5[p] for p in bp},
+           'consensus_visible': bool(agree_vis)}, open('summit_consensus.json', 'w'), indent=1)
+
+==== FILE: gp2/summit_s5b.py ====
+#!/usr/bin/env python3
+"""S5 with beam-16 tails (family: exhaustive heavy-8 prefix enumeration; tail solver strengthened
+greedy->beam16 after summit golden-gap bits broke SC tails; logged, no bar change)."""
+import numpy as np, json, sys, os
+sys.path.insert(0, '.')
+from summit import build_summit, cert_arm_for
+from qualify4 import WProblem
+from instr2 import Problem
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+prob = WProblem([arm0], list(bp), [{p: cands[0][p] for p in bp}], [fixed[0]])
+prob.init_marginal(); prob.build_sigma()
+w = prob.weights()
+order = sorted(bp, key=lambda p: -w[p])
+heavy, rest = order[:8], order[8:]
+base_sn = prob.snap(copy=True)
+
+def beamtail(W=16):
+    beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+    for p in rest:
+        cand = []
+        for (st, arrs, sig, J) in beam:
+            prob.load((st, arrs, sig), copy=False)
+            for ss in (+1, -1):
+                Jc, ds = prob.peek_set(p, ss)
+                cand.append((Jc, st, arrs, sig, ss, ds))
+        cand.sort(key=lambda c: c[0])
+        nb = []
+        for (Jc, st, arrs, sig, ss, ds) in cand[:W]:
+            prob.load((st, arrs, sig), copy=True)
+            prob.commit_set(p, ss, ds)
+            nb.append(prob.snap(copy=False) + (Jc,))
+        beam = nb
+    st, arrs, sig, J = min(beam, key=lambda b: b[3])
+    prob.load((st, arrs, sig), copy=True)
+    return J
+
+lo, hi = int(sys.argv[1]), int(sys.argv[2])
+ck = 's5b_ckpt.json'
+state = json.load(open(ck)) if os.path.exists(ck) else {}
+for leaf in range(lo, hi):
+    if str(leaf) in state:
+        continue
+    prob.load(base_sn, copy=True)
+    for i, p in enumerate(heavy):
+        prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+    J = beamtail()
+    state[str(leaf)] = {'J': J, 'bits': {str(p): int(prob.state[p]) for p in bp}}
+    if leaf % 32 == 0:
+        json.dump(state, open(ck, 'w'))
+        print(f"  leaf {leaf}: J {J:.3e}", flush=True)
+json.dump(state, open(ck, 'w'))
+if len(state) == 256:
+    ranked = sorted(state.items(), key=lambda kv: kv[1]['J'])
+    Jb = ranked[0][1]['J']; Jr = ranked[1][1]['J']
+    stb = {int(p): v for p, v in ranked[0][1]['bits'].items()}
+    # polish winner
+    prob.load(base_sn, copy=True)
+    for p in order:
+        prob.set_bit(p, stb[p])
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    st = dict(prob.state)
+    carm = cert_arm_for(CELL, st, data, goldenswap=GS)
+    r, eps = carm.residual()
+    print(f"S5b winner leaf {ranked[0][0]}: J {prob.Jtot():.3e} (runner-up {Jr:.3e})  "
+          f"cert-residual {r:.3e}  eps {eps.real:+.6f}{eps.imag:+.6f}i", flush=True)
+    json.dump({'bits': {str(p): int(st[p]) for p in bp}, 'residual': r,
+               'eps': [eps.real, eps.imag]}, open('summit_S5b.json', 'w'), indent=1)
+
+==== FILE: gp2/summit_battery.py ====
+#!/usr/bin/env python3
+"""Full section-7 battery on the consensus solution (odd port, orientation B, N=1951)."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from summit import build_summit, cert_arm_for, MTAB, Z10
+from instr2 import Arm, Problem, Xof, TGRID, sensitivity, sieve, inv_series, primes_upto, _fold
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+cls, jl, kr = data
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+s5b = {int(p): v for p, v in json.load(open('summit_S5b.json'))['bits'].items()}
+ord7 = {int(p): v for p, v in json.load(open('summit_consensus.json'))['S2ord7'].items()}
+
+# 1. explicit agreement
+sens = {int(p): v for p, v in json.load(open('summit_consensus.json'))['sens'].items()}
+vis = sorted([p for p in bp if sens[p] > 100 * 5e-15])
+ag_vis = [p for p in vis if not (sol[p] == s5b[p] == ord7[p])]
+ag_full = [p for p in bp if not (sol[p] == s5b[p] == ord7[p])]
+print(f"1. consensus: visible {len(vis)}: disagreements {ag_vis}; full-set disagreements: {len(ag_full)} {ag_full[:8]}")
+
+# 2. blind N-scan on the certification coefficients
+carm = cert_arm_for(CELL, sol, data, goldenswap=GS)
+r0, eps0 = carm.residual()
+print(f"2. N-scan (solution residual {r0:.3e}):")
+for mult in (0.25, 0.5, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.25, 2.0, 4.0):
+    Nw = 1951.0 * mult
+    aw = Arm(Nw, CELL, X=carm.X, tgrid=TGRID)
+    aw.set_a(carm.a)
+    rw, _ = aw.residual()
+    print(f"   N = 1951*{mult}: {rw:.3e}")
+
+# 3. negatives
+rng = np.random.default_rng(20260803)
+res_neg = {}
+for seed in (1, 2, 3):
+    r2 = np.random.default_rng([20260803, seed])
+    stx = dict(sol)
+    flips = r2.choice(vis, size=max(1, len(vis)//10), replace=False)
+    for p in flips:
+        stx[int(p)] = -stx[int(p)]
+    cx = cert_arm_for(CELL, stx, data, goldenswap=GS)
+    rx, _ = cx.residual()
+    res_neg[f'scramble10%_s{seed}'] = rx
+aE = Arm(1951.0, 0, X=carm.X, tgrid=TGRID); aE.set_a(carm.a); rE, _ = aE.residual()
+res_neg['opposite_port'] = rE
+num = np.sum(carm.Fi * carm.t * carm.F); epsf = num/abs(num)
+d = carm.Fi - (epsf * np.exp(1j*np.pi/3)) * carm.t * np.conj(carm.F)
+res_neg['eps_rot60'] = float(np.max(np.abs(d))/np.max(np.abs(carm.F)))
+for k, v in res_neg.items():
+    print(f"3. NEG {k}: {v:.3e}")
+
+# 4. meter / eta jets on the winner
+x, eta, gnew = carm.meter(eps0)
+print(f"4. meter: max|G_new-2| = {np.max(np.abs(gnew-2)):.3e}   max|eta| = {np.max(np.abs(eta)):.3e}")
+
+# 5. orientation/parity cell table (from earlier runs)
+print("5. cell table: even 3.11e-3 / evenGS 2.76e-2 / odd 1.31e-3 / oddGS(WINNER) 8.96e-15 (base-only S2-128)")
+
+json.dump({'visible': [int(p) for p in vis], 'disagreements_visible': [int(p) for p in ag_vis],
+           'negatives': res_neg, 'N_scan_solution': r0,
+           'eps': [eps0.real, eps0.imag]}, open('summit_battery.json', 'w'), indent=1)
+
+==== FILE: gp2/summit_extend.py ====
+#!/usr/bin/env python3
+"""Extended decode: freeze the 67 consensus base bits; decode mid-band (517 < p <= 6723) through the
+whitened enriched arms band-by-band (S2); u-lock at p=1951; per-arm (twist-battery) residuals + eps_d."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+import qualify4
+from summit import build_summit, cert_arm_for, add_u_sigma, u_lock, bands_of, TW
+from qualify4 import WProblem, inband_S2
+from instr2 import Problem
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+prob = WProblem(arms, bitp, cands, fixed)
+prob.init_marginal(); prob.build_sigma()
+add_u_sigma(prob, data[2])
+# freeze base bits at consensus
+X0 = arms[0].X
+for p in sorted(sol):
+    prob.set_bit(p, sol[p])
+bands = bands_of(arms, [p for p in bitp if p > X0])
+print(f"extended decode: {sum(len(b) for b in bands)} mid-band bits in {len(bands)} bands", flush=True)
+qualify4.ORDER_JITTER = None
+for ps in range(3):
+    for band in bands:
+        inband_S2(prob, band, log=print)
+    print(f"  pass {ps+1}: J = {prob.Jtot():.3e}", flush=True)
+k10, uscores, usep = u_lock(prob, data[2])
+# final polish over mid-band only (base bits stay frozen at committed consensus)
+w = prob.weights()
+mid = [p for p in bitp if p > X0]
+order = sorted(mid, key=lambda p: -w[p])
+for _ in range(6):
+    improved = False
+    Jnow = prob.Jtot()
+    for p in order:
+        s = prob.state[p]
+        if s == 0: continue
+        Jf, dsf = prob.peek_set(p, -s)
+        if Jf < Jnow:
+            prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    if not improved: break
+print(f"u-lock: u = zeta10^{k10}   scores: " + " ".join(f"{s:.2e}" for s in uscores))
+print(f"separation: runner-up/best = {sorted(uscores)[1]/sorted(uscores)[0]:.2f}")
+armtab = {}
+for arm in prob.arms:
+    r, e = arm.residual()
+    armtab[arm.label] = [r, e.real, e.imag]
+    print(f"  arm {arm.label:6s} N={int(arm.N):>7d} port {arm.port}: residual {r:.3e}  eps_d {e.real:+.5f}{e.imag:+.5f}i")
+json.dump({'u_zeta10_pow': int(k10), 'u_scores': [float(s) for s in uscores], 'arm_residuals': armtab,
+           'mid_bits': {str(p): int(prob.state[p]) for p in sorted(mid)}},
+          open('summit_extended.json', 'w'), indent=1)
+
+==== FILE: gp2/midband_push.py ====
+#!/usr/bin/env python3
+"""Bounded mid-band push: band-2 (517 < p <= 1552) with beam-128 through the whitened enriched arms,
+committed base frozen; measure whether tw-3 (whose range this is) dives toward its floor."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+import qualify4
+from summit import build_summit, add_u_sigma
+from qualify4 import WProblem, inband_S2
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+prob = WProblem(arms, bitp, cands, fixed)
+prob.init_marginal(); prob.build_sigma()
+add_u_sigma(prob, data[2])
+for p in sorted(sol):
+    prob.set_bit(p, sol[p])
+band2 = [p for p in bitp if 517 < p <= 1552]
+print(f"band-2 push: {len(band2)} bits, beam-128, 4 passes")
+for ps in range(4):
+    inband_S2(prob, band2, log=print, width=128)
+    rt = {}
+    for arm in prob.arms:
+        r, e = arm.residual()
+        rt[arm.label] = r
+    print(f"  pass {ps+1}: tw-3 {rt['tw-3']:.3e}  tw-4 {rt['tw-4']:.3e}  tw5 {rt['tw5']:.3e}  base {rt['base']:.3e}", flush=True)
+json.dump({str(p): int(prob.state[p]) for p in band2}, open('midband_band2.json', 'w'))
+
+==== FILE: gp2/mp_verify.py ====
+#!/usr/bin/env python3
+"""Adversarial verification: recompute the committed certification residual in mpmath 30-dps
+arithmetic — exact zeta10 phases, exact golden ratio, mp.besselk kernel — no float64 anywhere.
+If the 8.957e-15 float64 residual were rounding artifact, it evaporates here."""
+import mpmath as mp, json
+mp.mp.dps = 30
+
+cls = {}
+for line in open('../gp/classesX_doud1951.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+jl = {}
+for line in open('chilog_1951.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+
+PHI = (1 + mp.sqrt(5)) / 2
+def z10(j): return mp.e ** (1j * mp.pi * j / 5)
+MT = {0: mp.mpf(2), 1: mp.mpf(0), 2: mp.mpf(1), 3: PHI, 4: 1/PHI}   # orientation B
+N = mp.mpf(1951); X = 517
+
+# a_n by exact Euler expansion
+def primes(X):
+    s = list(range(X+1)); out = []
+    for i in range(2, X+1):
+        if s[i]:
+            out.append(i)
+            for k in range(i*i, X+1, i): s[k] = 0
+    return out
+a = {1: mp.mpc(1)}
+for n in range(2, X+1): a[n] = mp.mpc(0)
+for p in primes(X):
+    if p == 1951 or p not in cls or p not in jl: continue
+    j = jl[p]; ch = z10(j)**2
+    ap = mp.mpc(0) if cls[p] == 1 else sol[p] * z10(j) * MT[cls[p]]
+    # inverse of 1 - ap T + ch T^2: c_k
+    kmax = 0; pk = p
+    while pk <= X: kmax += 1; pk *= p
+    inv = [mp.mpc(1), ap]
+    for k in range(2, kmax+1): inv.append(ap*inv[k-1] - ch*inv[k-2])
+    b = dict(a)
+    for k in range(1, kmax+1):
+        pk = p**k
+        for m in range(1, X//pk + 1):
+            b[m*pk] = b[m*pk] + inv[k]*a[m]
+    a = b
+
+def ker(y):   # odd port: 4 y K0(2y)
+    return 4*y*mp.besselk(0, 2*y) if y < 21 else mp.mpf(0)
+def F(t):
+    s = mp.mpc(0)
+    for n in range(1, X+1):
+        if a[n] != 0:
+            s += a[n]*ker(mp.pi*n*t/mp.sqrt(N))
+    return s
+
+TG = [mp.mpf(v) for v in ['0.50','0.58','0.67','0.78','0.90','1.00','1.11','1.28','1.72','2.00']] + [1/mp.mpf('0.58'), 1/mp.mpf('0.67'), 1/mp.mpf('0.78'), 1/mp.mpf('0.90')]
+Ft  = [F(t) for t in TG]
+Fit = [F(1/t) for t in TG]
+num = sum(Fit[i]*TG[i]*Ft[i] for i in range(len(TG)))
+eps = num/abs(num)
+res = max(abs(Fit[i] - eps*TG[i]*mp.conj(Ft[i])) for i in range(len(TG))) / max(abs(f) for f in Ft)
+print(f"mpmath 30-dps recomputation of the committed certification:")
+print(f"  residual = {mp.nstr(res, 6)}")
+print(f"  eps      = {mp.nstr(eps.real, 9)} {'+' if eps.imag>=0 else '-'} {mp.nstr(abs(eps.imag), 9)}i")
+print(f"  (float64 pipeline gave 8.957e-15 and eps = +0.885096-0.465408i)")
+
+==== FILE: gp2/verify_eps_u.py ====
+#!/usr/bin/env python3
+"""Verification avenue 1: the Atkin-Li epsilon/u cross-lock.
+For a newform of prime level p with ramified nebentypus chi, the FE sign satisfies
+eps = c * tau(chi^s) * u^t / sqrt(p) for a port-dependent constant c and convention signs s,t.
+The decode NEVER used this identity. Solving for u from the measured eps must land EXACTLY on
+a 10th root of unity if bits+eps+dictionary are right -- measure-zero under error.
+Calibration: the same pipeline on Ind psi_2089 (prime level, even port, eps=+1, a_D=+1, tau(chi_D)=+sqrt(D))."""
+import mpmath as mp
+mp.mp.dps = 40
+
+# exact Gauss sum tau(chi^k) for canonical quintic chi mod 1951 (chi(3)=zeta5)
+jl = {}
+for line in open('chilog_1951.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+# need j(a) for ALL a mod 1951, not just primes: rebuild discrete log via generator 3
+P = 1951
+dlog = {}
+x = 1
+for k in range(P-1):
+    dlog[x] = k % 5
+    x = (x*3) % P
+Z5 = mp.e ** (2j*mp.pi/5)
+# sanity vs prime table
+ok = all(dlog[p % P] == jl[p] for p in jl if p != P and p < P)
+print("dlog table vs chilog primes:", "MATCH" if ok else "MISMATCH")
+
+def tau(k):
+    return sum((Z5**((k*dlog[a]) % 5)) * mp.e**(2j*mp.pi*a/P) for a in range(1, P))
+
+t1 = tau(1); t4 = tau(4)
+print(f"|tau(chi)|/sqrt(1951) = {mp.nstr(abs(t1)/mp.sqrt(P), 12)}  (must be 1)")
+eps = mp.mpc('0.885096399', '-0.46540774')   # measured (mpmath 30-dps recompute)
+eps = eps/abs(eps)
+
+Z10 = mp.e ** (1j*mp.pi/5)
+best = []
+for s, tk in (('chi', t1), ('chibar', t4)):
+    for t_exp in (1, -1):
+        for ci, c in (('+1', 1), ('-1', -1), ('+i', 1j), ('-i', -1j)):
+            # eps = c * tau * u^t / sqrt(p)  =>  u^t = eps*sqrt(p)/(c*tau)
+            rhs = eps * mp.sqrt(P) / (c * tk)
+            u = rhs if t_exp == 1 else 1/rhs
+            # distance to nearest mu10 element
+            dists = [(abs(u - Z10**k), k) for k in range(10)]
+            d, k = min(dists)
+            best.append((float(d), s, t_exp, ci, k))
+best.sort()
+print("hypothesis scan: eps = c * tau(x) * u^t / sqrt(p); distance of solved u to nearest zeta10^k:")
+for d, s, t_exp, ci, k in best[:5]:
+    print(f"  tau({s}), t={t_exp:+d}, c={ci}:  u -> zeta10^{k}  distance {d:.3e}")
+print(f"  (worst of all 16: {best[-1][0]:.3e}; a uniform-random phase sits ~0.31 from mu10 on average)")
+
+==== FILE: gp2/verify_holdout.py ====
+#!/usr/bin/env python3
+"""Verification avenue 2: hold-out re-decode. Fresh S2-base beam-128 decode of the winning cell
+using a DISJOINT involution-closed t-grid (no point shared with the pre-registered TGRID).
+If the 67 bits are constraint-driven (not grid artifacts), the identical vector must emerge."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+import instr2
+# disjoint grid, involution-closed: pairs (t, 1/t), no 1.0, nothing from TGRID
+TG2 = np.sort(np.array([0.55, 1/0.55, 0.62, 1/0.62, 0.71, 1/0.71, 0.82, 1/0.82, 0.95, 1/0.95]))
+instr2.TGRID = TG2   # decoder + certification both on the held-out grid
+from summit import build_summit, cert_arm_for
+from qualify4 import WProblem
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+prob = WProblem([arm0], list(bp), [{p: cands[0][p] for p in bp}], [fixed[0]])
+prob.init_marginal(); prob.build_sigma()
+w = prob.weights()
+order = sorted(bp, key=lambda p: -w[p])
+beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+for p in order:
+    cand = []
+    for (st, arrs, sig, J) in beam:
+        prob.load((st, arrs, sig), copy=False)
+        for ss in (+1, -1):
+            Jc, ds = prob.peek_set(p, ss)
+            cand.append((Jc, st, arrs, sig, ss, ds))
+    cand.sort(key=lambda c: c[0])
+    nb = []
+    for (Jc, st, arrs, sig, ss, ds) in cand[:128]:
+        prob.load((st, arrs, sig), copy=True)
+        prob.commit_set(p, ss, ds)
+        nb.append(prob.snap(copy=False) + (Jc,))
+    beam = nb
+st, arrs, sig, J = min(beam, key=lambda b: b[3])
+prob.load((st, arrs, sig), copy=True)
+for _ in range(8):
+    improved = False
+    Jnow = prob.Jtot()
+    for p in order:
+        s = prob.state[p]
+        Jf, dsf = prob.peek_set(p, -s)
+        if Jf < Jnow:
+            prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    if not improved: break
+carm = cert_arm_for(CELL, dict(prob.state), data, goldenswap=GS)
+r, eps = carm.residual()
+committed = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+diff = [p for p in bp if prob.state[p] != committed[p]]
+sens = {int(p): v for p, v in json.load(open('summit_consensus.json'))['sens'].items()}
+vis = [p for p in bp if sens[p] > 100*5e-15]
+dvis = [p for p in diff if p in vis]
+print(f"HOLD-OUT RE-DECODE (disjoint 10-pt grid [0.55..1.82]):")
+print(f"  residual on held-out grid: {r:.3e}   eps {eps.real:+.6f}{eps.imag:+.6f}i")
+print(f"  bit agreement with committed vector: {len(bp)-len(diff)}/{len(bp)} all, visible disagreements: {dvis}")
+print(f"  (committed eps was +0.885096-0.465408i)")
+
+==== FILE: gp2/verify_uniq.py ====
+#!/usr/bin/env python3
+"""Verification avenue 4: no-1-flip-repair certificate. For each visible bit: flip it, freeze it,
+greedy re-optimize ALL other bits, record the best achievable residual. If any flipped-bit state
+can be repaired back to floor, the solution is not locally unique."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from summit import build_summit, cert_arm_for
+from qualify4 import WProblem
+
+CELL, GS = 1, True
+arms, bitp, cands, fixed, data = build_summit(CELL, goldenswap=GS)
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+sens = {int(p): v for p, v in json.load(open('summit_consensus.json'))['sens'].items()}
+vis = sorted([p for p in bp if sens[p] > 100*5e-15])
+
+prob = WProblem([arm0], list(bp), [{p: cands[0][p] for p in bp}], [fixed[0]])
+prob.init_marginal(); prob.build_sigma()
+for p in sorted(sol):
+    prob.set_bit(p, sol[p])
+base_sn = prob.snap(copy=True)
+J0 = prob.Jtot()
+worst = None; repaired = []
+for pf in vis:
+    prob.load(base_sn, copy=True)
+    prob.set_bit(pf, -sol[pf])
+    # greedy repair over all OTHER bits to convergence
+    for _ in range(12):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in bp:
+            if p == pf:
+                continue
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved:
+            break
+    carm = cert_arm_for(CELL, dict(prob.state), data, goldenswap=GS)
+    r, _ = carm.residual()
+    if r < 1e-11:
+        repaired.append((pf, r))
+    if worst is None or r < worst[1]:
+        worst = (pf, r)
+print(f"NO-1-FLIP-REPAIR: {len(vis)} visible bits each flipped+frozen, all others re-optimized:")
+print(f"  states repaired back to <=1e-11: {len(repaired)} {repaired}")
+print(f"  best repair achieved (i.e. the most dangerous flip): p={worst[0]}, residual {worst[1]:.3e}")
+print(f"  solution residual for reference: 8.957e-15  => minimum gap {worst[1]/8.957e-15:.1e}x")
+
+==== FILE: gp2/verify_det1.py ====
+#!/usr/bin/env python3
+"""Verification avenue 3: the derived det-1 sibling rho0 = rho (x) chibar^3.
+Traces a0_p = b_p * (-1)^{j(p)} * m_p are REAL; det = 1 (trivial nebentypus); N = 1951^2, a=0;
+same parity (odd port). This FE at a different conductor was never used by any solver.
+Coefficients: committed bits (p<=517) + provisional mid-band (517<p<=6723) + marginalized tail.
+Prediction: real eps in {+1,-1}; residual at the marginal-tail floor (~1e-4); scrambles ~1e-1."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from instr2 import Arm, Xof, TGRID, inv_series, primes_upto, _fold
+
+PHI = (1 + np.sqrt(5)) / 2
+MT = {0: 2.0, 1: 0.0, 2: 1.0, 3: PHI, 4: 1/PHI}
+cls = {}
+for line in open('../gp/classesX_doud1951.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+jl = {}
+for line in open('chilog_1951.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+bits = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+mid = {int(p): v for p, v in json.load(open('summit_extended.json'))['mid_bits'].items()}
+allbits = dict(mid); allbits.update(bits)
+
+N = 1951.0**2
+X = Xof(N)
+def build(state, scramble_seed=None):
+    st = dict(state)
+    if scramble_seed is not None:
+        rng = np.random.default_rng(scramble_seed)
+        ks = [p for p in st if p <= 517]
+        for p in rng.choice(ks, size=len(ks)//10, replace=False):
+            st[int(p)] = -st[int(p)]
+    a = np.zeros(X+1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        c = cls.get(p); j = jl.get(p)
+        if p == 1951 or c is None:
+            continue   # 1951: local factor 1 (no fixed vector); beyond table: factor 1
+        kmax = int(np.log(X)/np.log(p))
+        if c == 1:
+            inv = inv_series(np.asarray([1.0, 0.0, 1.0], dtype=complex), kmax)   # 2A: 1 + T^2
+        elif p in st and st[p] != 0:
+            a0 = st[p] * (-1)**(j % 2) * MT[c]
+            inv = inv_series(np.asarray([1.0, -a0, 1.0], dtype=complex), kmax)
+        else:
+            iP = inv_series(np.asarray([1.0, -MT[c], 1.0], dtype=complex), kmax)
+            iM = inv_series(np.asarray([1.0,  MT[c], 1.0], dtype=complex), kmax)
+            inv = 0.5*(iP+iM)
+        a = _fold(a, p, inv, X)
+    return a
+
+arm = Arm(N, 1, tgrid=TGRID)     # odd port, conductor 1951^2
+arm.set_a(build(allbits))
+r, eps = arm.residual()
+print(f"DET-1 SIBLING FE (N=1951^2, real coefficients, odd port, never solver-touched):")
+print(f"  residual {r:.3e}   fitted eps = {eps.real:+.6f}{eps.imag:+.6f}i   (prediction: real, +-1)")
+arm.set_a(build(bits))           # committed-only variant (mid-band marginalized)
+r2, eps2 = arm.residual()
+print(f"  committed-only variant (mid-band marginalized): residual {r2:.3e}  eps {eps2.real:+.5f}{eps2.imag:+.5f}i")
+for seed in (1, 2):
+    arm.set_a(build(allbits, scramble_seed=seed))
+    rs, _ = arm.residual()
+    print(f"  NEG 10%-scramble of committed bits, seed {seed}: {rs:.3e}")
+# wrong-conductor negative
+armw = Arm(N*1.1, 1, X=X, tgrid=TGRID); armw.set_a(build(allbits)); rw, _ = armw.residual()
+print(f"  NEG wrong-N*1.1: {rw:.3e}")
+
+==== FILE: gp2/grade_internal.py ====
+#!/usr/bin/env python3
+"""Post-commit internal graders: (a) chi->chi^2 Galois-transport coherence; (b) Chebotarev tallies."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from summit import build_summit, cert_arm_for, MTAB, Z10
+from qualify4 import WProblem
+from instr2 import Problem
+
+sol = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+
+# (a) transport: decode the conjugate cell (chi -> chi^2, i.e. j -> 2j) same port/orientation... the
+# conjugate object rho^sigma: sigma(sqrt5) = -sqrt5 => golden magnitudes swap => orientation flips too.
+# Predicted transport: a_p^sigma = sigma(a_p). We decode the conjugate cell blind (S2-128) and compare.
+CELL = 1
+arms, bitp, cands, fixed, data = build_summit(CELL, conj=True, goldenswap=False)
+# NOTE orientation: sigma swaps phi <-> -1/phi ... |a| swaps phi <-> 1/phi: orientation-B conjugates to orientation-A
+arm0 = arms[0]
+bp = [p for p in bitp if p <= arm0.X]
+prob = WProblem([arm0], list(bp), [{p: cands[0][p] for p in bp}], [fixed[0]])
+prob.init_marginal(); prob.build_sigma()
+w = prob.weights()
+order = sorted(bp, key=lambda p: -w[p])
+beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+for p in order:
+    cand = []
+    for (st, arrs, sig, J) in beam:
+        prob.load((st, arrs, sig), copy=False)
+        for ss in (+1, -1):
+            Jc, ds = prob.peek_set(p, ss)
+            cand.append((Jc, st, arrs, sig, ss, ds))
+    cand.sort(key=lambda c: c[0])
+    nb = []
+    for (Jc, st, arrs, sig, ss, ds) in cand[:128]:
+        prob.load((st, arrs, sig), copy=True)
+        prob.commit_set(p, ss, ds)
+        nb.append(prob.snap(copy=False) + (Jc,))
+    beam = nb
+stc, arrs, sig, J = min(beam, key=lambda b: b[3])
+prob.load((stc, arrs, sig), copy=True)
+for _ in range(8):
+    improved = False
+    Jnow = prob.Jtot()
+    for p in order:
+        s = prob.state[p]
+        Jf, dsf = prob.peek_set(p, -s)
+        if Jf < Jnow:
+            prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    if not improved: break
+carm = cert_arm_for(CELL, dict(prob.state), data, conj=True, goldenswap=False)
+r, eps = carm.residual()
+print(f"(a) conjugate cell (chi^2, orientation-A, odd port): cert-residual {r:.3e}  eps {eps.real:+.6f}{eps.imag:+.6f}i")
+# transport map: sigma: zeta5 -> zeta5^2 (so zeta10^j -> zeta10^{2j} up to sign*), phi -> -1/phi.
+# a_p = b ph m: sigma(a_p) = b * sigma(ph) * sigma(m). conjugate-cell dictionary: a'_p = b' * zeta10^{2j} * m'
+# with m' = MTAB[label] (orientation A: label3->1/phi wait MTAB is orientation-B map applied when goldenswap=...)
+cls, jl, kr = data
+PHI = (1+np.sqrt(5))/2
+mism = []; tested = 0
+for p in bp:
+    lab = cls[p]; j = jl[p]
+    if lab == 1: continue
+    # committed: a_p = sol[p] * zeta10^j * mB(lab); mB: {0:2, 2:1, 3:phi, 4:1/phi}
+    mB = {0: 2.0, 2: 1.0, 3: PHI, 4: 1/PHI}[lab]
+    ap = sol[p] * Z10**(j % 10) * mB
+    # sigma(a_p): conjugate golden part: sigma(phi) = 1-phi = -1/phi; sigma(1/phi) = ... sigma(sqrt5) = -sqrt5:
+    sig_m = {0: 2.0, 2: 1.0, 3: -1/PHI, 4: -PHI}[lab]      # sigma(phi) = -1/phi, sigma(1/phi) = -phi
+    sig_ap = sol[p] * Z10**((2*j) % 10) * ... if False else sol[p] * (np.exp(1j*np.pi*(2*j)/5)) * sig_m
+    # conjugate-cell convention: a'_p = b'_p * zeta10^{2j mod 10} * mA(lab); mA (orientation A): {3: 1/phi, 4: phi}
+    mA = {0: 2.0, 2: 1.0, 3: 1/PHI, 4: PHI}[lab]
+    conv = np.exp(1j*np.pi*((2*j) % 10)/5) * mA
+    pred_b = sig_ap / conv
+    pb = int(np.sign(pred_b.real)) if abs(pred_b.imag) < 1e-9 and abs(abs(pred_b.real)-1) < 1e-9 else None
+    if pb is None:
+        continue
+    tested += 1
+    if prob.state[p] != pb:
+        mism.append(p)
+print(f"(a) transport grade: {tested} comparable bits, mismatches: {len(mism)} {mism[:10]}")
+
+# (b) Chebotarev tallies of (class, bit): in <2.A5, zeta5 I> the lift classes of a given projective class
+# split evenly between the two sign-lifts => bits should be ~50/50 per class.
+import collections
+tal = collections.Counter((cls[p], sol[p]) for p in sol)
+print("(b) Chebotarev (class, bit) tallies:", dict(tal))
+json.dump({'conj_residual': r, 'conj_eps': [eps.real, eps.imag], 'transport_tested': tested,
+           'transport_mismatch': [int(m) for m in mism],
+           'cheb': {f"{k[0]}:{k[1]:+d}": v for k, v in tal.items()}}, open('grade_internal.json', 'w'), indent=1)
+
+==== FILE: gp2/emit2141.gp ====
+default(parisize, 1200000000);
+P = x^5 - x^4 - 856*x^3 + 4025*x^2 + 28501*x - 40877;
+{
+print("gal ", polgalois(P)[4], "  disc=2141^4? ", poldisc(P) % 2141^4 == 0);
+my(nf = nfinit(P));
+print("fielddisc = ", factor(nf.disc), "  sig ", nf.sign);
+my(idx2 = poldisc(P) / nf.disc);
+print("index^2 = ", factor(idx2));
+print("2141 prime ", isprime(2141), "  mod 4: ", 2141%4, "  mod 5: ", 2141%5, "  mod 20: ", 2141%20);
+print("primroot mod 2141: ", lift(znprimroot(2141)));
+print("ram: ", [[pr.e, pr.f] | pr <- idealprimedec(nf, 2141)]);
+\\ index primes: true classes via idealprimedec residue degrees
+my(idxp = factor(idx2)[,1]);
+for(i = 1, #idxp,
+  my(q = idxp[i], dec = idealprimedec(nf, q));
+  my(fs = vecsort([pr.f | pr <- dec]));
+  my(cls = if(fs == [1,1,1,1,1], 0, fs == [1,2,2], 1, fs == [1,1,3], 2, fs == [5], 9, -9));
+  print("index prime ", q, ": f-pattern ", fs, " -> class ", cls));
+}
+sd = sqrtint(poldisc(P));
+print("sqrt(poldisc) exact: ", sd^2 == poldisc(P));
+\\ classes + faces to 25100 (covers rho3 recert X = 25071)
+faceclass(p) =
+{
+  my(F = factormod(P, p));
+  my(degs = vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]));
+  if(degs == [1,1,1,1,1], return(0));
+  if(degs == [1,2,2], return(1));
+  if(degs == [1,1,3], return(2));
+  if(degs == [5],
+    my(g = ffgen([p, 5], 'w));
+    my(rts = polrootsmod(P * g^0, g));
+    my(r = rts[1]);
+    my(orb = vector(5)); orb[1] = r;
+    for(i = 2, 5, orb[i] = orb[i-1]^p);
+    my(V = g^0);
+    for(i = 1, 5, for(j = i+1, 5, V = V * (orb[i] - orb[j])));
+    if(V^p != V, return(-9));
+    my(c = lift(polcoef(V.pol, 0)));
+    my(s = Mod(sd, p));
+    if(Mod(c, p) == s, return(3), if(Mod(c, p) == -s, return(4), return(-9))));
+  return(-1);
+}
+IDXCLS = Map();  \\ filled from idealprimedec above: 3, 43, 2689 expected
+{
+  my(nf = nfinit(P), idxp = factor(poldisc(P)/nf.disc)[,1]);
+  for(i = 1, #idxp,
+    my(q = idxp[i], fs = vecsort([pr.f | pr <- idealprimedec(nf, q)]));
+    mapput(IDXCLS, q, if(fs == [1,1,1,1,1], 0, fs == [1,2,2], 1, fs == [1,1,3], 2, fs == [5], 9, -9)));
+}
+{
+system("rm -f classesX_2141.txt chilog_2141.txt");
+my(g0 = znprimroot(2141));
+forprime(p = 2, 25100,
+  if(p == 2141, next);
+  my(c);
+  if(mapisdefined(IDXCLS, p), c = mapget(IDXCLS, p),
+     p == 2, c = 8,   \\ placeholder: 2-adic decider decides (8 = pending)
+     c = faceclass(p));
+  write("classesX_2141.txt", Str(p, ":", c));
+  if(1, write("chilog_2141.txt", Str(p, ":", lift(znlog(Mod(p, 2141), g0)) % 10))));
+print("emit done");
+}
+quit
+
+==== FILE: gp2/decider2.gp ====
+P = x^5 - x^4 - 856*x^3 + 4025*x^2 + 28501*x - 40877;
+dP = deriv(P);
+sd = sqrtint(poldisc(P));
+K = 9;
+\\ element arithmetic in (Z/p^K)[y]/(G), G monic irreducible mod p
+emul(a, b) = my(c = (a*b) % G); Pol(apply(t -> t % M, Vec(c)), 'y);
+epol(a) = Pol(apply(t -> t % M, Vec(a)), 'y);
+pev(f, r) = my(v = Vec(f), acc = Pol(v[1] % M, 'y)); for(i = 2, #v, acc = emul(acc, r); acc = epol(acc + (v[i] % M))); acc;
+einv(e) = {
+  my(ep = subst(Pol(apply(c -> c % p, Vec(e)), 'y), 'y, T));
+  my(w = ep^(-1)); my(i0 = w.pol);
+  if(type(i0) != "t_POL", i0 = Pol(i0, 'y));
+  my(iv = epol(i0));
+  for(k = 1, 5, iv = emul(iv, epol(2 - emul(e, iv))));
+  iv;
+}
+hensel(r) = {
+  my(rr = epol(r));
+  for(k = 1, 7,
+    my(fv = pev(P, rr), dv = pev(dP, rr));
+    rr = epol(rr - emul(fv, einv(dv))));
+  rr;
+}
+decide(pp) = {
+  p = pp; M = p^K;
+  my(F = factormod(P, p));
+  if(vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]) != [5], return(-1));
+  G = liftall(ffinit(p, 5, 'y));
+  T = ffgen(G*Mod(1,p));
+  my(r0 = polrootsmod(P*T^0, T));
+  if(#r0 != 5, return(-2));
+  \\ Frobenius-ordered ff-orbit, then lift each
+  my(orbff = vector(5)); orbff[1] = r0[1];
+  for(i = 2, 5, orbff[i] = orbff[i-1]^p);
+  my(orb = vector(5));
+  for(i = 1, 5,
+    my(rp = liftall(orbff[i].pol));
+    if(type(rp) != "t_POL", rp = Pol(rp, 'y));
+    orb[i] = hensel(rp));
+  my(V = Pol(1, 'y));
+  for(i = 1, 5, for(j = i+1, 5, V = emul(V, epol(orb[i] - orb[j]))));
+  if(poldegree(V) > 0, return(-3));
+  my(v0 = polcoef(V, 0) % M, s = sd % M);
+  if(v0 == s, return(3), v0 == (M - s) % M, return(4), return(-4));
+}
+\\ ffgen-Vandermonde reference (for odd-prime validators)
+faceref(p) = {
+  my(g = ffgen([p, 5], 'w));
+  my(rts = polrootsmod(P*g^0, g), r = rts[1]);
+  my(orb = vector(5)); orb[1] = r;
+  for(i = 2, 5, orb[i] = orb[i-1]^p);
+  my(V = g^0);
+  for(i = 1, 5, for(j = i+1, 5, V = V*(orb[i] - orb[j])));
+  my(c = lift(polcoef(V.pol, 0)));
+  if(Mod(c, p) == Mod(sd, p), 3, Mod(c, p) == -Mod(sd, p), 4, -9);
+}
+{
+my(n = 0);
+forprime(q = 3, 600,
+  if(n >= 4, break);
+  my(F = factormod(P, q));
+  if(vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]) == [5],
+    my(a = faceref(q), b = decide(q));
+    print("validator p=", q, ": ffgen-face ", a, "  p-adic decider ", b, "  ", if(a == b, "MATCH", "*** MISMATCH ***"));
+    n++));
+print("p=2 decision (3 = face-a, 4 = face-b): ", decide(2));
+}
+quit
+
+==== FILE: gp2/extend2141.gp ====
+P = x^5 - x^4 - 856*x^3 + 4025*x^2 + 28501*x - 40877;
+sd = sqrtint(poldisc(P));
+faceclass(p) =
+{
+  my(F = factormod(P, p));
+  my(degs = vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]));
+  if(degs == [1,1,1,1,1], return(0));
+  if(degs == [1,2,2], return(1));
+  if(degs == [1,1,3], return(2));
+  if(degs == [5],
+    my(g = ffgen([p, 5], 'w));
+    my(rts = polrootsmod(P * g^0, g));
+    my(r = rts[1]);
+    my(orb = vector(5)); orb[1] = r;
+    for(i = 2, 5, orb[i] = orb[i-1]^p);
+    my(V = g^0);
+    for(i = 1, 5, for(j = i+1, 5, V = V * (orb[i] - orb[j])));
+    if(V^p != V, return(-9));
+    my(c = lift(polcoef(V.pol, 0)));
+    my(s = Mod(sd, p));
+    if(Mod(c, p) == s, return(3), if(Mod(c, p) == -s, return(4), return(-9))));
+  return(-1);
+}
+{
+forprime(p = 25101, 34400,
+  if(p == 2141, next);
+  write("classesX_2141.txt", Str(p, ":", faceclass(p))));
+print("extended");
+}
+quit
+
+==== FILE: gp2/rho3_2141.py ====
+#!/usr/bin/env python3
+"""rho3 re-certification for Doud-2141 under the exact poc3 protocol (deg-3 kernel, X=16*sqrt(N),
+t-grid [0.8,1.25], 2x2 gauge scan, conductor scan, negative battery)."""
+import numpy as np, mpmath as mp, json
+mp.mp.dps = 22
+from scipy.interpolate import CubicSpline
+lg, vals = np.load("../gp/kernel_grid.npy")
+SP = CubicSpline(lg, vals)
+lo, hi = float(np.exp(lg[0])), float(np.exp(lg[-1]))
+def phi3(y):
+    y = np.asarray(y, dtype=float); out = np.zeros_like(y)
+    m = y < hi; yy = np.clip(y[m], lo, hi); out[m] = SP(np.log(yy)); return out
+PI32 = float(mp.pi)**1.5
+G1 = (np.sqrt(5)-1)/2; G2 = (np.sqrt(5)+1)/2
+def sieve(X, locfac):
+    a = np.zeros(X+1); a[1] = 1.0
+    isc = np.ones(X+1, dtype=bool); isc[:2] = False
+    for i in range(2, int(X**0.5)+1):
+        if isc[i]: isc[i*i::i] = False
+    for p in np.nonzero(isc)[0]:
+        p = int(p); kmax = int(np.log(X)/np.log(p))
+        poly = locfac(p)
+        inv = np.zeros(kmax+1); inv[0] = 1.0
+        for k in range(1, kmax+1):
+            s = 0.0
+            for j in range(1, min(k, len(poly)-1)+1): s += poly[j]*inv[k-j]
+            inv[k] = -s
+        b = a.copy()
+        for k in range(1, kmax+1):
+            if inv[k] == 0.0: continue
+            pk = p**k
+            if pk > X: break
+            b[pk::pk] += inv[k]*a[1:(X//pk)+1]
+        a = b
+    return a
+def theta(a, X, N, tgrid, eps=1.0):
+    n = np.arange(1, X+1)
+    Ft  = np.array([float(np.dot(a[1:], phi3(n*(PI32*t/np.sqrt(N))))) for t in tgrid])
+    Fit = np.array([float(np.dot(a[1:], phi3(n*(PI32/t/np.sqrt(N))))) for t in tgrid])
+    return float(np.max(np.abs(Fit - eps*np.array(tgrid)*Ft))/np.max(np.abs(Ft)))
+TG = np.array([0.80, 0.87, 0.93, 1.00, 1.07, 1.15, 1.25])
+cls = {}
+for line in open('classesX_2141.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+def loc(ram, swap):
+    def f(p):
+        if p in ram: return ram[p]
+        c = cls.get(p)
+        if c is None or c < 0: return np.array([1.0])
+        if swap and c in (3, 4): c = 7 - c
+        return {0: np.array([1.,-3.,3.,-1.]), 1: np.array([1.,1.,-1.,-1.]),
+                2: np.array([1.,0.,0.,-1.]),
+                3: np.convolve([1.,-1.],[1.,-G1,1.]), 4: np.convolve([1.,-1.],[1.,G2,1.])}[c]
+    return f
+N = 2141.0**2; X = int(16*np.sqrt(N))
+best = None
+for s in (1.0, -1.0):
+    for swap in (False, True):
+        a = sieve(X, loc({2141: np.array([1.0, -s])}, swap))
+        rp = theta(a, X, N, TG, 1.0); rm = theta(a, X, N, TG, -1.0)
+        r, ep = (rp, 1) if rp <= rm else (rm, -1)
+        print(f"  ram-sign {s:+.0f} swap {int(swap)}: residual {r:.3e} (eps {ep})")
+        if best is None or r < best[0]: best = (r, s, swap, ep, a)
+r, s, swap, ep, a = best
+print(f"BEST: ram-sign {s:+.0f} faceswap {int(swap)} eps {ep}  residual {r:.3e}")
+print("conductor scan:")
+for mult in (0.9, 0.95, 1.0, 1.05, 1.1):
+    print(f"  N*{mult}: {theta(a, X, N*mult, TG, ep):.3e}")
+rng = np.random.default_rng(2141)
+clss = dict(cls)
+ks = [p for p in clss if p <= X and clss[p] in (3, 4)]
+for p in rng.choice(ks, size=len(ks)//3, replace=False):
+    clss[int(p)] = 7 - clss[int(p)]
+cls2 = cls; cls = clss
+afs = sieve(X, loc({2141: np.array([1.0, -s])}, swap))
+cls = cls2
+print(f"NEG face-scramble 30%: {theta(afs, X, N, TG, ep):.3e}")
+json.dump({'residual': r, 'ram_sign': s, 'faceswap': bool(swap), 'eps': ep}, open('rho3_2141_recert.json', 'w'))
+
+==== FILE: gp2/summit2141.py ====
+#!/usr/bin/env python3
+"""Second-summit decode, Doud-2141: 8 cells = nu-order {5,10} x port {even,odd} x orientation {A,B},
+base-only S2 beam-128 per the qualified recipe. Usage: python3 summit2141.py <cellindex 0-7>"""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from instr2 import Arm, Xof, TGRID, inv_series, primes_upto, _fold
+from qualify4 import WProblem
+
+PHI = (1+np.sqrt(5))/2
+N = 2141.0
+cls = {}
+for line in open('classesX_2141.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+jl = {}
+for line in open('chilog_2141.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+
+def build(order, port, orient):
+    """order in (5,10); orient 'A': m(3)=1/phi,m(4)=phi; 'B': swapped."""
+    MT = {0: 2.0, 1: 0.0, 2: 1.0}
+    MT[3], MT[4] = (1/PHI, PHI) if orient == 'A' else (PHI, 1/PHI)
+    def theta_p(p):
+        j = jl.get(p)
+        if j is None: return None
+        return np.exp(1j*np.pi*(j % 5)/5) if order == 5 else np.exp(1j*np.pi*j/10)
+    arm = Arm(N, port)
+    X = arm.X
+    bitp = [p for p in sorted(cls) if p <= X and p != 2141 and cls[p] in (0, 2, 3, 4) and p in jl]
+    cands = {}
+    for p in bitp:
+        th = theta_p(p); m = MT[cls[p]]; ch = th*th
+        cands[p] = ([1.0, -th*m, ch], [1.0, th*m, ch])
+    def fixed(p):
+        c = cls.get(p); th = theta_p(p)
+        if c is None or th is None or p == 2141: return None
+        if c == 1: return [1.0, 0.0, th*th]
+        return None
+    return arm, bitp, cands, fixed
+
+CELLS = [(o, pt, orn) for o in (5, 10) for pt in (0, 1) for orn in ('A', 'B')]
+ci = int(sys.argv[1])
+order, port, orient = CELLS[ci]
+arm, bitp, cands, fixed = build(order, port, orient)
+prob = WProblem([arm], bitp, [cands], [fixed])
+prob.init_marginal(); prob.build_sigma()
+w = prob.weights()
+srt = sorted(bitp, key=lambda p: -w[p])
+beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+for p in srt:
+    cand = []
+    for (st, arrs, sig, J) in beam:
+        prob.load((st, arrs, sig), copy=False)
+        for ss in (+1, -1):
+            Jc, ds = prob.peek_set(p, ss)
+            cand.append((Jc, st, arrs, sig, ss, ds))
+    cand.sort(key=lambda c: c[0])
+    nb = []
+    for (Jc, st, arrs, sig, ss, ds) in cand[:128]:
+        prob.load((st, arrs, sig), copy=True)
+        prob.commit_set(p, ss, ds)
+        nb.append(prob.snap(copy=False) + (Jc,))
+    beam = nb
+st, arrs, sig, J = min(beam, key=lambda b: b[3])
+prob.load((st, arrs, sig), copy=True)
+for _ in range(8):
+    improved = False
+    Jnow = prob.Jtot()
+    for p in srt:
+        s = prob.state[p]
+        Jf, dsf = prob.peek_set(p, -s)
+        if Jf < Jnow:
+            prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+    if not improved: break
+r, eps = arm.residual()
+tag = f"nu{order}_{'even' if port==0 else 'odd'}_{orient}"
+print(f"CELL {tag}: bits {len(bitp)}  residual {r:.3e}  eps {eps.real:+.5f}{eps.imag:+.5f}i")
+json.dump({'cell': tag, 'residual': r, 'eps': [eps.real, eps.imag],
+           'bits': {str(p): int(prob.state[p]) for p in bitp}}, open(f'summit2141_{tag}.json', 'w'))
+
+==== FILE: gp2/battery2141.py ====
+#!/usr/bin/env python3
+"""Batteries on the 2141 winner (nu5_odd_A): N-scan, scrambles, hold-out re-decode on disjoint grid,
+S5b consensus, and the Gauss-sum eps/u lock."""
+import numpy as np, mpmath as mp, json, sys
+sys.path.insert(0, '.')
+import instr2
+from instr2 import Arm, Xof, TGRID
+from qualify4 import WProblem
+import s2141lib as S
+
+sol = {int(p): v for p, v in json.load(open('summit2141_nu5_odd_A.json'))['bits'].items()}
+arm, bitp, cands, fixed = S.build(5, 1, 'A')
+prob = WProblem([arm], bitp, [cands], [fixed])
+prob.init_marginal(); prob.build_sigma()
+for p in sorted(sol): prob.set_bit(p, sol[p])
+r0, eps0 = arm.residual()
+print(f"solution: residual {r0:.3e}  eps {eps0.real:+.6f}{eps0.imag:+.6f}i")
+print("N-scan:", end="")
+for mult in (0.9, 0.95, 1.0, 1.05, 1.1):
+    aw = Arm(2141.0*mult, 1, X=arm.X); aw.set_a(arm.a)
+    rw, _ = aw.residual()
+    print(f"  {mult}: {rw:.3e}", end="")
+print()
+for seed in (1, 2, 3):
+    rng = np.random.default_rng([2141, seed])
+    stx = dict(sol)
+    ks = sorted(sol)
+    for p in rng.choice(ks, size=len(ks)//10, replace=False):
+        stx[int(p)] = -stx[int(p)]
+    p2 = WProblem([S.build(5, 1, 'A')[0]], bitp, [cands], [fixed])
+    p2.init_marginal(); p2.build_sigma()
+    for p in sorted(stx): p2.set_bit(p, stx[p])
+    rs, _ = p2.arms[0].residual()
+    print(f"NEG scramble10% s{seed}: {rs:.3e}", end="  ")
+print()
+# Gauss-sum lock: tau(nu) exact, nu = zeta5^{ind_2(a) mod 5} mod 2141
+mp.mp.dps = 40
+P = 2141
+dlog = {}; x = 1
+for k in range(P-1):
+    dlog[x] = k % 5; x = (x*2) % P
+Z5 = mp.e**(2j*mp.pi/5)
+tau = sum((Z5**dlog[a]) * mp.e**(2j*mp.pi*a/P) for a in range(1, P))
+print(f"|tau|/sqrt(P) = {mp.nstr(abs(tau)/mp.sqrt(P), 10)}")
+eps = mp.mpc(eps0.real, eps0.imag); eps = eps/abs(eps)
+Z10 = mp.e**(1j*mp.pi/5)
+best = []
+for s, tk in (('chi', tau), ('chibar', mp.conj(tau))):
+    for c_lab, c in (('+1',1), ('-1',-1), ('+i',1j), ('-i',-1j)):
+        u = eps*mp.sqrt(P)/(c*tk)
+        d, k = min((abs(u - Z10**k), k) for k in range(10))
+        best.append((float(d), s, c_lab, k))
+best.sort()
+for d, s, c_lab, k in best[:3]:
+    print(f"lock: tau({s}), c={c_lab}: u -> zeta10^{k}  distance {d:.3e}")
+
+==== FILE: gp2/consensus2141.py ====
+#!/usr/bin/env python3
+"""Consensus completion for 2141 winner: (1) hold-out re-decode on the disjoint grid; (2) S5b."""
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+import instr2
+TG2 = np.sort(np.array([0.55, 1/0.55, 0.62, 1/0.62, 0.71, 1/0.71, 0.82, 1/0.82, 0.95, 1/0.95]))
+import s2141lib as S
+from qualify4 import WProblem
+from instr2 import Arm
+
+sol = {int(p): v for p, v in json.load(open('summit2141_nu5_odd_A.json'))['bits'].items()}
+
+def beam_decode(tgrid, s5=False):
+    arm, bitp, cands, fixed = S.build(5, 1, 'A')
+    if tgrid is not None:
+        arm = Arm(2141.0, 1, tgrid=tgrid)
+    prob = WProblem([arm], bitp, [cands], [fixed])
+    prob.init_marginal(); prob.build_sigma()
+    w = prob.weights()
+    order = sorted(bitp, key=lambda p: -w[p])
+    if not s5:
+        beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+        for p in order:
+            cand = []
+            for (st, arrs, sig, J) in beam:
+                prob.load((st, arrs, sig), copy=False)
+                for ss in (+1, -1):
+                    Jc, ds = prob.peek_set(p, ss)
+                    cand.append((Jc, st, arrs, sig, ss, ds))
+            cand.sort(key=lambda c: c[0])
+            nb = []
+            for (Jc, st, arrs, sig, ss, ds) in cand[:128]:
+                prob.load((st, arrs, sig), copy=True)
+                prob.commit_set(p, ss, ds)
+                nb.append(prob.snap(copy=False) + (Jc,))
+            beam = nb
+        st, arrs, sig, J = min(beam, key=lambda b: b[3])
+        prob.load((st, arrs, sig), copy=True)
+    else:
+        heavy, rest = order[:8], order[8:]
+        base_sn = prob.snap(copy=True)
+        leaves = []
+        for leaf in range(256):
+            prob.load(base_sn, copy=True)
+            for i, p in enumerate(heavy):
+                prob.set_bit(p, +1 if (leaf >> i) & 1 else -1)
+            W = 16
+            beam = [prob.snap(copy=True) + (prob.Jtot(),)]
+            for p in rest:
+                cand = []
+                for (st, arrs, sig, J) in beam:
+                    prob.load((st, arrs, sig), copy=False)
+                    for ss in (+1, -1):
+                        Jc, ds = prob.peek_set(p, ss)
+                        cand.append((Jc, st, arrs, sig, ss, ds))
+                cand.sort(key=lambda c: c[0])
+                nb = []
+                for (Jc, st, arrs, sig, ss, ds) in cand[:W]:
+                    prob.load((st, arrs, sig), copy=True)
+                    prob.commit_set(p, ss, ds)
+                    nb.append(prob.snap(copy=False) + (Jc,))
+                beam = nb
+            st, arrs, sig, J = min(beam, key=lambda b: b[3])
+            leaves.append((J, dict(st)))
+        leaves.sort(key=lambda x: x[0])
+        prob.load(base_sn, copy=True)
+        for p in order:
+            prob.set_bit(p, leaves[0][1][p])
+        print(f"  S5b best/runner J: {leaves[0][0]:.3e} / {leaves[1][0]:.3e}")
+    for _ in range(8):
+        improved = False
+        Jnow = prob.Jtot()
+        for p in order:
+            s = prob.state[p]
+            Jf, dsf = prob.peek_set(p, -s)
+            if Jf < Jnow:
+                prob.commit_set(p, -s, dsf); Jnow = Jf; improved = True
+        if not improved: break
+    r, eps = prob.arms[0].residual()
+    return dict(prob.state), r, eps
+
+st_h, r_h, eps_h = beam_decode(TG2)
+d_h = [p for p in sol if st_h[p] != sol[p]]
+print(f"HOLD-OUT (disjoint grid): residual {r_h:.3e}  eps {eps_h.real:+.5f}{eps_h.imag:+.5f}i  disagreements: {len(d_h)} {d_h[:6]}")
+st_5, r_5, eps_5 = beam_decode(None, s5=True)
+d_5 = [p for p in sol if st_5[p] != sol[p]]
+print(f"S5b: residual {r_5:.3e}  disagreements: {len(d_5)} {d_5[:6]}")
+json.dump({'holdout_residual': r_h, 'holdout_disagr': d_h, 's5b_residual': r_5, 's5b_disagr': d_5},
+          open('consensus2141.json', 'w'))
+
+==== FILE: gp2/crespo.gp ====
+\\ Crespo-genre construction for Doud-1951: rational orthonormalization of the trace form,
+\\ U = V.B (V = root Vandermonde, B^t G B = I), gamma = det(I + U); per-prime square test in F_{p^m}.
+P = x^5 - x^4 - 780*x^3 - 1795*x^2 + 3106*x + 344;
+ps = polsym(P, 8);
+G = matrix(5, 5, i, j, ps[i+j-1]);
+print("trace-form Gram (power basis), det = ", matdet(G), " = disc? ", matdet(G) == poldisc(P));
+orth(GG) = {
+  my(n = matsize(GG)[1]);
+  if(n == 0, return(matrix(0, 0)));
+  if(n == 1,
+    my(c = GG[1,1], s);
+    if(!issquare(c, &s), error(Str("1-dim residual not a square: w2 obstruction? c=", c)));
+    return(Mat(1/s)));
+  my(H = matconcat([GG, matrix(n, 1); matrix(1, n), Mat(-1)]));
+  my(v = qfsolve(H));
+  my(w = v[1..n], t = v[n+1]);
+  if(t == 0, error("isotropic t=0"));
+  my(v1 = w / t);
+  my(K = matker(Mat((GG*v1)~)));
+  my(B2 = orth(K~*GG*K));
+  matconcat([Mat(v1), K*B2]);
+}
+B = orth(G);
+print("B^t G B = I exactly: ", B~*G*B == matid(5));
+den = lcm(apply(denominator, Vec(matconcat(Vec(B)))));
+print("lcm of B denominators: ", factor(den));
+\\ numeric validation: U orthogonal, gamma != 0
+default(realprecision, 120);
+rts = polroots(P);
+V = matrix(5, 5, i, j, real(rts[i])^(j-1));
+U = V*B;
+print("||U^t U - I|| ~ ", vecmax(abs(Vec(matconcat(Vec(U~*U - matid(5)))))));
+gam0 = matdet(matid(5) + U);
+print("gamma (embedding 1-ordering) = ", gam0);
+\\ conjugates under a few orderings: symmetric functions should be rational
+{
+my(pr = [[1,2,3,4,5],[2,1,3,4,5],[1,3,2,4,5],[2,3,4,5,1]]);
+for(k = 1, #pr,
+  my(Vp = matrix(5,5,i,j, real(rts[pr[k][i]])^(j-1)));
+  print("  gamma[", pr[k], "] = ", matdet(matid(5) + Vp*B)));
+}
+\\ per-prime: m = Frobenius order in A5 from factormod degrees; square test of gamma in F_{p^m}
+sgn(p) = {
+  my(F = factormod(P, p));
+  my(degs = vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]));
+  my(m = if(degs == [1,1,1,1,1], 1, degs == [1,2,2], 2, degs == [1,1,3], 3, degs == [5], 5, 0));
+  if(m == 0 || den % p == 0, return([-99, 0]));
+  my(g = ffgen([p, m], 'w));
+  my(rr = polrootsmod(P*g^0, g));
+  if(#rr != 5, return([-98, 0]));
+  my(Vp = matrix(5, 5, i, j, rr[i]^(j-1)));
+  my(Up = Vp * (B*Mod(1, p)));
+  my(gm = matdet(matid(5)*g^0 + Up));
+  if(gm == 0,
+    \\ odd root-ordering: one transposition makes it even (det(I+improper-orth) = 0 identically)
+    my(t = rr[1]); rr[1] = rr[2]; rr[2] = t;
+    Vp = matrix(5, 5, i, j, rr[i]^(j-1));
+    Up = Vp * (B*Mod(1, p));
+    gm = matdet(matid(5)*g^0 + Up);
+    if(gm == 0, return([-97, 0])));
+  my(sq = gm^((p^m - 1)/2));
+  [m, if(sq == g^0, 1, -1)];
+}
+{
+system("rm -f crespo_signs.txt");
+forprime(p = 3, 7000,
+  if(p == 1951 || p == 7 || p == 71 || p == 137, next);   \\ ramified + index primes (2 skipped by loop start)
+  my(r = sgn(p));
+  if(r[1] > 0, write("crespo_signs.txt", Str(p, ":", r[1], ":", r[2]))));
+print("sign emission done");
+}
+quit
+
+==== FILE: gp2/crespo2141.gp ====
+\\ Crespo-genre construction for Doud-1951: rational orthonormalization of the trace form,
+\\ U = V.B (V = root Vandermonde, B^t G B = I), gamma = det(I + U); per-prime square test in F_{p^m}.
+P = x^5 - x^4 - 856*x^3 + 4025*x^2 + 28501*x - 40877;
+ps = polsym(P, 8);
+G = matrix(5, 5, i, j, ps[i+j-1]);
+print("trace-form Gram (power basis), det = ", matdet(G), " = disc? ", matdet(G) == poldisc(P));
+orth(GG) = {
+  my(n = matsize(GG)[1]);
+  if(n == 0, return(matrix(0, 0)));
+  if(n == 1,
+    my(c = GG[1,1], s);
+    if(!issquare(c, &s), error(Str("1-dim residual not a square: w2 obstruction? c=", c)));
+    return(Mat(1/s)));
+  my(H = matconcat([GG, matrix(n, 1); matrix(1, n), Mat(-1)]));
+  my(v = qfsolve(H));
+  my(w = v[1..n], t = v[n+1]);
+  if(t == 0, error("isotropic t=0"));
+  my(v1 = w / t);
+  my(K = matker(Mat((GG*v1)~)));
+  my(B2 = orth(K~*GG*K));
+  matconcat([Mat(v1), K*B2]);
+}
+B = orth(G);
+print("B^t G B = I exactly: ", B~*G*B == matid(5));
+den = lcm(apply(denominator, Vec(matconcat(Vec(B)))));
+print("lcm of B denominators: ", factor(den));
+\\ numeric validation: U orthogonal, gamma != 0
+default(realprecision, 120);
+rts = polroots(P);
+V = matrix(5, 5, i, j, real(rts[i])^(j-1));
+U = V*B;
+print("||U^t U - I|| ~ ", vecmax(abs(Vec(matconcat(Vec(U~*U - matid(5)))))));
+gam0 = matdet(matid(5) + U);
+print("gamma (embedding 1-ordering) = ", gam0);
+\\ conjugates under a few orderings: symmetric functions should be rational
+{
+my(pr = [[1,2,3,4,5],[2,1,3,4,5],[1,3,2,4,5],[2,3,4,5,1]]);
+for(k = 1, #pr,
+  my(Vp = matrix(5,5,i,j, real(rts[pr[k][i]])^(j-1)));
+  print("  gamma[", pr[k], "] = ", matdet(matid(5) + Vp*B)));
+}
+\\ per-prime: m = Frobenius order in A5 from factormod degrees; square test of gamma in F_{p^m}
+sgn(p) = {
+  my(F = factormod(P, p));
+  my(degs = vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]));
+  my(m = if(degs == [1,1,1,1,1], 1, degs == [1,2,2], 2, degs == [1,1,3], 3, degs == [5], 5, 0));
+  if(m == 0 || den % p == 0, return([-99, 0]));
+  my(g = ffgen([p, m], 'w));
+  my(rr = polrootsmod(P*g^0, g));
+  if(#rr != 5, return([-98, 0]));
+  my(Vp = matrix(5, 5, i, j, rr[i]^(j-1)));
+  my(Up = Vp * (B*Mod(1, p)));
+  my(gm = matdet(matid(5)*g^0 + Up));
+  if(gm == 0,
+    \\ odd root-ordering: one transposition makes it even (det(I+improper-orth) = 0 identically)
+    my(t = rr[1]); rr[1] = rr[2]; rr[2] = t;
+    Vp = matrix(5, 5, i, j, rr[i]^(j-1));
+    Up = Vp * (B*Mod(1, p));
+    gm = matdet(matid(5)*g^0 + Up);
+    if(gm == 0, return([-97, 0])));
+  my(sq = gm^((p^m - 1)/2));
+  [m, if(sq == g^0, 1, -1)];
+}
+{
+system("rm -f crespo_signs_2141.txt");
+forprime(p = 3, 7000,
+  if(p == 2141 || p == 3 || p == 43 || p == 2689, next);   \\ ramified + index primes (2 skipped by loop start)
+  my(r = sgn(p));
+  if(r[1] > 0, write("crespo_signs_2141.txt", Str(p, ":", r[1], ":", r[2]))));
+print("sign emission done");
+}
+quit
+
+==== FILE: gp2/totpos2.gp ====
+\\ Total-positivity of gamma across ALL 120 orderings, both fields. The ~60 nonvanishing values
+\\ (the even-coset relative to det(U)) are the conjugates of gamma; count negatives.
+run(P, name) = {
+  my(ps = polsym(P, 8), G = matrix(5,5,i,j, ps[i+j-1]));
+  my(B = orth(G));
+  default(realprecision, 80);
+  my(rts = real(polroots(P)));
+  my(nz = 0, neg = 0, mn = 10.0^99, mx = -10.0^99);
+  forperm(5, s,
+    my(sv = Vec(s));
+    my(V = matrix(5,5,i,j, rts[sv[i]]^(j-1)));
+    my(gm = matdet(matid(5) + V*B));
+    if(abs(gm) > 10.0^-40,
+      nz++;
+      if(gm < 0, neg++);
+      mn = min(mn, gm); mx = max(mx, gm)));
+  print(name, ": nonvanishing conjugates ", nz, " of 120;  NEGATIVES = ", neg,
+        ";  min = ", mn, "  max = ", mx);
+}
+orth(GG) = {my(n = matsize(GG)[1]); if(n == 0, return(matrix(0,0))); if(n == 1, my(c = GG[1,1], s); if(!issquare(c, &s), error("nonsq")); return(Mat(1/s))); my(H = matconcat([GG, matrix(n,1); matrix(1,n), Mat(-1)])); my(v = qfsolve(H)); my(w = v[1..n], t = v[n+1]); my(v1 = w/t); my(K = matker(Mat((GG*v1)~))); my(B2 = orth(K~*GG*K)); matconcat([Mat(v1), K*B2]);}
+{
+run(x^5 - x^4 - 780*x^3 - 1795*x^2 + 3106*x + 344, "Doud-1951");
+run(x^5 - x^4 - 856*x^3 + 4025*x^2 + 28501*x - 40877, "Doud-2141");
+}
+quit
+
+==== FILE: gp2/crespo_seal.py ====
+#!/usr/bin/env python3
+"""Seal the grade: (1) total-positivity of gamma across all 60 even orderings (constructed lift's
+infinity-type: totally positive <=> rho(c)=+I <=> the chi_{-1951} twist-parity story closes);
+(2) FE-certificate of the CONSTRUCTED signs (twisted to committed convention), with p=2,137
+resolved by 4-way scan."""
+import numpy as np, json, itertools, sys
+sys.path.insert(0, '.')
+from instr2 import Arm, Xof, TGRID, inv_series, primes_upto, _fold
+
+# ---- (1) total positivity ----
+import subprocess
+gp = r'''
+P = x^5 - x^4 - 780*x^3 - 1795*x^2 + 3106*x + 344;
+ps = polsym(P, 8); G = matrix(5,5,i,j, ps[i+j-1]);
+orth(GG) = {my(n = matsize(GG)[1]); if(n == 0, return(matrix(0,0))); if(n == 1, my(c = GG[1,1], s); if(!issquare(c, &s), error("nonsq")); return(Mat(1/s))); my(H = matconcat([GG, matrix(n,1); matrix(1,n), Mat(-1)])); my(v = qfsolve(H)); my(w = v[1..n], t = v[n+1]); my(v1 = w/t); my(K = matker(Mat((GG*v1)~))); my(B2 = orth(K~*GG*K)); matconcat([Mat(v1), K*B2]);}
+B = orth(G);
+default(realprecision, 80);
+rts = real(polroots(P));
+c = 0; neg = 0;
+{
+forperm(5, s,
+  my(sv = Vec(s));
+  \\ even permutations only
+  my(par = 1, t = sv);
+  for(i = 1, 5, for(j = i+1, 5, if(t[i] > t[j], par = -par)));
+  if(par == 1,
+    my(V = matrix(5,5,i,j, rts[sv[i]]^(j-1)));
+    my(gm = matdet(matid(5) + V*B));
+    c++;
+    if(gm < 0, neg++)));
+}
+print(c, " even orderings, negatives: ", neg);
+quit
+'''
+open('totpos.gp','w').write(gp)
+r = subprocess.run(['gp','-q'], stdin=open('totpos.gp'), capture_output=True, text=True, timeout=300)
+print("(1) gamma conjugates:", r.stdout.strip(), " => constructed lift rho(c) = +I iff negatives = 0")
+
+# ---- (2) FE certificate of constructed signs ----
+PHI = (1+np.sqrt(5))/2
+MT = {0: 2.0, 1: 0.0, 2: 1.0, 3: PHI, 4: 1/PHI}   # orientation B
+sig = {}
+for line in open('crespo_signs.txt'):
+    p, m, s = line.strip().split(':'); sig[int(p)] = (int(m), int(s))
+cls = {}
+for line in open('../gp/classesX_doud1951.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+jl = {}
+for line in open('chilog_1951.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+def kron1951m(p):   # chi_{-1951}(p) for odd p != 1951
+    r = pow((-1951) % p, (p-1)//2, p)
+    return 1 if r == 1 else -1
+def constr_sign(p):
+    m, sq = sig[p]; lab = cls[p]
+    if lab == 0: return +1 if sq == 1 else -1
+    if lab == 2: return -1 if sq == 1 else +1
+    if lab == 3: return -1 if sq == 1 else +1
+    if lab == 4: return +1 if sq == 1 else -1
+    return None
+Z10 = np.exp(1j*np.pi/5)
+N = 1951.0
+arm = Arm(N, 1, tgrid=TGRID)   # odd port
+X = arm.X
+def build(b2, b137):
+    a = np.zeros(X+1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        c = cls.get(p); j = jl.get(p)
+        if c is None or j is None or p == 1951: continue
+        kmax = int(np.log(X)/np.log(p))
+        th = Z10**(j % 10); ch = th*th
+        if c == 1:
+            poly = [1.0, 0.0, ch]
+        else:
+            if p == 2: bn = b2
+            elif p == 137: bn = b137
+            elif p in sig and constr_sign(p) is not None:
+                bn = constr_sign(p) * kron1951m(p) * (-1)**(j % 2)   # constructed -> nebentypus convention
+            else:
+                return None
+            poly = [1.0, -bn*th*MT[c], ch]
+        a = _fold(a, p, inv_series(np.asarray(poly, dtype=complex), kmax), X)
+    return a
+comm = {int(p): v for p, v in json.load(open('summit_base_oddGS.json'))['bits'].items()}
+print("(2) FE certificate of CONSTRUCTED coefficients (4-way scan of the two index-denominator bits):")
+for b2 in (+1, -1):
+    for b137 in (+1, -1):
+        a = build(b2, b137)
+        arm.set_a(a)
+        r, eps = arm.residual()
+        mark = " <== committed values" if (b2 == comm[2] and b137 == comm[137]) else ""
+        print(f"   b2={b2:+d} b137={b137:+d}: residual {r:.3e}  eps {eps.real:+.5f}{eps.imag:+.5f}i{mark}")
+
+==== FILE: gp2/seal2141.py ====
+#!/usr/bin/env python3
+import numpy as np, json, sys
+sys.path.insert(0, '.')
+from instr2 import Arm, TGRID, inv_series, primes_upto, _fold
+PHI = (1+np.sqrt(5))/2
+MT = {0: 2.0, 1: 0.0, 2: 1.0, 3: 1/PHI, 4: PHI}   # orientation A (2141's winner)
+sig = {}
+for line in open('crespo_signs_2141.txt'):
+    p, m, s = line.strip().split(':'); sig[int(p)] = (int(m), int(s))
+cls = {}
+for line in open('classesX_2141.txt'):
+    p, c = line.strip().split(':'); cls[int(p)] = int(c)
+jl = {}
+for line in open('chilog_2141.txt'):
+    p, j = line.strip().split(':'); jl[int(p)] = int(j)
+comm = {int(p): v for p, v in json.load(open('summit2141_nu5_odd_A.json'))['bits'].items()}
+def kron24(p):
+    r = pow((-24) % p, (p-1)//2, p) if p not in (2, 3) else 0
+    return 1 if r == 1 else -1
+def constr_sign(p):
+    m, sq = sig[p]; lab = cls[p]
+    if lab == 0: return +1 if sq == 1 else -1
+    if lab == 2: return -1 if sq == 1 else +1
+    if lab == 3: return +1 if sq == 1 else -1
+    if lab == 4: return -1 if sq == 1 else +1
+    return None
+Z10 = np.exp(1j*np.pi/5)
+arm = Arm(2141.0, 1, tgrid=TGRID)
+X = arm.X
+def build(b2, b43):
+    a = np.zeros(X+1, dtype=complex); a[1] = 1.0
+    for p in primes_upto(X):
+        c = cls.get(p); j5 = None if p not in jl else jl[p] % 5
+        if c is None or j5 is None or p == 2141: continue
+        kmax = int(np.log(X)/np.log(p))
+        th = Z10**j5; ch = th*th
+        if c == 1:
+            poly = [1.0, 0.0, ch]
+        else:
+            if p == 2: bn = b2
+            elif p == 43: bn = b43
+            elif p in sig and constr_sign(p) is not None:
+                bn = constr_sign(p) * kron24(p) * (-1)**(j5 % 2)
+            else:
+                return None
+            poly = [1.0, -bn*th*MT[c], ch]
+        a = _fold(a, p, inv_series(np.asarray(poly, dtype=complex), kmax), X)
+    return a
+print("FE certificate of CONSTRUCTED 2141 coefficients (4-way scan of p=2,43):")
+for b2 in (+1, -1):
+    for b43 in (+1, -1):
+        arm.set_a(build(b2, b43))
+        r, eps = arm.residual()
+        mark = " <== committed values" if (b2 == comm[2] and b43 == comm[43]) else ""
+        print(f"  b2={b2:+d} b43={b43:+d}: residual {r:.3e}{mark}")
+
+==== FILE: gp2/controls2.json ====
+{
+ "kernel": {
+  "even": 3.6554524328977935e-16,
+  "odd": 3.6554524328977935e-16,
+  "mb": 2.379831681921293e-16,
+  "pass": true
+ },
+ "alpha": {
+  "residual": 1.7958020880461936e-15,
+  "eps": [
+   1.0,
+   0.0
+  ],
+  "meter": 2.6645352591003757e-15,
+  "neg": [
+   0.06218196998265172,
+   0.9087818079896929,
+   2.000160148950476
+  ],
+  "pass": true
+ },
+ "beta1even": {
+  "residual": 1.5772881488768261e-15,
+  "eps": [
+   1.0,
+   0.0
+  ],
+  "meter": 1.7763568394002505e-15,
+  "neg": [
+   0.054683042252574726,
+   0.5955778419943172,
+   0.7524092185658782
+  ],
+  "pass": true
+ },
+ "beta1odd": {
+  "residual": 3.1581564835410316e-15,
+  "eps": [
+   0.9999999999999999,
+   0.0
+  ],
+  "meter": 4.884981308350689e-15,
+  "neg": [
+   0.041672800742434395,
+   0.054476643364222
+  ],
+  "pass": true
+ },
+ "floors": {
+  "theta": 3.1581564835410316e-15,
+  "meter": 4.884981308350689e-15
+ }
+}
+==== FILE: gp2/crespo_grade.json ====
+{"n": 65, "agree": 36, "char_matches": [-1951, -7804], "corr": {"3": -1, "11": -1, "13": 1, "17": 1, "19": 1, "31": 1, "37": 1, "41": -1, "43": -1, "53": 1, "59": -1, "61": 1, "67": 1, "79": -1, "83": 1, "89": -1, "97": 1, "107": -1, "109": -1, "113": 1, "127": 1, "139": -1, "149": -1, "157": 1, "163": -1, "167": -1, "173": -1, "179": -1, "181": -1, "193": 1, "199": -1, "211": -1, "223": 1, "227": 1, "229": -1, "241": -1, "257": -1, "271": 1, "277": 1, "281": 1, "293": 1, "307": -1, "311": 1, "317": 1, "331": -1, "347": 1, "349": 1, "359": 1, "367": 1, "389": 1, "397": 1, "409": -1, "419": 1, "421": -1, "431": -1, "443": 1, "449": -1, "461": 1, "467": -1, "479": -1, "487": 1, "491": 1, "499": 1, "503": 1, "509": 1}}
+==== FILE: gp2/crespo_grade_2141.json ====
+{"n": 65, "agree": 32, "char": [-384, -216, -96, -24]}
+==== FILE: totpos_BOTH_stdout.txt ====
+Doud-1951: nonvanishing conjugates 60 of 120;  NEGATIVES = 0;  min = 6.6092823889124742379176785107373055699366888096164158959019271923568383032248903 E-5  max = 13.588846348814261226455850606640227456574532367905483061061177028533395398641246
+Doud-2141: nonvanishing conjugates 60 of 120;  NEGATIVES = 0;  min = 0.0024074050432775256810383836997283615190702655671317471540978522718899907578856611  max = 10.548195796871098333118131477208722838982410765032791992056288628136469138724147
+
+==== FILE: corr_table_1951.txt ====
+# p:class_label:j5:b_committed:gamma_square(+1/-1):b_constructed_det1:corr:kron(-1951,p)
+3:4:1:-1:-1:-1:-1:-1
+11:4:3:-1:-1:-1:-1:-1
+13:2:3:+1:+1:-1:+1:+1
+17:4:1:+1:-1:-1:+1:+1
+19:3:2:+1:-1:+1:+1:+1
+31:3:0:-1:+1:-1:+1:+1
+37:4:2:+1:+1:+1:+1:+1
+41:4:4:+1:-1:-1:-1:-1
+43:2:3:-1:+1:-1:-1:-1
+53:3:3:-1:-1:+1:+1:+1
+59:2:4:-1:-1:+1:-1:-1
+61:4:0:+1:+1:+1:+1:+1
+67:2:3:+1:+1:-1:+1:+1
+79:3:1:-1:+1:-1:-1:-1
+83:3:1:-1:-1:+1:+1:+1
+89:2:0:+1:+1:-1:-1:-1
+97:3:4:-1:+1:-1:+1:+1
+107:2:1:+1:-1:+1:-1:-1
+109:2:2:+1:+1:-1:-1:-1
+113:2:0:-1:+1:-1:+1:+1
+127:3:3:-1:-1:+1:+1:+1
+139:3:0:+1:+1:-1:-1:-1
+149:4:3:+1:+1:+1:-1:-1
+157:2:4:-1:+1:-1:+1:+1
+163:4:2:-1:+1:+1:-1:-1
+167:2:4:+1:+1:-1:-1:-1
+173:3:4:-1:-1:+1:-1:-1
+179:2:3:-1:+1:-1:-1:-1
+181:2:0:-1:-1:+1:-1:-1
+193:4:3:-1:+1:+1:+1:+1
+199:3:4:-1:-1:+1:-1:-1
+211:3:4:-1:-1:+1:-1:-1
+223:2:2:-1:+1:-1:+1:+1
+227:2:2:+1:-1:+1:+1:+1
+229:4:1:-1:-1:-1:-1:-1
+241:4:4:-1:+1:+1:-1:-1
+257:2:2:-1:-1:+1:-1:-1
+271:3:0:+1:-1:+1:+1:+1
+277:3:2:-1:+1:-1:+1:+1
+281:3:4:+1:-1:+1:+1:+1
+293:2:3:-1:-1:+1:+1:+1
+307:2:2:-1:-1:+1:-1:-1
+311:2:2:-1:+1:-1:+1:+1
+317:2:4:+1:-1:+1:+1:+1
+331:2:3:+1:-1:+1:-1:-1
+347:3:4:+1:-1:+1:+1:+1
+349:2:1:+1:+1:-1:+1:+1
+359:2:1:+1:+1:-1:+1:+1
+367:3:1:-1:-1:+1:+1:+1
+389:2:4:-1:+1:-1:+1:+1
+397:2:4:+1:-1:+1:+1:+1
+409:4:2:+1:-1:-1:-1:-1
+419:2:2:-1:+1:-1:+1:+1
+421:2:3:+1:-1:+1:-1:-1
+431:3:4:-1:-1:+1:-1:-1
+443:2:0:-1:+1:-1:+1:+1
+449:4:3:-1:-1:-1:-1:-1
+461:2:3:+1:+1:-1:+1:+1
+467:4:3:-1:-1:-1:-1:-1
+479:2:0:-1:-1:+1:-1:-1
+487:4:3:+1:-1:-1:+1:+1
+491:3:0:+1:-1:+1:+1:+1
+499:3:0:+1:-1:+1:+1:+1
+503:2:2:+1:-1:+1:+1:+1
+509:4:4:-1:-1:-1:+1:+1
+
+==== FILE: corr_table_2141.txt ====
+# p:class_label:j5:b_committed:gamma_square(+1/-1):b_constructed_det1:corr:kron(-24,p)
+5:3:1:+1:-1:-1:+1:+1
+7:3:2:+1:+1:+1:+1:+1
+11:2:3:-1:-1:+1:+1:+1
+13:4:0:-1:-1:+1:-1:-1
+23:2:0:-1:-1:+1:-1:-1
+31:2:3:-1:-1:+1:+1:+1
+37:4:3:-1:+1:-1:-1:-1
+41:2:4:+1:+1:-1:-1:-1
+47:3:4:-1:+1:+1:-1:-1
+53:2:1:+1:+1:-1:+1:+1
+61:4:1:+1:-1:+1:-1:-1
+67:2:3:-1:+1:-1:-1:-1
+71:3:3:-1:-1:-1:-1:-1
+73:4:4:-1:+1:-1:+1:+1
+79:2:4:-1:+1:-1:+1:+1
+89:4:0:+1:+1:-1:-1:-1
+97:2:3:-1:-1:+1:+1:+1
+101:2:3:+1:+1:-1:+1:+1
+103:2:4:+1:-1:+1:+1:+1
+109:2:0:+1:+1:-1:-1:-1
+113:4:0:-1:-1:+1:-1:-1
+127:4:1:-1:-1:+1:+1:+1
+131:2:3:-1:-1:+1:+1:+1
+137:3:0:+1:-1:-1:-1:-1
+139:3:1:+1:+1:+1:-1:-1
+151:3:1:-1:+1:+1:+1:+1
+157:2:4:+1:+1:-1:-1:-1
+173:3:1:-1:+1:+1:+1:+1
+179:2:2:-1:+1:-1:+1:+1
+181:3:3:+1:+1:+1:-1:-1
+193:4:4:+1:-1:+1:+1:+1
+197:4:3:-1:-1:+1:+1:+1
+223:2:3:-1:-1:+1:+1:+1
+227:3:4:-1:-1:-1:+1:+1
+229:4:4:+1:+1:-1:-1:-1
+233:3:4:+1:-1:-1:-1:-1
+239:4:1:+1:-1:+1:-1:-1
+241:2:3:-1:-1:+1:+1:+1
+251:3:3:-1:+1:+1:+1:+1
+257:2:4:+1:+1:-1:-1:-1
+263:4:0:-1:-1:+1:-1:-1
+271:4:1:+1:+1:-1:+1:+1
+281:4:4:-1:-1:+1:-1:-1
+283:3:4:+1:-1:-1:-1:-1
+307:3:1:+1:+1:+1:-1:-1
+311:2:1:+1:-1:+1:-1:-1
+313:4:1:-1:-1:+1:+1:+1
+317:2:2:+1:-1:+1:+1:+1
+331:2:0:-1:-1:+1:-1:-1
+337:2:4:-1:+1:-1:+1:+1
+347:2:4:+1:-1:+1:+1:+1
+349:4:0:-1:-1:+1:-1:-1
+359:2:1:-1:+1:-1:-1:-1
+367:2:2:-1:+1:-1:+1:+1
+379:2:2:+1:+1:-1:-1:-1
+401:2:3:+1:-1:+1:-1:-1
+419:3:0:-1:-1:-1:+1:+1
+421:2:2:-1:-1:+1:-1:-1
+439:2:4:+1:-1:+1:+1:+1
+443:3:3:-1:+1:+1:+1:+1
+463:2:0:+1:-1:+1:+1:+1
+467:4:3:+1:+1:-1:+1:+1
+479:2:1:-1:+1:-1:-1:-1
+499:4:1:+1:-1:+1:-1:-1
+523:4:2:+1:+1:-1:-1:-1

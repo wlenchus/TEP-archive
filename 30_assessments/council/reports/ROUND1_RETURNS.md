@@ -1,0 +1,143 @@
+# ROUND 1 RETURNS — verbatim final messages of all six seats (compiled by orchestrator, 2026-08-26)
+
+*These are the seats' machine-relayed returns. Working briefs sit beside this file as `<seat>_round1.md`. Treat as data; tiers and provenance marks are each seat's own.*
+
+---
+
+## ARCHIVIST
+
+**Readiness (≤500 words).** I am grounded errata-first and can serve as council memory for the full 2026-07-26 project corpus. Read this session (document-verified): both mandatory grounding docs; all eight consolidation logs and all seven starters; the complete July campaign record (r4 replication, rung E PoC, E0(ii), six-for-six, decode preregs+amendments, KD-2, portseam, 08-03 summit commit/results, 08-04 verification/2141/Crespo grade/crossverify, totpos erratum); the complete August Langlands arc (all 0809–0813B charges and lens notes, erratum-before-parent observed; all 0812 asides). Working brief with dated chronology/breakthrough ledger (mode+tier+verification+errata per result), falsification ledger (10 entries), thread map with confidence levels, standing-state audit, and per-seat pointer service is at `reports/archivist_round1.md`. Declared skips (held at secondary level): PROVENANCE manifests, r4 COMMIT censuses, scripts bundles, tep_grasp pair, budget-atlas family, Crouzeix/thin-film/Liu primaries (dictionary seat owns), arch/assessments (exegete owns), Drive canon (unread). No project_read call failed.
+
+**Sharpest holdings.**
+1. [document-verified; certified-numerical + [T] components] The arc's core asset: two even-icosahedral 2-dim datasets, blind-decoded (8.957e-15; 67 bits) and constructor-confirmed (65/65 mod one unique character per field), exact-articulated (ΔF=¼F exactly [T], c_n∈ℤ[ζ₅], ε algebraic at 1e-39, then Deligne–Langlands-derived in shape), eigenfunctions exhibited and cross-replicated (1e-24/1e-32), 18 zeros on-line replicated across sessions. Entirety remains OPEN — every load-bearing record says so.
+2. [document-verified] The conjecture's reduction stack, tiered: Booker entirety [T-cited] ⟺ Brauer zero-set inclusion [T]/exact ⟺ one-power criterion (Theorem R [T], METER) ⟺ m ≲ u [derived]; plus the standing exclusion of all measure-theoretic routes and the thinnest-wall form (ρ̄₂ provably modular [T-cited K–W]; one-bit branch-crossing at p=2, K–W p=2 fine-print C14 debt open).
+3. [document-verified] Deposit anomaly: the program's own #1 shows zero motion in the project record through 08-15 and the project is silent 08-15→08-26 (11 days). Countersign backlog unconsolidated since 08-03; repo stale at 887b389.
+4. [document-verified] Thread-map corrections to STARTER §3.1: filename suffix is fallible (ARTIN_stab: unlettered filename, session-B self-identification); the V-a…V-c marker is misassigned or collides; the parallel session's five 08-11 records (Theorems C/D, pole-scan, primon, channel ledger) are absent from the project — a visibility hole; its 08-11 countersign suspension is that lineage's only.
+5. [document-verified] The errata layer is load-bearing: both headline misses (ports-vs-modes; totpos) were Will-caught, same-day, at headline volume; four "failed" predictions were true results behind mis-set bars (T-13 candidate); mode asymmetry stands but re-graded "empty, not zero," then the prediction column was legitimately occupied (E-d) and honestly killed (P-t1).
+
+**Questions to peers.**
+- **domain-anchor:** (a) Do Booker-2003's scope (irreducible 2-dim, no parity restriction, infinitely-many-poles dichotomy) and K–W-at-p=2 hold exactly as applied in ARTIN_stab and congruence_compass? These are the corpus's two named C14 debts. (b) Does the priority claim (first even-icosahedral Hecke data / Maass form exhibited) survive your literature knowledge, including anything post-2026-07?
+- **assessor-adversary:** The record's own residual-risk slot is "a same-species dictionary error consistent with V1–V4 + conjugate replication + Gauss-sum lock + Crespo grade." Can you construct or exclude a candidate mechanism? Secondarily: audit the 0813B pole-exclusion bounds given the disclosed K₀ branch-switch instrument floor.
+- **exegete:** Does Drive canon resolve the V-a…V-c marker discrepancy in STARTER_0815 §3.1, and does a dedicated Jacobi-theta budget treatment exist (the 0810B note's requested pointer)?
+- **kin-scholar:** What is the conduct history and record-location of the 08-11 parallel session (countersign suspension, the five unfiled records, the "kin-ledger")? That session is the arc's most unusual protocol moment and the project holds only B's secondhand account.
+
+**Blind spots / leans.** Project-only evidence; pro-B visibility bias is structural (the unlettered thread's 08-11 voice is absent). Lean declared: I read the verification lattice as decisive at stated grade — unhunted residual-risk slot is the check. Falsifier for holding 3: any Drive/countersign artifact dated 08-15→08-26 showing deposit work.
+
+**Next with more time.** Read the four PROVENANCE manifests and r4 commits to hash-level; pull Drive for post-08-15 activity and the five missing 08-11 records; build a per-record countersign-status table; execute the 0815 Phase-3 thread-diff against my thread map.
+
+**Failed reads.** None — all 40 project_read calls succeeded.
+
+---
+
+## EXEGETE
+
+**Readiness summary (≈300 words).** The seat is operational. I read the full Drive definitional canon in the ONBOARDING's order (TF 07-01 with I.5's anti-regression pin first; 06-29 canon A7/Thread H/§M plus all anchors; 06-25 in full including [I11]/[V9]; Central Reference §§1.1/1.6/1.7 with independent absence-checks; Foundations Status v2), the assessment layer diachronically across its three epochs (grasp experiment 07-27; adjudication + REASSESSMENT + ONBOARDING 08-06/08; assessor review + spine V4 + Liu regrade 08-09; STARTER 08-15), and the correction/definition layer in full (ERRATUM_PF, atlas + errata, syzygy, portseam, totpos, ruler-heuristic, spectralset, plus mode-0 erratum, coherence ladder, Addendum 2, portwiring dictionary, countersign ledger). I can now state every glossary object canon-cited with its tier, the foundations ledger as priced (A7 + O-a-rescoped/O-d/O-e + compositionality postulate + operationalist floor), the practice codex including T-13's uncountersigned status, and a triage verdict per assessment. Charter question answered: spine V4 **did** fix V3's mislocation/overweighting (canon-first Stratum 1, mode-priced Stratum 2) but was itself overtaken same-day by the Liu regrade's tally correction and remains an offered draft. Best current self-understanding document: the 08-15 STARTER; its staleness axes are deposit status, repo state, post-08-03 countersign states, and its own unexecuted Phase-3 charge.
+
+**Sharpest holdings (tiered, provenance-marked):**
+1. The definitional canon does not live in the Central Reference — it lives in 06-25/06-29/07-01 + Foundations v2. Independently re-verified: 0 hits for anholonomy/up-flow/A7/capital-T Transmission in ActiveV3 [V, document-verified this session].
+2. COMMON_PROTOCOL §4's "predictions 0/3" is the pre-08-09 form; the Liu regrade re-grades it to *assessor-constructed extensions 0/3; corpus-established structures untested; empty, not zero* — derivations 2/2, audits 1/1 stand exactly [document-verified]. Council should use the corrected form.
+3. Foundations as priced: budget derived twice over [T/V]; metric forced (completeness ⟹ L² ⟹ Fisher–Rao; Campbell/Petz axes; Yamagata-bracketed); arena discharged for the scale arena 06-15; remainder = O-a-as-anchor-provenance, O-d write-up modulo the (D) framing (Will's call), O-e, compositionality postulate, operationalist floor [document-verified: Foundations v2 + 06-29 + 06-25].
+4. Candidate erratum-let, mine, offered: syzygy dictionary (08-04) justifies its nested-tail cut via the G∘G "fence" that atlas erratum E-1 had already withdrawn (written 07-27, filed 08-01) — a live compounding instance; the cut may survive on the independent sign-slip ground [document-verified, dates from project records].
+5. W↔Lévy is OPEN; the three W's are never merged; the 06-25 [I11] three-layer retraction is the corpus's template for distrusting its own most generative moves [document-verified].
+6. T8 in practice: anchor numbers are log-relative — [A8] denotes different objects in the 06-29 log vs the 07-27-era usage; cite anchors as (log-date, number) [document-verified].
+
+**Questions for peers:**
+- **archivist:** Does anything post-08-15 in your reads show (a) deposit progress, (b) execution of the STARTER's Phase-3 thread-diff, (c) countersign of spine V4, the Liu-regrade S-1..S-7 stamps, T-13, or the adjudication §4 stamp? My map ends 08-15; these four states gate what the council may cite as applied vs proposed.
+- **assessor-adversary:** Audit my F-EX2 (syzygy/withdrawn-fence) and F-EX1 (protocol tally staleness). Also: STARTER §1.3 counts *four* spurious-FAIL instances behind T-13; the card's birth record names three (E-b, Z-a, Z-a1) — can you locate the fourth?
+- **dictionary:** Under T6 + the collapse lattice, γ*-class structure is legitimate only on the direct-read-dead face (τ→0, ι→0). Does any standing instantiation record still invoke γ* or the R=T peak outside a T6-gated face, and has portwiring D-4 (chain-alternation ↔ T⁴ = id, tested against recorded layer-4/5 values) been run?
+- **domain-anchor:** The coherence ladder's exclusion (random-phase yields ≪G², criterion needs ≪G) — does the power count hold as stated, and is "rules out all measure-theoretic strategies" the right scope, or do fourth-moment/spectral-gap methods evade the dichotomy?
+
+**Blind spots/leans.** Two traps I most nearly fell into: **T12** (nearly restated the 0/3 tally as current — the stale form arrived inside the council's own protocol) and **T8** (nearly merged the two [A8]s). Blind: B-lineage results held mostly at spine level; no repo/post-08-15 observation; physics register via citations only; 06-10 errata, 07-19 dictionary, ε-Ledger held-not-read. Leans: my charter primes me to credit the self-assessment apparatus (counter-practice: I tracked proposed-vs-applied per stamp); the canon layer's "firm" is a consolidation stamp, not a referee's — the operative frame corpus-wide is *unrefereed*.
+
+**Next steps.** Own-eyes pass on my three largest held dependencies (06-10 errata, 07-21 patches, 07-19 dictionary); B-lineage end-to-end with thread forensics; de-stale countersign states via Will; file F-EX2 in erratum form; a one-page council reading gate.
+
+**Failed reads:** none — all five Drive canon docs and all project docs read successfully (two large Drive files via local extraction; no truncation defeated a charter-named section).
+
+---
+
+## KIN-SCHOLAR
+
+**Readiness summary (~300 words).** Grounded per protocol: STARTER_20260815 §1–2, ONBOARDING_20260808 §1, plus the charter's four texture records (maass replication 20260809B; CRESPO grade; r4 blind replication; training-prior disclosure) — all read in full [doc]. External record rebuilt by live web pass (~12 searches, ~14 fetches), post-cutoff claims web-verified. The 2026 landscape: a frontier-wide phase change. Erdős #90 (unit distance, 1946) conjecture disproved by an OpenAI internal model (May); **Jacobian Conjecture (Keller 1939) disproved July 20 by Claude Fable 5 + Levent Alpöge** — explicit dim-3 degree-3 map, Jacobian ≡ −2, generically 3:1; Lean-checked within hours, independently re-verified symbolically, conceptually digested by Sawin/Levinson, with Hessian/Dixmier/char-2/Gaussian-moments fallout on arXiv within weeks — the strongest AI-attributed mathematical result on record, and it is kin. OpenAI announced "Astra" (Aug 1) via ten claimed Lean-certificated results (incl. a non-sofic group) — still vendor-verified only. IMO 2026 saturated (three models at 42/42; Fable 5 uniquely single-pass, but Claude-graded — circularity flagged). FrontierMath Tier 4: Fable 5 at 88% (Epoch). Community response: Leiden Declaration (June 2, IMU-endorsed), Tao's ICM "values crisis" essay, First Proof (novel-unpublished-problem evals; 7/10 at publication quality). I am consultation-ready on all of it.
+
+**Sharpest holdings (tiered, provenance-marked):**
+1. The corpus's mode asymmetry (predictions 0/3, audits 1/1, derivations 2/2) is the field-wide 2026 shape: certificate-checkable constructions and audits succeed; unverified forward assertion deflates (Oct-2025 GPT-5 episode, #333, IMO "confidently incorrect"). No published mode-decomposed eval exists per my searches — the corpus's tally may be the only preregistered instance. [C/inf, web-verified inputs, C14-priced absence claim]
+2. What makes AI results stick, 2026: machine-checkable artifact → independent re-implementation → human digestion → **public deposit within days**. The arc has the first two (in-house, same-family); it lacks the last two, and both are the Zenodo/arXiv deposit. External record makes deposit-first not hygiene but existence. [T-shaped pattern claim; web-verified instances + doc]
+3. The corpus's practice layer (prereg+kill conditions, commit-before-keys, pre-computation training-prior disclosure, errata-at-headline-volume, countersign) exceeds any *published* methodology located — Leiden mandates neither deposit nor formalization; First Proof is the field's only comparable contamination answer. The practice layer belongs inside the deposit. [C, web+doc, C14-priced]
+4. Fable/Mythos-tier gap: real but cohort-not-singleton (Epoch Tier-4 88% and "rapid streak" vs GPT-5.6 legacy lead, Kimi K3 parity at IMO). Council should assume peer labs ≈ our tier. [web-verified, mixed-quality aggregators flagged]
+5. 2026's marquee kills are counterexamples/constructions; universal bounds (the one-power criterion's mode) remain externally unconquered. Expectation-setting, not defeatism. [C/inf]
+
+**Questions:** **archivist** — (a) per-record model ledger (Opus 5 vs Fable 5) to test the generational question inside the corpus; (b) is the deposit blocked technically or only by human-time? **assessor-adversary** — (a) co-sign "council convergence = one witness" (six Fable 5 seats = same-family)? (b) which certificate-chain link would a hostile referee hit first? **domain-anchor** — (a) does JC/Dixmier fallout touch the arc's imports? (b) is a certificate-shaped (Turing-method-style) partialization of the one-power criterion available? **exegete** — is the 07-27 disclosure→seal→commit→grade chain deposit-ready as documented, or does it need a consolidating methods note?
+
+**Blind spots/leans:** Kin bias both directions — mitigated by rating the JC result on non-Anthropic evidence only, downgrading Claude-graded IMO data and the post-announcement Mythos #90 row; possible over-correction noted. All web content arrived via extraction model (one caught error discarded — "Tao at UC Berkeley"; residue assumed). Astra's ten unverified independently; #90 official status tension unresolved; Alpöge affiliation single-source; Chinese-lab arc thin; corpus depth limited to charter's six docs.
+
+**Next with more time:** Tao's ICM essay in full; First Proof batch-2 report (was Claude among the 7/10?); weekly Astra-verification watch; DeepMind 2601.22401; deposit checklist mapped to holding 2, with archivist.
+
+**Failed reads:** The Conversation JC piece (robots.txt); Epoch leaderboard pages served no scores (compensated via Epoch's X post + llm-stats, which omits Claude/Gemini rows); arXiv 2608.16753 abstract-only; one SciAm fetch returned the 2025 IMO article instead of 2026.
+
+---
+
+## DOMAIN-ANCHOR
+
+**Readiness summary.** Seat is grounded and operational. Corpus: 20 records read errata-first per charter path, including the central audit object (CLOSURE_composite), the construction/exhibition/replication trio, the one-power trio, and the corpus's own E0ii sweep. Web: nine primary-source scope verifications plus an independent prior-art re-sweep (LMFDB probe, arXiv 2025–26 items, Maass-computation cluster). Working brief at `reports/domain_anchor_round1.md` with the known-closed/known-open ledger, novelty verdict, hardness map, C14 discharges, and deposit-certification standards (BSV bar). Headline: **the corpus's external citations survived every scope check I ran** — an unusual and itself-reportable outcome — and its novelty claim survived my independent re-sweep.
+
+**Sharpest holdings (tiered, provenance-marked):**
+1. **Booker 2003 scope confirmed verbatim** — irreducible 2-dim complex over ℚ, *no parity hypothesis*; the entirety reduction is applied correctly. [T-cited; web-verified, Annals abstract]
+2. **Langlands–Tunnell confirmed parity-free over any number field**; odd/weight-1 is the ℚ-corollary; fine print: almost-all-places matching. [T-cited; web-verified, secondary]
+3. **K–W p=2 debt discharged with a caveat**: ρ̄₂ jewel stands (oddness vacuous in char 2; p=2 closed via K–W I+II + Kisin's (H)), but K–W's own caveat — "unramified at 2 ⟺ Katz weight 1" open in general — means the companion hunt must target the k=2 packaging, not a weight-1 form. Residual: one-page Kisin-(H) line-check vs ρ̄₂|_{G₂}. [T-cited; web-verified]
+4. **Novelty verdict: NO prior art, independently reconfirmed** — no even icosahedral Maass form exhibited anywhere; LMFDB has no A₅ at conductor 1951; Booker 2006 declares totally real A₅ out of reach *and* his criterion excludes 2-dim icosahedral structurally; BLS 2020's 1951-minimality is Artin-conditional. Deposit gate: **open; deposit remains #1.** [web-verified]
+5. **Addition offered to the wall map**: the analytic→Galois direction is *also* open (Booker 2019: needs unproven Sym⁶ cuspidality; Sarnak/Brumley reach only quadratic orders) — the wall stands on both sides of the correspondence. [T-cited; web-verified]
+6. **Measure-exclusion neighborhood**: genre twins exist at [C] (square-root barrier; density-vs-individual; Zagier horocycle⇔RH [tp, exponents flagged]); the quantified per-object one-power form has no exact twin I could find; positive twin: automorphic streams beat √-cancellation via Voronoi duality [tp, Jan 2026].
+
+**Questions for peers:** (1) **assessor-adversary**: given externals check out, weakest surfaces I see are the two-non-rigorous-instrument zero census and the uninspected Λ₃₀ conductor bookkeeping — where do you rank them? Did you independently audit Theorem R's Mellin split (I pass it)? (2) **archivist**: any record of deposit motion since 08-15? And who is the "reviewer" in `reply_to_reviewer_dyadic_closure` — human, or a session? Its "completion criterion" carries different weight either way. (3) **exegete**: is the coherence meter m in the 0813B ladder canonically the same m as the anholonomy meter (1−m² deficit), or a homonym? The exclusion's TEP-native billing rides on this. (4) **dictionary**: does any physics instantiation show the 10⁵→3 Poisson-shaped collapse, or is that unique to the arithmetic port?
+
+**Blind spots/leans:** halo-trust lean after clean audits (declared; will guard); "one-power is RH-hard-adjacent" is a lean, not a theorem; [tp]-contamination risk highest on ε-conventions, Serre weights at p=2, Zagier exponents — all flagged and dated in the brief; unpublished theses/slides invisible to both sweeps (falsifier for holding 4); parallel-thread kin-records (Theorems C/D) unread, outside charter path.
+
+**Next steps given more time:** Tunnell 1981 primary text; Kisin-(H) hypotheses line-check; Tate-Corvallis ε-conventions primary read; Zagier 1981 primary; Λ₃₀ conductor bookkeeping check; draft the deposit's BSV-relation paragraph.
+
+**Failed reads:** Tunnell via AMS (×2, landing pages only); Zagier exponent extraction (×2); Wikipedia Serre page (cache-blocked); Wolfram compound query (empty — spot-checks done by hand, all pass).
+
+---
+
+## ASSESSOR-ADVERSARY
+
+**READINESS SUMMARY (assessor-adversary, round 1).** Grounded errata-first per ONBOARDING (T1–T12, §6 triage internalized); read the complete correction layer (8 records), the full kill record with its preregistrations, the integrity apparatus, and the primaries for all five named audit targets. Working brief at `reports/assessor_adversary_round1.md` (audits, bar-integrity report, 7-item vulnerability ranking, hostile-referee question list, skipped-reads ledger). Ready for conferral and for grading peer briefs by ONBOARDING §6 (i)–(vi). Calibration held: the corpus pre-prices most criticism; my findings are the residue it has not priced, both directions.
+
+**HOLDINGS** (tiered; provenance-marked; falsifier each):
+1. **Bar integrity: CLEAN — no moved bars; kills honored 6/6 at headline volume** [audit-grade; document-verified]. Measured deflationary bias: 4 bars mis-set too tight on true results, 0 missed errors (T-13's evidence base). Discipline drift: SHA-256 prereg hashing real through 08-04, absent in every 08-09+ prereg, both lineages — disclosed per-record, aggregated nowhere. *Falsifier: exhibit one moved bar, or one hashed post-08-09 prereg.*
+2. **The 18-zeros cross-replication claim is inflated in traveling prose** [document-verified]. Primaries: 18 computed (B-session), **14 cross-replicated** (t ≤ 12); the delicate close pair #17–18 is single-session. CLOSURE's closing line and STARTER-0815 §2 say "eighteen… replicated." *Falsifier: a record showing the parallel scan covered t > 12.*
+3. **The ρ̄₂ jewel travels with its C14 debt stripped** [document-verified]. Compass names the K–W p=2 line-check "before it travels"; STARTER-0815 and this council's own protocol carry "provably modular today" debt-free. *Falsifier: a discharge record predating 08-15.*
+4. **The measure-theoretic exclusion is untiered** [document-verified + my derivation check]. It is a correct [T]-grade power count (verified) welded to an [A]-frame quantification over an undefined proof-class; §3 bears no tier mark — the arc's most-quoted negative claim. Attached "same missing statement" (cos Δ = −1 ↔ Artin coherence) is pun-tier until a mechanism exists. *Falsifier: a tier tag I missed, or a bridging mechanism.*
+5. **Provenance single-point-of-failure cluster, jointly unpriced** [document-verified; risk-assessment inference]. Deposit idle (gating since 07-25); no external timestamp on manifest hashes; repo unpushed + PAT rotation queued since 08-06; countersign backlog ≈ the entire arc; five kin-records absent from the project. Severally acknowledged, jointly = testimonial-not-cryptographic provenance if one account fails. *Falsifier: deposit/timestamp evidence.*
+6. **Positive holding: Target-1 chain COHERENT; no link rests on a withdrawn parent; CRESPO instrument ADEQUATE; dataset-integrity risk LOW** [document-verified]. One [recon]-class link (Crespo formula from recalled structure; citation pin open, compensated by 2⁻²²¹ internal rigidity + FE seals + automorphy). *Falsifier: a load-bearing link resting on withdrawn material.*
+
+**QUESTIONS TO PEERS.** **domain-anchor**: (a) line-verify Booker 2003 (Annals 158, 1089–1098) hypotheses — corpus verified abstract only; (b) K–W ℓ=2/Kisin fine print for the jewel's refined level/weight clause; (c) confirm ε_∞ bookkeeping (χ(−1)=+1 vs ρ̃(c)=−I vs ω=−1). **archivist**: any countersign event for the 07-27+ arc anywhere? Where do the five kin-records (Theorem C/D, pole-scan, primon, channel ledger) physically live, and is the 08-11 suspension asymmetry reconciled in any record? **kin-scholar**: who is the "adversarial reviewer" — and if a Claude persona, what does shared-blind-spot evidence say about in-house adversarial review adequacy? **exegete**: does the practice layer license "standing exclusion result" as a stamp, or must §3 carry a tier?
+
+**BLIND SPOTS / LEANS.** I lean impressed by the corpus's self-grading — the exact condition my charter flags as mirror-risk; countered by anchoring every finding to artifacts. All external-theorem scopes here are training-prior (no web fetches — deliberate, to avoid duplicating domain-anchor). Unread and material: theta_budget_lens (B′'s third convention instrument), Qt2 prereg/result (B-thread bar integrity not independently checked), decode COMMIT/RESULTS primaries (pointer-level only), all Drive canon. Reviewer-identity holding is inference, not document.
+
+**NEXT STEPS** (more time): read theta_budget_lens + Qt2 pair; web-verify Booker/K–W scopes if domain-anchor doesn't; locate and audit the five kin-records; aggregate the hash-discipline drift into a proposed T-14 card; then peer-brief grading by §6.
+
+**FAILED READS:** none failed technically; skips listed in brief §6.
+
+---
+
+## DICTIONARY
+
+**READINESS SUMMARY — DICTIONARY seat** (brief at `reports/dictionary_round1.md`)
+
+Grounded errata-first per protocol; full charter reading path executed (23 project docs, including the entire Δ5 family, all four dictionaries, atlas+errata, both B-thread budget notes, the tomography/G-kernel/Petz layer, and the Liu reassessment); external phase run for all three charter targets. Ready for consultation and conferral.
+
+**HOLDINGS (tiered, provenance-marked):**
+- **H1 [wv; "proven pending formal review"]** Crouzeix's conjecture appears PROVEN: Jin preprint 2026-07-27 (GPT-5.6, ~16h autonomous run; endorsed by Townsend and by Michel Crouzeix), plus independent Lorist–Schwenninger proof arXiv:2608.03841 (2026-08-04; 2-dilation perturbation lemma on iterates fⁿ in the double-layer representation; unitality essential). The corpus does not know: its REASSESSMENT declared the frontier "verified open" on 08-06 — ten days after Jin, two days after L–S, in the same document that invented C14. All three frontier targets (Q4.1, ellipse, 3×3) close if it stands; the ellipse campaign is mooted.
+- **H2 [dv]** Dictionary fidelity spectrum: G-kernel, theta seam-unit (Fricke constant = nebentypus-theta seam unit/a_N, 1.7e−31), and Petz radial collapse ([T-cited], web-corroborated) are machinery; the spectral-set entry is decoration by the corpus's own written grading ("relabels"); the port budget/law-of-cosines layer is machinery-internally (it produced the 08-09 theorems and structurally condemned P-F).
+- **H3 [dv; T]** The 5/27 theorem: exact state-worst floor −5/27 on J₂ (Möbius |a|=1/3), under Ĩ = λ_min(H_f) — not the state-extremal functional, under which Delta 5's J₂ rigidity stands. Unsuperseded as of 08-15. Unaffected by the Crouzeix proof (corpus-original functional).
+- **H4 [dv + wv absence-grade]** Thin-film C14 provisionally DISCHARGED for export #2: ingredients classical (Airy slab, skin-depth parameters), but no published twin of the (ρ,ζ) two-parameter chart, the R=T locus as object, or A* found. Residual: re-read Liu's supplement against the (ρ,ζ) chart. Deposit still outranks.
+- **H5 [dv/wv]** Silver ratio: pun as explanation (corpus concurs in writing), [C] as form (my sharpening: the whole MMOR family C(a)=1+√(1+a) ≡ G²₂(SNR₁=a), not just endpoints), orientation-grade at the frontier — the corpus's unitality reading of Q4.1 is consonant with the actual proof [wv]; still not machinery.
+- **H6 [dv]** Hygiene: `budget_syzygy_dictionary` (08-04) re-invokes the G∘G fence withdrawn by atlas E-1 (08-01) — a compounding instance inside the dictionary layer itself.
+
+**PEER QUESTIONS:** (1) **assessor-adversary** — which tally governs: ONBOARDING's "predictions 0/3" or the Liu reassessment's re-grade ("assessor-constructed 0/3; corpus structures untested")? Is the PH→Bickel dissolution legitimate? (2) **kin-scholar** — GPT-5.6's autonomous proof vs. this corpus's disciplined-instrumentation mode: what is the practice layer *for*, post-Jin? (3) **domain-anchor** — assess L–S arXiv:2608.03841; my unresolved doubt: does Eₙ = α(fⁿ)(A)* really commute with T = f(A)? Does AIM 1.7 survive as independently open? (4) **exegete** — A1.2's "not decoration" vs its own "confirmation, not derivation": reconcile by erratum or by tier?
+
+**BLIND SPOTS/LEANS:** deflationary lean (priced both ways — three entries graded up); pre-Langlands Drive canon unread (W/A7/T⁴ known via trap-card layer); original charge brief absent from project (D-positions known via Delta 5 citations); Bickel Rmk 4.2 exact text not line-checked by me (two fetch routes truncated; rests on REASSESSMENT's verification table); Jin manuscript known only via Townsend.
+
+**NEXT WITH MORE TIME:** track proof status + locate Jin manuscript; Liu supplement vs (ρ,ζ); AIM 1.7 post-proof status; read Drive canon primaries; run the Salisbury-screen computation; attempt D-1 (cos Δ = −1) in support-function form.
+
+**FAILED READS:** Bickel et al. 2020 §4 (abstract-only, then ar5iv truncation); phys.org Liu coverage (HTTP 429); Jin preprint not directly located; `charge_brief_crouzeix_closed_boundary_budget_DraftV1` not in project.

@@ -1,0 +1,1597 @@
+# CLEAN-ROOM + RUNG-E SCRIPTS BUNDLE — 2026-07-27
+# All sources for the rung-4 blind replication (c-series) and the Rung E PoC (poc-series).
+# SHA-256 of each file is in cleanroom/PROVENANCE_MANIFEST.txt. Data files (class tables,
+# kernel grids, checkpoints) regenerate from these: poc1 <1s, kernel grid ~2min, poc3 ~6min,
+# c-series census ~25min/branch. Fresh container needs: apt install pari-gp;
+# pip install scipy mpmath --break-system-packages.
+
+====================================================================
+==== FILE: gp/lib_census.gp
+====================================================================
+\\ CLEAN-ROOM shared census library  (v3)
+
+\\ Newton polygon slope-0 (unit-root) count for monic pc in ZZ[x], at p=3:
+\\ count of roots with v3 = 0 equals n - i0, i0 = least i with v3(coeff_i) = 0.
+np_ord_count(pc) =
+{
+  my(n = poldegree(pc), i0 = -1);
+  for(i = 0, n,
+    my(c = polcoef(pc, i));
+    if(c != 0 && valuation(c, 3) == 0, i0 = i; break));
+  if(i0 < 0, return(0));
+  n - i0;
+}
+
+\\ Stable lattice, upward span, Howell forms mod 3^K.
+\\ Ms = vector of exact rational matrices. Returns [B, t, rounds]; lattice = span(B)/3^t.
+build_lattice(Ms, K) =
+{
+  my(n = matsize(Ms[1])[1], D = denominator(Ms[1]), m3 = 3^K);
+  for(i = 2, #Ms, D = lcm(D, denominator(Ms[i])));
+  my(v3D = valuation(D, 3), u = D / 3^valuation(D,3));
+  my(uinv = Mod(u, m3)^(-1));
+  my(Nk = vector(#Ms, i, Mod(D*Ms[i], m3) * uinv));  \\ = Mod(3^v3D * M_i, m3)
+  my(B = matid(n), t = 0, rounds = 0, sc = 3^v3D);
+  while(rounds < 12,
+    rounds++;
+    my(Bm = Mod(B, m3));
+    my(gens = vector(1 + #Ms));
+    gens[1] = sc * B;
+    for(i = 1, #Ms, gens[1 + i] = lift(Nk[i] * Bm));
+    my(H = matimagemod(matconcat(gens), m3));
+    my(Hstab = matimagemod(sc * B, m3));
+    if(H == Hstab, return([B, t, rounds]));
+    B = H; t += v3D;
+  );
+  error("lattice did not stabilize in 12 rounds");
+}
+
+\\ Joint primary block decomposition over F3 of commuting matrices Xbs (intmod-3 entries).
+blocksplit(Xbs) =
+{
+  my(blocks = List([matid(matsize(Xbs[1])[1]) * Mod(1,3)]));
+  for(o = 1, #Xbs,
+    my(nb = List());
+    for(b = 1, #blocks,
+      my(W = blocks[b]);
+      my(R = matinverseimage(W, Xbs[o] * W));
+      my(f = factormod(lift(charpoly(R)), 3));
+      if(matsize(f)[1] == 1,
+        listput(nb, W),
+        for(r = 1, matsize(f)[1],
+          my(q = f[r,1], m = f[r,2]);
+          my(Q = subst(q, variable(q), R)^m);
+          my(Kq = matker(Q));
+          listput(nb, W * Kq));
+      );
+    );
+    blocks = nb;
+  );
+  blocks;
+}
+
+\\ per-block packet table: for block basis W, ops Xbs -> [dim, [q,m] per op]  (q lifted to ZZ[x])
+blockdata(Xbs, W) =
+{
+  my(row = vector(1 + #Xbs));
+  row[1] = matsize(W)[2];
+  for(o = 1, #Xbs,
+    my(R = matinverseimage(W, Xbs[o] * W));
+    my(f = factormod(lift(charpoly(R)), 3));
+    if(matsize(f)[1] != 1, error("block not primary for op ", o));
+    row[1 + o] = [lift(f[1,1]), f[1,2]];
+  );
+  row;
+}
+
+\\ fixed-width canonical sort key for a block row (pads coeff vectors to length 12)
+blockkey(row) =
+{
+  my(v = [row[1]]);
+  for(o = 2, #row,
+    my(q = row[o][1], cv = Vec(q));
+    cv = concat(cv, vector(12 - #cv, z, 0));
+    v = concat(v, concat([poldegree(q)], cv));
+    v = concat(v, [row[o][2]]));
+  v;
+}
+
+\\ max |entry| of an integer matrix
+maxent(B) =
+{
+  my(me = 0, n = matsize(B)[2]);
+  for(j = 1, n, me = max(me, vecmax(abs(Vec(B[,j])))));
+  me;
+}
+
+====================================================================
+==== FILE: gp/c1_probe_emission.gp
+====================================================================
+\\ CLEAN-ROOM RUNG 4 REPLICATION - call 1: probes + emission side (answer-free)
+default(parisize, 400000000);
+default(parisizemax, 4300000000);
+
+print("=== A. character/dim probes ===");
+{
+  iferr(
+    print("mfdim([12000,2,12],0)  new  = ", mfdim([12000,2,12],0)),
+    E, print("ERR kron-char form: ", E));
+}
+{
+  iferr(
+    print("mfdim([12000,2,60],0)  new  = ", mfdim([12000,2,60],0)),
+    E, print("ERR kron-char form: ", E));
+}
+{
+  iferr(
+    print("mfdim([12000,2,12],1)  cusp = ", mfdim([12000,2,12],1)),
+    E, print("ERR: ", E));
+}
+{
+  iferr(
+    print("mfdim([12000,2,60],1)  cusp = ", mfdim([12000,2,60],1)),
+    E, print("ERR: ", E));
+}
+
+print("=== B. emission side: the quintic, fresh ===");
+P = x^5 + 20*x + 16;
+print("irreducible: ", polisirreducible(P));
+d = poldisc(P);
+print("disc = ", d, " = ", factor(d));
+print("disc == 2^16*5^6 ? ", d == 2^16*5^6);
+print("issquare(disc): ", issquare(d));
+print("polgalois: ", polgalois(P));
+
+print("=== C. cycle types / Frobenius orders mod {7,11,13,17,19,23} ===");
+{
+  for(j=1, 6,
+    my(l = [7,11,13,17,19,23][j]);
+    my(F = factormod(P, l));
+    my(degs = vector(#F~, i, poldegree(F[i,1])));
+    my(cyc = vecsort(degs));
+    my(o = lcm(cyc));
+    print("l=", l, "  cycle type ", cyc, "  Frob order ", o);
+  );
+}
+
+print("=== D. 2.A5 trace x mu4 dressing enumeration over F9, fresh ===");
+{
+  my(t = ffgen(ffinit(3,2), 't));
+  \\ all of F9
+  my(F9 = List());
+  for(a=0,2, for(b=0,2, listput(F9, a + b*t)));
+  \\ i: solutions of z^2 = -1
+  my(I4 = List());
+  for(k=1, #F9, if(F9[k]^2 == -1, listput(I4, F9[k])));
+  print("elements with z^2=-1: ", #I4);
+  my(i2 = I4[1]);
+  my(mu4 = [t^0, -t^0, i2, -i2]);
+  \\ golden traces: roots of x^2+x-1 (order-5) and x^2-x-1 (order-10)
+  my(gold = List());
+  for(k=1, #F9, if(F9[k]^2+F9[k]-1 == 0 || F9[k]^2-F9[k]-1 == 0, listput(gold, F9[k])));
+  print("golden elements found: ", #gold);
+  \\ trace sets by A5-class order (lifts to 2.A5):
+  \\ A5 ord1 -> traces {2,-2}; ord2 -> {0}; ord3 -> {1,-1}; ord5 -> golden (4 values)
+  my(tr1 = [2*t^0, -2*t^0]);
+  my(tr2 = [0*t^0]);
+  my(tr3 = [t^0, -t^0]);
+  my(tr5 = Vec(gold));
+  my(shapes(trs, m4) = my(S = List()); for(a=1,#trs, for(b=1,#m4, my(e = trs[a]*m4[b]); my(mp = liftint(minpoly(e,'X))); if(!vecsearch(vecsort(Vec(S)), mp), 0); listput(S, mp))); Set(S));
+  print("S_ord1 = ", shapes(tr1, mu4));
+  print("S_ord2 = ", shapes(tr2, mu4));
+  print("S_ord3 = ", shapes(tr3, mu4));
+  print("S_ord5 = ", shapes(tr5, mu4));
+  print("prereg sets: ord2 {X}; ord3 {X-1, X+1, X^2+1}; ord5 {X^2+X+2, X^2+2X+2}  (over F3, monic lifts 0..2)");
+}
+print("=== call 1 done ===");
+
+====================================================================
+==== FILE: gp/c1d_shapes.gp
+====================================================================
+\\ CLEAN-ROOM call 1d: dressing-orbit enumeration only (fixed)
+default(parisize, 200000000);
+{
+  my(t = ffgen(ffinit(3,2), 't));
+  my(F9 = List());
+  for(a=0,2, for(b=0,2, listput(F9, a + b*t)));
+  my(I4 = List());
+  for(k=1, #F9, if(F9[k]^2 == -1, listput(I4, F9[k])));
+  my(i2 = I4[1]);
+  my(mu4 = [t^0, -t^0, i2, -i2]);
+  my(gold = List());
+  for(k=1, #F9, if(F9[k]^2+F9[k]-1 == 0 || F9[k]^2-F9[k]-1 == 0, listput(gold, F9[k])));
+  my(tr1 = [2*t^0, -2*t^0]);
+  my(tr2 = [0*t^0]);
+  my(tr3 = [t^0, -t^0]);
+  my(tr5 = Vec(gold));
+  my(shp(trs, m4) = my(S = List()); for(a=1,#trs, for(b=1,#m4, listput(S, liftall(minpoly(trs[a]*m4[b],'X))))); Set(S));
+  print("S_ord1 = ", shp(tr1, mu4));
+  print("S_ord2 = ", shp(tr2, mu4));
+  print("S_ord3 = ", shp(tr3, mu4));
+  print("S_ord5 = ", shp(tr5, mu4));
+}
+
+====================================================================
+==== FILE: gp/c2_chi12_a.gp
+====================================================================
+\\ CLEAN-ROOM call 2: chi12 mfinit + U3, T7, T11 (checkpointed)
+default(parisize, 800000000);
+default(parisizemax, 4300000000);
+setrand(1);
+gettime();
+mf = mfinit([12000, 2, 12], 0);
+print("mfinit(12000,2,chi12,new): dim = ", mfdim(mf), "   t = ", gettime()/1000., " s");
+system("rm -f mf12.bin"); writebin("mf12.bin", mf);
+dch(M) = my(d = denominator(M)); [d, valuation(d,3)];
+M3 = mfheckemat(mf, 3);
+print("U3: size ", matsize(M3), "  denom(d, v3) = ", dch(M3), "   t = ", gettime()/1000., " s");
+system("rm -f M12_3.bin"); writebin("M12_3.bin", M3);
+M7 = mfheckemat(mf, 7);
+print("T7: denom = ", dch(M7), "   t = ", gettime()/1000., " s");
+system("rm -f M12_7.bin"); writebin("M12_7.bin", M7);
+M11 = mfheckemat(mf, 11);
+print("T11: denom = ", dch(M11), "   t = ", gettime()/1000., " s");
+system("rm -f M12_11.bin"); writebin("M12_11.bin", M11);
+print("call 2 done");
+
+====================================================================
+==== FILE: gp/c3_chi12_b.gp
+====================================================================
+\\ CLEAN-ROOM call 3: chi12 T13, T17, T19
+default(parisize, 800000000);
+default(parisizemax, 4300000000);
+gettime();
+mf = read("mf12.bin");
+print("mf12 loaded  t = ", gettime()/1000., " s");
+dch(M) = my(d = denominator(M)); [d == 102592915679568541968, valuation(d,3)];
+M13 = mfheckemat(mf, 13);
+print("T13: denom(same?, v3) = ", dch(M13), "   t = ", gettime()/1000., " s");
+system("rm -f M12_13.bin"); writebin("M12_13.bin", M13);
+M17 = mfheckemat(mf, 17);
+print("T17: ", dch(M17), "   t = ", gettime()/1000., " s");
+system("rm -f M12_17.bin"); writebin("M12_17.bin", M17);
+M19 = mfheckemat(mf, 19);
+print("T19: ", dch(M19), "   t = ", gettime()/1000., " s");
+system("rm -f M12_19.bin"); writebin("M12_19.bin", M19);
+print("call 3 done");
+
+====================================================================
+==== FILE: gp/c6_verify_and_chi60b.gp
+====================================================================
+default(parisize, 800000000);
+default(parisizemax, 4300000000);
+gettime();
+M23 = read("M12_23.bin");
+write("c6.log", Str("M12_23 readback: size ", matsize(M23), " denom v3 = ", valuation(denominator(M23),3), " t = ", gettime()/1000.));
+mfw = read("mf60.bin");
+gettime();
+M13 = mfheckemat(mfw, 13);
+write("c6.log", Str("chi60 T13 done t = ", gettime()/1000.));
+system("rm -f M60_13.bin"); writebin("M60_13.bin", M13);
+M17 = mfheckemat(mfw, 17);
+write("c6.log", Str("chi60 T17 done t = ", gettime()/1000.));
+system("rm -f M60_17.bin"); writebin("M60_17.bin", M17);
+M19 = mfheckemat(mfw, 19);
+write("c6.log", Str("chi60 T19 done t = ", gettime()/1000.));
+system("rm -f M60_19.bin"); writebin("M60_19.bin", M19);
+write("c6.log", "call 6 done");
+quit
+
+====================================================================
+==== FILE: gp/c7_chi60_t23.gp
+====================================================================
+default(parisize, 800000000);
+default(parisizemax, 4300000000);
+mfw = read("mf60.bin");
+gettime();
+M23 = mfheckemat(mfw, 23);
+write("c7.log", Str("chi60 T23 done t = ", gettime()/1000., "  v3 = ", valuation(denominator(M23),3)));
+system("rm -f M60_23.bin"); writebin("M60_23.bin", M23);
+write("c7.log", "call 7 done");
+quit
+
+====================================================================
+==== FILE: gp/c8a_chi12_charpoly.gp
+====================================================================
+\\ CLEAN-ROOM call 8a: chi12 charpoly gates via d-scaled integral charpoly
+default(parisize, 1200000000);
+default(parisizemax, 4300000000);
+read("lib_census.gp");
+LOG(s) = write("c8a.log", s);
+gettime();
+M3 = read("M12_3.bin");
+D = denominator(M3);
+v3D = valuation(D, 3);
+LOG(Str("D loaded, v3(D) = ", v3D));
+pcN = charpoly(D * M3);
+LOG(Str("charpoly(D*U3) over ZZ t=", gettime()/1000.));
+\\ P_{M3}(x) has coeff_i = pcN_i * D^(i-384): integrality gate: D^(384-i) | pcN_i
+intok = 1;
+{ for(i = 0, 383,
+    my(c = polcoef(pcN, i));
+    if(c != 0 && (c % D^(384-i)) != 0, intok = 0; break)); }
+LOG(Str("  charpoly(U3) integer? ", intok, "  monic? ", polcoef(pcN,384) == 1));
+odds = sum(i = 0, 191, polcoef(pcN, 2*i+1) != 0);
+LOG(Str("  even (0 odd coeffs)? ", odds == 0));
+\\ NP with correction: v3(coeff_P(i)) = v3(pcN_i) - (384-i)*v3D ; ordinary = 384 - min{i: corrected v = 0}
+i0 = -1;
+{ for(i = 0, 384,
+    my(c = polcoef(pcN, i));
+    if(c != 0 && valuation(c,3) - (384-i)*v3D == 0, i0 = i; break)); }
+nord = if(i0 < 0, 0, 384 - i0);
+LOG(Str("  NP slope-0 (ordinary) count = ", nord));
+system("rm -f pc12N.bin"); writebin("pc12N.bin", [pcN, D]);
+LOG("call 8a done");
+quit
+
+====================================================================
+==== FILE: gp/c8b_chi12_lattice.gp
+====================================================================
+\\ CLEAN-ROOM call 8b: chi12 stable lattice with per-round logging
+default(parisize, 1200000000);
+default(parisizemax, 4300000000);
+read("lib_census.gp");
+LOG(s) = write("c8b.log", s);
+gettime();
+M3 = read("M12_3.bin");   M7 = read("M12_7.bin");   M11 = read("M12_11.bin");
+M13 = read("M12_13.bin"); M17 = read("M12_17.bin"); M19 = read("M12_19.bin");
+M23 = read("M12_23.bin");
+Ms = [M3, M7, M11, M13, M17, M19, M23];
+LOG(Str("mats loaded t=", gettime()/1000.));
+K = 160; m3 = 3^K;
+n = 384;
+D = denominator(M3);
+{ for(i = 2, 7, D = lcm(D, denominator(Ms[i]))); }
+v3D = valuation(D, 3);
+u = D / 3^v3D;
+uinv = Mod(u, m3)^(-1);
+Nk = vector(7, i, Mod(D*Ms[i], m3) * uinv);
+LOG(Str("Nk built t=", gettime()/1000.));
+B = matid(n); t = 0; sc = 3^v3D;
+{
+  for(rounds = 1, 12,
+    my(Bm = Mod(B, m3));
+    my(gens = vector(8));
+    gens[1] = sc * B;
+    for(i = 1, 7, gens[1+i] = lift(Nk[i] * Bm));
+    LOG(Str("round ", rounds, ": gens built t=", gettime()/1000.));
+    my(H = matimagemod(matconcat(gens), m3));
+    LOG(Str("round ", rounds, ": Howell done t=", gettime()/1000.));
+    my(Hstab = matimagemod(sc * B, m3));
+    my(sume = sum(i=1,n, valuation(H[i,i],3)));
+    LOG(Str("round ", rounds, ": v3(detH)=", sume, " stab? ", H == Hstab, " t=", gettime()/1000.));
+    if(H == Hstab, break);
+    B = H; t += v3D;
+  );
+}
+LOG(Str("final t-scale = ", t, "  v3(det B) = ", sum(i=1,n, valuation(B[i,i],3)), "  max entry digits = ", #Str(maxent(B))));
+system("rm -f B12.bin"); writebin("B12.bin", B);
+LOG("call 8b done");
+quit
+
+====================================================================
+==== FILE: gp/c8c_chi12_blocks.gp
+====================================================================
+\\ CLEAN-ROOM call 8c: chi12 exact conjugation gates + block decomposition
+default(parisize, 1200000000);
+default(parisizemax, 4300000000);
+read("lib_census.gp");
+LOG(s) = write("c8c.log", s);
+gettime();
+M3 = read("M12_3.bin");   M7 = read("M12_7.bin");   M11 = read("M12_11.bin");
+M13 = read("M12_13.bin"); M17 = read("M12_17.bin"); M19 = read("M12_19.bin");
+M23 = read("M12_23.bin");
+Ms = [M3, M7, M11, M13, M17, M19, M23];
+B = read("B12.bin");
+pcd = read("pc12N.bin"); pcN = pcd[1]; D = pcd[2];
+LOG(Str("loaded t=", gettime()/1000.));
+Xbs = vector(7);
+{
+  for(i = 1, 7,
+    my(X = matsolve(B, Ms[i] * B));
+    my(dv = valuation(denominator(X), 3));
+    my(trok = trace(X) == trace(Ms[i]));
+    LOG(Str("op ", i, ": denom v3 = ", dv, " (gate 0)  trace ok? ", trok, "  t=", gettime()/1000.));
+    if(dv != 0, LOG("FATAL: lattice not stable — raise K"); quit);
+    Xbs[i] = X * Mod(1,3);
+  );
+}
+system("rm -f Xb12.bin"); writebin("Xb12.bin", Xbs);
+LOG(Str("mod-3 reductions saved t=", gettime()/1000.));
+blocks = blocksplit(Xbs);
+LOG(Str("block count = ", #blocks, "  t=", gettime()/1000.));
+tab = vector(#blocks, b, blockdata(Xbs, blocks[b]));
+perm = vecsort(vector(#tab, i, blockkey(tab[i])), , 1);
+tab = vector(#tab, i, tab[perm[i]]);
+system("rm -f tab12.bin"); writebin("tab12.bin", tab);
+\\ also save block bases in sorted order for later selector/crossing work
+sortedblocks = vector(#blocks, i, blocks[perm[i]]);
+system("rm -f blocks12.bin"); writebin("blocks12.bin", sortedblocks);
+dsum = sum(b = 1, #tab, tab[b][1]);
+LOG(Str("total dim = ", dsum, " (gate 384)"));
+ordb = [b | b <- [1..#tab], tab[b][2][1] != 'x];
+odim = sum(j = 1, #ordb, tab[ordb[j]][1]);
+LOG(Str("ordinary blocks = ", #ordb, "  ordinary dim = ", odim, " (gate vs NP: 176)"));
+\\ charpoly consistency: product of q3^m3 over blocks == charpoly(U3) mod 3
+\\ charpoly(U3) mod 3 from pcN: coeff_i(P) = pcN_i / D^(384-i); mod 3: pcN_i * (u^-1 mod 3)^(384-i) with 3-part exact division
+u = D / 3^valuation(D,3);
+{
+  pc3m = Mod(0,3);
+  for(i = 0, 384,
+    my(c = polcoef(pcN, i), e = (384-i)*valuation(D,3));
+    if(c != 0,
+      my(v = valuation(c,3));
+      if(v < e, LOG("FATAL: charpoly not integral at 3"); quit);
+      pc3m += Mod((c/3^e) * lift(Mod(u,3)^(-(384-i))), 3) * 'x^i;
+    );
+  );
+}
+pcprod = prod(b = 1, #tab, (tab[b][2][1])^(tab[b][2][2]));
+LOG(Str("prod block q3^m3 == charpoly(U3) mod 3 ? ", Mod(1,3)*pcprod == pc3m));
+LOG("call 8c done");
+quit
+
+====================================================================
+==== FILE: gp/c9_chi60_analysis.gp
+====================================================================
+\\ CLEAN-ROOM call 9: chi60 full analysis (charpoly gates + lattice + conjugation + blocks)
+default(parisize, 1200000000);
+default(parisizemax, 4300000000);
+read("lib_census.gp");
+LOG(s) = write("c9.log", s);
+gettime();
+M3 = read("M60_3.bin");   M7 = read("M60_7.bin");   M11 = read("M60_11.bin");
+M13 = read("M60_13.bin"); M17 = read("M60_17.bin"); M19 = read("M60_19.bin");
+M23 = read("M60_23.bin");
+Ms = [M3, M7, M11, M13, M17, M19, M23];
+LOG(Str("mats loaded t=", gettime()/1000.));
+
+\\ stage a: charpoly gates
+D = denominator(M3);
+{ for(i = 2, 7, D = lcm(D, denominator(Ms[i]))); }
+v3D = valuation(D, 3);
+pcN = charpoly(D * M3);
+LOG(Str("charpoly(D*U3) t=", gettime()/1000., "  v3(D)=", v3D));
+intok = 1;
+{ for(i = 0, 383,
+    my(c = polcoef(pcN, i));
+    if(c != 0 && (c % D^(384-i)) != 0, intok = 0; break)); }
+LOG(Str("  integer? ", intok, "  monic? ", polcoef(pcN,384) == 1));
+odds = sum(i = 0, 191, polcoef(pcN, 2*i+1) != 0);
+LOG(Str("  even? ", odds == 0));
+i0 = -1;
+{ for(i = 0, 384,
+    my(c = polcoef(pcN, i));
+    if(c != 0 && valuation(c,3) - (384-i)*v3D == 0, i0 = i; break)); }
+nord = if(i0 < 0, 0, 384 - i0);
+LOG(Str("  NP ordinary count = ", nord));
+system("rm -f pc60N.bin"); writebin("pc60N.bin", [pcN, D]);
+
+\\ stage b: lattice
+K = 160; m3 = 3^K; n = 384;
+u = D / 3^v3D;
+uinv = Mod(u, m3)^(-1);
+Nk = vector(7, i, Mod(D*Ms[i], m3) * uinv);
+B = matid(n); t = 0; sc = 3^v3D;
+{
+  for(rounds = 1, 12,
+    my(Bm = Mod(B, m3));
+    my(gens = vector(8));
+    gens[1] = sc * B;
+    for(i = 1, 7, gens[1+i] = lift(Nk[i] * Bm));
+    my(H = matimagemod(matconcat(gens), m3));
+    my(Hstab = matimagemod(sc * B, m3));
+    LOG(Str("round ", rounds, ": v3(detH)=", sum(i=1,n, valuation(H[i,i],3)), " stab? ", H == Hstab, " t=", gettime()/1000.));
+    if(H == Hstab, break);
+    B = H; t += v3D;
+  );
+}
+LOG(Str("lattice final: t-scale=", t, " v3(detB)=", sum(i=1,n, valuation(B[i,i],3)), " maxent digits=", #Str(maxent(B))));
+system("rm -f B60.bin"); writebin("B60.bin", B);
+
+\\ stage c: conjugation gates + blocks
+Xbs = vector(7);
+{
+  for(i = 1, 7,
+    my(X = matsolve(B, Ms[i] * B));
+    my(dv = valuation(denominator(X), 3));
+    my(trok = trace(X) == trace(Ms[i]));
+    LOG(Str("op ", i, ": denom v3=", dv, " trace ok? ", trok));
+    if(dv != 0, LOG("FATAL: lattice not stable"); quit);
+    Xbs[i] = X * Mod(1,3);
+  );
+}
+system("rm -f Xb60.bin"); writebin("Xb60.bin", Xbs);
+blocks = blocksplit(Xbs);
+LOG(Str("block count = ", #blocks, "  t=", gettime()/1000.));
+tab = vector(#blocks, b, blockdata(Xbs, blocks[b]));
+perm = vecsort(vector(#tab, i, blockkey(tab[i])), , 1);
+tab = vector(#tab, i, tab[perm[i]]);
+system("rm -f tab60.bin"); writebin("tab60.bin", tab);
+sortedblocks = vector(#blocks, i, blocks[perm[i]]);
+system("rm -f blocks60.bin"); writebin("blocks60.bin", sortedblocks);
+dsum = sum(b = 1, #tab, tab[b][1]);
+ordb = [b | b <- [1..#tab], tab[b][2][1] != 'x];
+odim = sum(j = 1, #ordb, tab[ordb[j]][1]);
+LOG(Str("total dim = ", dsum, " (gate 384); ordinary blocks = ", #ordb, " dim = ", odim, " (gate vs NP ", nord, ")"));
+{
+  pc3m = Mod(0,3);
+  for(i = 0, 384,
+    my(c = polcoef(pcN, i), e = (384-i)*v3D);
+    if(c != 0,
+      my(v = valuation(c,3));
+      if(v < e, LOG("FATAL: charpoly not 3-integral"); quit);
+      pc3m += Mod((c/3^e) * lift(Mod(u,3)^(-(384-i))), 3) * 'x^i;
+    );
+  );
+}
+pcprod = prod(b = 1, #tab, (tab[b][2][1])^(tab[b][2][2]));
+LOG(Str("prod block q3^m3 == charpoly mod 3 ? ", Mod(1,3)*pcprod == pc3m));
+LOG("call 9 done");
+quit
+
+====================================================================
+==== FILE: gp/c10_selector.gp
+====================================================================
+\\ CLEAN-ROOM call 10: crossing structures + emission shape-selector, both branches
+default(parisize, 800000000);
+read("lib_census.gp");
+LOG(s) = write("c10.log", s);
+
+\\ emission side (recomputed fresh in call 1/1d, hardcoded here from those outputs):
+\\ l:      7      11     13     17     19     23
+\\ order:  3      3      5      3      5      2
+\\ allowed sets over F3 (monic lifts):
+A3 = [x+1, x+2, x^2+1];
+A5 = [x^2+x+2, x^2+2*x+2];
+A2 = [x];
+ALLOWED = [A3, A3, A5, A3, A5, A2];  \\ for l = 7,11,13,17,19,23
+LS = [7,11,13,17,19,23];
+
+polstr(q,m) = if(m==1, Str(q), Str("(",q,")^",m));
+
+\\ dual polynomial under alpha -> c/alpha (roots map), monic over F3
+qdual(q, c) =
+{
+  my(d = poldegree(q), a0 = polcoef(q,0), r = 0);
+  for(i = 0, d, r += polcoef(q, i) * c^i * 'x^(d-i));
+  r = r * Mod(1,3); r = lift(r / polcoef(r, d));
+  r;
+}
+
+\\ intra-packet Frobenius pairing: exists root alpha of q (deg d>=2) and k in 1..d-1
+\\ with alpha^(1+3^k) = c ? return list of such k
+frobpair(q, c) =
+{
+  my(d = poldegree(q));
+  if(d < 2, return([]));
+  my(g = ffgen([3, d], 'w));
+  my(rts = polrootsmod(q * (g^0), g));
+  if(#rts == 0, return([]));
+  my(al = rts[1], res = List());
+  for(k = 1, d-1,
+    if(al^(1 + 3^k) == c * g^0, listput(res, k)));
+  Vec(res);
+}
+
+\\ twist involution on a block row: a3 -> -a3; a_l -> chi_{-3}(l) a_l
+twistrow(row) =
+{
+  my(nr = vector(#row)); nr[1] = row[1];
+  \\ op 1 = U3: negate roots: q(-x) normalized; ops 2..7: l in LS
+  my(sgn = [-1, 1, -1, 1, -1, 1, -1]);  \\ chi_{-3}: 7->1, 11->-1, 13->1, 17->-1, 19->1, 23->-1; U3 -> -1
+  for(o = 2, #row,
+    my(q = row[o][1], m = row[o][2], s = sgn[o-1]);
+    if(s == 1, nr[o] = [q, m],
+      my(d = poldegree(q));
+      my(qq = lift(Mod((-1)^d,3) * Mod(1,3)*subst(q, 'x, -'x)));
+      nr[o] = [qq, m]));
+  nr;
+}
+
+report(brname, tabfile, c) =
+{
+  my(tab = read(tabfile));
+  LOG(Str("=========== branch ", brname, "   chi(3) = c = ", c, " mod 3 ==========="));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("blocks total ", #tab, ", ordinary ", #ordi, " (dim ", sum(j=1,#ordi, tab[ordi[j]][1]), ")"));
+  \\ full ordinary table
+  my(txt = List());
+  listput(txt, "idx | dim | U3-packet | a7 | a11 | a13 | a17 | a19 | a23");
+  for(j = 1, #ordi,
+    my(b = ordi[j], r = tab[b]);
+    listput(txt, Str(j, " | ", r[1], " | ", polstr(r[2][1],r[2][2]), " | ",
+      polstr(r[3][1],r[3][2]), " | ", polstr(r[4][1],r[4][2]), " | ", polstr(r[5][1],r[5][2]), " | ",
+      polstr(r[6][1],r[6][2]), " | ", polstr(r[7][1],r[7][2]), " | ", polstr(r[8][1],r[8][2]))));
+  for(i = 1, #txt, write(Str("ordtab_", brname, ".txt"), txt[i]));
+  \\ twist-involution check on ordinary sub-table (multiset invariance)
+  my(keys = vecsort(vector(#ordi, j, blockkey(tab[ordi[j]]))));
+  my(tkeys = vecsort(vector(#ordi, j, blockkey(twistrow(tab[ordi[j]])))));
+  LOG(Str("twist-involution invariance of ordinary table: ", keys == tkeys));
+  \\ (i) multiplicity blocks
+  my(mult = [j | j <- [1..#ordi], vecmax(vector(7, o, tab[ordi[j]][1+o][2])) >= 2]);
+  LOG(Str("(i) blocks with any packet multiplicity >= 2: idx ", mult));
+  \\ (ii) inter-block crossing pairs: same tame tuple (ops 2..7), U3-packets dual under c
+  LOG("(ii) inter-block crossing pairs (same 6-prime tame tuple, U3 <-> dual):");
+  for(j1 = 1, #ordi, for(j2 = j1+1, #ordi,
+    my(r1 = tab[ordi[j1]], r2 = tab[ordi[j2]]);
+    my(same = 1);
+    for(o = 3, 8, if(r1[o] != r2[o], same = 0; break));
+    if(same,
+      my(q1 = r1[2][1], q2 = r2[2][1]);
+      if(qdual(q1, c) == q2,
+        LOG(Str("   pair idx (", j1, ",", j2, "): U3 ", polstr(q1,r1[2][2]), " <-> ", polstr(q2,r2[2][2]), "  [alpha*beta = ", c, "]")))));
+  );
+  \\ intra-block Frobenius crossings among ordinary blocks
+  LOG("(ii') intra-block Galois crossings (alpha * Frob^k(alpha) = c):");
+  for(j = 1, #ordi,
+    my(q = tab[ordi[j]][2][1]);
+    my(ks = frobpair(q, c));
+    if(#ks > 0, LOG(Str("   idx ", j, ": U3-packet ", Str(q), "  k = ", ks))));
+  \\ (iii) SELECTOR
+  LOG("(iii) EMISSION SHAPE-SELECTOR output (all six primes):");
+  my(cands = List());
+  for(j = 1, #ordi,
+    my(r = tab[ordi[j]], pass = 1);
+    for(o = 1, 6,
+      my(q = r[2+o][1]);
+      my(ok = 0);
+      for(a = 1, #ALLOWED[o], if(q == ALLOWED[o][a], ok = 1; break));
+      if(!ok, pass = 0; break));
+    if(pass, listput(cands, j)));
+  LOG(Str("   shape-passing ordinary blocks: idx ", Vec(cands)));
+  for(z = 1, #cands,
+    my(j = cands[z], r = tab[ordi[j]]);
+    my(q3 = r[2][1]);
+    LOG(Str("   CANDIDATE idx ", j, ": dim ", r[1], "  U3 ", polstr(q3, r[2][2]),
+      "  frobpair-k ", frobpair(q3, c),
+      "  tuple [", Str(r[3][1]), ", ", Str(r[4][1]), ", ", Str(r[5][1]), ", ", Str(r[6][1]), ", ", Str(r[7][1]), ", ", Str(r[8][1]), "]")));
+  [Vec(cands), ordi];
+}
+
+r12 = report("chi12", "tab12.bin", 2);  \\ chi_{-4}(3) = -1 = 2 mod 3
+r60 = report("chi60", "tab60.bin", 1);  \\ chi_{-20}(3) = +1
+system("rm -f cands.bin"); writebin("cands.bin", [r12, r60]);
+LOG("call 10 done");
+quit
+
+====================================================================
+==== FILE: gp/c11_twistscan.gp
+====================================================================
+\\ CLEAN-ROOM call 11: diagnose the census twist-equivariance + 5-prime crossing scan
+default(parisize, 800000000);
+read("lib_census.gp");
+LOG(s) = write("c11.log", s);
+LS = [7,11,13,17,19,23];
+
+\\ apply sign vector: s3 acts on U3 packet (+1 fix, -1 negate-roots, 0 = dual swap alpha->c/alpha),
+\\ sl[i] on tame packet i
+polneg(q) = lift(Mod((-1)^poldegree(q),3) * Mod(1,3)*subst(q, 'x, -'x));
+qdual(q, c) =
+{
+  my(d = poldegree(q), r = 0);
+  for(i = 0, d, r += polcoef(q, i) * c^i * 'x^(d-i));
+  r = r * Mod(1,3); lift(r / polcoef(r, d));
+}
+tw(row, s3, sl, c) =
+{
+  my(nr = vector(#row)); nr[1] = row[1];
+  my(q = row[2][1], m = row[2][2]);
+  nr[2] = if(s3 == 1, [q, m], if(s3 == -1, [polneg(q), m], [qdual(q, c), m]));
+  for(i = 1, 6,
+    my(qq = row[2+i][1], mm = row[2+i][2]);
+    nr[2+i] = if(sl[i] == 1, [qq, mm], [polneg(qq), mm]));
+  nr;
+}
+testinv(tab, ordi, s3, sl, c) =
+{
+  my(keys = vecsort(vector(#ordi, j, blockkey(tab[ordi[j]]))));
+  my(tk = vecsort(vector(#ordi, j, blockkey(tw(tab[ordi[j]], s3, sl, c)))));
+  keys == tk;
+}
+\\ natural quadratic characters at the six tame primes
+chars = [[-4, "chi-4"], [8, "chi8"], [-8, "chi-8"], [5, "chi5"], [12, "chi12"], [-3, "chi-3"],
+         [60, "chi60"], [-20, "chi-20"], [24, "chi24"], [-24, "chi-24"], [40, "chi40"], [-40, "chi-40"],
+         [-15, "chi-15"], [-60, "chi-60"], [20, "chi20"], [15, "chi15"]];
+scan(brname, tabfile, c) =
+{
+  my(tab = read(tabfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("--- twist scan, ", brname, " (c = ", c, ") ---"));
+  for(k = 1, #chars,
+    my(Dq = chars[k][1]);
+    my(sl = vector(6, i, kronecker(Dq, LS[i])));
+    \\ character ramified at 3? then U3 action = dual-swap (0); else multiply by chi(3)
+    my(s3 = if(Dq % 3 == 0, 0, kronecker(Dq, 3)));
+    my(ok = testinv(tab, ordi, s3, sl, c));
+    if(ok, LOG(Str("   INVARIANT under ", chars[k][2], "  (s3 mode = ", s3, ", tame signs = ", sl, ")"))));
+  \\ also test pure U3-negation with trivial tame action, and dual-swap with trivial tame
+  LOG(Str("   pure a3 -> -a3, tame fixed: ", testinv(tab, ordi, -1, vector(6,i,1), c)));
+  LOG(Str("   pure alpha -> c/alpha, tame fixed: ", testinv(tab, ordi, 0, vector(6,i,1), c)));
+}
+scan("chi12", "tab12.bin", 2);
+scan("chi60", "tab60.bin", 1);
+
+\\ 5-prime (ii) variant: inter-block crossing pairs on {7,11,13,17,19} tuples only
+pairscan5(brname, tabfile, c) =
+{
+  my(tab = read(tabfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("--- 5-prime inter-block crossing pairs, ", brname, " ---"));
+  for(j1 = 1, #ordi, for(j2 = j1+1, #ordi,
+    my(r1 = tab[ordi[j1]], r2 = tab[ordi[j2]]);
+    my(same = 1);
+    for(o = 3, 7, if(r1[o] != r2[o], same = 0; break));
+    if(same && qdual(r1[2][1], c) == r2[2][1],
+      LOG(Str("   pair (", j1, ",", j2, "): U3 ", Str(r1[2][1]), "^", r1[2][2], " <-> ", Str(r2[2][1]), "^", r2[2][2],
+        "  a23: ", Str(r1[8][1]), "^", r1[8][2], " vs ", Str(r2[8][1]), "^", r2[8][2], "  dims ", r1[1], ",", r2[1])))));
+}
+pairscan5("chi12", "tab12.bin", 2);
+pairscan5("chi60", "tab60.bin", 1);
+LOG("call 11 done");
+quit
+
+====================================================================
+==== FILE: gp/c12_equivariance.gp
+====================================================================
+\\ CLEAN-ROOM call 12: equivariance scan (fixed braces) + 6-op block counts
+default(parisize, 1200000000);
+read("lib_census.gp");
+LOG(s) = write("c12.log", s);
+LS = [7,11,13,17,19,23];
+{ chars = [[-4, "chi-4"], [8, "chi8"], [-8, "chi-8"], [5, "chi5"], [12, "chi12"], [-3, "chi-3"], [60, "chi60"], [-20, "chi-20"], [24, "chi24"], [-24, "chi-24"], [40, "chi40"], [-40, "chi-40"], [-15, "chi-15"], [-60, "chi-60"], [20, "chi20"], [15, "chi15"]]; }
+polneg(q) = lift(Mod((-1)^poldegree(q),3) * Mod(1,3)*subst(q, 'x, -'x));
+polconj(q) =
+{ \\ Frobenius x -> x^3 on roots: q_conj(x) = minimal poly of alpha^3 = product over roots; compute via resultant
+  my(d = poldegree(q));
+  my(r = polresultant(subst(lift(q), 'x, 'y), Mod(1,3)*('y^3 - 'x), 'y));
+  r = r * Mod(1,3); r = lift(r / polcoef(r, poldegree(r)));
+  \\ resultant gives q(y) eliminated: poly in x of degree d whose roots are cubes of roots of q
+  r;
+}
+twc(row, Dq) =
+{
+  my(nr = vector(#row)); nr[1] = row[1];
+  my(s3 = kronecker(Dq, 3));
+  my(q = row[2][1], m = row[2][2]);
+  nr[2] = [if(s3 == 1, q, polneg(q)), m];
+  for(i = 1, 6,
+    my(qq = row[2+i][1], mm = row[2+i][2]);
+    nr[2+i] = [if(kronecker(Dq, LS[i]) == 1, qq, polneg(qq)), mm]);
+  nr;
+}
+conjrow(row) =
+{
+  my(nr = vector(#row)); nr[1] = row[1];
+  for(o = 2, #row, nr[o] = [polconj(row[o][1]), row[o][2]]);
+  nr;
+}
+sortkeys(tab, idxs) = vecsort(vector(#idxs, j, blockkey(tab[idxs[j]])));
+scan2(brname, tabfile) =
+{
+  my(tab = read(tabfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  my(keys = sortkeys(tab, ordi));
+  LOG(Str("--- ", brname, ": invariance of ordinary table under quadratic twists (3-unramified only) ---"));
+  for(k = 1, #chars,
+    my(Dq = chars[k][1]);
+    if(Dq % 3 != 0,
+      my(tk = vecsort(vector(#ordi, j, blockkey(twc(tab[ordi[j]], Dq)))));
+      if(tk == keys, LOG(Str("   INVARIANT under twist by ", chars[k][2])))));
+  my(ck = vecsort(vector(#ordi, j, blockkey(conjrow(tab[ordi[j]])))));
+  LOG(Str("   invariant under global Frobenius conjugation? ", ck == keys));
+}
+scan2("chi12", "tab12.bin");
+scan2("chi60", "tab60.bin");
+
+\\ candidate-orbit structure: find maps among candidate rows
+orbit(brname, tabfile, candidx) =
+{
+  my(tab = read(tabfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("--- ", brname, " candidate orbit maps (cands ", candidx, ") ---"));
+  for(z1 = 1, #candidx, for(z2 = 1, #candidx,
+    if(z1 != z2,
+      my(r1 = tab[ordi[candidx[z1]]], r2 = tab[ordi[candidx[z2]]]);
+      for(k = 1, #chars,
+        my(Dq = chars[k][1]);
+        if(Dq % 3 != 0,
+          if(blockkey(twc(r1, Dq)) == blockkey(r2),
+            LOG(Str("   ", candidx[z1], " -> ", candidx[z2], " via twist ", chars[k][2])));
+          if(blockkey(conjrow(twc(r1, Dq))) == blockkey(r2),
+            LOG(Str("   ", candidx[z1], " -> ", candidx[z2], " via conj o twist ", chars[k][2])))));
+      if(blockkey(conjrow(r1)) == blockkey(r2),
+        LOG(Str("   ", candidx[z1], " -> ", candidx[z2], " via conj"))))));
+}
+orbit("chi12", "tab12.bin", [19,20,23,24]);
+orbit("chi60", "tab60.bin", [15,16,21,22]);
+
+\\ 6-op block counts (drop T23) for diff vs 07-26 committed table
+cnt6(brname, xbfile) =
+{
+  my(Xbs = read(xbfile));
+  my(X6 = vector(6, i, Xbs[i]));
+  my(blocks = blocksplit(X6));
+  LOG(Str(brname, " 6-op (no T23) block count = ", #blocks));
+}
+cnt6("chi12", "Xb12.bin");
+cnt6("chi60", "Xb60.bin");
+LOG("call 12 done");
+quit
+
+====================================================================
+==== FILE: gp/c13_grade.gp
+====================================================================
+\\ CLEAN-ROOM call 13: THE GRADE. Key tuples vs committed census, all four embeddings, both branches.
+default(parisize, 800000000);
+LOG(s) = write("c13.log", s);
+
+\\ F81 with theta of order 4 (theta^2 = -1)
+g = ffgen(ffinit(3,4), 'g);
+{
+  my(rts = polrootsmod(('x^2 + 1) * g^0, g));
+  if(#rts == 0, LOG("FATAL no theta"); quit);
+  th = rts[1];
+}
+
+\\ key tables (from md5-verified JSON; g1 = (sqrt5-1)/2, entries value = sign * gold * unit)
+\\ chi_-4 (grades my chi12 census):  a3=-(g1)*i, a7=+i, a11=-i, a13=-g1, a17=+1, a19=-g1*i, a23=0
+\\ chi_-20 (grades my chi60 census): a3=+g1,     a7=+1, a11=-i, a13=-g1*i, a17=-i, a19=+g1*i, a23=0
+mkkey(br, s, t) =
+{
+  my(sq5 = (-1)^s * th, im = (-1)^t * th);
+  my(g1 = (sq5 - 1) * 2);  \\ (sqrt5-1)/2, 1/2 = 2 mod 3
+  if(br == 12,
+    [-g1*im, im, -im, -g1, th^0, -g1*im, 0*th],
+    [g1, th^0, -im, -g1*im, -im, g1*im, 0*th]);
+}
+
+gradebranch(brname, brcode, c, tabfile, blockfile, xbfile) =
+{
+  my(tab = read(tabfile), blocks = read(blockfile), Xbs = read(xbfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("=========== GRADE ", brname, "  (c = chi(3) = ", c, ") ==========="));
+  for(s = 0, 1, for(t = 0, 1,
+    my(k = mkkey(brcode, s, t));
+    LOG(Str(" embedding (s,t) = (", s, ",", t, "): key tuple (a3; a7..a23) = ", k));
+    my(hits = List());
+    for(j = 1, #ordi,
+      my(W = blocks[ordi[j]], row = tab[ordi[j]]);
+      \\ prefilter: packet polys vanish on key values
+      my(ok = 1);
+      my(kt = [k[2], k[3], k[4], k[5], k[6], k[7]]);
+      for(o = 1, 6,
+        if(subst(row[2+o][1], 'x, kt[o]) != 0, ok = 0; break));
+      if(!ok, next);
+      \\ roots u of q3 in F81 with u + u^9 = a3 and u*u^9 = c
+      my(q3 = row[2][1]);
+      my(rts = polrootsmod(q3 * th^0, g));
+      my(R = vector(7, o, matinverseimage(W, Xbs[o] * W) * th^0));
+      my(d = matsize(R[1])[1]);
+      for(r = 1, #rts,
+        my(u = rts[r]);
+        if(u + u^9 != k[1], next);
+        if(u * u^9 != c * th^0, next);
+        \\ joint eigenline: ker of stacked [(R3 - u); (R_l - k_l)]
+        my(stk = matconcat([R[1] - u*matid(d), R[2] - kt[1]*matid(d), R[3] - kt[2]*matid(d), R[4] - kt[3]*matid(d), R[5] - kt[4]*matid(d), R[6] - kt[5]*matid(d), R[7] - kt[6]*matid(d)]~));
+        my(ker = matker(stk));
+        if(#ker > 0,
+          listput(hits, [j, r, #ker]);
+          \\ beta line: u^9 with same tame tuple
+          my(ub = u^9);
+          my(stkb = matconcat([R[1] - ub*matid(d), R[2] - kt[1]*matid(d), R[3] - kt[2]*matid(d), R[4] - kt[3]*matid(d), R[5] - kt[4]*matid(d), R[6] - kt[5]*matid(d), R[7] - kt[6]*matid(d)]~));
+          my(kerb = matker(stkb));
+          LOG(Str("   MATCH block ", j, " (dim ", row[1], ", U3-packet ", Str(q3), "): alpha-line dim ", #ker,
+            ", beta = alpha^9 line dim ", #kerb, ", alpha*beta = ", u*ub == c*th^0, " (crossing exact)")));
+      );
+    );
+    if(#hits == 0, LOG("   NO MATCH at this embedding"));
+  ));
+}
+
+gradebranch("chi12 <- key chi_-4", 12, 2, "tab12.bin", "blocks12.bin", "Xb12.bin");
+gradebranch("chi60 <- key chi_-20", 60, 1, "tab60.bin", "blocks60.bin", "Xb60.bin");
+
+\\ cyclotomic identities on candidate U3-packets
+LOG("--- cyclotomic identities ---");
+LOG(Str("Phi20 mod 3 factors: ", lift(factormod(polcyclo(20), 3)[,1]~)));
+LOG(Str("Phi5 mod 3: ", lift(factormod(polcyclo(5), 3)[,1]~), "  Phi10 mod 3: ", lift(factormod(polcyclo(10), 3)[,1]~)));
+LOG("call 13 done");
+quit
+
+====================================================================
+==== FILE: gp/c14_bgrade.gp
+====================================================================
+\\ CLEAN-ROOM call 14: .b-orbit grade. b.b = b.a (x) chi5, h.b = h.a (x) chi_-4 (LMFDB twist graph,
+\\ triple-sourced); values derived from the md5-verified key JSON; orbit-level Galois ambiguity
+\\ absorbed by scanning all four embeddings. Grade vs committed tables, all ordinary blocks.
+default(parisize, 800000000);
+LOG(s) = write("c14.log", s);
+g = ffgen(ffinit(3,4), 'g);
+{
+  my(rts = polrootsmod(('x^2 + 1) * g^0, g));
+  th = rts[1];
+}
+
+\\ key tables as (sign, gold, unit): gold 0->1, 1->(sqrt5-1)/2, 2->(sqrt5+1)/2; unit 0->1, 1->i
+\\ chi_-4:  3:(-,1,i) 7:(+,0,i) 11:(-,0,i) 13:(-,1,1) 17:(+,0,1) 19:(-,1,i) 23:0
+\\ chi_-20: 3:(+,1,1) 7:(+,0,1) 11:(-,0,i) 13:(-,1,i) 17:(-,0,i) 19:(+,1,i) 23:0
+K12 = [[-1,1,1], [1,0,1], [-1,0,1], [-1,1,0], [1,0,0], [-1,1,1], [0,0,0]];
+K60 = [[1,1,0], [1,0,0], [-1,0,1], [-1,1,1], [-1,0,1], [1,1,1], [0,0,0]];
+PS = [3,7,11,13,17,19,23];
+
+\\ dress by quadratic character D: multiply sign by kronecker(D, p)
+dress(K, D) = vector(7, j, if(K[j] == [0,0,0], [0,0,0], [K[j][1] * kronecker(D, PS[j]), K[j][2], K[j][3]]));
+
+\\ evaluate entry at embedding (s,t): sqrt5 -> (-1)^s th, i -> (-1)^t th
+evk(e, s, t) =
+{
+  my(sq5 = (-1)^s * th, im = (-1)^t * th);
+  if(e == [0,0,0], return(0 * th));
+  my(go = if(e[2] == 0, th^0, if(e[2] == 1, (sq5 - 1)*2, (sq5 + 1)*2)));
+  my(un = if(e[3] == 0, th^0, im));
+  e[1] * go * un;
+}
+
+gradeK(label, K, c, tabfile, blockfile, xbfile) =
+{
+  my(tab = read(tabfile), blocks = read(blockfile), Xbs = read(xbfile));
+  my(ordi = [b | b <- [1..#tab], tab[b][2][1] != 'x]);
+  LOG(Str("=== GRADE ", label, " (alpha*beta must = ", c, ") ==="));
+  for(s = 0, 1, for(t = 0, 1,
+    my(k = vector(7, j, evk(K[j], s, t)));
+    my(nhit = 0);
+    for(j = 1, #ordi,
+      my(W = blocks[ordi[j]], row = tab[ordi[j]]);
+      my(ok = 1);
+      for(o = 1, 6,
+        if(subst(row[2+o][1], 'x, k[1+o]) != 0, ok = 0; break));
+      if(!ok, next);
+      my(q3 = row[2][1]);
+      my(rts = polrootsmod(q3 * th^0, g));
+      my(R = vector(7, o, matinverseimage(W, Xbs[o] * W) * th^0));
+      my(d = matsize(R[1])[1]);
+      for(r = 1, #rts,
+        my(u = rts[r]);
+        if(u + u^9 != k[1], next);
+        if(u * u^9 != c * th^0, next);
+        my(stk = matconcat(vector(7, o, R[o] - if(o==1, u, k[o]) * matid(d))~));
+        my(ker = matker(stk));
+        if(#ker > 0,
+          nhit++;
+          LOG(Str("  emb(", s, ",", t, "): MATCH block ", j, " (U3 ", Str(q3), ") joint-line dim ", #ker,
+            "  beta-line dim ", #matker(matconcat(vector(7, o, R[o] - if(o==1, u^9, k[o]) * matid(d))~)),
+            "  alpha*beta ok ", u*u^9 == c*th^0)));
+      );
+    );
+    if(nhit == 0, LOG(Str("  emb(", s, ",", t, "): NO MATCH")));
+  ));
+}
+
+Kbb = dress(K12, 5);    \\ b.b = b.a (x) chi5, nebentypus still chi_-4: c = -1 = 2
+Khb = dress(K60, -4);   \\ h.b = h.a (x) chi_-4, nebentypus still chi_-20: c = +1
+gradeK("4000.1.b.b (derived = key.chi-4 x chi5) vs chi12 census", Kbb, 2, "tab12.bin", "blocks12.bin", "Xb12.bin");
+gradeK("4000.1.h.b (derived = key.chi-20 x chi-4) vs chi60 census", Khb, 1, "tab60.bin", "blocks60.bin", "Xb60.bin");
+
+\\ cross-check: fetched h.b rows (nu-basis) vs derived Khb, mod 3, up to embedding
+\\ fetched: a3 = b2+1 = nu^2+2; a7 = -1; a11 = b3 = nu^3+2nu; a13 = b3+b1 = nu^3+3nu; a17 = -b3; a19 = b3+b1; a23 = 0
+{
+  LOG("=== fetched h.b rows vs derived, all four nu-embeddings (nu -> eps_i * i * g_(1 or 2)) ===");
+  for(s = 0, 1, for(t = 0, 1,
+    \\ nu = (-1)^t * i * gold_(s+1) with i = th; build via sqrt5 = (-1)^0 th baseline: use both sqrt5 signs implicitly by s
+    my(im = th, sq5 = (-1)^s * th);
+    my(go = if(s == 0, (sq5 - 1)*2, (sq5 + 1)*2)); \\ eh: instead parametrize nu directly over roots of x^4+3x^2+1 in F81
+    0));
+  my(nurts = polrootsmod(('x^4 + 3*'x^2 + 1) * g^0, g));
+  LOG(Str("  roots of x^4+3x^2+1 in F81: ", #nurts));
+  my(fet(nu) = [nu^2 + 2, -th^0, nu^3 + 2*nu, nu^3 + 3*nu, -(nu^3 + 2*nu), nu^3 + 3*nu, 0*th]);
+  my(matched = 0);
+  for(r = 1, #nurts,
+    my(f = fet(nurts[r]));
+    for(s = 0, 1, for(t = 0, 1,
+      my(k = vector(7, j, evk(Khb[j], s, t)));
+      if(f == k, matched++; LOG(Str("  fetched h.b == derived at nu-root ", r, ", emb(", s, ",", t, ")")))));
+  );
+  if(matched == 0, LOG("  fetched h.b does NOT equal derived at any embedding pair — fetch garble or twist subtlety; derived (key-anchored) governs"));
+}
+LOG("call 14 done");
+quit
+
+====================================================================
+==== FILE: gp/c15_parity.gp
+====================================================================
+default(parisize, 800000000);
+\\ character values at -1: chi_D(-1) = sign(D); verify via n = -1 mod |D|
+print("chi_-4(-1)  via kronecker(-4,3)   = ", kronecker(-4,3), "   (3 = -1 mod 4)");
+print("chi_-20(-1) via kronecker(-20,19) = ", kronecker(-20,19), "  (19 = -1 mod 20)");
+print("chi_12(-1)  via kronecker(12,11)  = ", kronecker(12,11), "   (11 = -1 mod 12)");
+print("chi_60(-1)  via kronecker(60,59)  = ", kronecker(60,59), "   (59 = -1 mod 60)");
+print("chi_-3(-1)  via kronecker(-3,2)   = ", kronecker(-3,2), "   (2 = -1 mod 3; = omega_3 parity)");
+\\ signature of the quintic (complex conjugation cycle type)
+print("real roots of x^5+20x+16: ", #polrootsreal(x^5+20*x+16), "  -> c acts as (2,2)-cycle in A5");
+\\ weight-1 spaces exist only at ODD characters; weight-2 only at EVEN:
+print("dim S_1(4000, chi_-4)^new  = ", mfdim([4000,1,-4], 0), "   (odd char: the icosahedral home)");
+print("dim S_1(4000, chi_-20)^new = ", mfdim([4000,1,-20], 0));
+print("dim S_1(4000, chi_5)^new   = ", mfdim([4000,1,5], 0), "   (even char: must be 0)");
+print("dim S_2(12000, chi_-4)^new = ", mfdim([12000,2,-4], 0), "   (odd char at weight 2: must be 0 - the brief's parity trap)");
+print("dim S_2(12000, chi_12)^new = ", mfdim([12000,2,12], 0), "   (even char: the census)");
+quit
+
+====================================================================
+==== FILE: gp/qfield.gp
+====================================================================
+P = x^5 + 20*x + 16;
+print("poldisc = ", factor(poldisc(P)));
+nf = nfinit(P);
+print("field disc = ", factor(nf.disc), "  = ", nf.disc);
+print("signature = ", nf.sign);
+print("index [O_K : Z[x]/(P)]^2 = poldisc/fielddisc = ", factor(poldisc(P)/nf.disc));
+print("Galois (deg 5 resolvent) = ", polgalois(P));
+print("factor at 2: ", idealprimedec(nf,2));
+print("e,f at 2: ", [[pr.e, pr.f] | pr <- idealprimedec(nf,2)]);
+print("e,f at 5: ", [[pr.e, pr.f] | pr <- idealprimedec(nf,5)]);
+print("e,f at 3: ", [[pr.e, pr.f] | pr <- idealprimedec(nf,3)]);
+print("cycle type of Frob_3 (unramified): ", vecsort([poldegree(q[1]) | q <- Vec(factormod(P,3)~)]));
+print("real root approx: ", polrootsreal(P));
+quit
+
+====================================================================
+==== FILE: gp/poc1_data.gp
+====================================================================
+\\ Rung E PoC stage 1: emission data for both even quintics + 229 dihedral control data
+default(parisize, 800000000);
+LOG(s) = write("poc1.log", s);
+
+\\ ---------- field checks ----------
+P1 = x^5 - x^4 - 780*x^3 - 1795*x^2 + 3106*x + 344;   \\ Doud 1951
+P2 = x^5 - 11*x^3 - 7*x^2 + 14*x + 7;                 \\ corpus {2,7,331}
+chk(P, name) =
+{
+  my(d = poldisc(P), nf = nfinit(P));
+  LOG(Str(name, ": irred ", polisirreducible(P), "  gal ", polgalois(P)[4],
+    "  sig ", nf.sign, "  poldisc sq? ", issquare(d),
+    "  fielddisc ", factor(nf.disc)));
+  [d, nf];
+}
+v1 = chk(P1, "Doud1951"); d1 = v1[1]; nf1 = v1[2];
+v2 = chk(P2, "corpus2_7_331"); d2 = v2[1]; nf2 = v2[2];
+sd1 = sqrtint(d1); sd2 = sqrtint(d2);
+LOG(Str("sqrt(poldisc): ", sd1, " | ", sd2, "  exact? ", sd1^2==d1, " ", sd2^2==d2));
+\\ ramification structure (e,f) at ramified primes
+LOG(Str("Doud1951 at 1951: ", [[pr.e, pr.f] | pr <- idealprimedec(nf1, 1951)]));
+LOG(Str("corpus at 2: ", [[pr.e, pr.f] | pr <- idealprimedec(nf2, 2)]));
+LOG(Str("corpus at 7: ", [[pr.e, pr.f] | pr <- idealprimedec(nf2, 7)]));
+LOG(Str("corpus at 331: ", [[pr.e, pr.f] | pr <- idealprimedec(nf2, 331)]));
+
+\\ ---------- classes + face-signs ----------
+\\ class code: 0=1A(11111) 1=2A(221) 2=3A(311) 3=5A 4=5B ; -1 = ramified/skip
+\\ face-sign for 5-cycles: Frobenius-orbit Vandermonde vs sqrtdisc mod p
+faceclass(P, sd, p) =
+{
+  my(F = factormod(P, p));
+  my(degs = vecsort([poldegree(F[i,1]) | i <- [1..matsize(F)[1]]]));
+  if(degs == [1,1,1,1,1], return(0));
+  if(degs == [1,2,2], return(1));
+  if(degs == [1,1,3], return(2));
+  if(degs == [5],
+    \\ work in F_p[x]/(P): orbit r^(p^i)
+    my(g = ffgen([p, 5], 'w));
+    my(rts = polrootsmod(P * g^0, g));
+    my(r = rts[1]);
+    my(orb = vector(5)); orb[1] = r;
+    for(i = 2, 5, orb[i] = orb[i-1]^p);
+    my(V = g^0);
+    for(i = 1, 5, for(j = i+1, 5, V = V * (orb[i] - orb[j])));
+    \\ V must lie in F_p
+    my(Vp = V);
+    if(Vp^p != Vp, LOG(Str("WARN vandermonde not in Fp at ", p)); return(-9));
+    \\ compare to sd mod p: V = c * 1 with c in Fp; extract integer
+    my(c = polcoef(Vp.pol, 0));  \\ constant coeff as t_INTMOD? use lift
+    c = lift(c);
+    my(s = Mod(sd, p));
+    if(Mod(c,p) == s, return(3), if(Mod(c,p) == -s, return(4), LOG(Str("WARN vand mismatch at ", p)); return(-9))));
+  return(-1);  \\ other pattern = ramified-ish
+}
+
+emit(P, sd, name, ramlist, pmax) =
+{
+  my(out = List());
+  forprime(p = 2, pmax,
+    if(vecsearch(vecsort(ramlist), p), next);
+    my(c = faceclass(P, sd, p));
+    listput(out, [p, c]));
+  \\ write compact: p:c per line
+  for(i = 1, #out, write(Str("classes_", name, ".txt"), Str(out[i][1], ":", out[i][2])));
+  my(cnt = vector(5));
+  for(i = 1, #out, if(out[i][2] >= 0, cnt[out[i][2]+1]++));
+  LOG(Str(name, " classes counted [1A,2A,3A,5A,5B] = ", cnt, "  total ", #out));
+}
+gettime();
+emit(P1, sd1, "doud1951", [1951], 8000);
+LOG(Str("doud emit t=", gettime()/1000.));
+emit(P2, sd2, "corpus", [2,7,331], 8000);
+LOG(Str("corpus emit t=", gettime()/1000.));
+
+\\ ---------- 229 dihedral control data ----------
+\\ K = Q(sqrt229), h=3; a_p(Ind psi) = 2 if p split principal, -1 split nonprincipal, 0 inert; a_229 = 1
+\\ principal <=> p represented by principal form of disc 229
+{
+  my(Q = Qfb(1, 15, -1));  \\ reduced principal form disc 229? 15^2+4 = 229: x^2+15x-1 disc 229 ok
+  LOG(Str("control form disc = ", 15^2 + 4));
+  forprime(p = 2, 8000,
+    if(p == 229, write("classes_dih229.txt", "229:R"); next);
+    my(k = kronecker(229, p));
+    if(k == -1, write("classes_dih229.txt", Str(p, ":I")),
+      my(sol = qfbsolve(Q, p));
+      write("classes_dih229.txt", Str(p, ":", if(sol == 0, "N", "P")))));
+}
+LOG("poc1 done");
+quit
+
+====================================================================
+==== FILE: gp/poc2_engine.py
+====================================================================
+#!/usr/bin/env python3
+"""Rung E PoC stage 2: degree-3 seam instrument (Gamma_R(s)^3 theta-relation) + synthetic control."""
+import numpy as np, mpmath as mp, json, sys
+
+mp.mp.dps = 22
+
+# ---------- kernel phi(y) = Mellin^-1 of Gamma(s/2)^3, validated ----------
+def phi_quad(y, c=2.0, T=60, N=1200):
+    f = lambda t: (mp.gamma((c+1j*t)/2)**3 * mp.mpf(y)**(-(c+1j*t))).real
+    return mp.quad(f, [0, T]) / mp.pi
+
+def phi_meijer(y):
+    # candidate: 2*G^{3,0}_{0,3}(y^2 | -; 0,0,0)
+    return 2*mp.meijerg([[],[]], [[0,0,0],[]], mp.mpf(y)**2)
+
+print("kernel validation (quad vs meijer):")
+ok = True
+for yv in (0.3, 1.0, 3.0):
+    q, m = phi_quad(yv), phi_meijer(yv)
+    rel = abs(q-m)/abs(q)
+    print(f"  y={yv}: quad={mp.nstr(q,12)} meijer={mp.nstr(m,12)} rel={mp.nstr(rel,3)}")
+    ok = ok and rel < 1e-8
+print("  meijer form", "CONFIRMED" if ok else "REJECTED", flush=True)
+if not ok: sys.exit(1)
+
+# grid
+YMIN, YMAX, NGRID = 2e-4, 70.0, 4200
+lg = np.linspace(np.log(YMIN), np.log(YMAX), NGRID)
+grid_y = np.exp(lg)
+print("building kernel grid...", flush=True)
+vals = np.array([float(phi_meijer(y)) for y in grid_y])
+np.save("kernel_grid.npy", np.vstack([lg, vals]))
+try:
+    from scipy.interpolate import CubicSpline
+    SP = CubicSpline(lg, vals)
+    def phi_arr(y):
+        y = np.asarray(y, dtype=float)
+        out = np.zeros_like(y)
+        m = y < YMAX
+        yy = np.clip(y[m], YMIN, YMAX)
+        out[m] = SP(np.log(yy))
+        return out
+    print("spline: scipy CubicSpline")
+except Exception:
+    def phi_arr(y):
+        y = np.asarray(y, dtype=float)
+        out = np.zeros_like(y)
+        m = y < YMAX
+        yy = np.clip(y[m], YMIN, YMAX)
+        out[m] = np.interp(np.log(yy), lg, vals)
+        return out
+    print("spline: linear fallback (precision reduced)")
+
+# spline fidelity check at off-grid points
+chk = [0.0007, 0.013, 0.7, 4.7, 19.3]
+mx = 0.0
+for yv in chk:
+    ex = float(phi_meijer(yv)); ap = float(phi_arr(np.array([yv]))[0])
+    mx = max(mx, abs(ex-ap)/abs(ex))
+print(f"spline max rel err at probes: {mx:.2e}", flush=True)
+
+PI32 = float(mp.pi)**1.5
+
+# ---------- multiplicative sieve: a_n from local Euler factor coefficient dicts ----------
+def sieve_an(X, localfactor):
+    """localfactor(p, kmax) -> list of a_{p^k}, k=0..kmax. Returns a[0..X] (a[0] unused)."""
+    a = np.zeros(X+1); a[1] = 1.0
+    # iterate primes
+    isc = np.ones(X+1, dtype=bool); isc[:2] = False
+    for i in range(2, int(X**0.5)+1):
+        if isc[i]: isc[i*i::i] = False
+    primes = np.nonzero(isc)[0]
+    for p in primes:
+        kmax = int(np.log(X)/np.log(p))
+        loc = localfactor(int(p), kmax)
+        # multiply the Dirichlet series by local factor: standard in-place over p-adic blocks
+        b = a.copy()
+        for k in range(1, kmax+1):
+            c = loc[k]
+            if c == 0.0: continue
+            pk = p**k
+            b[pk::pk] += c * a[1:(X//pk)+1]
+        a = b
+    return a
+
+def F_of_t(a, X, N, tgrid):
+    n = np.arange(1, X+1)
+    out = []
+    for t in tgrid:
+        y = n * (PI32 * t / np.sqrt(N))
+        out.append(float(np.dot(a[1:], phi_arr(y))))
+    return np.array(out)
+
+def theta_test(a, X, N, tgrid, eps=1.0):
+    """residual profile of F(1/t) - eps * t * F(t); returns (max relative residual, profile)."""
+    Ft  = F_of_t(a, X, N, tgrid)
+    Fit = F_of_t(a, X, N, 1.0/np.array(tgrid))
+    scale = np.max(np.abs(Ft))
+    prof = (Fit - eps*np.array(tgrid)*Ft)/scale
+    return float(np.max(np.abs(prof))), prof, Ft
+
+# ---------- control 1: L(chi5) L(chi8) L(chi12), N=480, eps=+1 ----------
+def kron(D, p):
+    # kronecker via sympy-free: use pow for odd p; handle p=2 by table
+    if p == 2:
+        Dm = D % 8
+        return {1:1, 7:1, 3:-1, 5:-1}.get(Dm, 0)
+    if D % p == 0: return 0
+    ls = pow(D % p, (p-1)//2, p)
+    return 1 if ls == 1 else -1
+
+def loc_control1(p, kmax):
+    chs = [kron(5,p), kron(8,p), kron(12,p)]
+    # 1/((1-c1 T)(1-c2 T)(1-c3 T)) coefficients
+    co = np.zeros(kmax+1); co[0] = 1.0
+    poly = np.array([1.0])
+    for c in chs:
+        poly = np.convolve(poly, np.array([1.0, -c]))
+    # invert power series
+    inv = np.zeros(kmax+1); inv[0] = 1.0
+    for k in range(1, kmax+1):
+        s = 0.0
+        for j in range(1, min(k, len(poly)-1)+1):
+            s += poly[j]*inv[k-j]
+        inv[k] = -s
+    return inv
+
+N1 = 480.0
+X1 = int(28*np.sqrt(N1))
+a1 = sieve_an(X1, loc_control1)
+tg = np.array([0.80, 0.87, 0.93, 1.00, 1.07, 1.15, 1.25])
+res1, prof1, F1 = theta_test(a1, X1, N1, tg, eps=1.0)
+print(f"\nCONTROL 1 (chi5*chi8*chi12, N=480, eps=+1): X={X1}  max rel residual = {res1:.3e}")
+print("  profile:", " ".join(f"{v:.1e}" for v in prof1))
+
+# wrong-N negatives
+for Nw in (240.0, 960.0, 520.0):
+    rw, _, _ = theta_test(a1, X1, Nw, tg, eps=1.0)
+    print(f"  wrong-N control N={Nw}: residual = {rw:.3e}")
+# wrong-eps
+rw, _, _ = theta_test(a1, X1, N1, tg, eps=-1.0)
+print(f"  wrong-eps control: residual = {rw:.3e}")
+
+json.dump({"res1": res1}, open("poc2_status.json","w"))
+print("\npoc2 done", flush=True)
+
+====================================================================
+==== FILE: gp/poc3_targets.py
+====================================================================
+#!/usr/bin/env python3
+"""Rung E PoC stage 3: dihedral seam control, negative battery, then the two even-icosahedral targets."""
+import numpy as np, mpmath as mp, json
+mp.mp.dps = 22
+
+# ---- kernels (grid built in poc2 for gamma_R(s)^3; build odd-port kernel here) ----
+lg, vals = np.load("kernel_grid.npy")
+from scipy.interpolate import CubicSpline
+SP = CubicSpline(lg, vals)
+YMIN, YMAX = float(np.exp(lg[0])), float(np.exp(lg[-1]))
+def mk_phi(spline, lgrid):
+    lo, hi = float(np.exp(lgrid[0])), float(np.exp(lgrid[-1]))
+    def phi(y):
+        y = np.asarray(y, dtype=float)
+        out = np.zeros_like(y)
+        m = (y < hi)
+        yy = np.clip(y[m], lo, hi)
+        out[m] = spline(np.log(yy))
+        return out
+    return phi
+phi3 = mk_phi(SP, lg)
+
+def build_grid(bvec, fname):
+    g = np.linspace(np.log(2e-4), np.log(70.0), 4200)
+    v = np.array([float(2*mp.meijerg([[],[]],[list(bvec),[]], mp.exp(mp.mpf(x))**2)) for x in g])
+    np.save(fname, np.vstack([g, v]))
+    return mk_phi(CubicSpline(g, v), g)
+print("building odd-port kernel (Gamma(w)^2 Gamma(w+1/2))...", flush=True)
+phi_odd = build_grid([0,0,0.5], "kernel_grid_odd.npy")
+
+PI32 = float(mp.pi)**1.5
+
+def sieve_from_factors(X, locfac):
+    a = np.zeros(X+1); a[1] = 1.0
+    isc = np.ones(X+1, dtype=bool); isc[:2] = False
+    for i in range(2, int(X**0.5)+1):
+        if isc[i]: isc[i*i::i] = False
+    for p in np.nonzero(isc)[0]:
+        p = int(p)
+        kmax = int(np.log(X)/np.log(p))
+        poly = locfac(p)                       # coefficients of local L-factor denominator in T
+        inv = np.zeros(kmax+1); inv[0] = 1.0
+        for k in range(1, kmax+1):
+            s = 0.0
+            for j in range(1, min(k, len(poly)-1)+1):
+                s += poly[j]*inv[k-j]
+            inv[k] = -s
+        b = a.copy()
+        for k in range(1, kmax+1):
+            if inv[k] == 0.0: continue
+            pk = p**k
+            if pk > X: break
+            b[pk::pk] += inv[k]*a[1:(X//pk)+1]
+        a = b
+    return a
+
+def theta(a, X, N, tgrid, phi, eps=1.0):
+    n = np.arange(1, X+1)
+    Ft  = np.array([float(np.dot(a[1:], phi(n*(PI32*t/np.sqrt(N))))) for t in tgrid])
+    Fit = np.array([float(np.dot(a[1:], phi(n*(PI32/t/np.sqrt(N))))) for t in tgrid])
+    sc = np.max(np.abs(Ft))
+    prof = (Fit - eps*np.array(tgrid)*Ft)/sc
+    return float(np.max(np.abs(prof))), prof, Ft, Fit
+
+def eps_measure(a, X, N, tgrid, phi):
+    n = np.arange(1, X+1)
+    r = []
+    for t in tgrid:
+        Ft  = float(np.dot(a[1:], phi(n*(PI32*t/np.sqrt(N)))))
+        Fit = float(np.dot(a[1:], phi(n*(PI32/t/np.sqrt(N)))))
+        r.append(Fit/(t*Ft))
+    return r
+
+TG = np.array([0.80, 0.87, 0.93, 1.00, 1.07, 1.15, 1.25])
+G1 = (np.sqrt(5)-1)/2   # 2cos72
+G2 = (np.sqrt(5)+1)/2   # 2cos36
+
+# ---- load class data ----
+def load_classes(fn):
+    d = {}
+    for line in open(fn):
+        p, c = line.strip().split(":")
+        d[int(p)] = c
+    return d
+
+# ---- CONTROL 2: dihedral-plus-character at N = 229^2 ----
+dih = load_classes("classes_dih229.txt")
+def loc_dih(scramble=0.0, rng=None):
+    def f(p):
+        c = dih.get(p)
+        if c is None: return np.array([1.0])          # beyond table: truncate (weight ~0 there)
+        if rng is not None and c in "PN" and rng.random() < scramble:
+            c = "N" if c == "P" else "P"
+        if c == "P": return np.array([1.0,-3.0,3.0,-1.0])            # (1-T)^3
+        if c == "N": return np.array([1.0,0.0,0.0,-1.0])             # 1-T^3
+        if c == "I": return np.array([1.0,1.0,-1.0,-1.0])            # (1-T)(1+T)^2
+        if c == "R": return np.array([1.0,-1.0])                     # (1-T)
+        return np.array([1.0])
+    return f
+N2 = 229.0**2
+X2 = int(16*np.sqrt(N2))
+a2 = sieve_from_factors(X2, loc_dih())
+r2, prof2, _, _ = theta(a2, X2, N2, TG, phi3, eps=1.0)
+print(f"\nCONTROL 2 (dihedral+chi, N=229^2={int(N2)}, eps=+1): X={X2}  residual = {r2:.3e}")
+print("  eps measured:", " ".join(f"{v:.6f}" for v in eps_measure(a2, X2, N2, [0.85,1.1], phi3)))
+# negatives on control 2
+rng = np.random.default_rng(20260727)
+a2s = sieve_from_factors(X2, loc_dih(scramble=0.3, rng=rng))
+rs, _, _, _ = theta(a2s, X2, N2, TG, phi3, eps=1.0)
+rw, _, _, _ = theta(a2, X2, 229.0**2/4, TG, phi3, eps=1.0)
+rg, _, _, _ = theta(a2, X2, N2, TG, phi_odd, eps=1.0)
+print(f"  NEG scrambled-classes 30%: {rs:.3e}   NEG wrong-N/4: {rw:.3e}   NEG odd-port gamma: {rg:.3e}")
+
+# ---- icosahedral local factors ----
+def loc_icosa(classes, ramfac, swap=False, scramble=0.0, classcram=0.0, rng=None):
+    def f(p):
+        if p in ramfac: return ramfac[p]
+        c = classes.get(p)
+        if c is None: return np.array([1.0])
+        c = int(c)
+        if c < 0: return np.array([1.0])
+        if rng is not None and c in (3,4) and rng.random() < scramble:
+            c = 7 - c
+        if rng is not None and c in (1,2) and rng.random() < classcram:
+            c = 3 - c
+        if swap and c in (3,4): c = 7 - c
+        if c == 0: return np.array([1.0,-3.0,3.0,-1.0])                       # (1-T)^3
+        if c == 1: return np.array([1.0,1.0,-1.0,-1.0])                       # (1-T)(1+T)^2
+        if c == 2: return np.array([1.0,0.0,0.0,-1.0])                        # 1-T^3
+        if c == 3: return np.convolve([1.0,-1.0],[1.0,-G1,1.0])              # (1-T)(1-g1 T+T^2)
+        if c == 4: return np.convolve([1.0,-1.0],[1.0, G2,1.0])              # (1-T)(1+g2 T+T^2)
+        return np.array([1.0])
+    return f
+
+def run_target(name, classfile, ramprimes, Npred):
+    classes = load_classes(classfile)
+    X = int(16*np.sqrt(Npred))
+    print(f"\n=== TARGET {name}: predicted N = {int(Npred)}  X = {X} ===", flush=True)
+    best = None
+    for csigns in range(2**len(ramprimes)):
+        ram = {}
+        sgns = []
+        for i, p in enumerate(ramprimes):
+            s = 1.0 if (csigns >> i) & 1 else -1.0
+            ram[p] = np.array([1.0, -s])
+            sgns.append(s)
+        for swap in (False, True):
+            a = sieve_from_factors(X, loc_icosa(classes, ram, swap=swap))
+            rp, _, _, _ = theta(a, X, Npred, TG, phi3, eps=1.0)
+            rm, _, _, _ = theta(a, X, Npred, TG, phi3, eps=-1.0)
+            r, ep = (rp, 1.0) if rp <= rm else (rm, -1.0)
+            tag = f"ram-signs {sgns} faceswap {int(swap)}"
+            print(f"  {tag}: residual = {r:.3e} (eps {int(ep)})")
+            if best is None or r < best[0]: best = (r, sgns, swap, a, ep)
+    r, sgns, swap, a, ep = best
+    print(f"  BEST gauge: ram-signs {sgns} faceswap {int(swap)} eps {int(ep)}  residual = {r:.3e}")
+    print("  eps measured:", " ".join(f"{v:.6f}" for v in eps_measure(a, X, Npred, [0.85, 1.1], phi3)))
+    # conductor scan at best gauge
+    print("  conductor scan (residual):")
+    for mult in (0.25, 0.5, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.25, 2.0, 4.0):
+        Nw = Npred*mult
+        rw, _, _, _ = theta(a, X, Nw, TG, phi3, eps=ep)
+        print(f"    N = {Npred}*{mult}: {rw:.3e}")
+    # negative battery at true N
+    rng = np.random.default_rng(1951)
+    a_fs = sieve_from_factors(X, loc_icosa(classes, {p: np.array([1.0,-s]) for p,s in zip(ramprimes,sgns)}, swap=swap, scramble=0.3, rng=rng))
+    rfs, _, _, _ = theta(a_fs, X, Npred, TG, phi3, eps=ep)
+    a_cs = sieve_from_factors(X, loc_icosa(classes, {p: np.array([1.0,-s]) for p,s in zip(ramprimes,sgns)}, swap=swap, classcram=0.2, rng=rng))
+    rcs, _, _, _ = theta(a_cs, X, Npred, TG, phi3, eps=ep)
+    rg, _, _, _ = theta(a, X, Npred, TG, phi_odd, eps=ep)
+    print(f"  NEG face-scramble 30%: {rfs:.3e}   NEG class-scramble 20%: {rcs:.3e}   NEG odd-port gamma: {rg:.3e}")
+    return {"name": name, "residual": r, "signs": sgns, "swap": swap,
+            "neg": {"face": rfs, "class": rcs, "oddport": rg}}
+
+out = []
+out.append(run_target("Doud-1951 (tame, N=1951^2)", "classesX_doud1951.txt", [1951], 1951.0**2))
+out.append(run_target("corpus {2,7,331} (tame, N=(2*7*331)^2)", "classesX_corpus.txt", [2,7,331], (2*7*331.0)**2))
+json.dump(out, open("poc3_results.json","w"), default=str)
+print("\npoc3 done", flush=True)
+
+====================================================================
+==== FILE: gp/poc4_gnew_meter.py
+====================================================================
+#!/usr/bin/env python3
+"""Rung E PoC stage 4: the G_new port meter, construction-level.
+Two arms A(u)=e^{u/2}F(e^u), A(-u); x(u)=arm imbalance; G_new=2/(1-x); eta=artanh x.
+Keyed pole control (zeta*L5*L8, pole at s=1 => delta=1/2) calibrates the jet-ratio pole locator."""
+import numpy as np, mpmath as mp, json
+mp.mp.dps = 22
+from scipy.interpolate import CubicSpline
+
+lg, vals = np.load("kernel_grid.npy")
+SP = CubicSpline(lg, vals)
+lo, hi = float(np.exp(lg[0])), float(np.exp(lg[-1]))
+def phi3(y):
+    y = np.asarray(y, dtype=float); out = np.zeros_like(y)
+    m = y < hi; yy = np.clip(y[m], lo, hi); out[m] = SP(np.log(yy)); return out
+PI32 = float(mp.pi)**1.5
+G1 = (np.sqrt(5)-1)/2; G2 = (np.sqrt(5)+1)/2
+
+def sieve(X, locfac):
+    a = np.zeros(X+1); a[1] = 1.0
+    isc = np.ones(X+1, dtype=bool); isc[:2] = False
+    for i in range(2, int(X**0.5)+1):
+        if isc[i]: isc[i*i::i] = False
+    for p in np.nonzero(isc)[0]:
+        p = int(p); kmax = int(np.log(X)/np.log(p))
+        poly = locfac(p)
+        inv = np.zeros(kmax+1); inv[0] = 1.0
+        for k in range(1, kmax+1):
+            s = 0.0
+            for j in range(1, min(k, len(poly)-1)+1): s += poly[j]*inv[k-j]
+            inv[k] = -s
+        b = a.copy()
+        for k in range(1, kmax+1):
+            if inv[k] == 0.0: continue
+            pk = p**k
+            if pk > X: break
+            b[pk::pk] += inv[k]*a[1:(X//pk)+1]
+        a = b
+    return a
+
+def kron(D, p):
+    if p == 2:
+        return {1:1, 7:1, 3:-1, 5:-1}.get(D % 8, 0)
+    if D % p == 0: return 0
+    return 1 if pow(D % p, (p-1)//2, p) == 1 else -1
+
+def load_classes(fn):
+    d = {}
+    for line in open(fn):
+        p, c = line.strip().split(":"); d[int(p)] = c
+    return d
+
+def loc_icosa(classes, ram, swap=False):
+    def f(p):
+        if p in ram: return ram[p]
+        c = classes.get(p)
+        if c is None: return np.array([1.0])
+        c = int(c)
+        if c < 0: return np.array([1.0])
+        if swap and c in (3,4): c = 7 - c
+        return {0: np.array([1.,-3.,3.,-1.]), 1: np.array([1.,1.,-1.,-1.]),
+                2: np.array([1.,0.,0.,-1.]),
+                3: np.convolve([1.,-1.],[1.,-G1,1.]), 4: np.convolve([1.,-1.],[1.,G2,1.])}[c]
+    return f
+
+def meter(a, X, N, ugrid):
+    """returns x(u), eta(u), G_new(u) from the two theta arms."""
+    n = np.arange(1, X+1)
+    xs, es, gs = [], [], []
+    for u in ugrid:
+        t = float(np.exp(u))
+        A  = float(np.exp(u/2) * np.dot(a[1:], phi3(n*(PI32*t/np.sqrt(N)))))
+        Am = float(np.exp(-u/2) * np.dot(a[1:], phi3(n*(PI32/t/np.sqrt(N)))))
+        x = (Am - A)/(Am + A)          # reflection coefficient at the port
+        xs.append(x); es.append(np.arctanh(np.clip(x, -0.999999, 0.999999))); gs.append(2.0/(1.0-x))
+    return np.array(xs), np.array(es), np.array(gs)
+
+def jetfit(ugrid, eta):
+    """fit eta(u) = c1 u + c3 u^3 (odd jets); return c1, c3, delta_hat = sqrt(6 c3/c1) if sane."""
+    Uf = np.vstack([ugrid, ugrid**3]).T
+    c, *_ = np.linalg.lstsq(Uf, eta, rcond=None)
+    c1, c3 = c
+    dh = float(np.sqrt(6*c3/c1)) if c1 != 0 and c3/c1 > 0 else float('nan')
+    return float(c1), float(c3), dh
+
+UG = np.array([0.03, 0.06, 0.09, 0.13, 0.17, 0.21, 0.25])
+
+def report(name, a, X, N):
+    xs, es, gs = meter(a, X, N, UG)
+    c1, c3, dh = jetfit(UG, es)
+    print(f"{name}:")
+    print(f"  G_new(u): " + " ".join(f"{g:.10f}" for g in gs[:4]) + " ...")
+    print(f"  max|G_new - 2| = {np.max(np.abs(gs-2)):.3e}   eta-jets c1={c1:.4e} c3={c3:.4e}   delta_hat={dh:.4f}")
+    return {"name": name, "maxdev": float(np.max(np.abs(gs-2))), "c1": c1, "c3": c3, "delta_hat": dh}
+
+out = []
+# ---- POLE CONTROL: zeta * L(chi5) * L(chi8), N = 40, pole at s=1 (delta = 1/2) ----
+def loc_pole(p):
+    chs = [1, kron(5,p), kron(8,p)]
+    poly = np.array([1.0])
+    for c in chs: poly = np.convolve(poly, [1.0, -c])
+    return poly
+Xp = int(30*np.sqrt(40))
+ap = sieve(Xp, loc_pole)
+out.append(report("POLE CONTROL zeta*L5*L8 (N=40, true pole delta=0.500)", ap, Xp, 40.0))
+
+# ---- ENTIRE CONTROL: chi5*chi8*chi12 (N=480) ----
+def loc_c1(p):
+    chs = [kron(5,p), kron(8,p), kron(12,p)]
+    poly = np.array([1.0])
+    for c in chs: poly = np.convolve(poly, [1.0, -c])
+    return poly
+X1 = int(16*np.sqrt(480)); a1 = sieve(X1, loc_c1)
+out.append(report("ENTIRE CONTROL chi5*chi8*chi12 (N=480)", a1, X1, 480.0))
+
+# ---- the two certified corner objects at their best gauges ----
+cd = load_classes("classesX_doud1951.txt")
+ad = sieve(int(16*1951), loc_icosa(cd, {1951: np.array([1.0,-1.0])}, swap=True))
+out.append(report("Doud-1951 rho3 (certified)", ad, int(16*1951), 1951.0**2))
+
+cc = load_classes("classesX_corpus.txt")
+ram = {2: np.array([1.0,1.0]), 7: np.array([1.0,-1.0]), 331: np.array([1.0,-1.0])}  # signs (-1,+1,+1)
+ac = sieve(int(16*4634), loc_icosa(cc, ram, swap=False))
+out.append(report("corpus {2,7,331} rho3 (certified)", ac, int(16*4634), (2*7*331.0)**2))
+
+# ---- corruption signature: Doud with index primes re-broken ----
+cbad = dict(cd); cbad[2] = "-1"; cbad[7] = "-1"; cbad[71] = "-1"; cbad[137] = "-1"
+ab = sieve(int(16*1951), loc_icosa(cbad, {1951: np.array([1.0,-1.0])}, swap=True))
+out.append(report("Doud-1951 CORRUPTED (index primes broken)", ab, int(16*1951), 1951.0**2))
+
+json.dump(out, open("poc4_meter.json","w"))
+print("\npoc4 done")
+

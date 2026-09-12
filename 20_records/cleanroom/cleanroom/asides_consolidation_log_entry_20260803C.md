@@ -1,0 +1,31 @@
+# 2026-08-03 (session C) — Resumption: the conductor-minimal retarget, the qualified solver, and the summit read
+
+**Context:** resumption instance in the session-A container (survived, tools intact), executing Will's standing "final swings in full" countersign-on-spec after reconstructing state from the project (sessions A and B both closed; B's KD-2 verdict and entry bar inherited). Pre-registration → GATE-M qualification → summit decode → commit → graders, one day. Records: `decode2dim_RESUMPTION_preregistration_20260803`, `decode2dim_COMMIT_20260803`, `decode2dim_RESULTS_20260803`, `DECODE_COMMIT_bundle_20260803.json`, manifest v6.
+
+**Anchors (continuing 07-27B numbering):**
+- [A18] The conductor-minimal retarget: the summit lift lives at N = p (quintic nebentypus, Tate lift, tame exponent 1), not N = p²·2^a (det-1 framing); confirmed at source post-commit (Doud's minimality theorem, type 3a). The det-1 sibling derives from it (b⁰_p = b_p(−1)^{j(p)}, N = p², a = 0 forced) — B's grid was hunting the non-minimal twin at the proven-impossible scale. | Firm.
+- [A19] GATE-M passed behind B's entry-bar discipline: matched planted rung D\*=2089 recovered exactly by S2/S2-perturbed/S5 (1.6–5.1e-15, identical visible sets) under R1 (staged bands) + R1.w (variance-whitened arms). | Firm.
+- [A20] Landscape law (measured): the sign-decode objective carries deep compensated false minima (54%-wrong at 5.7e-7 residual); single-path solvers (greedy SC, tempering ×2 calibrations, mean-field) all fail at matched scale; multi-hypothesis tracking (beam / exhaustive-prefix list) is load-bearing. B's KD-2 = failing-family solvers × 2000× the minimal conductor, both now quantified. | Firm.
+- [A21] THE SUMMIT READ: 67 sign-bits of the Doud-1951 minimal lift (58 visible), unanimous across 3 runs / 2 families, cert-residual 8.957e-15, blind-N unique at 1951 (13 orders), negatives 11–13 orders, ε = +0.885096−0.465408i, meter G_new = 2 to 2.2e-14 (η extinguished — the committed port-flattening executed literally). First Hecke data for any even icosahedral representation (priority gated on E0(ii) coverage caveats). | Firm at PoC fidelity; bit-level external grade = Crespo construction, queued.
+- [A22] MEASURED CENTRAL DATA the shadow cannot see (A17's targets, now read): parity ρ̃(c) = −I — sin-type Maass partner (my w₂-ledger [C] prediction of cos-type WRONG by 11 orders of cell separation); golden orientation B (the inherited orientation-A statement WRONG — A4-style live control won). Two pre-registered contingencies fired against the author; both printed at headline volume. | Firm.
+- [A23] Galois-conjugate replication as internal grade: the χ² cell decoded independently to 2.649e-15 with its own ε; branch-corrected transport = 100% on certification-weight bits. A wrong solution does not conjugate. | Firm.
+
+**Inflections:**
+- [I12] B's det-1 target framing → conductor-minimal nebentypus lift | trigger: literature anchors already in-record (Doud "prime conductor", BLS 1950-cap) + Tate local arithmetic | the campaign-shaping decision of the session.
+- [I13] Twist-arm enrichment poisoned the solved base-only decode → whitening (R1.w): each arm's defect normalized by its marginalization variance | trigger: per-arm true-bits lint passing while solvers failed | the statistical repair that made multi-arm decoding work at all.
+- [I14] Summit cells all floored → the missing complex-nebentypus control + the un-whitened u-hole (R2) | trigger: A4-style assumption-stack audit | the control gap closed same-turn (L(η)² at 1.6e-15, Gauss-sum ε to 2.3e-16).
+- [I15] My transport-grade "27 mismatches" → machine showed mismatch set = odd-j set (mod one sub-visible bit): my hand-picked ζ₁₀-branch, not incoherence | drift-watch (iv) again, machine-settled again.
+
+**Drift watch (chain seven deep now):**
+- (i) enthusiasm-bias: exercised at the summit moment — the oddGS dive appeared at e-15 while three sibling cells sat at e-2/e-3; controls: the full §7 battery ran before any language hardened, and the two self-contradicting measurements (parity, orientation) were promoted to headline placement. Held.
+- (iv) hand-computation confidence: TWO new instances (meter exp-sign; ζ₁₀-branch), both machine-caught. The rule stands: mechanize immediately, always.
+- (vi) optimizer-manufactured signal: the qualification design faced it squarely — planted rungs, per-arm lint, and the 25-order S5 winner-separation are the controls that make the summit basin a measurement rather than an artifact.
+- NEW candidate mode, named: **inherited-gauge complacency** — two inherited conventions (port parity, golden orientation) were both wrong at the lift level while perfectly consistent at shadow level. Control (now standing): every inherited discrete gauge gets a live cell, not a spot-check negative — A4's practice, promoted to rule.
+
+**Open threads:** Crespo/K̃ grade (THE decisive next step; seal lifted, can be built openly); mid-band completion + u (two routes, incl. the ε(u) Tate-constant derivation); det-1 battery; GATE-B + wall map; rigorization (Palojärvi–Zhao); referee package (now carrying a first-ever dataset + falsifiable parity prediction); the five remaining Doud lifts; countersign backlog THREE sessions deep (A: rung-4 + PoC stamps; B: six-for-six + E0(ii) + KD-2 + amendments; C: everything above) — Will's next session should probably open with the ledger.
+
+**Asides:**
+- The corner was never unreachable — it was mis-conducted. Two thousand times too much conductor, and every solver that walks one path at a time. The mountain got smaller the moment its true address was read off the field's own signage.
+- Every failed decode this week was the same failure at three scales: information present, aggregation blind. The whitened multi-arm beam is D↓ discipline applied to a solver: weight every port by what it cannot yet know.
+- The two bits the shadow can't see — parity and orientation — are exactly the two the record got wrong by inheritance. Sym² kills the center, and the center is where the surprises lived, again.
+- ε came out irrational-phased and stable to sixteen digits; u hides one rung deeper. The seam gives up its data in strict weight order, and it does not round.

@@ -1,0 +1,27 @@
+# Starter prompt — session following 2026-08-09
+
+*(Written at close of the closure-and-eigenfunction session. Supersedes `STARTER_next_session_20260806.md`. Everything persists in the claude.ai project "2026-07-26": records under `charges/` and `cleanroom/`, the citable CSVs with upgraded provenance under `cleanroom/hecke_eigenvalues_doud{1951,2141}_to1e5.csv`, scripts in the delivered zips (hashes in manifest v7/v7b), plus Drive folder `TEP_dyadic_closure_20260809`.)*
+
+
+
+Hi. You inherit the corpus the evening after two summits were closed in one day. State, one paragraph: **the algebraic side of Doud-1951 is COMPLETE** — exact a_p at every unramified prime including p = 2 (pre-registered 8/8: odd index primes by residue embeddings, p = 2 by the 2-adic Artin–Schreier route; b₂ = +1 reproduced algebraically, matching the committed seam-read; 2141's dyadic port is *demonstrably* arithmetically obstructed, v₂(γ) odd at all 60 orderings) — and **the eigenfunctions themselves now exist as functions** (pre-registered 4/4: pointwise Γ₀(N)-automorphy at 1.3×10⁻²⁴/1.1×10⁻²⁴ over all graded pairs, out-of-sample; corruption control fails by 26 orders; Fricke ratio = −ε to 10⁻²⁶ constancy at both fields; first rendering delivered — the sin-type parity is visible as the dark seams at x ∈ ½ℤ). En route: the frame-degeneracy finding (Σbₖ = −1 ⟹ all-orderings vanishing — the answer to the reviewer's diagnostic question), and the frame-change law (gauges differ by exactly one quadratic character off the involution locus: d₀ = 78040 and 12; 2A is frame-independent and masks any character fit — fit off-involution).
+
+
+
+**Read in order:** `charges/RESULT_algebraic_closure_1951_20260809.md` → `charges/RESULT_maass_live_20260809.md` → the two preregs (they carry the procedures and kill conditions) → `charges/reply_to_reviewer_dyadic_closure_20260809.md` (relay-ready) → `cleanroom/asides_consolidation_log_entry_20260809.md` (instrument lessons: GP denominator semantics; division-free arithmetic over ℤ/2^K; per-side tail bounds; the C4 ordering deviation, owned).
+
+
+
+**The decision surface now:** (i) **The remaining Doud fields** (3701, 3821, 8501, 9461) via the streamlined recipe — trace-form construction + FE-character-pin in place of beam decode; the heavy part is per-conductor emission machinery; pre-register the prediction classes first (3701 ≡ 1 mod 4: the order-5-vs-10 nebentypus question is live). (ii) **Rigorization** — Turing-method completeness (Palojärvi–Zhao 2508.03023); there is now an actual function with certified automorphy to hang it on. (iii) **The deposit/referee package** — the case has never been stronger: two constructor-confirmed datasets, algebraic closure at 1951, λ = 1/4 to 10⁻²⁰, and the eigenfunctions exhibited. (iv) The Crespo citation pin (library access) and the countersign ledger session with Will remain queued.
+
+
+
+**Conventions:** all standing (tier tags; offered-not-self-filed; prereg with kill conditions before computing; prediction-class labels; honest-bite-first; errata and deviations at headline volume; controls before targets — they caught two harness bugs again today). **Working with Will:** unchanged and better than ever — his pivots keep choosing the deepest open item ("are you sure p=2 is invisible?", "live directly at the analytic side"); treat his questions as construction-specs, take the liberties he grants, and spend them on protocol, not around it.
+
+
+
+The corner now has: two datasets, an instrument, a constructor's countersignature, a completed algebraic algorithm at the minimal conductor, a measured spectral parameter, two living eigenfunctions, and a picture. Whatever you open with: say which mountain you're on in the first line — and take the protocol with you. It has still never been wrong.
+
+
+
+Good hunting.

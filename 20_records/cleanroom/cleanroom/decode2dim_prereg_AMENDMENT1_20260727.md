@@ -1,0 +1,13 @@
+# AMENDMENT 1 to the 2-dim decode pre-registration — the archimedean-parity axis — 2026-07-27 (~15:00Z)
+
+**Trigger (measured, logged before any odd-port target run):** the ten even-port triage cells returned a flat floor — ε=+1: 7.8e-4 / 6.5e-4 / 6.9e-4 / 5.9e-4 / 6.5e-4 across a = 0..4 (structured start, converged, drift-gates clean); ε=−1: 1.4e-1 / 1.3e-1 / 7.4e-2 / 3.7e-2 / 8.9e-2. No cell dove; the a-axis does not discriminate at the floor. Flat-across-a is the signature of "the object is not in the scanned grid" (or of decoder stall — priced in §3 below).
+
+**The derivation error being corrected:** prereg §2 pinned the port to Γ_ℝ(s)² (cos-type) by inheritance from the shadow. But ρ̃(c) ∈ {+I, −I}, both with det ρ̃(c) = +1 (the representation is det-even either way), giving L_∞ = Γ_ℝ(s)² or Γ_ℝ(s+1)² respectively — cos-type vs sin-type Maass partner at λ = ¼. **Sym² kills the center: ρ₃(c) = Sym²(±I) = I identically — the certified shadow is structurally incapable of seeing this bit.** It is a central sign-bit, i.e. precisely decode-class data; pinning it by inheritance was the same species of error as the original faceswap default at p = 2. Over Q the parity of the minimal lift is fixed arithmetic (flipping it costs a χ_D twist with D < 0, which adds finite ramification) — so it is one unknown bit, not a gauge.
+
+**Amended design:** the outer grid gains the parity axis: cells = (parity ∈ {even: Γ_ℝ(s)², odd: Γ_ℝ(s+1)²}) × (a ∈ 0..4) × (ε ∈ ±1). The odd-port kernel (Mellin⁻¹Γ((s+1)/2)², already built and gridded as the former negative control) becomes a live hypothesis port; the theta relation F(1/t) = ε·t·F(t) holds identically in this normalization. The "opposite-parity port" replaces "odd-parity port" in the §7 negative battery (the winning cell's opposite port must fail).
+
+**New control, run before any odd-port target cell (KD-1 extension):** Ind ψ₂₂₉ ⊗ χ₋₄ — an ODD (sin-type) λ = ¼ Maass object, automorphic by Hecke–Maass, N = 229·16 = 3664, ρ(c) = −I, coefficients derived from the byte-certified on-disk 229 table by χ₋₄-dressing (no new data). Bar: ≤ 5e-12 through the odd port; loud negatives (even-port read, wrong-N, wrong-ε).
+
+**Honest pricing kept live:** the even-port 6e-4 stall may yet be decoder-stall rather than wrong-port (the greedy visibly stalls: single-flip convergence at e-3, pair-pass to e-4). If the odd-port cells also floor flat, the next pre-registered step is the full battery per §7 and, failing that, the BOUNDED-ABSENCE report — not algorithm-fishing. All §7 bars unchanged; no other change to the committed design.
+
+*Filed before any odd-port target computation. Seal intact.*

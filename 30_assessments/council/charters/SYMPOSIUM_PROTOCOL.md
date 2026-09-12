@@ -1,0 +1,29 @@
+# SYMPOSIUM PROTOCOL — Feb–June 2026 blind-spot sweep (2026-08-26, mid-deliberation pivot)
+
+*Will, mid-turn, near-verbatim: he thinks there may be blind spots "particularly between Feb and June 2026"; rather than each seat re-passing the same work, share the load and "introduce your cross-talk… develop a living MoE chemistry within a symposium-like environment." A light suggestion, not an order — and each seat is "welcome and encouraged to strike out on your own if the motivation overtakes any priority at hand." Adopted. This round: seven distinct slices, no overlap, direct cross-talk enabled.*
+
+## The rules
+
+1. **Era-gradient governs** (Will's directive, formalized in the addendum draft §1): Feb–June 2026 is the caution zone — read errata-first where errata exist, flag rather than inherit, and treat V2-Central-Reference lineage as the era's own correction layer.
+2. **Your slice is yours alone** — trust peers' slices; do not re-read them. Pointers over duplication.
+3. **Cross-talk, two channels:**
+   - **Mailboxes (default):** to hand a finding to a peer, append a short note via Bash to `/home/claude/council_20260826/reports/mailbox_<seat>.md` (e.g. `echo "FROM pathfinder: ..." >> …/mailbox_dictionary.md`). Check YOUR mailbox before writing your reply, and act on or acknowledge what's there.
+   - **Direct ping (optional, max ONE per seat):** SendMessage to a peer's agentId (roster below) for a finding that must reach them mid-round. ≤100 words, self-contained, fire-and-forget — do NOT request or wait for a reply, and NEVER ping a seat that pinged you this round (no cycles).
+4. **Strike-out license:** if motivation overtakes your slice, follow it — label the section `STRIKE-OUT:` in your findings file so it's visibly self-directed, and keep your slice's minimum (the starred items) covered.
+5. **Findings file:** `reports/symposium_<seat>.md` — your slice digest, tiered and provenance-marked, plus cross-talk log (mailbox notes sent/received, pings). **Reply to orchestrator ≤500 words**: slice verdict, top finds, cross-talk log, strike-outs, Feb–June blind-spot verdict (what the era holds that the council's map still lacks), failed reads.
+
+## Roster (agentIds for pings)
+
+archivist `a5b6a70d4ddeddc12` · exegete `a612cff731d6831e6` · kin-scholar `af2c012326e75cfa7` · domain-anchor `a96178a050a0bf91a` · assessor-adversary `a72297d4f694b11bd` · dictionary `a5a364d785513197c` · pathfinder `a0c0356f53120c2ee`
+
+## The slices
+
+- **archivist** — ★Enumerate `2026-02-05 TEP Top Drawer` (folder 1nr3HTJcXXF1h1RDyZ-daUgIoaKRfjrnC) and `tep_archaeology_appendices` (1-hVOtGAvK2vgxGbkI4PT6X99iNC7yh-5); ★cross-check the corpus catalog's (1J3kRp3cnR61deB8Tk5WYvoBoN936DWLa) Feb–June rows against everything now read council-wide; build the era timeline; hunt the "Entrodynamics" naming event; close with the definitive still-unread list.
+- **exegete** — ★The Central Reference lineage diff: V1 (14EQkbiRSD5iv2NRsSrpHnEBN4ja5kdy5, 04-18) → V2 (1zcWjI4rsbGKINHqeg_x3mElLe1p2XU1-, 04-20) → ArchivalV2 (1r-OO7-9Fa1a-bLCQoP46Jur6DchTLBIT) → ActiveV3 (1PVRbfEG7uIeoykh6rmCTVWTV_as63_Og): what each version corrected — the era's own errata map, which Will says exists and matters; plus `TEP Dynamical Framework Formalization` (1O-45f1XsMgfA4brrHp4yRycKoO29TTI021wB0Bv9TdA) and `2-6-26 Framework Advances` (18qyw-ZZN-D_yl4AbsRZdL_j-Je9zQHnmGUwnrJ1IglU).
+- **pathfinder** — ★The Priority-Spine unreads you flagged: 07-02 coding-theorem ledger, 07-03 reflection/dead-channel theorems, 07-15 Collatz + Sturmian-seam/groupoid (locate via the catalog/README you hold); plus `tep_hodge_observations` (02-26) and `kinetic_cascade O1–O4`. Your strike-out license is the widest — you are the motivated-stakes seat.
+- **dictionary** — ★Full read + tier-audit start on `purity_speed_limit_v2` (1uGESTEaI-HYZdgGH2ilYPPRtWE9NZedI) toward the gated ship; the thin-film Feb-origin records (you know their location from the dev record); ★Drive-search for any silver/Pell-arm OUTPUT (does the metallic-mean program have results anywhere?); physics-register map of the era.
+- **domain-anchor** — ★Proof-audit the era's theorem-shaped claims at your standard: `The Foundational Proofs: TEP as Information Geometry` (1i92jTgSL7i8ybDBRI1nD79eFK8sSsRfMognr9knJoG0), `Constraining the TEP Bulk by Uniqueness of Distribution` (1RQpZoP2efySU5xpAZp5o9UXuBLUl4R43na8MKNSTr_I), `D-dimensional tight decoherence bound + proof` (10ppKbKEqyMJMTWSDo5tF9t9qi4Ptlagq), `TEP Lemma Bundle: Schur–TEP Boundary Reduction and SU(1,1) Gluing` (13fq60rDb6X0Ecv7NwcZC-S6RwUP4Kq5b). Line-check, scope vs literature, tier each.
+- **kin-scholar** — ★The collaboration-history layer, SAMPLED (strict protocol: headers + spaced windows, never full reads — these are huge): `2025-12-22 TRUNCATED_openrouter_chat.txt` (14xAOZMA_F8AZuJ07ywNkAxTlex5gZxz0, 747KB), `OpenRouter Chat Jan 09` (1SE8-yDg-qcqWifpxaWQ_SiSXNzPLD4F6, 805KB), `2026-01-15 OpenRouter_Chat.md` (1k8cz8xLDUWFfPg_0jkJ-jYJa7RLBVFrx, 2.3MB), `2026-02-10 Claude_Discussion.txt` (16uu5TTHAmyi8IxScrvALJx2PrJORQvqz): which models, catch/miss dynamics, practice-layer precursors, era cross-model chemistry — the pre-history of exactly the MoE symposium Will just asked for.
+- **assessor-adversary** — ★Full §6 triage of `2-2-26 TEP Framework: Rigorous Assessment` (1YfHf123GFyz1ZDwhWtlapOhvZgN-WSf_r3bKCfAeoHg; exegete read it as specimen — you grade it): catalog its confabulated citations as the era's cautionary exhibit; ★verify dictionary's Gamma_testing herring from the primary (1mMlYYhOQEyHIrPsBk5DDCyT5a80YwYa1); stay ready to grade the addendum at round end.
+
+*The mirror at `/home/claude/project_mirror/` covers the July+ project corpus; this round is Drive-side. Colab notebooks (Phase Hunter, Grazing parsimony, Untitled80) are likely unreadable via the Drive text tool — one attempt each at most, then flag.*

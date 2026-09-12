@@ -5,7 +5,7 @@ What the corpus itself, as of July 2026, declares canonical: the V2 Entrodynamic
 Read the errata record alongside anything older than 2026-06-10 — it revises the read-status of several earlier claims.
 
 **Added 2026-09-12.** The errata line is extended: `2026-07-21 ledger_patches_proposed_ActiveV2.md` (the live
-edition; its in-file header still reads ActiveV1 — stamp C16), `2026-07-25 correctness_patch_bundle_ActiveV1.md`
+edition by title; byte-identical to the ActiveV1 file beside it — the retitle carried no text change; the in-file header still reads ActiveV1 — stamp C16), `2026-07-25 correctness_patch_bundle_ActiveV1.md`
 (P-A…P-G; appendix = **Foundations Status block v2**, the canonical foundations statement; v1 retained as
 ArchivalV1), and `2026-09-12 errata_and_status_index_2026-07-25_to_2026-09-12.md` (37 indexed corrections through
 the council era). The OT1 resolution's live edition `2026-07-22 ot1_delta_EXHIBITION_GRADED_conductor_4000_ActiveV5.md`

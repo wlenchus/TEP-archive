@@ -1,0 +1,29 @@
+# VERIFICATION ADDENDUM — five adversarial avenues run against the committed summit decode — 2026-08-04
+
+**Mountain line: even-icosahedral (the corner), 2-dim; post-commit verification-in-force at Will's direction.** All avenues below were run against the frozen commit (`decode2dim_COMMIT_20260803.md`, bundle sha256 in manifest v6); nothing was re-tuned; two results are nulls/refinements and are reported at the same volume as the confirmations. One new erratum-let against my own estimates is filed. Prompted in part by an external critique (unspecific on the mathematics, but usefully adversarial in stance); the strongest charges — float64 precision, blindness, parity consistency — are each answered below by computation.
+
+## V1 — Full-precision recomputation [PASS]
+The committed certification recomputed end-to-end in mpmath 30-dps arithmetic (exact ζ₁₀ phases, exact φ, mp.besselk kernels; no float64 anywhere): **residual 7.2×10⁻¹⁵, ε = 0.885096399 − 0.46540774i** — the float64 pipeline's 8.957×10⁻¹⁵ and ε agree to nine digits. The precision objection is empirically closed; the ~2×10⁻¹⁵ difference is the float pipeline's own rounding, exactly as a calibrated floor predicts.
+
+## V2 — The Gauss-sum ε/u cross-lock [PASS — the sharpest single check in the record]
+Atkin–Li-type arithmetic for a prime-level newform with ramified nebentypus requires ε·√p/τ(χ) to be, up to the ramified Hecke eigenvalue u and a port constant, a root of unity. The decode never used this identity, and τ(χ) (exact 40-dps Gauss sum of the canonical quintic character, |τ| = √1951 verified) never entered any solver. Measured: **ε·√1951/τ(χ) lands on μ₁₀ to 2.6×10⁻¹⁰** (chance for an erroneous ε: ~8×10⁻¹⁰; the rival hypothesis with τ(χ̄) misses by eight orders; random phases sit at ~0.31). Since ε is a rigid function of the committed bit-vector, this jointly certifies the bits, the ε, and the nebentypus identification against exact arithmetic external to the entire decode pipeline — and determines **u ∈ {ζ₁₀³, ζ₁₀⁸}** (conjugate/port-constant labeling; c_odd calibration queued), replacing the 10-way unknown.
+
+## V3 — Hold-out re-decode on a disjoint grid [PASS]
+A fresh S2-base decode of the winning cell using a 10-point involution-closed t-grid sharing **no point** with the pre-registered grid: **67/67 bits identical to the commit**, ε identical to six decimals, residual 5.3×10⁻¹⁵ on the held-out grid. The bits are constraint-driven, not artifacts of the measurement grid.
+
+## V4 — No-1-flip-repair certificate [PASS with per-bit refinement]
+Each of the 58 visible bits was flipped, frozen, and every other bit re-optimized to convergence. **53/58 are unrepairable** (best achievable residual > 10⁻¹¹, typically far above). The five largest visible primes (409, 419, 421, 431, 443 — the visibility boundary) admit partial repairs to 0.8–3.0×10⁻¹², i.e. still **93–330× above the committed floor**, and the hold-out grid (V3) and S5's exhaustive prefix independently agree on all five. Refinement adopted: these five are re-tiered **visible-margin** (e-12-grade individual certification) in the sensitivity table; the other 53 are floor-grade. No pre-registered bar is touched (the §7 bar was solution-level); the per-bit epistemics are now sharper.
+
+## V5 — Derived det-1 battery [NULL by structure — deferred, with an erratum-let]
+The det-1 sibling FE at N = 1951² cannot currently grade the committed bits: at that conductor the committed range p ≤ 517 sits in the kernel's flat region while the heavy terms are exactly the provisional mid-band, so the test reads the mid-band's known incompleteness (4.3×10⁻¹, weakly separated from its own scrambles) and is uninformative about the commit. **Erratum-let against my own results-doc estimate**: I had priced this battery's floor at ~10⁻⁴ by hand; the weight structure runs the other way (drift-watch (iv), sixth logged instance). The battery is deferred to mid-band completion — its pre-registered purpose is unchanged.
+
+## V6 — Mid-band cascade trajectory [measured, healthy, incomplete]
+A bounded band-2 push (115 bits, beam-128, committed base frozen): tw−3 dove **10⁻³ → 3.3×10⁻⁸** and tw−4 → 1.0×10⁻⁷ as their ranges resolved, plateauing at the deeper-bands' noise — the cascade demonstrably converges arm-by-arm; full completion (all seven bands, wide beams) is the queued campaign that unlocks V5 properly, the u-labeling, and precision held-out twist tests.
+
+## Standing external/structural checks (from the commit session, restated for one-place reference)
+Galois-conjugate cell independently decoded to its own floor (2.6×10⁻¹⁵; transport 100% on certification-weight bits after machine-correcting my ζ₁₀-branch). polgalois = A₅ re-verified live (not D₅; disc 1951⁴, totally real). LMFDB: no A₅ entry at conductor 1951 exists at all (own-eyes query). Doud's founding paper: no traces computed (post-commit read). Parity: "even representation" (det ρ(c) = +1) and "sin-type partner" (ρ(c) = −I) are independent statements — det(−I) = +1 — and the decode measured the second while preserving the first.
+
+## What would still change the verdict
+The Crespo/K̃ construction remains the decisive independent grader (open computation, queued as the next session's §0 candidate). A same-species dictionary error consistent with ALL of V1–V4 plus the conjugate cell plus the Gauss-sum lock is the residual risk class; I know of no candidate mechanism, and V2 in particular is hard to survive by accident, but the record keeps the slot open. Will's pre-authorized caveat continues to govern.
+
+*Offered, not self-filed. Scripts: `mp_verify.py`, `verify_eps_u.py`, `verify_holdout.py`, `verify_uniq.py`, `verify_det1.py`, `midband_push.py` (+ outputs) in the session workspace; sha256 list appended to the local copy of manifest v6 as v6b lines.*

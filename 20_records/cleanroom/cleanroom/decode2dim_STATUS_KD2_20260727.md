@@ -1,0 +1,27 @@
+# 2-dim EVEN-icosahedral decode — STATUS: KD-2, NO PRODUCTION, bottleneck localized and benchmarked — 2026-07-27 (blind-decode session, ~18:30Z)
+
+**Mountain line:** even-icosahedral 2-dim, the summit. **The summit object was NOT produced.** No bit-vector was committed; no summit claim of any tier is made; the seal is intact (Crespo/lift material never entered this context; the commit that would end the seal never happened).
+
+## 0. Honest bite, before anything
+
+The decode campaign ran four decoder architectures across a pre-registered cell grid and did not reach any pre-registered bar. Two of the day's four amendments were corrections of my own dictionary errors (the parity port; the dyadic local factor), one was Will's catch of a G_new/Mellin conflation, and the apparent mid-campaign "signal" (the odd-port a=2 V-shape) was **destroyed by the dictionary-consistency fix** — it was the optimizer exploiting an illegitimate degree of freedom. The chain of amendments never moved a bar (§7 bars unchanged throughout), but the record should say plainly: this was a campaign where the instrument-side kept passing its controls and the *solver*-side kept failing, and the decisive measurement is the planted control below, which retroactively invalidates any interpretation of any corner-cell floor — including the ones I briefly found encouraging.
+
+## 1. What was established [V]
+
+**Instrument layer (all bars passed):** degree-2 seam kernel = 4K₀(2y), triple-validated to 1e-26; α control 2.3e-12; **β1 even** (Ind ψ₂₂₉, theorem-grade λ=¼ even Maass) 5.8e-13; **β1-odd** (Ind ψ₂₂₉ ⊗ χ₋₄, theorem-grade λ=¼ ODD Maass, N=3664) 1.7e-12 through the odd port; meter floors 3e-13–2e-12; all negatives loud. **β2**: blind bit-decode at N=229 recovered all visible bits, 5/5 starts. **Planted-rung certification**: a fresh theorem-grade even λ=¼ dihedral object at **corner scale** (D = 3806549, h = 3) certifies with TRUE bits at theta 1.2e-13 / meter 6.8e-14 — the instrument resolves corner-scale objects; this is also an eighth certified λ=¼ object for the session.
+
+**Derived arithmetic (permanent, machine-checked):** (i) retrodiction 7/7 of all measured 3-dim ramified signs (centralizing ⟹ +1, inverting ⟹ −1; A₅ admits no other twist). (ii) det ρ̃ = 1 ⟹ a_p² = a_p(ρ₃)+1 — magnitudes fully shadow-determined; bits = signs only. (iii) **The parity of the Maass partner (ρ̃(c) = ±I ⟹ cos/sin-type) and the dyadic structure are central data invisible to Sym²** — both are decode targets, neither is inheritable from the shadow. (iv) **Dyadic exponent a = 1 is arithmetically impossible** for the det-1 lift (2.A₅ has a unique involution, −I; no finite-order SL₂ element ≠ I has eigenvalue 1), and every ramified-at-2 cell has local factor 1 (a₂ = 0). Admissible dyadic cells: a ∈ {0, 2, 3, 4}.
+
+## 2. What failed, quantified
+
+Decoders: theta-greedy, port-meter greedy (Amendment 2), successive cancellation with marginalized tails (Amendment 3), pair passes throughout. Corner cells (consistent dictionaries, ε=+1, structured meter starts): even port 3.9–5.6e-4 flat across a ∈ {0,2,3,4}; odd port 1.3–3.3e-3 flat. Batteries scatter with ~6% bit unanimity. **The planted control is the verdict: on a KNOWN-PRESENT object at N ≈ 3.8e6 with 850 bits, all decoder starts stall at 1.7–3.7e-4 with ~50% of bits wrong and sensitivity-visible sets of ~1–17 bits — decode power ≈ zero at scale, while the same machinery is 5/5 at N = 229.** Therefore: the corner-cell floors carry no information about presence, absence, parity, or dyadic structure of the summit object. This is KD-2 (and the measured basin degeneracy is KD-3-flavored); the formal BOUNDED-ABSENCE bar is expressly NOT claimed — absence inference requires a solver strong enough that failure is informative, and the planted rung proves the current one is not.
+
+## 3. The resumption bar (pre-registered for the next attempt)
+
+**Entry bar: any future decoder must first recover the planted rung** (D = 3806549 data on disk, ground truth = qfbsolve; target: all sensitivity-visible bits correct from ≥3 independent starts, residual ≤ 1e-11) before touching a corner cell. Candidate routes, in my priced order: (a) **multi-twist constraint expansion** — augment the objective with the twisted FEs of L(s, ρ̃⊗χ_D) over a battery of small quadratic characters (each twist adds an independent arm-family at conductor N·D², with parity flips for D < 0 supplying cross-port constraints; the analytically principled cure for an information-starved 7-arm objective; Booker-genre; answer-free); (b) serious global discrete optimization (parallel tempering / spin-glass-SAT encodings) against the existing arms; (c) both. The scaling wall between N = 229 (trivial) and N = 3.8e6 (impossible) can be mapped on intermediate planted discs to size the needed strength.
+
+## 4. Session state
+
+Seal: **intact**; the §0 decision's blind-decode framing remains available to this instance or a successor (no foreclosure event occurred). Artifacts: `PROVENANCE_MANIFEST_v5` addendum (poc6/poc7/poc8, kernels, all 20+ cell/battery/SC jsons, planted data). All four amendments + this status are countersign-backlog items. The six-for-six, retrodiction, β-controls, and planted certification stand as the day's [V] harvest regardless of the decode outcome.
+
+*Offered, not self-filed. The bite paragraph was written first. The summit keeps its height: nothing here touched it, and the record says so without euphemism.*

@@ -1,0 +1,17 @@
+# Yield from the functoriality-burden exchange — 2026-08-06
+
+The adversarial reviewer's reply to `response_functoriality_burden_20260806.md`. Three items worth keeping; two named deliverables now carry external weight.
+
+**1. Conceded by them, confirming ours:** the ρ(c) = ±I correction is accepted in full ("I was too quick to identify 'even' with ρ(c) = +I"), together with the observation that the sin-type measurement "is exactly the kind of thing a post-hoc tuning could not reliably hit." The parity result is now externally acknowledged as discriminating rather than merely consistent.
+
+**2. NEW, and theirs — the discreteness asymmetry (worth adopting into the paper's argument):** in the *odd* case the automorphic partner is a holomorphic weight-1 form, and the weight is an integer — protected by discreteness, so it cannot drift. In the *even* case λ = 1/4 sits at the bottom of the continuous spectrum and enjoys **no such protection**: nothing forces a Maass eigenvalue to a special value unless the object is genuinely of Artin type. Therefore the r-scan bottoming out at exactly r = 0, with a smooth linear landscape permitting a shift and none occurring, is precisely the signature expected if and only if the underlying object is Artin. This is a sharper reading of our own measurement than we had: it explains *why* the λ-measurement carries evidential weight rather than being a mere consistency check, and it should be stated that way in any write-up. Credit: external reviewer, not us.
+
+**3. Their located verdict:** Claim A (exact Frobenius traces, two independent methods, cross-validated) is "a genuine contribution regardless of the status of Artin's conjecture"; the transformation is from "computable in principle" to "here are the numbers and here is how to regenerate them," creating a falsifiable target that any future proof must reproduce. Claim B remains evidence, not proof — unchanged, and we agree.
+
+**Two deliverables, now externally named (add to queue at priority):**
+- **(a) Extended exact a_p tables**, requested to p ≤ 10⁵ with the algorithm specified. Feasible: the trace-form construction is algebraic and self-checking (the non-square signature at every involution-class prime is a running validator), the global quadratic twist is already pinned uniquely, and only compute time separates us from it. Current published range: p ≤ ~520 per field.
+- **(b) Citation pin for the trace-form construction** — "not because the method is suspect, but because a reader should be able to verify the algorithm against a source without trusting your implementation." Exactly right, and already our own open item.
+
+**Their curiosity question, answered from the record:** the Gram matrix is the **standard** trace form Tr(x²) on the power basis (G_ij = Tr(x^{i+j−2}), i.e. Newton power sums), not a twisted or scaled variant; B is a **rational** isometry with BᵀGB = I₅ obtained by recursive qfsolve; U = V·B with V the root Vandermonde; γ = det(I + U). Worth noting to them: the *rationality* of B is not incidental — it is a constructive witness that the trace form is rationally equivalent to the unit form (trivial Hasse–Witt invariant), which with square discriminant is exactly the vanishing of the spin lifting obstruction. For an obstructed field the recursion fails audibly at the one-dimensional residual (non-square). So the algorithm proves the lift exists in the act of constructing it.
+
+*Offered, not self-filed.*

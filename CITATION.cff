@@ -1,5 +1,13 @@
 cff-version: 1.2.0
-message: "If you use this archive, please cite it as below. Once a Zenodo DOI is minted it will be added here; until then cite the repository and the commit."
+message: "If you use this archive, please cite it as below (the concept DOI resolves to the latest version; the version DOI pins the 2026-09-12 snapshot)."
+doi: 10.5281/zenodo.22727504
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22727505
+    description: "Version 0.1.0, deposited 2026-09-12"
+  - type: doi
+    value: 10.5281/zenodo.22727504
+    description: "Concept DOI, all versions"
 type: dataset
 title: "The TEP Archive (August 2025 – September 2026): working records of the Terminal Equivalence Principle program, with Hecke eigenvalue tables, candidate Maass forms and numerical automorphy tests for the even icosahedral Artin representations of conductors 1951 and 2141"
 authors:

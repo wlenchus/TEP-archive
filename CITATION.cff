@@ -5,7 +5,7 @@ title: "The TEP Archive (August 2025 – September 2026): working records of the
 authors:
   - family-names: Lenchus
     given-names: William C.
-version: 1.0.0
+version: 0.1.0
 date-released: 2026-09-12
 repository-code: "https://github.com/wlenchus/TEP-archive"
 license:
